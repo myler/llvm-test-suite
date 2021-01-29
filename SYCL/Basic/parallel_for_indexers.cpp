@@ -1,3 +1,10 @@
+// INTEL_CUSTOMIZATION
+// This tests global offset support, which is an experimental feature.
+// It requires L0 ci-neo-018674 or later.  In order to prevent alloy
+// test run failures, this test is disabled.
+// UNSUPPORTED: true
+// end INTEL_CUSTOMIZATION
+//
 // RUN: %clangxx %s -o %t1.out -lsycl -I %sycl_include -Wno-sycl-strict -Xclang -verify-ignore-unexpected=note,warning
 // RUN: %HOST_RUN_PLACEHOLDER %t1.out
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t2.out
@@ -6,10 +13,6 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t2.out
 // RUN: %ACC_RUN_PLACEHOLDER %t2.out
 // UNSUPPORTED: cl_options
-
-// TODO: Unexpected result
-// TODO: _indexers.cpp:37: int main(): Assertion `id == -1' failed.
-// XFAIL: level_zero&&gpu
 
 #include <CL/sycl.hpp>
 
