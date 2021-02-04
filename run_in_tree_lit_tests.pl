@@ -1,16 +1,20 @@
 use ics_subs;
 
 my $run_all_lf = "$optset_work_dir/run_all.lf";
-my $wsdir;
-my $tests_abspath;
+my $wsdir = "";
+my $tests_abspath = "";
 my $test_path;
 my %data;
 my $build_output;
 my $build_dir = "$optset_work_dir/build";
-my $cmplr_root;
+my $cmplr_root = "";
 my $sycl_backend = "";
 my $ics_os = is_windows() ? "Windows":"Linux";
 my $exe_postfix = is_windows() ? ".exe":"";
+
+my $src_fail_msg = "fail to get source code";
+my $exceed_time_msg = "test exceeded time limit";
+my $EXCEED_TIME = -1;
 
 sub unxpath
 {
@@ -78,6 +82,7 @@ sub get_src
       $tests_abspath = "$ENV{ICS_WSDIR}/$sycl_src";
       $wsdir = "$ENV{ICS_WSDIR}";
     }
+    return PASS;
 }
 
 sub get_list
@@ -86,7 +91,7 @@ sub get_list
     # build phase results in some file and then reread the data
     my @list = sort keys %data;
 
-    if (! @list) {
+    if (! @list and $tests_abspath ne "") {
       # test name cannot include '/' or '\', so replace '/' with '~'
       @list = map { s/.*test\/on-device\///; s/~/~~/g; s/\//~/g; $_ } alloy_find("$tests_abspath", '.*\.cpp|.*\.c');
       # exclude files whose path includes "Input"
@@ -177,8 +182,14 @@ sub check_device
 sub generate_run_result
 {
     my $output = shift;
+
+    # test path should not be empty
+    if (get_test_path() eq "") {
+      $failure_message = "empty test path";
+      return FILTERFAIL;
+    }
+
     my $result = "";
-    get_test_path();
 
     for my $line (split /^/, $output){
       if ($line =~ m/^(.*): SYCL-on-device :: \Q$test_path\E \(.*\)/i) {
@@ -204,7 +215,7 @@ sub generate_run_result
         } else {
           # Every test should have result.
           # If not, it is maybe something wrong in processing result
-          return $FILTERFAIL;
+          return FILTERFAIL;
         }
       }
 
@@ -229,8 +240,8 @@ sub generate_run_result
     }
 
     # Every test should have result.
-    # If not, it is maybe something wrong in processing result
-    return $FILTERFAIL;
+    # If not, it is maybe something wrong, for example killed for timeout
+    return FILTERFAIL;
 }
 
 sub generate_run_test_lf
@@ -270,9 +281,10 @@ sub run_cmake
              . " -DLLVMGenXIntrinsics_SOURCE_DIR=\"$optset_work_dir/vc-intrinsics\""
              . " $wsdir/llvm/llvm";
 
-    execute($cmdl);
+    my $ret = execute($cmdl);
     $build_output .= "\n  ------ cmake output ------\n"
                    . "$command_output\n";
+    return $ret;
 }
 
 sub run_build
@@ -303,11 +315,13 @@ sub run_build
 
     my $error_msg = "";
     # run cmake
-    run_cmake();
+    my $cmake_status = run_cmake();
 
-    if (($res = $command_status) != PASS) {
-      $error_msg = "cmake returned non zero exit code";
-      return ($res, $error_msg);
+    if ($cmake_status == $EXCEED_TIME) {
+        $res = COMPFAIL;
+        $error_msg = $exceed_time_msg;
+    } elsif (($res = $command_status) != PASS) {
+        $error_msg = "cmake returned non zero exit code";
     }
 
     return ($res, $error_msg);
@@ -317,7 +331,13 @@ sub run_lit_tests
 {
     my $tests_path = shift;
 
-    my $lit = is_windows() ? "./bin/llvm-lit.py":"./bin/llvm-lit";
+    if (! -d $tests_path and ! -f $tests_path) {
+       # Return fail if the path is not a directory or a file
+       return (BADTEST, "test doesn't exist");
+    }
+
+    my $lit = "$optset_work_dir/build/bin/llvm-lit";
+    $lit .= is_windows() ? ".py":"";
     my $cmplr_bin_path = "$cmplr_root/bin";
     my $cmplr_lib_path = "$cmplr_root/lib";
     my $cmplr_include_path = "$cmplr_root/include/sycl";
@@ -341,14 +361,15 @@ sub run_lit_tests
              . " --param LEVEL_ZERO_INCLUDE_DIR=\"$l0_header_path\""
              . " $tests_path";
 
-    execute($cmdl);
-    return $command_output;
+    my $lit_status = execute($cmdl);
+    return ($lit_status, $command_output);
 }
 
 sub BuildSuite
 {
     if (get_src() eq BADTEST) {
-      return BADTEST;
+      # Report BADTEST if fail to get source code
+      report_result("check_source", BADTEST, $src_fail_msg, $command_output);
     }
 
     my @list = get_list(@_);
@@ -412,6 +433,13 @@ sub BuildTest
       $failure_message = $message if $status != PASS;
       $compiler_output .= $lscl_output;
       return $status;
+    } elsif ($current_test eq "check_source") {
+      if (get_src() eq BADTEST) {
+        $failure_message = $src_fail_msg;
+        return BADTEST;
+      } else {
+        return PASS;
+      }
     }
 
     if (get_src() eq BADTEST) {
@@ -420,7 +448,7 @@ sub BuildTest
 
     $build_output .= $lscl_output;
 
-    my $ret = $COMPFAIL;
+    my $ret = COMPFAIL;
     my ($res, $err_msg) = run_build();
     if ($res == PASS) {
       $ret = PASS;
@@ -438,6 +466,7 @@ sub RunSuite
     my $ret = PASS;
     my @list = get_list(@_);
     my $run_output = "";
+    my $lit_status = "";
 
     foreach my $tst (@list) {
       $current_test = $tst;
@@ -451,7 +480,7 @@ sub RunSuite
       if ($res == PASS) {
         $execution_output = "";
         if (! -e $run_all_lf) {
-          $run_output = run_lit_tests($tests_abspath);
+          ($lit_status, $run_output) = run_lit_tests($tests_abspath);
           print2file($run_output, $run_all_lf);
         } else {
           $run_output = file2str($run_all_lf);
@@ -462,8 +491,12 @@ sub RunSuite
         $execution_output .= "\n  ------ llvm-lit output ------\n"
                            . "$filtered_output\n";
 
-        if ($res != PASS) {
-          $msg = $failure_message;
+        if ($res != PASS and $res != SKIP) {
+          if ($lit_status == $EXCEED_TIME) {
+            $msg = $exceed_time_msg;
+          } else {
+            $msg = $failure_message;
+          }
           $ret = RUNFAIL;
         }
       } else {
@@ -484,14 +517,30 @@ sub RunTest
     # For tests check_*, they are not real tests.
     # If RunTest() is called, it means that BuildTest() is passed
     # so we just need to return PASS.
-    if ($current_test =~ /^check_(GPU)$/ or $current_test =~ /^check_(CPU)$/ or $current_test =~ /^check_(accelerator)$/) {
+    if ($current_test =~ m/^check_(GPU|CPU|accelerator|source)$/) {
       return PASS;
     }
 
-    get_test_path();
-    my $run_output = run_lit_tests("$tests_abspath/$test_path");
+    # test path should not be empty
+    if (get_test_path() eq "") {
+      $failure_message = "empty test path";
+      return FILTERFAIL;
+    }
+
+    my ($lit_status, $run_output) = run_lit_tests("$tests_abspath/$test_path");
+    if ($lit_status == BADTEST) {
+      $failure_message = $run_output;
+      return BADTEST;
+    }
+
     $execution_output .= "\n  ------ llvm-lit output ------\n"
                        . "$run_output\n";
+
+    if ($lit_status == $EXCEED_TIME) {
+      $failure_message = $exceed_time_msg;
+      return RUNFAIL;
+    }
+
     $failure_message = "test execution exit status $command_status";
 
     return generate_run_result($command_output);
