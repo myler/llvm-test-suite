@@ -45,6 +45,14 @@ sub lscl {
     return $output;
 }
 
+sub is_ats_gta {
+  my $current_host = $ENV{'SUDO_USER'};
+  if (!defined $current_host) {
+    return 0;
+  }
+  return $current_host eq "gta";
+}
+
 sub init_test
 {
     my $suite_feature = $current_suite;
@@ -145,12 +153,16 @@ sub do_run
       my @whole_suite_test = sort(get_test_list());
       my @current_test_list = sort(@test_name_list);
       my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
+      my $python = "python3";
+      if (is_ats_gta()) {
+        $python = "/usr/bin/python3"
+      }
       if ($is_suite) {
         set_tool_path();
-        execute("python3 $lit -a . > $run_all_lf 2>&1");
+        execute("$python $lit -a . > $run_all_lf 2>&1");
       } else {
         set_tool_path();
-        execute("python3 $lit -a $path");
+        execute("$python $lit -a $path");
       }
     }
 
