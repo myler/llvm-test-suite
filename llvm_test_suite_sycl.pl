@@ -46,11 +46,8 @@ sub lscl {
 }
 
 sub is_ats_gta {
-  my $current_host = $ENV{'SUDO_USER'};
-  if (!defined $current_host) {
-    return 0;
-  }
-  return $current_host eq "gta";
+  my $current_kernel = `uname -r`;
+  return $current_kernel =~ m/ats/;
 }
 
 sub init_test
