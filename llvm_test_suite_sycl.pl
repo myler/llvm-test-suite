@@ -218,7 +218,8 @@ sub generate_run_result
           return $SKIP;
         } else {
           # Every test should have result.
-          # If not, it is maybe something wrong in processing result
+          # If not, it is maybe something wrong in processing result or missing result
+          $failure_message = "Result not found";
           return $FILTERFAIL;
         }
       }
@@ -244,7 +245,8 @@ sub generate_run_result
     }
 
     # Every test should have result.
-    # If not, it is maybe something wrong in processing result
+    # If not, it is maybe something wrong in processing result or missing result
+    $failure_message = "Result not found";
     return $FILTERFAIL;
 }
 
