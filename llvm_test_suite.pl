@@ -128,10 +128,10 @@ sub do_run
     
     if ($test_number > 10) {
       if (! -e $run_all_lf) {
-        $cmd = "python $lit ./build > $run_all_lf 2>&1";
+        $cmd = "python3 $lit ./build > $run_all_lf 2>&1";
       }
     } else {
-      $cmd = "python $lit $path";
+      $cmd = "python3 $lit $path";
     }
 
     # using PIN_CMD to run lit leads to big overhead. So disable it.  But it may be usefull in some cases.
