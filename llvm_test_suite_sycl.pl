@@ -45,9 +45,12 @@ sub lscl {
     return $output;
 }
 
-sub is_ats_gta {
-  my $current_kernel = `uname -r`;
-  return $current_kernel =~ m/ats/;
+sub is_ats {
+  my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+  if (!defined $current_gpu) {
+    return 0;
+  }
+  return $current_gpu =~ m/ats/;
 }
 
 sub init_test
@@ -151,7 +154,7 @@ sub do_run
       my @current_test_list = sort(@test_name_list);
       my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
       my $python = "python3";
-      if (is_ats_gta()) {
+      if (is_ats()) {
         $python = "/usr/bin/python3"
       }
       if ($is_suite) {
