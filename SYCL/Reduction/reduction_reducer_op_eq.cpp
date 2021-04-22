@@ -3,8 +3,8 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
-// This test checks that if the custom type supports operations like +=, then
-// such operations can be used for the reduction objects in kernels.
+// This test checks that operators ++, +=, *=, |=, &=, ^= are supported
+// whent the corresponding std::plus<>, std::multiplies, etc are defined.
 
 #include <CL/sycl.hpp>
 #include <cmath>
@@ -22,6 +22,8 @@ struct XY {
 };
 
 enum OperationEqual {
+  PlusPlus,
+  PlusPlusInt,
   PlusEq,
   MultipliesEq,
   BitwiseOREq,
@@ -76,26 +78,43 @@ template <> struct bit_and<XY> {
 };
 } // namespace std
 
-template <typename T, typename BinaryOperation, OperationEqual OpEq,
-          bool IsFP = false>
-int test(T Identity) {
+template <bool IsSYCL2020Mode, typename T, typename BinaryOperation>
+auto createReduction(T *USMPtr, T Identity, BinaryOperation BOp) {
+  if constexpr (IsSYCL2020Mode)
+    return sycl::reduction(USMPtr, Identity, BOp);
+  else
+    return ONEAPI::reduction(USMPtr, Identity, BOp);
+}
+
+template <typename T, bool IsSYCL2020Mode, typename BinaryOperation,
+          OperationEqual OpEq, bool IsFP>
+int test(queue &Q, T Identity) {
   constexpr size_t N = 16;
   constexpr size_t L = 4;
 
-  queue Q;
-  T *Data = malloc_shared<T>(N, Q);
-  T *Res = malloc_shared<T>(1, Q);
+  T *Data = malloc_host<T>(N, Q);
+  T *Res = malloc_host<T>(1, Q);
   T Expected = Identity;
   BinaryOperation BOp;
-  for (int I = 0; I < N; I++) {
-    Data[I] = T{I, I + 1};
-    Expected = BOp(Expected, T{I, I + 1});
+  if constexpr (OpEq == PlusPlus || OpEq == PlusPlusInt) {
+    Expected = T{N, N};
+  } else {
+    for (int I = 0; I < N; I++) {
+      Data[I] = T{I, I + 1};
+      Expected = BOp(Expected, T{I, I + 1});
+    }
   }
 
   *Res = Identity;
-  auto Red = ONEAPI::reduction(Res, Identity, BOp);
+  auto Red = createReduction<IsSYCL2020Mode>(Res, Identity, BOp);
   nd_range<1> NDR{N, L};
-  if constexpr (OpEq == PlusEq) {
+  if constexpr (OpEq == PlusPlus) {
+    auto Lambda = [=](nd_item<1> ID, auto &Sum) { ++Sum; };
+    Q.submit([&](handler &H) { H.parallel_for(NDR, Red, Lambda); }).wait();
+  } else if constexpr (OpEq == PlusPlusInt) {
+    auto Lambda = [=](nd_item<1> ID, auto &Sum) { Sum++; };
+    Q.submit([&](handler &H) { H.parallel_for(NDR, Red, Lambda); }).wait();
+  } else if constexpr (OpEq == PlusEq) {
     auto Lambda = [=](nd_item<1> ID, auto &Sum) {
       Sum += Data[ID.get_global_id(0)];
     };
@@ -138,36 +157,42 @@ int test(T Identity) {
   return Error;
 }
 
-template <typename T> int testFPPack() {
+template <typename T, typename BinaryOperation, OperationEqual OpEq,
+          bool IsFP = false>
+int testBoth(queue &Q, T Identity) {
   int Error = 0;
-  Error += test<T, std::plus<>, PlusEq, true>(T{});
-  Error += test<T, std::plus<T>, PlusEq, true>(T{});
-  Error += test<T, std::multiplies<>, MultipliesEq, true>(T{1, 1});
-  Error += test<T, std::multiplies<T>, MultipliesEq, true>(T{1, 1});
+  Error += test<T, true, BinaryOperation, OpEq, IsFP>(Q, Identity);
+  Error += test<T, false, BinaryOperation, OpEq, IsFP>(Q, Identity);
   return Error;
 }
 
-template <typename T> int testINTPack() {
+template <typename T> int testFPPack(queue &Q) {
   int Error = 0;
-  Error += test<T, std::plus<T>, PlusEq>(T{});
-  Error += test<T, std::multiplies<T>, MultipliesEq>(T{1, 1});
-  Error += test<T, std::bit_or<T>, BitwiseOREq>(T{});
-  Error += test<T, std::bit_xor<T>, BitwiseXOREq>(T{});
-  Error += test<T, std::bit_and<T>, BitwiseANDEq>(T{~0, ~0});
+  Error += testBoth<T, std::plus<T>, PlusEq, true>(Q, T{});
+  Error += testBoth<T, std::multiplies<T>, MultipliesEq, true>(Q, T{1, 1});
+  return Error;
+}
+
+template <typename T, bool TestPlusPlus> int testINTPack(queue &Q) {
+  int Error = 0;
+  if constexpr (TestPlusPlus) {
+    Error += testBoth<T, std::plus<T>, PlusPlus>(Q, T{});
+    Error += testBoth<T, std::plus<>, PlusPlusInt>(Q, T{});
+  }
+  Error += testBoth<T, std::plus<T>, PlusEq>(Q, T{});
+  Error += testBoth<T, std::multiplies<T>, MultipliesEq>(Q, T{1, 1});
+  Error += testBoth<T, std::bit_or<T>, BitwiseOREq>(Q, T{});
+  Error += testBoth<T, std::bit_xor<T>, BitwiseXOREq>(Q, T{});
+  Error += testBoth<T, std::bit_and<T>, BitwiseANDEq>(Q, T{~0, ~0});
   return Error;
 }
 
 int main() {
+  queue Q;
   int Error = 0;
-  Error += testFPPack<float2>();
-  Error += testINTPack<XY>();
-
-  // TODO: enable this test for int vetors as well.
-  // This test revealed an existing/unrelated problem with the type trait
-  // known_identity_impl. It returns true for 'int2' type, but the
-  // corrsponding functionality returning identity value is not implemented
-  // correctly.
-  // Error += testINTPack<int2>();
+  Error += testFPPack<float2>(Q);
+  Error += testINTPack<int2, true>(Q);
+  Error += testINTPack<XY, false>(Q);
 
   std::cout << (Error ? "Failed\n" : "Passed.\n");
   return Error;

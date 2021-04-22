@@ -1,5 +1,4 @@
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
-// RUNx: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
@@ -14,35 +13,50 @@
 
 using namespace cl::sycl;
 
-template <typename SpecializationKernelName, typename T, int Dim,
-          class BinaryOperation>
-void test(T Identity, size_t WGSize, size_t NWItems) {
+// This allocator is needed only for the purpose of testing buffers
+// with allocator that is not same_as sycl::buffer_allocator.
+struct CustomAllocator : public sycl::buffer_allocator {};
+
+template <typename T, bool B> class KName;
+
+template <typename Name, bool IsSYCL2020Mode, typename T, class BinaryOperation>
+void test(queue &Q, T Identity, T Init, size_t WGSize, size_t NWItems) {
   buffer<T, 1> InBuf(NWItems);
-  buffer<T, 1> OutBuf(1);
+  buffer<T, 1, CustomAllocator> OutBuf(1);
 
   // Initialize.
   BinaryOperation BOp;
   T CorrectOut;
   initInputData(InBuf, CorrectOut, Identity, BOp, NWItems);
 
-  (OutBuf.template get_access<access::mode::write>())[0] = Identity;
+  // The final reduction sum after running parallel_for() must include
+  // the original value it was initialized with before the parallel_for().
+  CorrectOut = BOp(CorrectOut, Init);
+  (OutBuf.template get_access<access::mode::write>())[0] = Init;
 
   // Compute.
-  queue Q;
-  Q.submit([&](handler &CGH) {
-    auto In = InBuf.template get_access<access::mode::read>(CGH);
-    accessor<T, Dim, access::mode::read_write, access::target::global_buffer>
-        Out(OutBuf, CGH);
-    auto Redu = ONEAPI::reduction(Out, Identity, BOp);
+  nd_range<1> NDRange(range<1>{NWItems}, range<1>{WGSize});
+  if constexpr (IsSYCL2020Mode) {
+    Q.submit([&](handler &CGH) {
+      auto In = InBuf.template get_access<access::mode::read>(CGH);
+      auto Redu = sycl::reduction(OutBuf, CGH, Identity, BOp);
 
-    range<1> GlobalRange(NWItems);
-    range<1> LocalRange(WGSize);
-    nd_range<1> NDRange(GlobalRange, LocalRange);
-    CGH.parallel_for<SpecializationKernelName>(
-        NDRange, Redu, [=](nd_item<1> NDIt, auto &Sum) {
-          Sum.combine(In[NDIt.get_global_linear_id()]);
-        });
-  });
+      CGH.parallel_for<Name>(NDRange, Redu, [=](nd_item<1> NDIt, auto &Sum) {
+        Sum.combine(In[NDIt.get_global_linear_id()]);
+      });
+    });
+  } else {
+    Q.submit([&](handler &CGH) {
+      auto In = InBuf.template get_access<access::mode::read>(CGH);
+      accessor<T, 1, access::mode::read_write, access::target::global_buffer>
+          Out(OutBuf, CGH);
+      auto Redu = ONEAPI::reduction(Out, Identity, BOp);
+
+      CGH.parallel_for<Name>(NDRange, Redu, [=](nd_item<1> NDIt, auto &Sum) {
+        Sum.combine(In[NDIt.get_global_linear_id()]);
+      });
+    });
+  }
 
   // Check correctness.
   auto Out = OutBuf.template get_access<access::mode::read>();
@@ -55,47 +69,41 @@ void test(T Identity, size_t WGSize, size_t NWItems) {
   }
 }
 
+template <typename Name, typename T, class BinaryOperation>
+void testBoth(queue &Q, T Identity, T Init, size_t WGSize, size_t NWItems) {
+  test<KName<Name, false>, false, T, BinaryOperation>(Q, Identity, Init, WGSize,
+                                                      NWItems);
+  test<KName<Name, true>, true, T, BinaryOperation>(Q, Identity, Init, WGSize,
+                                                    NWItems);
+}
+
 int main() {
-  // Check some less standards WG sizes and corner cases first.
-  test<class KernelName_KXo, int, 1, ONEAPI::plus<int>>(0, 2, 2);
-  test<class KernelName_bznJZlALYJ, int, 1, ONEAPI::plus<int>>(0, 7, 7);
-  test<class KernelName_rpv, int, 1, ONEAPI::plus<int>>(0, 9, 18);
-  test<class KernelName_vLBXMFYkqbrgegKkf, int, 1, ONEAPI::plus<int>>(0, 49,
-                                                                      49 * 5);
+  queue Q;
+
+  // Check non power-of-two work-group sizes.
+  testBoth<class A1, int, ONEAPI::plus<int>>(Q, 0, 99, 1, 7);
+  testBoth<class A2, int, ONEAPI::plus<int>>(Q, 0, -99, 49, 49 * 5);
 
   // Try some power-of-two work-group sizes.
-  test<class KernelName_UfAE, int, 1, ONEAPI::plus<int>>(0, 2, 64);
-  test<class KernelName_JAuydtGTPKjMyKoFvN, int, 1, ONEAPI::plus<int>>(0, 4,
-                                                                       64);
-  test<class KernelName_llgFdNLtCm, int, 1, ONEAPI::plus<int>>(0, 8, 128);
-  test<class KernelName_YdE, int, 1, ONEAPI::plus<int>>(0, 16, 256);
-  test<class KernelName_OIL, int, 1, ONEAPI::plus<int>>(0, 32, 256);
-  test<class KernelName_PciECIxEoUIymqnyYiq, int, 1, ONEAPI::plus<int>>(0, 64,
-                                                                        256);
-  test<class KernelName_oqnGqZmfsZpGYmVOY, int, 1, ONEAPI::plus<int>>(0, 128,
-                                                                      256);
-  test<class KernelName_VxwwptlAZpflz, int, 1, ONEAPI::plus<int>>(0, 256, 256);
+  testBoth<class B1, int, ONEAPI::plus<>>(Q, 0, 99, 2, 32);
+  testBoth<class B2, int, ONEAPI::plus<>>(Q, 0, 199, 32, 128);
+  testBoth<class B3, int, ONEAPI::plus<>>(Q, 0, 299, 128, 128);
+  testBoth<class B4, int, ONEAPI::plus<>>(Q, 0, 399, 256, 256);
 
-  // Check with various operations.
-  test<class KernelName_GIjawXYajX, int, 1, std::multiplies<int>>(1, 8, 256);
-  test<class KernelName_jOm, int, 1, ONEAPI::bit_or<int>>(0, 8, 256);
-  test<class KernelName_GjfldZIgGoaP, int, 1, ONEAPI::bit_xor<int>>(0, 8, 256);
-  test<class KernelName_rtmiZQvIVAHj, int, 1, ONEAPI::bit_and<int>>(~0, 8, 256);
-  test<class KernelName_vsFbwaoREC, int, 1, ONEAPI::minimum<int>>(
-      (std::numeric_limits<int>::max)(), 8, 256);
-  test<class KernelName_rHeZYARRF, int, 1, ONEAPI::maximum<int>>(
-      (std::numeric_limits<int>::min)(), 8, 256);
-
-  // Check with various types.
-  test<class KernelName_BkpSVeNxs, float, 1, std::multiplies<float>>(1, 8, 256);
-  test<class KernelName_tDQManTv, float, 1, ONEAPI::minimum<float>>(
-      getMaximumFPValue<float>(), 1, 16);
-  test<class KernelName_lDQXQiJveKkXxjBIZ, float, 1, ONEAPI::maximum<float>>(
-      getMinimumFPValue<float>(), 8, 256);
+  // Check with various operations and types.
+  testBoth<class C1, int, std::multiplies<int>>(Q, 1, 2, 8, 256);
+  testBoth<class C2, float, std::multiplies<float>>(Q, 1, 1.2, 8, 16);
+  testBoth<class C3, short, ONEAPI::bit_or<>>(Q, 0, 0x3400, 4, 32);
+  testBoth<class C4, int, ONEAPI::bit_xor<int>>(Q, 0, 0x12340000, 2, 16);
+  testBoth<class C5, char, ONEAPI::bit_and<>>(Q, ~0, ~0, 4, 16);
+  testBoth<class C6, int, ONEAPI::minimum<int>>(
+      Q, (std::numeric_limits<int>::max)(), 99, 8, 256);
+  testBoth<class C7, int, ONEAPI::maximum<float>>(
+      Q, (std::numeric_limits<int>::min)(), -99, 8, 256);
 
   // Check with CUSTOM type.
-  test<class KernelName_tQeAgyjhLaAwt, CustomVec<long long>, 1,
-       CustomVecPlus<long long>>(CustomVec<long long>(0), 8, 256);
+  testBoth<class D1, CustomVec<long long>, CustomVecPlus<long long>>(
+      Q, CustomVec<long long>(0), CustomVec<long long>(-199), 8, 256);
 
   std::cout << "Test passed\n";
   return 0;
