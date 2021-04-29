@@ -272,6 +272,10 @@ sub generate_run_test_lf
 
 sub run_cmake
 {
+    my $lit_extra_env = "";
+    $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX");
+    $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX_STRIP");
+
     my $cmdl = "cmake -G Ninja"
              . " -DLLVM_TARGETS_TO_BUILD=\"X86\""
              . " -DLLVM_EXTERNAL_PROJECTS=\"sycl-test\""
@@ -279,6 +283,7 @@ sub run_cmake
              . " -DSYCL_SOURCE_DIR=\"$wsdir/llvm/sycl\""
              . " -DOpenCL_LIBRARIES=\"$cmplr_root/lib\""
              . " -DLLVMGenXIntrinsics_SOURCE_DIR=\"$optset_work_dir/vc-intrinsics\""
+             . " -DLIT_EXTRA_ENVIRONMENT=\"$lit_extra_env\""
              . " $wsdir/llvm/llvm";
 
     my $ret = execute($cmdl);
@@ -352,6 +357,12 @@ sub run_lit_tests
     my $env_path = join($path_sep, $tool_path, $ENV{PATH});
     set_envvar("PATH", $env_path, join($path_sep, $tool_path, '$PATH'));
 
+    my $timeout = "";
+    # Pass TC_DEFAULT_LIMIT to timeout only when the value of TC_DEFAULT_LIMIT is valid
+    if (defined $ENV{TC_DEFAULT_LIMIT} and $ENV{TC_DEFAULT_LIMIT} =~ /^[0-9]{1,}$/) {
+       $timeout = "--timeout $ENV{TC_DEFAULT_LIMIT}";
+    }
+
     my $cmdl = "python3 $lit -a"
              . " --param SYCL_PLUGIN=$sycl_backend"
              . " --param SYCL_TOOLS_DIR=\"$cmplr_bin_path\""
@@ -359,7 +370,7 @@ sub run_lit_tests
              . " --param SYCL_LIBS_DIR=\"$cmplr_lib_path\""
              . " --param GET_DEVICE_TOOL=\"$get_device_tool_path\""
              . " --param LEVEL_ZERO_INCLUDE_DIR=\"$l0_header_path\""
-             . " $tests_path";
+             . " $timeout $tests_path";
 
     my $lit_status = execute($cmdl);
     return ($lit_status, $command_output);
@@ -544,6 +555,24 @@ sub RunTest
     $failure_message = "test execution exit status $command_status";
 
     return generate_run_result($command_output);
+}
+
+sub join_extra_env
+{
+    my $extra_env = shift;
+    my $env_var = shift;
+
+    my $env = '';
+    if (defined $ENV{$env_var}) {
+        $env = "$env_var=$ENV{$env_var}";
+        if ($extra_env eq '') {
+            $extra_env = $env;
+        } else {
+            $extra_env = join(',',$extra_env,$env);
+        }
+    }
+
+    return $extra_env;
 }
 
 sub print2file
