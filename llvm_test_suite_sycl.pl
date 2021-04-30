@@ -57,6 +57,8 @@ sub init_test
 {
     my $suite_feature = $current_suite;
     $suite_feature =~ s/^llvm_test_suite_//;
+    #Remove suffix of suite names if it has
+    $suite_feature =~ s/~.*$//;
     $config_folder = 'config_sycl';
     if ($suite_feature ne 'sycl')
     {
@@ -91,6 +93,27 @@ sub init_test
 
     }
 
+    #Remove untested source files from $subdir if it run with several subsuites
+    my $info_dir = "$optset_work_dir/$config_folder";
+    my @info_files = glob("$info_dir/*.info");
+
+    my @in_test_list = get_test_list();
+    my %in_test_hash = map { $_ => 1 } @in_test_list;
+    my @outof_test_list = ();
+
+    for my $file (@info_files) {
+      $file = basename($file);
+      $file =~ s/\.info//;
+      if (!exists($in_test_hash{$file})) {
+        push(@outof_test_list, $file);
+      }
+    }
+    for my $test (@outof_test_list) {
+      my $test_info = get_info($test);
+      my $path = "$test_info->{fullpath}";
+      rmtree($path);
+    }
+
     return PASS;
 }
 
@@ -98,12 +121,12 @@ sub BuildTest
 {
     $build_dir = $cwd . "/build";
     safe_Mkdir($build_dir);
-    chdir_log($build_dir);
 
     @test_name_list = get_tests_to_run();
     if ($current_test eq $test_name_list[0])
     {
         init_test();
+        chdir_log($build_dir);
 
         my ( $status, $output) = run_cmake();
         if ( $status)
@@ -114,6 +137,8 @@ sub BuildTest
             my $lscl_output = lscl();
             append2file($lscl_output, $cmake_log);
         }
+    } else {
+      chdir_log($build_dir);
     }
 
     $compiler_output = file2str($cmake_log);
@@ -184,7 +209,10 @@ sub set_tool_path
 
 sub get_info
 {
-    my $test_file = file2str("$optset_work_dir/$config_folder/$current_test.info");
+    my $test_name = shift;
+    $test_name = $current_test if ! defined $test_name or $test_name eq "";
+
+    my $test_file = file2str("$optset_work_dir/$config_folder/$test_name.info");
     $short_test_name = $test_file;
     $short_test_name =~ s/^$subdir\///;
 
