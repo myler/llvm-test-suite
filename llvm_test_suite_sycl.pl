@@ -60,7 +60,7 @@ sub init_test
     #Remove suffix of suite names if it has
     $suite_feature =~ s/~.*$//;
     $config_folder = 'config_sycl';
-    if ($suite_feature ne 'sycl')
+    if ($suite_feature ne 'sycl' and $suite_feature ne 'sycl_valgrind')
     {
         $config_folder = $config_folder . '_' . $suite_feature;
         $subdir = uc $suite_feature;
@@ -112,6 +112,23 @@ sub init_test
       my $test_info = get_info($test);
       my $path = "$test_info->{fullpath}";
       rmtree($path);
+    }
+
+    #add Valgrind command for test run, added by Xingxu"
+    if ($suite_feature eq 'sycl_valgrind') {
+      my $valgrind_commands = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$cwd/valgrind_reports/log.%%p";
+      my $config_file = "SYCL/lit.cfg.py";
+      if (-f $config_file) {
+         my $valgrind_dir = $cwd . "/valgrind_reports";
+         safe_Mkdir($valgrind_dir);
+         my $replacement = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
+         `sed -i 's!$replacement:gpu !$replacement:gpu $valgrind_commands !g' $config_file`;
+         `sed -i 's!$replacement:cpu !$replacement:cpu $valgrind_commands !g' $config_file`;
+         `sed -i 's!$replacement:host !$replacement:host $valgrind_commands !g' $config_file`;
+         `sed -i 's!$replacement:acc !$replacement:acc $valgrind_commands !g' $config_file`;
+         `sed -i 's!$replacement !$replacement $valgrind_commands !g' $config_file`;
+         `sed -i 's!$replacement:gpu,host !$replacement:gpu,host $valgrind_commands !g' $config_file`;
+      }
     }
 
     return PASS;
@@ -179,15 +196,19 @@ sub do_run
       my @current_test_list = sort(@test_name_list);
       my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
       my $python = "python3";
+      my $timeset = "";
       if (is_ats()) {
         $python = "/usr/bin/python3"
       }
+      if ($current_suite eq 'llvm_test_suite_sycl_valgrind'){
+        $timeset = "--timeout 0";
+      }
       if ($is_suite) {
         set_tool_path();
-        execute("$python $lit -a . > $run_all_lf 2>&1");
+        execute("$python $lit -a . $timeset > $run_all_lf 2>&1");
       } else {
         set_tool_path();
-        execute("$python $lit -a $path");
+        execute("$python $lit -a $path $timeset");
       }
     }
 
