@@ -138,6 +138,8 @@ sub gen_suite
         my @pre_xml = ();
         my $pre_xml_name = "";
 
+        my ($group) = split("_", $testname);
+
         if ( @strings != 0 ) {
             @pre_xml = grep /testName="$testname"/, @strings;
         }
@@ -146,11 +148,11 @@ sub gen_suite
             my $pre_xml_file = basename($pre_xml_name);
             if (-f "${testbase}/$pre_xml_name" and ! -f "$pre_xml_file") {
                 copy("${testbase}/$pre_xml_name", "./$config_folder/") or die "copy failed: $!";
-                push @{ $xml->{tests}{test}}, { configFile => "$pre_xml_name", testName => $testname};
+                push @{ $xml->{tests}{test}}, { configFile => "$pre_xml_name", testName => $testname, splitGroup => $group};
                 next;
             }
         }
-        push @{ $xml->{tests}{test}}, { configFile => "$config_folder/TEMPLATE_$suite_name.xml", testName => $testname};
+        push @{ $xml->{tests}{test}}, { configFile => "$config_folder/TEMPLATE_$suite_name.xml", testName => $testname, splitGroup => $group};
     }
 
     return XMLout( $xml, xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>', RootName => 'suite');
