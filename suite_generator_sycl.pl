@@ -257,9 +257,6 @@ print "\n\nFinish the generation of $suite_name Successfully.\n";
 if ( $suite_name eq "llvm_test_suite_sycl" ) {
     my $valgrind_suite_name = "llvm_test_suite_sycl_valgrind";
     copy("$suite_name.xml", "$valgrind_suite_name.xml");
-    `sed -i 's!TEMPLATE_llvm_test_suite_sycl!TEMPLATE_llvm_test_suite_sycl_valgrind!g' $valgrind_suite_name.xml`;
-    copy("$config_folder/TEMPLATE_$suite_name.xml", "$config_folder/TEMPLATE_$valgrind_suite_name.xml");
-    `sed -i 's!llvm_test_suite_sycl!llvm_test_suite_sycl_valgrind!g' $config_folder/TEMPLATE_$valgrind_suite_name.xml`;
     print "\n\nFinish the generation of $valgrind_suite_name Successfully.\n";
 }
 
