@@ -18,6 +18,7 @@ Last Changed Revision: 5bd38c6e74ab5705b71d4d8908b6c765ecc11a1b    Thu May 6 13:
     <file path=".github/CODEOWNERS" />
   </files>
   <tests>
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="Basic_opencl_interop_0" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_accelerator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_cpu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_gpu" />
