@@ -344,6 +344,9 @@ Last Changed Revision: 5bd38c6e74ab5705b71d4d8908b6c765ecc11a1b    Thu May 6 13:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_dmemll_ocl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_event_release" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_kernels" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_property_trace" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_usm_explicit" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_usm_implicit" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="inorderqueue" testName="inorderqueue_prop" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_basic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_basic_program" />
@@ -520,5 +523,6 @@ Last Changed Revision: 5bd38c6e74ab5705b71d4d8908b6c765ecc11a1b    Thu May 6 13:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_smemll" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_smemllaligned" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_source_kernel_indirect_access" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_usm_pooling" />
   </tests>
 </suite>
