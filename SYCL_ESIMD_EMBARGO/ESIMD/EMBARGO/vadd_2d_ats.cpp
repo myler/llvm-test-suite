@@ -5,10 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
-// RUN: %clangxx-esimd -fsycl %s -o %t.out
-// RUNx: env SYCL_DEVICE_TYPE=HOST %t.out
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../esimd_test_utils.hpp"
 
@@ -60,7 +60,7 @@ int main(void) {
 
       cgh.parallel_for<class Test>(
           GlobalRange * LocalRange, [=](id<1> i) SYCL_ESIMD_KERNEL {
-            using namespace sycl::INTEL::gpu;
+            using namespace sycl::ext::intel::experimental::esimd;
 
             constexpr int ESIZE = sizeof(int);
             int x = i * ESIZE * VL;

@@ -5,10 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
-// RUN: %clangxx-esimd -fsycl %s -o %t.out
-// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../esimd_test_utils.hpp"
 
@@ -18,7 +18,7 @@
 #include <iostream>
 
 using namespace cl::sycl;
-using namespace sycl::INTEL::gpu;
+using namespace sycl::ext::intel::experimental::esimd;
 
 #define NUM_BINS 256
 #define IMG_WIDTH 1024
@@ -172,8 +172,8 @@ int main(int argc, char *argv[]) {
           Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
             // Get thread origin offsets
             uint tid = ndi.get_group(0);
-            uint h_pos = esimd_emu_impl_urem(tid, range_width) * BLOCK_WIDTH;
-            uint v_pos = esimd_emu_impl_udiv(tid, range_width) * BLOCK_HEIGHT;
+            uint h_pos = (tid % range_width) * BLOCK_WIDTH;
+            uint v_pos = (tid / range_width) * BLOCK_HEIGHT;
 
             // Declare a 8x32 uchar matrix to store the input block pixel value
             simd<unsigned char, 8 * 32> in;
@@ -218,9 +218,10 @@ int main(int argc, char *argv[]) {
                   bins, offset, src, 1);
               offset += 8 * sizeof(unsigned int);
 #else
-              auto vals = block_load<unsigned int, 8>(bins + i);
+              simd<unsigned int, 8> vals;
+              vals.copy_from(bins + i);
               vals = vals + src;
-              block_store<unsigned int, 8>(bins + i, vals);
+              vals.copy_to(bins + i);
 #endif
             }
           });

@@ -5,10 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
-// RUN: %clangxx-esimd -fsycl %s -o %t.out
-// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out %S/band27-1m.dat 2
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../../esimd_test_utils.hpp"
 
@@ -74,7 +74,7 @@ struct CsrSparseMatrix {
 
 using ushort = unsigned short;
 using namespace cl::sycl;
-using namespace sycl::INTEL::gpu;
+using namespace sycl::ext::intel::experimental::esimd;
 using namespace std;
 
 using IndexType = unsigned int;
@@ -666,7 +666,7 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
       auto e = q.submit([&](cl::sycl::handler &cgh) {
         cgh.parallel_for<class spmv_csr>(
             GroupRange * TaskRange, [=](item<2> it) SYCL_ESIMD_KERNEL {
-              using namespace sycl::INTEL::gpu;
+              using namespace sycl::ext::intel::experimental::esimd;
               SpmvCsr(anz, acol, arow, x, y_vec[i], batch_row_start, row_stride,
                       max_rows, v_st, it.get_id(0), it.get_id(1),
                       i == 0 ? dbgBuf : nullptr);
@@ -810,8 +810,6 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
     return 0;
   }
   delete[] ref;
-  sycl::free(res);
-
   sycl::free(x, ctxt);
   sycl::free(y, ctxt);
   sycl::free(anz, ctxt);
