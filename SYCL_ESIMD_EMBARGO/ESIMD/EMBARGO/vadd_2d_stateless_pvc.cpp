@@ -5,12 +5,12 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
-// RUN: %clangxx-esimd -fsycl %s -o %t.out
-// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
-#include "esimd_test_utils.hpp"
+#include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <CL/sycl/INTEL/esimd.hpp>
@@ -18,7 +18,7 @@
 
 using namespace cl::sycl;
 
-using namespace sycl::INTEL::gpu;
+using namespace sycl::ext::intel::experimental::esimd;
 
 #define WIDTH 16
 #define HEIGHT 8
@@ -50,7 +50,6 @@ int main(void) {
 
   auto e = q.submit([&](handler &cgh) {
     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-      using namespace sycl::INTEL::gpu;
       int i = ndi.get_global_id(0);
 
       constexpr unsigned NROW = WIDTH;

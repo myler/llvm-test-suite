@@ -5,10 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
-// RUN: %clangxx-esimd -fsycl %s -o %t.out
-// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../esimd_test_utils.hpp"
 
@@ -44,7 +44,7 @@ int main(void) {
 
   auto e = q.submit([&](handler &cgh) {
     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-      using namespace sycl::INTEL::gpu;
+      using namespace sycl::ext::intel::experimental::esimd;
 
       simd<char, 8 * 16> va(0);
       auto ma = va.format<char, 8, 16>();
@@ -55,11 +55,13 @@ int main(void) {
       mb.select<4, 2, 1, 1>(0, 0) = 4;
 
       simd<int, 8 * 8> vc(0);
-      vc = esimd_dpasw<ESIMD_PRECISION_S2, ESIMD_PRECISION_S2, 8, 8, int, int,
-                       int, 64, 32, 16>(vc, ma.format<int>(), mb.format<int>());
+      vc = esimd_dpasw<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8,
+                       int, int, int, 64, 32, 16>(vc, ma.format<int>(),
+                                                  mb.format<int>());
 
       for (int i = 0; i < 64; i += VL) {
-        block_store<int, VL>(C + i, vc.select<VL, 1>(i));
+        simd<int, VL> output = vc.select<VL, 1>(i);
+        output.copy_to(C + i);
       }
     });
   });
