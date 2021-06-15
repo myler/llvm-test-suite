@@ -10,7 +10,6 @@
 // RUN: %clangxx -fsycl %s -I%S/.. -o %t.out
 // RUN: %HOST_RUN_PLACEHOLDER %t.out %S/points.csv
 // RUN: %GPU_RUN_PLACEHOLDER %t.out %S/points.csv
-//
 
 #include "kmeans.h"
 #include "esimd_test_utils.hpp"
