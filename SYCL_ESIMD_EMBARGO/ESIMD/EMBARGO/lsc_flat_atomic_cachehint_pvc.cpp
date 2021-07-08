@@ -24,10 +24,15 @@ class Test;
 using namespace cl::sycl;
 using namespace sycl::ext::intel::experimental::esimd;
 
-ESIMD_INLINE void atomic_add_float(nd_item<1> ndi, DTYPE* sA) {
-  simd<uint32_t,16> offsets = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-  simd<float,16> mat= {0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5};
-  lsc_flat_atomic<float, EsimdAtomicOpType::ATOMIC_FADD, 1, lsc_data_size::default_size, CacheHint::Uncached, CacheHint::WriteBack, 16>((float*)sA, offsets * sizeof(float), mat, 1);
+ESIMD_INLINE void atomic_add_float(nd_item<1> ndi, DTYPE *sA) {
+  simd<uint32_t, 16> offsets = {0, 1, 2,  3,  4,  5,  6,  7,
+                                8, 9, 10, 11, 12, 13, 14, 15};
+  simd<float, 16> mat = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                         0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+  lsc_flat_atomic<float, EsimdAtomicOpType::ATOMIC_FADD, 1,
+                  lsc_data_size::default_size, CacheHint::Uncached,
+                  CacheHint::WriteBack, 16>((float *)sA,
+                                            offsets * sizeof(float), mat, 1);
 }
 
 int main(void) {
@@ -42,19 +47,18 @@ int main(void) {
   std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
   auto ctxt = q.get_context();
 
-  DTYPE *A = static_cast<DTYPE *>(malloc_shared(Size / 16 * sizeof(DTYPE), dev, ctxt));
-  DTYPE *B = static_cast<DTYPE *>(malloc_shared(Size / 16 * sizeof(DTYPE), dev, ctxt));
+  DTYPE *A =
+      static_cast<DTYPE *>(malloc_shared(Size / 16 * sizeof(DTYPE), dev, ctxt));
+  DTYPE *B =
+      static_cast<DTYPE *>(malloc_shared(Size / 16 * sizeof(DTYPE), dev, ctxt));
 
   for (unsigned i = 0; i < Size / 16; ++i) {
     A[i] = 0;
-    B[i] = 1 *64 * 0.5;
+    B[i] = 1 * 64 * 0.5;
   }
 
-  // We need that many workitems. Each processes VL elements of data.
   cl::sycl::range<1> GlobalRange{Size / VL / NElts};
-  // Number of workitems in each workgroup.
   cl::sycl::range<1> LocalRange{GroupSize};
-
   cl::sycl::nd_range<1> Range(GlobalRange, LocalRange);
 
   std::vector<kernel_id> kernelId1 = {get_kernel_id<Test>()};
@@ -64,17 +68,16 @@ int main(void) {
   try {
     auto e = q.submit([&](handler &cgh) {
       cgh.use_kernel_bundle(exeBundle1);
-      cgh.parallel_for<Test>(
-          Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-          atomic_add_float(ndi, A);
-          });
+      cgh.parallel_for<Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
+        atomic_add_float(ndi, A);
+      });
     });
     e.wait();
   } catch (cl::sycl::exception const &e) {
     std::cout << "SYCL exception caught: " << e.what() << '\n';
     return e.get_cl_code();
   }
-  
+
   for (unsigned i = 0; i < Size / 16; ++i) {
     std::cout << A[i] << " ";
   }
@@ -83,7 +86,8 @@ int main(void) {
   for (unsigned i = 0; i < Size / 16; ++i) {
     if (A[i] != B[i]) {
       if (++err_cnt < 10) {
-        std::cout << "failed at index " << i << ", " << B[i] << " != " << A[i] << "\n";
+        std::cout << "failed at index " << i << ", " << B[i] << " != " << A[i]
+                  << "\n";
       }
     }
   }
