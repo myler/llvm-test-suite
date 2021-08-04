@@ -45,14 +45,6 @@ sub lscl {
     return $output;
 }
 
-sub is_ats {
-  my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
-  if (!defined $current_gpu) {
-    return 0;
-  }
-  return $current_gpu =~ m/ats/;
-}
-
 sub init_test
 {
     my $suite_feature = $current_suite;
@@ -197,12 +189,20 @@ sub do_run
       my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
       my $python = "python3";
       my $timeset = "";
-      if (is_ats()) {
-        $python = "/usr/bin/python3"
+
+      if (defined $ENV{'CURRENT_GPU_DEVICE'}) {
+        my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+        if ($current_gpu =~ m/ats/) {
+          $python = "/usr/bin/python3";
+        } elsif ($current_gpu =~ m/pvc/) {
+          $timeset = "--timeout 1200";
+        }
       }
+
       if ($current_suite eq 'llvm_test_suite_sycl_valgrind'){
         $timeset = "--timeout 0";
       }
+
       if ($is_suite) {
         set_tool_path();
         execute("$python $lit -a . $timeset > $run_all_lf 2>&1");
