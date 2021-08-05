@@ -189,11 +189,13 @@ sub do_run
       my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
       my $python = "python3";
       my $timeset = "";
+      my $matrix = "";
 
       if (defined $ENV{'CURRENT_GPU_DEVICE'}) {
         my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
         if ($current_gpu =~ m/ats/) {
           $python = "/usr/bin/python3";
+          $matrix = "-Dmatrix=1";
         } elsif ($current_gpu =~ m/pvc/) {
           $timeset = "--timeout 1200";
         }
@@ -205,10 +207,10 @@ sub do_run
 
       if ($is_suite) {
         set_tool_path();
-        execute("$python $lit -a . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $matrix . $timeset > $run_all_lf 2>&1");
       } else {
         set_tool_path();
-        execute("$python $lit -a $path $timeset");
+        execute("$python $lit -a $matrix $path $timeset");
       }
     }
 
