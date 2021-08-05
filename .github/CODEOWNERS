@@ -74,3 +74,6 @@ SYCL/Basic/stream @againull
 
 # Test scripts
 *.pl @yuxianch @yamanwan
+
+# tc files
+*.xml @yuxianch @yamanwan
