@@ -407,17 +407,24 @@ sub run_cmake
 
     if ($insert_command ne "") {
         my $config_file = "$optset_work_dir/SYCL/lit.cfg.py";
-        if (-f $config_file) {
-           my $replacement = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
-           # Make $replacewith different with $replacement to avoid repeated insert
-           my $replacewith = "env  SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
-           `sed -i 's!$replacement:gpu !$replacewith:gpu $insert_command !g' $config_file`;
-           `sed -i 's!$replacement:cpu !$replacewith:cpu $insert_command !g' $config_file`;
-           `sed -i 's!$replacement:host !$replacewith:host $insert_command !g' $config_file`;
-           `sed -i 's!$replacement:acc !$replacewith:acc $insert_command !g' $config_file`;
-           `sed -i 's!$replacement !$replacewith $insert_command !g' $config_file`;
-           `sed -i 's!$replacement:gpu,host !$replacewith:gpu,host $insert_command !g' $config_file`;
+        if (! -f $config_file) {
+          return COMPFAIL, "File SYCL/lit.cfg.py doesn't exist";
         }
+
+        my $config_file_original = "$config_file.ori";
+        # If using tc -rerun, it may repeat inserting so we need to keep the original file and insert on it
+        if (! -f $config_file_original) {
+          copy($config_file, $config_file_original);
+        }
+
+        open my $in, "<", $config_file_original || die "Cannot open file lit.cfg.py.ori: $!";
+        open my $out, ">", $config_file || die "Cannot open file lit.cfg.py: $!";
+        while (<$in>) {
+          s/env\s+SYCL_DEVICE_FILTER=(\S+)/env SYCL_DEVICE_FILTER=$1 $insert_command /g;
+          print $out $_;
+        }
+        close $in;
+        close $out;
     }
 
     execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
