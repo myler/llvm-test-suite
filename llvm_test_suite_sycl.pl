@@ -13,6 +13,7 @@ my $short_test_name;
 my $test_info;
 my $config_folder = "";
 my $subdir = "SYCL";
+my $insert_command = "";
 
 my $sycl_backend = "";
 my $device = "";
@@ -108,19 +109,9 @@ sub init_test
 
     #add Valgrind command for test run, added by Xingxu"
     if ($suite_feature eq 'sycl_valgrind') {
-      my $valgrind_commands = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$cwd/valgrind_reports/log.%%p";
-      my $config_file = "SYCL/lit.cfg.py";
-      if (-f $config_file) {
-         my $valgrind_dir = $cwd . "/valgrind_reports";
-         safe_Mkdir($valgrind_dir);
-         my $replacement = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
-         `sed -i 's!$replacement:gpu !$replacement:gpu $valgrind_commands !g' $config_file`;
-         `sed -i 's!$replacement:cpu !$replacement:cpu $valgrind_commands !g' $config_file`;
-         `sed -i 's!$replacement:host !$replacement:host $valgrind_commands !g' $config_file`;
-         `sed -i 's!$replacement:acc !$replacement:acc $valgrind_commands !g' $config_file`;
-         `sed -i 's!$replacement !$replacement $valgrind_commands !g' $config_file`;
-         `sed -i 's!$replacement:gpu,host !$replacement:gpu,host $valgrind_commands !g' $config_file`;
-      }
+      my $valgrind_dir = $cwd . "/valgrind_reports";
+      safe_Mkdir($valgrind_dir);
+      $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$cwd/valgrind_reports/log.%%p";
     }
 
     return PASS;
@@ -405,7 +396,28 @@ sub run_cmake
     $lit_extra_env = join_extra_env($lit_extra_env,"TC_WRAPPER_PATH");
 
     if ( defined $ENV{PIN_CMD} ) {
-        $lit_extra_env = join(',',$lit_extra_env,$ENV{PIN_CMD});
+        my $pin_cmd = $ENV{PIN_CMD};
+
+        if ($pin_cmd =~ /=/) {
+          $lit_extra_env = join(',',$lit_extra_env,$ENV{PIN_CMD});
+        } elsif ($insert_command eq "") {
+          $insert_command = $pin_cmd;
+        }
+    }
+
+    if ($insert_command ne "") {
+        my $config_file = "$optset_work_dir/SYCL/lit.cfg.py";
+        if (-f $config_file) {
+           my $replacement = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
+           # Make $replacewith different with $replacement to avoid repeated insert
+           my $replacewith = "env  SYCL_DEVICE_FILTER={SYCL_PLUGIN}";
+           `sed -i 's!$replacement:gpu !$replacewith:gpu $insert_command !g' $config_file`;
+           `sed -i 's!$replacement:cpu !$replacewith:cpu $insert_command !g' $config_file`;
+           `sed -i 's!$replacement:host !$replacewith:host $insert_command !g' $config_file`;
+           `sed -i 's!$replacement:acc !$replacewith:acc $insert_command !g' $config_file`;
+           `sed -i 's!$replacement !$replacewith $insert_command !g' $config_file`;
+           `sed -i 's!$replacement:gpu,host !$replacewith:gpu,host $insert_command !g' $config_file`;
+        }
     }
 
     execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
