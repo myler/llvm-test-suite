@@ -190,7 +190,7 @@ sub do_run
           $matrix = "-Dmatrix=1";
           $jobset = "";
         } elsif ($current_gpu =~ m/pvc/) {
-          $timeset = "--timeout 1200";
+          $timeset = "--timeout 1800";
           $jobset = "";
         }
       }
