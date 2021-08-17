@@ -97,6 +97,9 @@ config.substitutions.append( ('%sycl_include',  config.sycl_include ) )
 if lit_config.params.get('gpu-intel-dg1', False):
     config.available_features.add('gpu-intel-dg1')
 
+if lit_config.params.get('matrix', False):
+    config.available_features.add('matrix')
+
 # check if compiler supports CL command line options
 cl_options=False
 sp = subprocess.getstatusoutput(config.dpcpp_compiler+' /help')
@@ -185,8 +188,10 @@ if config.sycl_be == "rocm" and config.rocm_platform == "AMD":
 else:
     mcpu_flag = ""
 
-config.substitutions.append( ('%clangxx', ' '+ config.dpcpp_compiler + ' ' + config.cxx_flags + ' ' + mcpu_flag) )
-config.substitutions.append( ('%clang', ' ' + config.dpcpp_compiler + ' ' + config.c_flags ) )
+# extra_include points to sycl/sycl.hpp location to workaround compiler
+# versions which supports only CL/sycl.hpp
+config.substitutions.append( ('%clangxx', ' '+ config.dpcpp_compiler + ' ' + config.cxx_flags + ' ' + mcpu_flag + ( "/I" if cl_options else "-I") + config.extra_include ) )
+config.substitutions.append( ('%clang', ' ' + config.dpcpp_compiler + ' ' + config.c_flags + ( "/I" if cl_options else "-I") + config.extra_include ) )
 config.substitutions.append( ('%threads_lib', config.sycl_threads_lib) )
 
 # Configure device-specific substitutions based on availability of corresponding

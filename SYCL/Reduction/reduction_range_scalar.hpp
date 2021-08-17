@@ -3,38 +3,32 @@
 // accessing a scalar holding the reduction result.
 
 #include "reduction_utils.hpp"
-#include <CL/sycl.hpp>
-#include <cassert>
 
 using namespace cl::sycl;
 
 template <typename T, bool B> class KName;
+template <typename T, typename> class TName;
 
-template <int Dims>
-std::ostream &operator<<(std::ostream &OS, const range<Dims> &Range) {
-  OS << "{" << Range[0];
-  if constexpr (Dims > 1)
-    OS << ", " << Range[1];
-  if constexpr (Dims > 2)
-    OS << ", " << Range[2];
-  OS << "}";
-  return OS;
-}
+template <typename Name, bool IsSYCL2020, access::mode Mode, int AccDim = 1,
+          typename T, class BinaryOperation, int Dims>
+int test(queue &Q, T Identity, T Init, BinaryOperation BOp,
+         const range<Dims> &Range) {
+  printTestLabel<T, BinaryOperation>(IsSYCL2020, Range);
 
-template <typename Name, bool IsSYCL2020Mode, access::mode Mode, typename T,
-          int AccDim = 1, class BinaryOperation, int Dims>
-void test(queue &Q, T Identity, T Init, BinaryOperation BOp,
-          range<Dims> Range) {
-  std::string StdMode = IsSYCL2020Mode ? "SYCL2020" : "ONEAPI  ";
-  std::cout << "Running the test case: " << StdMode
-            << " {T=" << typeid(T).name()
-            << ", BOp=" << typeid(BinaryOperation).name() << ", Range=" << Range
-            << std::endl;
-
-  // Skip the test for such big arrays now.
-  constexpr size_t TwoGB = 2LL * 1024 * 1024 * 1024;
-  if (Range.size() > TwoGB)
-    return;
+  // It is a known problem with passing data that is close to 4Gb in size
+  // to device. Such data breaks the execution pretty badly.
+  // Some of test cases calling this function try to verify the correctness
+  // of reduction with the global range bigger than the maximal work-group size
+  // for the device. Maximal WG size for device may be very big, e.g. it is
+  // 67108864 for ACC emulator. Multiplying that by some factor
+  // (to exceed max WG-Size) and multiplying it by the element size may exceed
+  // the safe size of data passed to device.
+  // Let's set it to 1 GB for now, and just skip the test if it exceeds 1Gb.
+  constexpr size_t OneGB = 1LL * 1024 * 1024 * 1024;
+  if (Range.size() * sizeof(T) > OneGB) {
+    std::cout << " SKIPPED due to too big data size" << std::endl;
+    return 0;
+  }
 
   buffer<T, Dims> InBuf(Range);
   buffer<T, 1> OutBuf(1);
@@ -51,42 +45,136 @@ void test(queue &Q, T Identity, T Init, BinaryOperation BOp,
   (OutBuf.template get_access<access::mode::write>())[0] = Init;
 
   // Compute.
-  if constexpr (IsSYCL2020Mode) {
-    Q.submit([&](handler &CGH) {
-      auto In = InBuf.template get_access<access::mode::read>(CGH);
-      property_list PropList = getPropertyList<Mode>();
-      auto Redu = sycl::reduction(OutBuf, CGH, Identity, BOp, PropList);
-
-      CGH.parallel_for<Name>(
-          Range, Redu, [=](id<Dims> Id, auto &Sum) { Sum.combine(In[Id]); });
-    });
-  } else {
-    Q.submit([&](handler &CGH) {
-      auto In = InBuf.template get_access<access::mode::read>(CGH);
-      accessor<T, AccDim, Mode, access::target::global_buffer> Out(OutBuf, CGH);
-      auto Redu = ext::oneapi::reduction(Out, Identity, BOp);
-
-      CGH.parallel_for<Name>(
-          Range, Redu, [=](id<Dims> Id, auto &Sum) { Sum.combine(In[Id]); });
-    });
-  }
+  Q.submit([&](handler &CGH) {
+    auto In = InBuf.template get_access<access::mode::read>(CGH);
+    auto Redu =
+        createReduction<IsSYCL2020, Mode, AccDim>(OutBuf, CGH, Identity, BOp);
+    CGH.parallel_for<Name>(
+        Range, Redu, [=](id<Dims> Id, auto &Sum) { Sum.combine(In[Id]); });
+  });
 
   // Check correctness.
   auto Out = OutBuf.template get_access<access::mode::read>();
   T ComputedOut = *(Out.get_pointer());
-  if (ComputedOut != CorrectOut) {
-    printDeviceInfo(Q, true);
-    std::cerr << "Error: Range = " << Range << ", "
-              << "Computed value: " << ComputedOut
-              << ", Expected value: " << CorrectOut << "\n";
-    assert(0 && "Wrong value.");
-  }
+  return checkResults(Q, IsSYCL2020, BOp, Range, ComputedOut, CorrectOut);
 }
 
 template <typename Name, access::mode Mode, typename T, class BinaryOperation,
           int Dims>
-void testBoth(queue &Q, T Identity, T Init, BinaryOperation BOp,
-              range<Dims> Range) {
-  test<KName<Name, false>, false, Mode>(Q, Identity, Init, BOp, Range);
-  test<KName<Name, true>, true, Mode>(Q, Identity, Init, BOp, Range);
+int testBoth(queue &Q, T Identity, T Init, BinaryOperation BOp,
+             const range<Dims> &Range) {
+  return test<KName<Name, false>, false, Mode>(Q, Identity, Init, BOp, Range) +
+         test<KName<Name, true>, true, Mode>(Q, Identity, Init, BOp, Range);
+}
+
+template <typename Name, bool IsSYCL2020, access::mode Mode, typename T,
+          class BinaryOperation, int Dims>
+int testUSM(queue &Q, T Identity, T Init, BinaryOperation BOp,
+            const range<Dims> &Range, usm::alloc AllocType) {
+  printTestLabel<T, BinaryOperation>(IsSYCL2020, Range);
+
+  auto Dev = Q.get_device();
+  if (!Dev.has(getUSMAspect(AllocType))) {
+    std::cout << " SKIPPED due to unsupported USM alloc type" << std::endl;
+    return 0;
+  }
+
+  // It is a known problem with passing data that is close to 4Gb in size
+  // to device. Such data breaks the execution pretty badly.
+  // Some of test cases calling this function try to verify the correctness
+  // of reduction with the global range bigger than the maximal work-group size
+  // for the device. Maximal WG size for device may be very big, e.g. it is
+  // 67108864 for ACC emulator. Multiplying that by some factor
+  // (to exceed max WG-Size) and multiplying it by the element size may exceed
+  // the safe size of data passed to device.
+  // Let's set it to 1 GB for now, and just skip the test if it exceeds 1Gb.
+  constexpr size_t OneGB = 1LL * 1024 * 1024 * 1024;
+  if (Range.size() * sizeof(T) > OneGB) {
+    std::cout << " SKIPPED due to too big data size" << std::endl;
+    return 0;
+  }
+
+  T *ReduVarPtr = (T *)malloc(sizeof(T), Dev, Q.get_context(), AllocType);
+  if (ReduVarPtr == nullptr) {
+    std::cout << " SKIPPED due to unrelated reason: alloc returned nullptr"
+              << std::endl;
+    return 0;
+  }
+  if (AllocType == usm::alloc::device) {
+    Q.submit([&](handler &CGH) {
+       CGH.single_task<TName<Name, class InitKernel>>(
+           [=]() { *ReduVarPtr = Init; });
+     }).wait();
+  } else {
+    *ReduVarPtr = Init;
+  }
+
+  // Initialize.
+  T CorrectOut;
+  buffer<T, Dims> InBuf(Range);
+  initInputData(InBuf, CorrectOut, Identity, BOp, Range);
+  if constexpr (Mode == access::mode::read_write)
+    CorrectOut = BOp(CorrectOut, Init);
+
+  // Compute.
+  Q.submit([&](handler &CGH) {
+     auto In = InBuf.template get_access<access::mode::read>(CGH);
+     auto Redu = createReduction<IsSYCL2020, Mode>(ReduVarPtr, Identity, BOp);
+     CGH.parallel_for<TName<Name, class Test>>(
+         Range, Redu, [=](id<Dims> Id, auto &Sum) { Sum.combine(In[Id]); });
+   }).wait();
+
+  // Check correctness.
+  T ComputedOut;
+  if (AllocType == usm::alloc::device) {
+    buffer<T, 1> Buf(&ComputedOut, range<1>(1));
+    Q.submit([&](handler &CGH) {
+       auto OutAcc = Buf.template get_access<access::mode::discard_write>(CGH);
+       CGH.single_task<TName<Name, class Check>>(
+           [=]() { OutAcc[0] = *ReduVarPtr; });
+     }).wait();
+    ComputedOut = (Buf.template get_access<access::mode::read>())[0];
+  } else {
+    ComputedOut = *ReduVarPtr;
+  }
+
+  std::string AllocStr =
+      "AllocMode=" + std::to_string(static_cast<int>(AllocType));
+  int Error = checkResults(Q, IsSYCL2020, BOp, Range, ComputedOut, CorrectOut,
+                           AllocStr);
+  free(ReduVarPtr, Q.get_context());
+  return Error;
+}
+
+template <typename Name, access::mode Mode, typename T, class BinaryOperation,
+          int Dims>
+int test2020USM(queue &Q, T Identity, T Init, BinaryOperation BOp,
+                const range<Dims> &Range) {
+  int NumErrors = 0;
+  NumErrors += testUSM<TName<Name, class Shared2020>, true, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::shared);
+  NumErrors += testUSM<TName<Name, class Host2020>, true, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::host);
+  NumErrors += testUSM<TName<Name, class Device2020>, true, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::device);
+  return NumErrors;
+}
+
+template <typename Name, access::mode Mode, typename T, class BinaryOperation,
+          int Dims>
+int testONEAPIUSM(queue &Q, T Identity, T Init, BinaryOperation BOp,
+                  const range<Dims> &Range) {
+  int NumErrors = 0;
+  if (Mode == access::mode::discard_write) {
+    std::cerr << "Skipped an incorrect test case: ext::oneapi::reduction "
+              << "does not support discard_write mode for USM variables.";
+    return 0;
+  }
+  NumErrors += testUSM<TName<Name, class Shared>, false, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::shared);
+  NumErrors += testUSM<TName<Name, class Host>, false, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::host);
+  NumErrors += testUSM<TName<Name, class Device>, false, Mode, T>(
+      Q, Identity, Init, BOp, Range, usm::alloc::device);
+  return NumErrors;
 }
