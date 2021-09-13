@@ -17,6 +17,8 @@ implied warranties, other than those that are expressly stated in the License.
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUNx: %GPU_RUN_PLACEHOLDER %t.out
 
+#include "esimd_test_utils.hpp"
+
 #include <CL/sycl.hpp>
 #include <algorithm>
 #include <cmath>
@@ -34,8 +36,8 @@ int main() {
   unsigned y = 0;
   unsigned size = data_height * data_pitch;
 
-  auto GPUSelector = gpu_selector{};
-  auto q = queue{GPUSelector};
+  auto q =
+      queue{esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler()};
   auto device = q.get_device();
   std::cout << "Device name: " << device.get_info<info::device::name>()
             << std::endl;
