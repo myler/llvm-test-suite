@@ -11,7 +11,7 @@ my $cwd = cwd();
 # @test_to_run_list stores only the test(s) that will be run
 # For example, for "tc -t llvm_test_suite_sycl/aot_cpu,aot_gpu" it will store 2 tests - aot_cpu and aot_gpu
 my @test_to_run_list = ();
-# All the tests in the whole suite(without splitting) or sub-suite(with splitting)
+# @suite_test_list stores all the tests in the whole suite(without splitting) or sub-suite(with splitting)
 # For example, for "tc -t llvm_test_suite_sycl~4-1/aot_cpu,aot_gpu" it will store all the tests in sub-suite 4-1
 my @suite_test_list = ();
 my $short_test_name;
@@ -58,7 +58,7 @@ sub init_test
     #Remove suffix of suite names if it has
     $suite_feature =~ s/~.*$//;
     $config_folder = 'config_sycl';
-    if ($suite_feature ne 'sycl' and $suite_feature ne 'sycl_valgrind')
+    if ($suite_feature !~ /^sycl/)
     {
         $config_folder = $config_folder . '_' . $suite_feature;
         $subdir = uc $suite_feature;
