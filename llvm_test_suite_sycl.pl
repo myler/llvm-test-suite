@@ -406,8 +406,6 @@ sub run_cmake
     }
 
     my $lit_extra_env = "SYCL_ENABLE_HOST_DEVICE=1";
-    $lit_extra_env = join_extra_env($lit_extra_env,"CPATH");
-    $lit_extra_env = join_extra_env($lit_extra_env,"LIBRARY_PATH");
     $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX");
     $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX_STRIP");
     $lit_extra_env = join_extra_env($lit_extra_env,"TC_WRAPPER_PATH");
@@ -415,8 +413,13 @@ sub run_cmake
     if ( defined $ENV{PIN_CMD} ) {
         my $pin_cmd = $ENV{PIN_CMD};
 
-        if ($pin_cmd =~ /=/) {
-          $lit_extra_env = join(',',$lit_extra_env,$ENV{PIN_CMD});
+        # Only pass PIN_CMD to lit when PIN_CMD includes "=" and does not include " "(space)
+        if ($pin_cmd =~ /=(.*)/) {
+          my $pin_cmd_value = $1;
+          $pin_cmd_value =~ s/\s+$//; # Remove the ending space
+          if ($pin_cmd_value !~ / /) {
+            $lit_extra_env = join(',',$lit_extra_env,$ENV{PIN_CMD});
+          }
         } elsif ($insert_command eq "") {
           $insert_command = $pin_cmd;
         }
