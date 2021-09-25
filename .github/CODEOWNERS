@@ -29,15 +29,13 @@ SYCL/DotProduct @rdeodhar
 # Explicit SIMD
 SYCL/ESIMD @kbobrovs @DenisBakhvalov
 
-# Function pointers
-SYCL/FunctionPointers @AlexeySachkov
-
 # Functor
 SYCL/Functor @AlexeySachkov
 
 # Group algorithms
 SYCL/GroupAlgorithm @Pennycook @AlexeySachkov
 SYCL/SubGroup @Pennycook @AlexeySachkov
+SYCL/GroupMask @Pennycook @vladimilaz
 
 # Group local memory
 SYCL/GroupLocalMemory @sergey-semenov @Pennycook
@@ -77,3 +75,8 @@ SYCL/Basic/stream @againull
 
 # tc files
 *.xml @yuxianch @yamanwan
+#BFloat16 conversion
+SYCL/BFloat16 @AlexeySotkin @MrSidims
+
+# Deprecated features
+SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
