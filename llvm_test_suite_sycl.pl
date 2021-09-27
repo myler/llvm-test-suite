@@ -111,11 +111,10 @@ sub init_test
       rmtree($path);
     }
 
-    #add Valgrind command for test run, added by Xingxu"
     if ($suite_feature eq 'sycl_valgrind') {
-      my $valgrind_dir = $cwd . "/valgrind_reports";
-      safe_Mkdir($valgrind_dir);
-      $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$cwd/valgrind_reports/log.%%p";
+      my $valgrind_dir = $cwd . "/_VALGRIND/valgrind_reports";
+      safe_Mkdir('-p',$valgrind_dir);
+      $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/log.%%p";
     }
 
     return PASS;
@@ -207,7 +206,7 @@ sub do_run
           $matrix = "-Dmatrix=1";
       }
 
-      if ($current_suite eq 'llvm_test_suite_sycl_valgrind'){
+      if ($current_suite =~ m/valgrind/){
         $timeset = "--timeout 0";
       }
 
