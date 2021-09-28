@@ -19,6 +19,7 @@ my $test_info;
 my $config_folder = "";
 my $subdir = "SYCL";
 my $insert_command = "";
+my $is_suite = 0;
 
 my $sycl_backend = "";
 my $device = "";
@@ -92,23 +93,26 @@ sub init_test
     }
 
     #Remove untested source files from $subdir if it run with several subsuites
-    my $info_dir = "$optset_work_dir/$config_folder";
-    my @info_files = glob("$info_dir/*.info");
+    if ($is_suite) {
+      my $info_dir = "$optset_work_dir/$config_folder";
+      my @info_files = glob("$info_dir/*.info");
 
-    my %in_test_hash = map { $_ => 1 } @suite_test_list;
-    my @outof_test_list = ();
+      my %in_test_hash = map { $_ => 1 } @suite_test_list;
+      my @outof_test_list = ();
 
-    for my $file (@info_files) {
-      $file = basename($file);
-      $file =~ s/\.info//;
-      if (!exists($in_test_hash{$file})) {
-        push(@outof_test_list, $file);
+      for my $file (@info_files) {
+        $file = basename($file);
+        $file =~ s/\.info//;
+        if (!exists($in_test_hash{$file})) {
+          push(@outof_test_list, $file);
+        }
       }
-    }
-    for my $test (@outof_test_list) {
-      my $test_info = get_info($test);
-      my $path = "$test_info->{fullpath}";
-      rmtree($path);
+      for my $test (@outof_test_list) {
+        my $test_info = get_info($test);
+        my $path = "$test_info->{fullpath}";
+        rmtree($path);
+      }
+      log_command("##Removed tests that are not in $current_suite\n");
     }
 
     if ($suite_feature eq 'sycl_valgrind') {
@@ -131,6 +135,10 @@ sub BuildTest
     @test_to_run_list = get_tests_to_run();
     if ($current_test eq $test_to_run_list[0])
     {
+        my @whole_suite_test = sort(@suite_test_list);
+        my @current_test_list = sort(@test_to_run_list);
+        $is_suite = is_same(\@current_test_list, \@whole_suite_test);
+
         init_test();
         chdir_log($build_dir);
 
@@ -181,9 +189,6 @@ sub do_run
     my $path = "$r->{fullpath}";
 
     if (! -e $run_all_lf) {
-      my @whole_suite_test = sort(@suite_test_list);
-      my @current_test_list = sort(@test_to_run_list);
-      my $is_suite = is_same(\@current_test_list, \@whole_suite_test);
       my $python = "python3";
       my $timeset = "";
       # Set matrix to 1 if it's running on ATS or using SPR SDE
