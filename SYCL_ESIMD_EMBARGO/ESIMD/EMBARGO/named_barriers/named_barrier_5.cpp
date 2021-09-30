@@ -64,18 +64,16 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
   }
-
-  off += (Threads + 1) * VL * sizeof(int);
-  simd<int, VL * 2> val2(Threads + idx);
-  lsc_surf_store<int, VL * 2>(val2, acc, off);
 }
 
 bool check(std::vector<int> out) {
   bool passed = true;
   for (int i = 0; i < Size; i++) {
     int etalon = i / 4;
-    if (etalon * 4 > Size / 2)
+    if (etalon * 4 == Size / 2)
       etalon -= 1;
+    if (etalon * 4 > Size / 2)
+      etalon = 0;
     if (out[i] != etalon) {
       passed = false;
       std::cout << "out[" << i << "]=" << std::hex << out[i] << " vs " << etalon
