@@ -18,15 +18,25 @@ implied warranties, other than those that are expressly stated in the License.
 #include "Inputs/lsc_surf_load.hpp"
 
 constexpr uint32_t seed = 199;
-// constexpr lsc_data_size DS = lsc_data_size::u16u32;
 
 int main(void) {
   srand(seed);
   bool passed = true;
 
-  passed &= test<uint32_t, 1, 4, 32, 1>(0, rand());
-  passed &= test<uint32_t, 1, 4, 32, 3>(1, rand());
-  passed &= test<uint32_t, 1, 4, 1, 32, true>(2, rand());
+  // non transpose
+  passed &= test<0, uint32_t, 1, 4, 32, 1, false>(rand());
+  passed &= test<1, uint32_t, 1, 4, 32, 2, false>(rand());
+  passed &= test<2, uint32_t, 1, 4, 16, 2, false>(rand());
+  passed &= test<3, uint32_t, 1, 4, 4, 1, false>(rand());
+  passed &= test<4, uint32_t, 1, 1, 1, 1, false>(1);
+  passed &= test<5, uint32_t, 2, 1, 1, 1, false>(1);
+  // passed &= test<6, uint32_t, 1, 4, 8, 2>(rand()); // merge fail
+  // passed &= test<7, uint32_t, 1, 4, 8, 3>(rand()); // exec fail
+
+  // transpose
+  passed &= test<8, uint32_t, 1, 4, 1, 32, true>();
+  passed &= test<9, uint32_t, 2, 2, 1, 16, true>();
+  passed &= test<10, uint32_t, 4, 4, 1, 4, true>();
 
   std::cout << (passed ? "Passed\n" : "FAILED\n");
   return passed ? 0 : 1;
