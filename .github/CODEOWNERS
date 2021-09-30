@@ -82,4 +82,4 @@ SYCL/BFloat16 @AlexeySotkin @MrSidims
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
 
 # LSC
-SYCL/ESIMD/lsc @fveselov
+SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/lsc @fveselov
