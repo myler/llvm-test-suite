@@ -46,9 +46,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
 
-  // we use producer-consumer mode
   int flag = 0;
-  // each barrier is going to be signalled and waited on by two threads
   int producers = 2;
   int consumers = 2;
 
