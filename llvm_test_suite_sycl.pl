@@ -124,6 +124,62 @@ sub init_test
     return PASS;
 }
 
+sub extract_perf_results
+{
+    my $timer = Timer->new($current_test, $current_suite, $current_optset);
+    $timer->set("host", &alloy_utils::get_hostname());
+    my $output_file = join($slash, $optset_work_dir, "$current_test.output");
+    open(LOG, "+>", $output_file) or die "open $output_file fail";
+    print LOG $execution_output;
+    seek(LOG, 0, 0);
+    my $perf_matched = 0;
+    while (<LOG>) {
+        my $pattern = ".*OverallTime(.*):(\\d+.?\\d*[Ee]?[+-]?\\d+).*";
+        if ($_ =~ qr/$pattern/) {
+            my $primary = $1;
+            my $result = $2;
+            my $metric = "time";
+            my $better = "lt";
+            $timer->set($metric, $result);
+            $timer->set("BETTER_$metric", $better);
+            if ($primary =~ m/Primary/) {
+              $timer->set("primary_metric", $metric);
+              $perf_matched = 1;
+            }
+        }
+        $pattern = ".*KernelThroughput(.*):(\\d+.?\\d*[Ee]?[+-]?\\d+).*";
+        if ($_ =~ qr/$pattern/) {
+            my $primary = $1;
+            my $result = $2;
+            my $metric = "throughput";
+            my $better = "gt";
+            $timer->set($metric, $result);
+            $timer->set("BETTER_$metric", $better);
+            if ($primary =~ m/Primary/) {
+              $timer->set("primary_metric", $metric);
+              $perf_matched = 1;
+            }
+        }
+        $pattern = ".*KernelTime(.*):(\\d+.?\\d*[Ee]?[+-]?\\d+).*";
+        if ($_ =~ qr/$pattern/) {
+            my $primary = $1;
+            my $result = $2;
+            my $metric = "kerneltime";
+            my $better = "lt";
+            $timer->set($metric, $result);
+            $timer->set("BETTER_$metric", $better);
+            if ($primary =~ m/Primary/) {
+              $timer->set("primary_metric", $metric);
+              $perf_matched = 1;
+            }
+        }
+    }
+    close(LOG);
+    if (! $perf_matched) {
+        print "Warning: Primary metric is not specified!!!\n";
+    }
+}
+
 sub BuildTest
 {
     $build_dir = $cwd . "/build";
@@ -168,6 +224,18 @@ sub BuildTest
 
 sub RunTest
 {
+    $build_dir = $cwd . "/build";
+
+    @suite_test_list = get_test_list($current_optset);
+    @test_to_run_list = get_tests_to_run();
+    if ($current_test eq $test_to_run_list[0]) {
+        my @whole_suite_test = sort(@suite_test_list);
+        my @current_test_list = sort(@test_to_run_list);
+        $is_suite = is_same(\@current_test_list, \@whole_suite_test);
+
+        init_test();
+    }
+    chdir_log($build_dir);
     $test_info = get_info();
     my ( $status, $output) = do_run($test_info);
     my $res = "";
@@ -179,6 +247,10 @@ sub RunTest
         $execution_output .= $filtered_output;
     } else {
         $res = generate_run_result($output);
+    }
+    if ($res eq $PASS && ((defined $opt_perf && $opt_perf) ||
+        (defined $opt_perf_run && $opt_perf_run))) {
+        extract_perf_results();
     }
     return $res;
 }
@@ -578,6 +650,7 @@ sub append2file
 }
 
 sub CleanupTest {
+  @test_to_run_list = get_tests_to_run();
   if ($current_test eq $test_to_run_list[-1]) {
       rename($run_all_lf, "$run_all_lf.last");
       rename($cmake_err, "$cmake_err.last");
