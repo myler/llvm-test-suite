@@ -28,6 +28,7 @@ SYCL/DotProduct @rdeodhar
 
 # Explicit SIMD
 SYCL/ESIMD @kbobrovs @DenisBakhvalov
+config_sycl/esimd*
 
 # Functor
 SYCL/Functor @AlexeySachkov
@@ -81,5 +82,7 @@ SYCL/BFloat16 @AlexeySotkin @MrSidims
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
 
-# LSC
+# ESIMD embargo
+SYCL_ESIMD_EMBARGO @kychendev @kbobrovs @v-vklochkov
+config_sycl_esimd_embargo @kychendev @kbobrovs @v-vklochkov
 SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/lsc @fveselov
