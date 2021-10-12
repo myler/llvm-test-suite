@@ -28,7 +28,7 @@ SYCL/DotProduct @rdeodhar
 
 # Explicit SIMD
 SYCL/ESIMD @kbobrovs @DenisBakhvalov
-config_sycl/esimd*
+config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
 
 # Functor
 SYCL/Functor @AlexeySachkov
