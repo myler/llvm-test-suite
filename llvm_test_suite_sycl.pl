@@ -10,16 +10,15 @@ my $cwd = cwd();
 
 # @test_to_run_list stores only the test(s) that will be run
 # For example, for "tc -t llvm_test_suite_sycl/aot_cpu,aot_gpu" it will store 2 tests - aot_cpu and aot_gpu
-my @test_to_run_list = ();
+my @test_to_run_list = get_tests_to_run();
 # @suite_test_list stores all the tests in the whole suite(without splitting) or sub-suite(with splitting)
 # For example, for "tc -t llvm_test_suite_sycl~4-1/aot_cpu,aot_gpu" it will store all the tests in sub-suite 4-1
-my @suite_test_list = ();
+my @suite_test_list = get_test_list($current_optset);
 my $short_test_name;
 my $test_info;
-my $config_folder = "";
+my $config_folder = 'config_sycl';
 my $subdir = "SYCL";
 my $insert_command = "";
-my $is_suite = 0;
 
 my $sycl_backend = "";
 my $device = "";
@@ -52,13 +51,27 @@ sub lscl {
     return $output;
 }
 
+sub is_zperf_run {
+    if ((defined $opt_perf && $opt_perf) ||
+        (defined $opt_perf_run && $opt_perf_run)) {
+        return 1;
+    }
+    return 0;
+}
+
+sub is_suite {
+    my @whole_suite_test = sort(@suite_test_list);
+    my @current_test_list = sort(@test_to_run_list);
+
+    return is_same(\@current_test_list, \@whole_suite_test);
+}
+
 sub init_test
 {
     my $suite_feature = $current_suite;
     $suite_feature =~ s/^llvm_test_suite_//;
     #Remove suffix of suite names if it has
     $suite_feature =~ s/~.*$//;
-    $config_folder = 'config_sycl';
     if ($suite_feature !~ /^sycl/)
     {
         $config_folder = $config_folder . '_' . $suite_feature;
@@ -93,7 +106,7 @@ sub init_test
     }
 
     #Remove untested source files from $subdir if it run with several subsuites
-    if ($is_suite) {
+    if (is_suite()) {
       my $info_dir = "$optset_work_dir/$config_folder";
       my @info_files = glob("$info_dir/*.info");
 
@@ -185,16 +198,8 @@ sub BuildTest
     $build_dir = $cwd . "/build";
     safe_Mkdir($build_dir);
 
-    # CMPLRTST-14094: API get_test_list() requires optset name as an argument
-    @suite_test_list = get_test_list($current_optset);
-
-    @test_to_run_list = get_tests_to_run();
     if ($current_test eq $test_to_run_list[0])
     {
-        my @whole_suite_test = sort(@suite_test_list);
-        my @current_test_list = sort(@test_to_run_list);
-        $is_suite = is_same(\@current_test_list, \@whole_suite_test);
-
         init_test();
         chdir_log($build_dir);
 
@@ -225,17 +230,8 @@ sub BuildTest
 sub RunTest
 {
     $build_dir = $cwd . "/build";
-
-    @suite_test_list = get_test_list($current_optset);
-    @test_to_run_list = get_tests_to_run();
-    if ($current_test eq $test_to_run_list[0]) {
-        my @whole_suite_test = sort(@suite_test_list);
-        my @current_test_list = sort(@test_to_run_list);
-        $is_suite = is_same(\@current_test_list, \@whole_suite_test);
-
-        init_test();
-    }
     chdir_log($build_dir);
+
     $test_info = get_info();
     my ( $status, $output) = do_run($test_info);
     my $res = "";
@@ -248,8 +244,7 @@ sub RunTest
     } else {
         $res = generate_run_result($output);
     }
-    if ($res eq $PASS && ((defined $opt_perf && $opt_perf) ||
-        (defined $opt_perf_run && $opt_perf_run))) {
+    if ($res eq $PASS && is_zperf_run()) {
         extract_perf_results();
     }
     return $res;
@@ -287,7 +282,7 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
-      if ($is_suite) {
+      if (is_suite()) {
         set_tool_path();
         execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
       } else {
@@ -650,7 +645,6 @@ sub append2file
 }
 
 sub CleanupTest {
-  @test_to_run_list = get_tests_to_run();
   if ($current_test eq $test_to_run_list[-1]) {
       rename($run_all_lf, "$run_all_lf.last");
       rename($cmake_err, "$cmake_err.last");
