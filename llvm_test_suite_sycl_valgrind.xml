@@ -17,6 +17,9 @@ Last Changed Revision: a8b83015d7b93ed047f757881ae384a559201eba    Mon Oct 4 21:
     <file path="config_sycl" />
     <file path=".github/CODEOWNERS" />
   </files>
+  <rules>
+    <advancedRule perfSupport="accurate" />
+  </rules>
   <tests>
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="DeprecatedFeatures_opencl-interop_0" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_accelerator" />
