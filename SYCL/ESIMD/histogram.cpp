@@ -132,11 +132,16 @@ int main(int argc, char *argv[]) {
                          image_channel_type::unsigned_int32,
                          range<2>{width / sizeof(uint4), height});
 
+  // Start Timer
+  esimd_test::Timer timer;
+  double start;
+
   // Launches the task on the GPU.
   double kernel_times = 0;
   unsigned num_iters = 10;
 
   try {
+    // num_iters + 1, iteration#0 is for warmup
     for (int iter = 0; iter <= num_iters; ++iter) {
       double etime = 0;
       for (int b = 0; b < NUM_BINS; b++)
@@ -215,6 +220,8 @@ int main(int argc, char *argv[]) {
       etime = esimd_test::report_time("kernel time", e, e);
       if (iter > 0)
         kernel_times += etime;
+      else
+        start = timer.Elapsed();
     }
     // SYCL will enqueue and run the kernel. Recall that the buffer's data is
     // given back to the host at the end of scope.
@@ -224,8 +231,12 @@ int main(int argc, char *argv[]) {
     return e.get_cl_code();
   }
 
-  float kernel_time = kernel_times / num_iters;
-  std::cerr << "GPU kernel time = " << kernel_time << " msec\n";
+  // End timer.
+  double end = timer.Elapsed();
+
+  esimd_test::display_timing_stats(kernel_times,num_iters,(end-start)*1000);
+  //float kernel_time = kernel_times / num_iters;
+  //std::cerr << "GPU kernel time = " << kernel_time << " msec\n";
 
   writeHist(bins);
   writeHist(cpuHistogram);
