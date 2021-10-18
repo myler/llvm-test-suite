@@ -21,11 +21,8 @@ Last Changed Revision: 5b3d87cfddd7d42e02abba9752252ab37f608bb8    Fri Oct 8 11:
     <advancedRule perfSupport="accurate" />
   </rules>
   <tests>
-<<<<<<< HEAD
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="Basic_opencl-interop_0" />
-=======
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="DeprecatedFeatures_opencl-interop_0" />
->>>>>>> xmain
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_accelerator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_cpu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_gpu" />
@@ -178,18 +175,14 @@ Last Changed Revision: 5b3d87cfddd7d42e02abba9752252ab37f608bb8    Fri Oct 8 11:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="config" testName="config_env_vars" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="config" testName="config_kernel_from_file" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="config" testName="config_select_device" />
-<<<<<<< HEAD
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_basic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_basic_program" />
-=======
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_buffer_interop" />
->>>>>>> xmain
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_deprecated" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_device_platform_interop" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_event_creation_opencl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_functionpointers_fp_as_kernel_arg" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_functionpointers_pass_fp_through_buffer" />
-<<<<<<< HEAD
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_get_backend" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_get_options" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_kernel_and_program" />
@@ -209,7 +202,6 @@ Last Changed Revision: 5b3d87cfddd7d42e02abba9752252ab37f608bb8    Fri Oct 8 11:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_specconsts1_2_1_specialization_constants_negative" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_specconsts1_2_1_specialization_constants_override" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_specconsts1_2_1_unpacked_composite_type" />
-=======
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_kernel_and_program_interop" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_kernel_interop" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_opencl_interop" />
@@ -218,7 +210,6 @@ Last Changed Revision: 5b3d87cfddd7d42e02abba9752252ab37f608bb8    Fri Oct 8 11:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_sampler_ocl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_set_arg_interop" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_subbuffer_interop" />
->>>>>>> xmain
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_accelerator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_cpu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_gpu" />
@@ -452,12 +443,9 @@ Last Changed Revision: 5b3d87cfddd7d42e02abba9752252ab37f608bb8    Fri Oct 8 11:
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_cache_env_vars" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_cache_env_vars_lin" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_cache_env_vars_win" />
-<<<<<<< HEAD
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_kernel_and_program_interop" />
-=======
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_get_options" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_kernel_and_program" />
->>>>>>> xmain
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_kernel_bundle_merge_options" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_kernel_bundle_merge_options_env" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelandprogram" testName="kernelandprogram_program_merge_options" />
