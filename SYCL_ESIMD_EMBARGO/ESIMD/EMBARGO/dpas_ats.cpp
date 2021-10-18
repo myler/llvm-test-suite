@@ -13,7 +13,7 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
 
 using namespace cl::sycl;
@@ -27,56 +27,49 @@ int main(void) {
 
   auto dev = q.get_device();
   std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
-  auto ctxt = q.get_context();
 
-  int *C = static_cast<int *>(malloc_shared(Size * sizeof(int), dev, ctxt));
-
-  for (unsigned i = 0; i < Size; ++i) {
-    C[i] = 0;
-  }
+  int *C = malloc_shared<int>(Size, q);
+  memset(C, 0, Size * sizeof(int));
 
   // We need that many task groups
-  cl::sycl::range<1> GroupRange{1};
+  range<1> GroupRange{ GroupSize };
 
   // We need that many tasks in each group
-  cl::sycl::range<1> TaskRange{GroupSize};
-  cl::sycl::nd_range<1> Range(GroupRange, TaskRange);
+  range<1> TaskRange{GroupSize};
+  nd_range<1> Range(GroupRange, TaskRange);
 
-  auto e = q.submit([&](handler &cgh) {
+  q.submit([&](handler &cgh) {
     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
       using namespace sycl::ext::intel::experimental::esimd;
 
-      simd<char, 8 * 16> va(0);
-      auto ma = va.format<char, 8, 16>();
+      simd<char, Size * 2> va(0);
+      auto ma = va.bit_cast_view<char, 8, 16>();
       ma.select<2, 1, 4, 4>(0, 0) = 4;
 
       simd<char, 8 * 16> vb(0);
-      auto mb = vb.format<char, 8, 16>();
+      auto mb = vb.bit_cast_view<char, 8, 16>();
       mb.select<8, 1, 1, 1>(0, 0) = 4;
 
-      simd<int, 8 * 8> vc(0);
+      simd<int, Size> vc(0);
       vc = esimd_dpas<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8, int,
-                      int, int, 64, 32, 32>(vc, ma.format<int>(),
-                                            mb.format<int>());
+                      int, int, Size, 32, 32>(vc, ma.bit_cast_view<int>(),
+                                            mb.bit_cast_view<int>());
 
-      for (int i = 0; i < 64; i += VL) {
+      for (int i = 0; i < Size; i += VL) {
         simd<int, VL> output = vc.select<VL, 1>(i);
         output.copy_to(C + i);
       }
     });
-  });
-  e.wait();
+  }).wait();
+
   int err_cnt = 0;
-
-  for (unsigned i = 0; i < Size; ++i) {
+  for (unsigned i = 0; i < Size && err_cnt < 10; ++i)
     if (C[i] != 1) {
-      if (++err_cnt < 10) {
-        std::cout << "failed at index " << i << ", " << C[i] << " != " << 1
-                  << "\n";
-      }
+      err_cnt++;
+      std::cerr << "Failed at index " << i << ", " << C[i] << " != 1\n";
     }
-  }
 
+  free(C, q);
   std::cout << (err_cnt > 0 ? "FAILED\n" : "Passed\n");
   return err_cnt > 0 ? 1 : 0;
 }

@@ -7,13 +7,13 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
 
 using namespace cl::sycl;
@@ -31,22 +31,18 @@ int main(void) {
   auto dev = q.get_device();
   std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
 
-  auto ctxt = q.get_context();
-  float *A =
-      static_cast<float *>(malloc_shared(Size * sizeof(float), dev, ctxt));
-  float *B =
-      static_cast<float *>(malloc_shared(Size * sizeof(float), dev, ctxt));
-  float *C =
-      static_cast<float *>(malloc_shared(Size * sizeof(float), dev, ctxt));
+  float *A = malloc_shared<float>(Size, q);
+  float *B = malloc_shared<float>(Size, q);
+  float *C = malloc_shared<float>(Size, q);
 
   for (unsigned i = 0; i < Size; ++i) {
     A[i] = B[i] = i;
     C[i] = 0.0f;
   }
 
-  cl::sycl::range<1> GroupRange{1};
-  cl::sycl::range<1> TaskRange{1};
-  cl::sycl::nd_range<1> Range(GroupRange, TaskRange);
+  range<1> GroupRange{1};
+  range<1> TaskRange{1};
+  nd_range<1> Range(GroupRange, TaskRange);
 
   auto e = q.submit([&](handler &cgh) {
     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
@@ -97,6 +93,9 @@ int main(void) {
               << ((float)(Size - err_cnt) / (float)Size) * 100.0f << "% ("
               << (Size - err_cnt) << "/" << Size << ")\n";
   }
+  free(A, q);
+  free(B, q);
+  free(C, q);
 
   std::cout << (err_cnt > 0 ? "FAILED\n" : "Passed\n");
   return err_cnt > 0 ? 1 : 0;

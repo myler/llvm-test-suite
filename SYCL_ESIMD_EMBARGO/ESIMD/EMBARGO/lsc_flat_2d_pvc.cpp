@@ -14,7 +14,7 @@ implied warranties, other than those that are expressly stated in the License.
 // TODO enable this test on PVC fullsim when LSC patch is merged
 // TODO enable on Windows and Level Zero
 // REQUIRES: linux && gpu && opencl
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUNx: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
@@ -83,12 +83,16 @@ int main() {
     q.wait();
   } catch (sycl::exception e) {
     std::cout << "SYCL exception caught: " << e.what();
+    free(input, q);
+    free(block_store, q);
     return 1;
   }
 
   auto error = 0;
   for (auto i = 0; i < size; ++i)
     error += std::abs(ref[i] - block_store[i]);
+  free(input, q);
+  free(block_store, q);
   std::cout << (error != 0 ? "FAILED" : "PASSED") << std::endl;
   return error;
 }

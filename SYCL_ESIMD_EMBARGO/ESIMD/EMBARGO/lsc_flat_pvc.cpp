@@ -14,7 +14,7 @@ implied warranties, other than those that are expressly stated in the License.
 // TODO enable this test on PVC fullsim when LSC patch is merged
 // TODO enable on Windows and Level Zero
 // REQUIRES: linux && gpu && opencl
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUNx: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
@@ -55,7 +55,7 @@ int main() {
             auto offset = id[0] * SIMDSize;
             auto offsets =
                 simd<uint32_t, SIMDSize>(id * SIMDSize, 1) * sizeof(int);
-            auto pred = simd<uint16_t, SIMDSize>(1);
+            auto pred = simd_mask<uint16_t, SIMDSize>(1);
             auto add = simd<uint16_t, SIMDSize>(5);
             auto compare = simd<uint32_t, SIMDSize>(id * SIMDSize, 1);
             auto swap = compare * 2;
@@ -81,6 +81,11 @@ int main() {
     q.wait();
   } catch (sycl::exception e) {
     std::cout << "SYCL exception caught: " << e.what();
+    sycl::free(vec_0, q);
+    sycl::free(vec_1, q);
+    sycl::free(vec_2, q);
+    sycl::free(vec_3, q);
+    sycl::free(vec_4, q);
     return 1;
   }
 
@@ -92,6 +97,11 @@ int main() {
     error += std::abs(vec_3[i] - (i + 5));
     error += std::abs(vec_4[i] - (i * 2));
   }
+  sycl::free(vec_0, q);
+  sycl::free(vec_1, q);
+  sycl::free(vec_2, q);
+  sycl::free(vec_3, q);
+  sycl::free(vec_4, q);
   std::cout << (error != 0 ? "FAILED" : "PASSED") << std::endl;
   return error;
 }
