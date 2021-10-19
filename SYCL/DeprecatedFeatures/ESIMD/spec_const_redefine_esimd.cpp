@@ -20,7 +20,7 @@
 // - the program is JITted only once per a unique set of specialization
 //   constants values.
 
-#include "esimd_test_utils.hpp"
+#include "../../ESIMD/Inputs/esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <sycl/ext/intel/experimental/esimd.hpp>

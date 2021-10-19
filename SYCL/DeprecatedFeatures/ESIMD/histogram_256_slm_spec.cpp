@@ -11,7 +11,7 @@
 // RUN: %clangxx -fsycl %s -I%S/Inputs -D__SYCL_INTERNAL_API -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out 16
 
-#include "esimd_test_utils.hpp"
+#include "../../ESIMD/Inputs/esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <iostream>
