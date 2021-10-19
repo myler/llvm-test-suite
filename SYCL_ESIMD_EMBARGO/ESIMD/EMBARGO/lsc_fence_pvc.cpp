@@ -14,7 +14,7 @@ implied warranties, other than those that are expressly stated in the License.
 // On HW it can also check that lsc_fence is working
 // TODO enable this test on PVC HW
 // REQUIRES: linux && gpu && opencl
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUNx: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
@@ -29,10 +29,9 @@ int main() {
   using namespace cl::sycl;
   using namespace sycl::ext::intel::experimental::esimd;
   auto size = size_t{512};
-  auto constexpr SIMDSize = unsigned{8};
+  unsigned constexpr SIMDSize = 8;
 
-  auto q =
-      queue{esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler()};
+  queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
   auto device = q.get_device();
   std::cout << "Device name: " << device.get_info<info::device::name>()
             << std::endl;
@@ -78,6 +77,7 @@ int main() {
     q.wait();
   } catch (sycl::exception e) {
     std::cout << "SYCL exception caught: " << e.what();
+    free(res_vec, q);
     return 1;
   }
 
@@ -86,5 +86,6 @@ int main() {
     error += std::abs(res_vec[i] - i);
   }
   std::cout << (error != 0 ? "FAILED" : "PASSED") << std::endl;
+  free(res_vec, q);
   return error;
 }

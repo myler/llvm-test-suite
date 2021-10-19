@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out %S/band27-1m.dat 10
 
 #include "../../esimd_test_utils.hpp"
@@ -97,7 +97,6 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   // Param csr: this structure will contain Spmv_csr after this call.
 
   auto dev = q.get_device();
-  auto ctxt = q.get_context();
 
   FILE *f = fopen(csr_filename, "rb");
   if (f == NULL) {
@@ -108,6 +107,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   // Reads # cols (unsigned).
   if (fread(&csr.num_cols, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_cols from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   fprintf(stderr, "csr.num_cols = %d\n", csr.num_cols);
@@ -115,6 +115,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   // Reads # rows (unsigned).
   if (fread(&csr.num_rows, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_rows from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   fprintf(stderr, "csr.num_rows = %d\n", csr.num_rows);
@@ -122,17 +123,18 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   // Reads # non-zero values (unsigned).
   if (fread(&csr.num_nonzeros, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_nonzeros from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   fprintf(stderr, "csr.num_nonzeros = %d\n", csr.num_nonzeros);
 
   // Reads column indices (unsigned *).
   // Do we need to aligned to 0x1000?
-  csr.Acol =
-      (unsigned *)malloc_shared(csr.num_nonzeros * sizeof(unsigned), dev, ctxt);
+  csr.Acol = malloc_shared<unsigned>(csr.num_nonzeros, q);
   if (fread(csr.Acol, sizeof(unsigned), csr.num_nonzeros, f) !=
       csr.num_nonzeros) {
     fprintf(stderr, "Error reading column indices from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   for (unsigned int i = 0; i != csr.num_nonzeros; i++) {
@@ -140,11 +142,11 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   }
 
   // Reads extent of rows (unsigned *).
-  csr.Arow = (unsigned *)malloc_shared((csr.num_rows + 1) * sizeof(unsigned),
-                                       dev, ctxt);
+  csr.Arow = malloc_shared<unsigned>(csr.num_rows + 1, q);
   if (fread(csr.Arow, sizeof(unsigned), csr.num_rows + 1, f) !=
       csr.num_rows + 1) {
     fprintf(stderr, "Error reading extent of rows from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   for (unsigned int i = 0; i != csr.num_rows + 1; i++) {
@@ -152,9 +154,10 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   }
 
   // Reads all non-zero values (float *).
-  csr.Anz = (float *)malloc_shared(csr.num_nonzeros * sizeof(float), dev, ctxt);
+  csr.Anz = malloc_shared<float>(csr.num_nonzeros, q);
   if (fread(csr.Anz, sizeof(float), csr.num_nonzeros, f) != csr.num_nonzeros) {
     fprintf(stderr, "Error reading non-zeros from %s\n", csr_filename);
+    fclose(f);
     std::exit(1);
   }
   for (unsigned int i = 0; i != csr.num_nonzeros; i++) {
@@ -442,7 +445,6 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   // the same initial X and Y vectors, and will compare first Y result with
   // subsequent Y (num_iter - 1) results.
   auto dev = q.get_device();
-  auto ctxt = q.get_context();
 
   srand(1);
 
@@ -450,10 +452,8 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   unsigned rounded_num_cols = ROUND(csr.num_cols + 1, OWORD_BUF_ALIGNMENT);
 
   // Randomizes x and y arrays.  They are aligned to OWORD_BUF_ALIGNMENT.
-  float *x =
-      (float *)malloc_shared(rounded_num_cols * sizeof(float), dev, ctxt);
-  float *y =
-      (float *)malloc_shared(rounded_num_rows * sizeof(float), dev, ctxt);
+  float *x = malloc_shared<float>(rounded_num_cols, q);
+  float *y = malloc_shared<float>(rounded_num_rows, q);
 
   x[0] = 0;
 
@@ -498,12 +498,9 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
     rounded_anz_length += row_length;
   }
 
-  unsigned int *arow = (unsigned int *)malloc_shared(
-      (rounded_num_rows + 1) * sizeof(unsigned int), dev, ctxt);
-  float *anz =
-      (float *)malloc_shared(rounded_anz_length * sizeof(float), dev, ctxt);
-  unsigned *acol = (unsigned *)malloc_shared(
-      rounded_anz_length * sizeof(unsigned), dev, ctxt);
+  unsigned int *arow = malloc_shared<unsigned int>(rounded_num_rows + 1, q);
+  float *anz = malloc_shared<float>(rounded_anz_length, q);
+  unsigned *acol = malloc_shared<unsigned>(rounded_anz_length, q);
 
   arow[0] = 0;
 
@@ -534,12 +531,10 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   }
 
   // Creates num_iter copies of y vectors.
-  float **y_vec =
-      (float **)malloc_shared(num_iter * sizeof(float **), dev, ctxt);
+  float **y_vec = malloc_shared<float **>(num_iter, q);
 
   for (int i = 0; i < num_iter; i++) {
-    y_vec[i] =
-        (float *)malloc_shared(rounded_num_rows * sizeof(float), dev, ctxt);
+    y_vec[i] = malloc_shared<float>(rounded_num_rows, q);
     memcpy(y_vec[i], y, rounded_num_rows * sizeof(float));
   }
 
@@ -551,8 +546,7 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   //   - MULTIPLIER corresponds to thread space height
   //   - ROWS_PER_THREAD corresponds to max scatter read capability
   // v_st contains scattered read offset locations to relative rows per thread.
-  unsigned *v_st =
-      (unsigned *)malloc_shared(ROWS_PER_THREAD * sizeof(unsigned), dev, ctxt);
+  unsigned *v_st = malloc_shared<unsigned>(ROWS_PER_THREAD, q);
   for (int k = 0; k < ROWS_PER_THREAD; k++) {
     v_st[k] = k * THREAD_SPACE_WIDTH;
   }
@@ -639,7 +633,7 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   char *dbgBuf = nullptr;
 #else
   constexpr unsigned int SZ = 200000;
-  char *dbgBuf = (char *)malloc_shared(SZ * sizeof(uint), dev, ctxt);
+  char *dbgBuf = malloc_shared<char>(SZ, q);
 #endif
   memset(dbgBuf, 0, SZ * sizeof(uint));
 
@@ -659,11 +653,11 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
       }
 
       unsigned int total_threads = thread_count;
-      auto GroupRange = cl::sycl::range<2>(THREAD_SPACE_WIDTH,
-                                           thread_count / THREAD_SPACE_WIDTH);
-      auto TaskRange = cl::sycl::range<2>(1, 1);
+      auto GroupRange = range<2>(THREAD_SPACE_WIDTH,
+                                 thread_count / THREAD_SPACE_WIDTH);
+      auto TaskRange = range<2>(1, 1);
 
-      auto e = q.submit([&](cl::sycl::handler &cgh) {
+      auto e = q.submit([&](handler &cgh) {
         cgh.parallel_for<class spmv_csr>(
             GroupRange * TaskRange, [=](item<2> it) SYCL_ESIMD_KERNEL {
               using namespace sycl::ext::intel::experimental::esimd;
@@ -799,33 +793,34 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
     }
   }
 
+  int Error = 0;
   if (max_rel_error > 0.02 && abs_error > 0.000005) {
     std::cout << "Max rel error = " << max_rel_error << std::endl;
     std::cout << "Error index = " << error_index << std::endl;
     std::cout << "Error ref = " << error_ref << std::endl;
     std::cout << "Error res = " << error_res << std::endl;
     std::cout << "FAILED" << std::endl;
-    return 1;
+    Error = 1;
   } else {
     std::cout << "Result matches reference CPU implementation" << std::endl;
     std::cout << "PASSED" << std::endl;
-    return 0;
   }
   delete[] ref;
-  sycl::free(x, ctxt);
-  sycl::free(y, ctxt);
-  sycl::free(anz, ctxt);
-  sycl::free(arow, ctxt);
-  sycl::free(acol, ctxt);
+  sycl::free(x, q);
+  sycl::free(y, q);
+  sycl::free(anz, q);
+  sycl::free(arow, q);
+  sycl::free(acol, q);
   for (int i = 0; i < num_iter; i++) {
-    sycl::free(y_vec[i], ctxt);
+    sycl::free(y_vec[i], q);
   }
-  sycl::free(y_vec, ctxt);
-  sycl::free(v_st, ctxt);
-  sycl::free(dbgBuf, ctxt);
-  sycl::free(csr.Acol, ctxt);
-  sycl::free(csr.Arow, ctxt);
-  sycl::free(csr.Anz, ctxt);
+  sycl::free(y_vec, q);
+  sycl::free(v_st, q);
+  sycl::free(dbgBuf, q);
+  sycl::free(csr.Acol, q);
+  sycl::free(csr.Arow, q);
+  sycl::free(csr.Anz, q);
+  return Error;
 }
 
 int main(int argc, char *argv[]) {

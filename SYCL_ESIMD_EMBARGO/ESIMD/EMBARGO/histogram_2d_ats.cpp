@@ -13,7 +13,7 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <array>
 #include <iostream>
 
@@ -77,24 +77,25 @@ int main(int argc, char *argv[]) {
   // ------------------------------------------------------------------------
   // Read in image luma plane
 
-  // Allocate Input Buffer
   queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
-
   auto dev = q.get_device();
-  auto ctxt = q.get_context();
-  unsigned char *srcY =
-      static_cast<unsigned char *>(malloc_shared(width * height, dev, ctxt));
-  unsigned int *bins = static_cast<unsigned int *>(
-      malloc_shared(NUM_BINS * sizeof(unsigned int), dev, ctxt));
   std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
+
+  // Allocate Input Buffer
+  unsigned char *srcY = malloc_shared<unsigned char>(width * height, q);
+  if (srcY == NULL) {
+    std::cerr << "Out of memory\n";
+    return 1;
+  }
+  unsigned int *bins = malloc_shared<unsigned int>(NUM_BINS, q);
+  if (bins == NULL) {
+    free(srcY, q);
+    std::cerr << "Out of memory\n";
+    return 1;
+  }
 
   uint range_width = width / BLOCK_WIDTH;
   uint range_height = height / BLOCK_HEIGHT;
-
-  if (srcY == NULL) {
-    std::cerr << "Out of memory\n";
-    exit(1);
-  }
 
   // Initializes input.
   unsigned int input_size = width * height;
@@ -108,6 +109,7 @@ int main(int argc, char *argv[]) {
     }
 
     unsigned int cnt = fread(srcY, sizeof(unsigned char), input_size, f);
+    fclose(f);
     if (cnt != input_size) {
       std::cerr << "Error reading input from " << input_file;
       std::exit(1);
@@ -119,9 +121,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  for (int i = 0; i < NUM_BINS; i++) {
-    bins[i] = 0;
-  }
+  memset(bins, 0, NUM_BINS * sizeof(bins[0]));
 
   // ------------------------------------------------------------------------
   // CPU Execution:
@@ -130,9 +130,9 @@ int main(int argc, char *argv[]) {
   memset(cpuHistogram, 0, sizeof(cpuHistogram));
   histogram_CPU(width, height, srcY, cpuHistogram);
 
-  cl::sycl::image<2> Img(srcY, image_channel_order::rgba,
-                         image_channel_type::unsigned_int8,
-                         range<2>{width / sizeof(uint), height});
+  sycl::image<2> Img(srcY, image_channel_order::rgba,
+                     image_channel_type::unsigned_int8,
+                     range<2>{width / sizeof(uint), height});
 
   {
     // create ranges
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
     nd_range<2> Range(GlobalRange, LocalRange);
 
     auto e = q.submit([&](handler &cgh) {
-      auto readAcc = Img.get_access<uint4, cl::sycl::access::mode::read>(cgh);
+      auto readAcc = Img.get_access<uint4, access::mode::read>(cgh);
 
       cgh.parallel_for<class Hist>(
           Range, [=](nd_item<2> ndi) SYCL_ESIMD_KERNEL {
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
               src = histogram.select<8, 1>(i);
 
 #ifdef __SYCL_DEVICE_ONLY__
-              flat_atomic<EsimdAtomicOpType::ATOMIC_ADD, unsigned int, 8>(
+              flat_atomic<sycl::ext::intel::experimental::esimd::atomic_op::add, unsigned int, 8>(
                   bins, offset, src, 1);
               offset += 8 * sizeof(unsigned int);
 #else
@@ -211,13 +211,14 @@ int main(int argc, char *argv[]) {
   writeHist(bins);
   writeHist(cpuHistogram);
   // Checking Histogram
-  if (checkHistogram(cpuHistogram, bins)) {
-    std::cerr << "PASSED\n";
-    return 0;
-  } else {
+  int Success = checkHistogram(cpuHistogram, bins);
+  free(srcY, q);
+  free(bins, q);
+
+  if (!Success) {
     std::cerr << "FAILED\n";
     return 1;
   }
-
+  std::cout << "PASSED\n";
   return 0;
 }

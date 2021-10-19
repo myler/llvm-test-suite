@@ -14,7 +14,7 @@ implied warranties, other than those that are expressly stated in the License.
 // TODO enable this test on PVC fullsim when LSC patch is merged
 // TODO enable on Windows and Level Zero
 // REQUIRES: linux && gpu && opencl
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUNx: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"

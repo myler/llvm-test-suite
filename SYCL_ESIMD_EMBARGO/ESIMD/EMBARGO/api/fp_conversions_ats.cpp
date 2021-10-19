@@ -16,7 +16,7 @@
 #include "../../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
 
 using namespace cl::sycl;
@@ -110,6 +110,10 @@ struct TestBF16Impl {
     }
     catch (cl::sycl::exception const &e) {
       std::cout << "SYCL exception caught: " << e.what() << '\n';
+      sycl::free(FP32, q);
+      sycl::free(BF16, q);
+      sycl::free(FP32_to_BF16, q);
+      sycl::free(BF16_to_FP32, q);
       return false;
     }
     int err_cnt = 0;
