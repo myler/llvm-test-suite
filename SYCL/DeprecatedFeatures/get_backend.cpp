@@ -1,4 +1,4 @@
-// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
+// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -D__SYCL_INTERNAL_API %s -o %t.out
 // RUN: env SYCL_DEVICE_FILTER=%sycl_be %t.out
 //
 //==----------------- get_backend.cpp ------------------------==//
@@ -40,6 +40,11 @@ int main() {
 
       context c(plt);
       if (c.get_backend() != plt.get_backend()) {
+        return_fail();
+      }
+
+      program prog(c);
+      if (prog.get_backend() != plt.get_backend()) {
         return_fail();
       }
 
