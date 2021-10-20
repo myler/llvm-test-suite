@@ -9,7 +9,7 @@
 // basic types, particularly a specialization constant can be redifined and
 // correct new value is used after redefinition.
 
-#include "../../ESIMD/Inputs/esimd_test_utils.hpp"
+#include "esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <sycl/ext/intel/experimental/esimd.hpp>
