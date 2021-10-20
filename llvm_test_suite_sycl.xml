@@ -20,6 +20,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <advancedRule perfSupport="accurate" />
   </rules>
   <tests>
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="deprecatedfeatures" testName="DeprecatedFeatures_opencl_interop_0" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_accelerator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_cpu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="aot" testName="aot_gpu" />
