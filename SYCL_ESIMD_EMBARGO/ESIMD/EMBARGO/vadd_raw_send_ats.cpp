@@ -13,7 +13,7 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
 
 using namespace cl::sycl;
@@ -62,7 +62,7 @@ ESIMD_INLINE void block_write2(AccessorTy acc, unsigned int offset,
                                simd<T, N> data) {
   simd<T, 16> src0;
   auto src0_ref1 =
-      src0.template select<8, 1>(0).template format<unsigned int>();
+      src0.template select<8, 1>(0).template bit_cast_view<unsigned int>();
   auto src0_ref2 = src0.template select<8, 1>(8);
 
   src0_ref1.template select<1, 1>(2) = offset >> 4;
@@ -96,11 +96,11 @@ int main(void) {
     buffer<float, 1> bufc(C, range<1>(Size));
 
     // We need that many workgroups
-    cl::sycl::range<1> GroupRange{Size / VL};
+    range<1> GroupRange{Size / VL};
 
     // We need that many threads in each group
-    cl::sycl::range<1> TaskRange{1};
-    cl::sycl::nd_range<1> Range(GroupRange, TaskRange);
+    range<1> TaskRange{1};
+    nd_range<1> Range(GroupRange, TaskRange);
 
     queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
 

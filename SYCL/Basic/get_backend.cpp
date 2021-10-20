@@ -43,11 +43,6 @@ int main() {
         return_fail();
       }
 
-      program prog(c);
-      if (prog.get_backend() != plt.get_backend()) {
-        return_fail();
-      }
-
       default_selector sel;
       queue q(c, sel);
       if (q.get_backend() != plt.get_backend()) {
