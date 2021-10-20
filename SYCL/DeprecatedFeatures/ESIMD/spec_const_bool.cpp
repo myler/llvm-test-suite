@@ -6,15 +6,9 @@
 //
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
-// On Windows vector compute backend (as a part of IGC) uses llvm-7 and llvm-7
-// based spirv translator. This translator doesn't have the ability to overwrite
-// the default specialization constant value. That is why the support in Windows
-// driver is disabled at all. This feature will start working on Windows when
-// the llvm version is switched to 9.
-// UNSUPPORTED: windows
-// RUN: %clangxx -fsycl -I%S/.. %s -o %t.out
+// RUN: %clangxx -fsycl -D__SYCL_INTERNAL_API -I%S/.. %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
-// UNSUPPORTED: cuda || rocm
+// UNSUPPORTED: cuda || hip
 
 #include <cstdint>
 
@@ -27,4 +21,4 @@
 using spec_const_t = bool;
 using container_t = uint8_t;
 
-#include "Inputs/spec-const-2020-common.hpp"
+#include "Inputs/spec_const_common.hpp"

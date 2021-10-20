@@ -7,8 +7,8 @@
 //===----------------------------------------------------------------------===//
 // TODO enable on Windows
 // REQUIRES: linux && gpu
-// UNSUPPORTED: cuda || rocm
-// RUN: %clangxx -fsycl %s -o %t.out
+// UNSUPPORTED: cuda || hip
+// RUN: %clangxx -fsycl %s -I%S/Inputs -D__SYCL_INTERNAL_API -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out 16
 
 #include "esimd_test_utils.hpp"
