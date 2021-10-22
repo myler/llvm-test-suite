@@ -195,6 +195,11 @@ sub extract_perf_results
 
 sub BuildTest
 {
+    return 0;
+}
+
+sub RunTest
+{
     $build_dir = $cwd . "/build";
     safe_Mkdir($build_dir);
 
@@ -220,34 +225,26 @@ sub BuildTest
 
     if ( ! -f $cmake_err)
     {
-        return $PASS;
+        $test_info = get_info();
+        my ( $status, $output) = do_run($test_info);
+        my $res = "";
+        if (-e $run_all_lf)
+        {
+            my $run_output = file2str("$run_all_lf");
+            $res = generate_run_result($run_output);
+            my $filtered_output = generate_run_test_lf($run_output);
+            $execution_output .= $filtered_output;
+        } else {
+            $res = generate_run_result($output);
+        }
+        if ($res eq $PASS && is_zperf_run()) {
+            extract_perf_results();
+        }
+        return $res;
     }
 
     $failure_message = "cmake returned non zero exit code";
     return $COMPFAIL;
-}
-
-sub RunTest
-{
-    $build_dir = $cwd . "/build";
-    chdir_log($build_dir);
-
-    $test_info = get_info();
-    my ( $status, $output) = do_run($test_info);
-    my $res = "";
-    if (-e $run_all_lf)
-    {
-        my $run_output = file2str("$run_all_lf");
-        $res = generate_run_result($run_output);
-        my $filtered_output = generate_run_test_lf($run_output);
-        $execution_output .= $filtered_output;
-    } else {
-        $res = generate_run_result($output);
-    }
-    if ($res eq $PASS && is_zperf_run()) {
-        extract_perf_results();
-    }
-    return $res;
 }
 
 sub do_run
