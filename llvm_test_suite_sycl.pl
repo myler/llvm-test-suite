@@ -407,6 +407,25 @@ sub generate_run_test_lf
     return $filtered_output;
 }
 
+# Call a driver to obtain a path to a particular tool. On Windows, backslashes
+# are converted to forward slashes and ".exe" is appended such that CMake will
+# accept the string as a compiler name.
+sub generate_tool_path
+{
+    my $driver = shift;
+    my $tool_name = shift;
+
+    my $tool_path = qx/$driver --print-prog-name=$tool_name/;
+    chomp $tool_path;
+
+    if ($cmplr_platform{OSFamily} eq "Windows") {
+        $tool_path =~ tr#\\#/#;
+        $tool_path = "$tool_path.exe";
+    }
+
+    return $tool_path;
+}
+
 sub run_cmake
 {
     my $c_flags = "$current_optset_opts $compiler_list_options $compiler_list_options_c $opt_c_compiler_flags";
@@ -433,6 +452,10 @@ sub run_cmake
         } else {
             $c_cmplr = "clang";
             $cpp_cmplr = 'clang++';
+            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # for absolute paths.
+            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
             $c_cmd_opts = convert_opt($c_cmd_opts);
             $cpp_cmd_opts = convert_opt($cpp_cmd_opts);
         }
@@ -441,6 +464,10 @@ sub run_cmake
         $c_cmplr = "clang";
         if ($compiler =~ /xmain/) {
             $cpp_cmplr = "clang++";
+            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # for absolute paths.
+            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
         }
         $thread_opts = "-lpthread";
     }
