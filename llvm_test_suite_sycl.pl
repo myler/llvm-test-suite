@@ -302,6 +302,14 @@ sub set_tool_path
     }
     my $env_path = join($path_sep, $tool_path, $ENV{PATH});
     set_envvar("PATH", $env_path, join($path_sep, $tool_path, '$PATH'));
+
+    # For the product compiler, add the internal "bin-llvm" directory to PATH.
+    if ($compiler =~ /xmain/) {
+        my $llvm_dir = dirname(qx/dpcpp -print-prog-name=llvm-ar/);
+        my $llvm_path = join($path_sep, $llvm_dir, $ENV{PATH});
+        set_envvar("PATH", $env_path, join($path_sep, $llvm_path, '$PATH'));
+    }
+
 }
 
 sub get_info
