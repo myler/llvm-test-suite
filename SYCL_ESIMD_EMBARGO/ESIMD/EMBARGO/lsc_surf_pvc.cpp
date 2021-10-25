@@ -64,8 +64,8 @@ int main() {
           range<1>{size / SIMDSize}, [=](id<1> id) SYCL_ESIMD_KERNEL {
             auto offset = id[0] * SIMDSize * sizeof(int);
             auto offsets =
-                simd<uint32_t, SIMDSize>(id * SIMDSize, 1) * sizeof(int);
-            auto pred = simd<uint16_t, SIMDSize>(1);
+                simd<uint32_t, SIMDSize>(id * SIMDSize * sizeof(int), 1);
+            auto pred = simd_mask<SIMDSize>(1);
             auto add = simd<uint16_t, SIMDSize>(5);
             auto compare = simd<uint32_t, SIMDSize>(id * SIMDSize, 1);
             auto swap = compare * 2;
