@@ -6,9 +6,9 @@
 // UNSUPPORTED: cuda
 // UNSUPPORTED: hip
 
-#include <CL/sycl.hpp>
+#include <sycl/sycl.hpp>
 
-using namespace cl::sycl;
+using namespace sycl;
 
 using accessorPixelT = sycl::float4;
 using dataPixelT = uint32_t;

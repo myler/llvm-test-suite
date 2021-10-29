@@ -12,13 +12,15 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out %T/output_spec.ppm %S/golden_hw.ppm 512 -2.09798 -1.19798 0.004 4.0
 
 #include "esimd_test_utils.hpp"
-#include <CL/sycl.hpp>
+
+#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/sycl.hpp>
+
 #include <array>
 #include <iostream>
 #include <memory>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 
-using namespace cl::sycl;
+using namespace sycl;
 using namespace sycl::ext::intel::experimental::esimd;
 
 #ifdef _SIM_MODE_
@@ -95,17 +97,17 @@ int main(int argc, char *argv[]) {
   unsigned char *buf = new unsigned char[img_size];
 
   try {
-    cl::sycl::image<2> imgOutput((unsigned int *)buf, image_channel_order::rgba,
-                                 image_channel_type::unsigned_int8,
-                                 range<2>{WIDTH, HEIGHT});
+    sycl::image<2> imgOutput((unsigned int *)buf, image_channel_order::rgba,
+                             image_channel_type::unsigned_int8,
+                             range<2>{WIDTH, HEIGHT});
 
     // We need that many workitems
     uint range_width = WIDTH / 8;
     uint range_height = HEIGHT / 2;
-    cl::sycl::range<2> GlobalRange{range_width, range_height};
+    sycl::range<2> GlobalRange{range_width, range_height};
 
     // Number of workitems in a workgroup
-    cl::sycl::range<2> LocalRange{1, 1};
+    sycl::range<2> LocalRange{1, 1};
 
     queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
 
@@ -128,7 +130,7 @@ int main(int argc, char *argv[]) {
 
     auto e = q.submit([&](sycl::handler &cgh) {
       auto accOutput =
-          imgOutput.get_access<uint4, cl::sycl::access::mode::write>(cgh);
+          imgOutput.get_access<uint4, sycl::access::mode::write>(cgh);
 
       cgh.set_specialization_constant<CrunchConst>(crunch);
       cgh.set_specialization_constant<XoffConst>(xoff);
@@ -149,7 +151,7 @@ int main(int argc, char *argv[]) {
           });
     });
     e.wait();
-  } catch (cl::sycl::exception const &e) {
+  } catch (sycl::exception const &e) {
     std::cout << "SYCL exception caught: " << e.what() << '\n';
     delete[] buf;
     return e.get_cl_code();
