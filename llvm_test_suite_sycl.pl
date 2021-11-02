@@ -307,7 +307,7 @@ sub set_tool_path
     if ($compiler =~ /xmain/) {
         my $llvm_dir = dirname(qx/dpcpp -print-prog-name=llvm-ar/);
         my $llvm_path = join($path_sep, $llvm_dir, $ENV{PATH});
-        set_envvar("PATH", $env_path, join($path_sep, $llvm_path, '$PATH'));
+        set_envvar("PATH", $llvm_path, join($path_sep, $llvm_dir, '$PATH'));
     }
 
 }
