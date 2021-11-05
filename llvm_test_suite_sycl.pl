@@ -529,6 +529,12 @@ sub run_cmake
         }
     }
 
+    # llvm_test_suite_sycl run the whole suite at once. ulimit should be set to all tests
+    if ($current_optset =~ m/opt_use_(cpu|cpu_aot|cpu_nonspirv)_O0/ &&
+        $ENV{"ICS_OSFLAVOR"} =~ m/lin/) {
+        $insert_command = "sh /rdrive/tests/data/mainline/CT-SyclTests/wrapper/mem_extend.sh ";
+    }
+
     if ($insert_command ne "") {
         my $config_file = "$optset_work_dir/SYCL/lit.cfg.py";
         if (! -f $config_file) {
