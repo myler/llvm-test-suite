@@ -12,10 +12,23 @@ implied warranties, other than those that are expressly stated in the License.
 // TODO enable this test on PVC fullsim when named barriers patch is merged
 // TODO enable on Windows and Level Zero
 // REQUIRES: linux && gpu && opencl
-// RUN: %clangxx -fsycl -I%S/.. %S/Inputs/common.cpp -o %t.out
-// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out 2
+// RUN: %clangxx -fsycl %s -o %t.out
+// RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
 //
-// Test checks support of named barrier in ESIMD kernel:
-//   2 workgroups
-//   2 threads: 1 producer per workgroup, 1 consumer per workgroup
-//   1 barrier
+// Test checks support of named barrier in ESIMD kernel.
+// Basic case with 1 work-group and 16 threads: 4 producer and 12 consumer.
+// SLM and surface size is 64 bytes.
+// Producers store data to SLM, then all threads read SLM and store data to
+// surface.
+
+#include <CL/sycl.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
+
+#include <iostream>
+
+#include"Inputs/single_wg.hpp"
+#include"Inputs/common.hpp"
+
+int main() {
+  return test<1, 16, 64>();
+}
