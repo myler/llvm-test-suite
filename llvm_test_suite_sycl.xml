@@ -15,6 +15,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <file path="$INFO_TDRIVE/ref/lit" />
     <file path="config_sycl" />
     <file path=".github/CODEOWNERS" />
+    <file path="setenv.list" />
   </files>
   <rules>
     <advancedRule perfSupport="accurate" />

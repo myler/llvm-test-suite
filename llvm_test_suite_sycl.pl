@@ -22,6 +22,7 @@ my $insert_command = "";
 
 my $sycl_backend = "";
 my $device = "";
+my $os_platform = is_windows() ? "windows" : "linux";
 
 my $build_dir = "";
 my $lit = "../lit/lit.py";
@@ -206,8 +207,11 @@ sub RunTest
     if ($current_test eq $test_to_run_list[0])
     {
         init_test();
-        chdir_log($build_dir);
 
+        # Before running cmake, add settings for specific tests according to setenv.list
+        add_setting();
+
+        chdir_log($build_dir);
         my ( $status, $output) = run_cmake();
         if ( $status)
         {
@@ -247,6 +251,81 @@ sub RunTest
     return $COMPFAIL;
 }
 
+sub modify_test_file
+{
+    my $test = shift;
+    my $placeholder = shift;
+    my $setting = shift;
+
+    my $test_info = get_info($test);
+    my $test_file = $test_info->{fullpath};
+    # Use absolute path for test
+    $test_file = "$optset_work_dir/$test_file";
+    if (-f $test_file) {
+        log_command("##Add \"$setting\" to \"$placeholder\" for test $test\n");
+        my $test_file_original = "${test_file}.ori";
+        copy($test_file, $test_file_original);
+
+        open my $in, "<", $test_file_original || die "Cannot open file $test_file_original: $!";
+        open my $out, ">", $test_file || die "Cannot open file $test_file: $!";
+        while (<$in>) {
+          s/($placeholder)/$1 $setting /g;
+          print $out $_;
+        }
+        close $in;
+        close $out;
+    } else {
+        die "Cannot find file $test_file: $!";
+    }
+}
+
+sub add_setting
+{
+    my $list_file = "$optset_work_dir/setenv.list";
+    my $rules = file2str($list_file);
+    foreach my $rule (split(/^/, $rules)) {
+        if ($rule =~ /^#/) {
+            next;
+        }
+        if ($rule =~ /([^,]{1,}),([^,]{1,}),([^,]{0,}),([^,]{1,})/) {
+            my $test_pattern = $1;
+            my $optset_pattern = $2;
+            my $platform_pattern = $3;
+            my $setting = $4;
+            if ($current_optset !~ m/$optset_pattern/) {
+                # optset is not matched
+                # log_command("##optset $current_optset is not matched with $optset_pattern\n");
+                next;
+            } elsif ($platform_pattern ne "" and $os_platform !~ m/$platform_pattern/) {
+                # platform is not matched
+                next;
+            } else {
+                # check whether test is matched
+                my @match_tests = grep { /$test_pattern/ } @test_to_run_list;
+                if (scalar(@match_tests) == 0) {
+                    # test is not matched
+                    next;
+                } else {
+                    # test is matched
+                    if ($current_optset =~ /opt_use_(cpu|acc|gpu|host)/) {
+                        my $device = uc($1);
+                        my $placeholder = "%${device}_RUN_PLACEHOLDER";
+                        # log_command("##optset $current_optset placeholder $placeholder\n");
+                        foreach my $test (@match_tests) {
+                            $setting =~ s/\s+$//;
+                            modify_test_file($test, $placeholder, $setting);
+                        }
+                    } else {
+                        die "Unrecognized optset: $optset_pattern!\n";
+                    }
+                }
+            }
+        } else {
+            die "Unrecognized format: $rule!\n";
+        }
+    }
+}
+
 sub do_run
 {
     my $r = shift;
@@ -279,11 +358,10 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
+      set_tool_path();
       if (is_suite()) {
-        set_tool_path();
         execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        set_tool_path();
         execute("$python $lit -a $matrix $path $timeset");
       }
     }
