@@ -136,14 +136,14 @@ sub gen_suite
             $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL/CMakeLists.txt', dst => 'SYCL/CMakeLists.txt'}, { path => 'SYCL/lit.cfg.py', dst => 'SYCL/lit.cfg.py'}, {path => 'SYCL/lit.site.cfg.py.in', dst => 'SYCL/lit.site.cfg.py.in'}, {path => 'SYCL/helpers.hpp', dst => 'SYCL/helpers.hpp'}, {path => 'SYCL/External/CMakeLists.txt', dst => 'SYCL/External/CMakeLists.txt'}, {path => 'SYCL/ExtraTests/CMakeLists.txt', dst => 'SYCL/ExtraTests/CMakeLists.txt'}, { path => "SYCL/${subsuite}", dst => "SYCL/${subsuite}"}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
         } else {
             $xml->{rules} = { advancedRule => [{ perfSupport => 'accurate'}]};
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
+            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}, { path => 'setenv.list'}]};
         }
     } else {
         if ($subsuite ne "") {
             # For subsuite
             $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => "$feature_folder/$subsuite", dst => "SYCL_${subsuite}/$subsuite"}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}]};
         } else {
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => $feature_folder}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}]};
+            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => $feature_folder}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => 'setenv.list'}]};
         }
     }
 
