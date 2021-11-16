@@ -282,6 +282,11 @@ sub modify_test_file
 sub add_setting
 {
     my $list_file = "$optset_work_dir/setenv.list";
+    if (! -f $list_file) {
+        log_command("##setenv.list doesn't exist so no extra setting is added\n");
+        return;
+    }
+
     my $rules = file2str($list_file);
     foreach my $rule (split(/^/, $rules)) {
         if ($rule =~ /^#/) {
