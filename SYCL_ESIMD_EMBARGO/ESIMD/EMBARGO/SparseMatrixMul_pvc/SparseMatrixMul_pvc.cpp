@@ -22,7 +22,7 @@
 #include <string>
 
 #include <CL/sycl.hpp>
-#include <CL/sycl/INTEL/esimd.hpp>
+#include <sycl/ext/intel/experimental/esimd.hpp>
 
 #ifdef DUMP_ENABLE
 #define DUMP(x) std::cout << x
@@ -62,13 +62,16 @@ struct CsrSparseMatrix {
   unsigned num_rows;
   unsigned num_cols;
   unsigned num_nonzeros;
-  unsigned *Arow; // pointer to the extents of rows for a CSR sparse matrix
-  unsigned *Acol; // pointer to the column indices for a CSR sparse matrix
-  float *Anz;     // pointer to the non-zero values for a CSR sparse matrix
-  ~CsrSparseMatrix() {
-    Arow = nullptr;
-    Arow = nullptr;
-    Acol = nullptr;
+  unsigned *Arow = nullptr; // pointer to the extents of rows for a CSR sparse matrix
+  unsigned *Acol = nullptr; // pointer to the column indices for a CSR sparse matrix
+  float *Anz = nullptr;     // pointer to the non-zero values for a CSR sparse matrix
+  void deallocate(queue &Q) {
+    if (Arow)
+      sycl::free(Arow, Q);
+    if (Acol)
+      sycl::free(Acol, Q);
+    if (Anz)
+      sycl::free(Anz, Q);
   }
 };
 
@@ -91,24 +94,23 @@ void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
              IndexType max_rows,  // CURBE  parameter
              IndexType *v_st_ptr, unsigned int gid0, unsigned int gid1);
 
-int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
+// Returns true on successful read of the file.
+bool ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   // This subroutine is to read in a CSR formatted matrix from a file
   // Param csr_filename: is an input file containing Spmv_csr.
   // Param csr: this structure will contain Spmv_csr after this call.
 
-  auto dev = q.get_device();
-
   FILE *f = fopen(csr_filename, "rb");
   if (f == NULL) {
     fprintf(stderr, "Error opening file %s", csr_filename);
-    std::exit(1);
+    return false;
   }
 
   // Reads # cols (unsigned).
   if (fread(&csr.num_cols, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_cols from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   fprintf(stderr, "csr.num_cols = %d\n", csr.num_cols);
 
@@ -116,7 +118,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   if (fread(&csr.num_rows, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_rows from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   fprintf(stderr, "csr.num_rows = %d\n", csr.num_rows);
 
@@ -124,7 +126,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   if (fread(&csr.num_nonzeros, sizeof(unsigned), 1, f) != 1) {
     fprintf(stderr, "Error reading num_nonzeros from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   fprintf(stderr, "csr.num_nonzeros = %d\n", csr.num_nonzeros);
 
@@ -135,7 +137,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
       csr.num_nonzeros) {
     fprintf(stderr, "Error reading column indices from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   for (unsigned int i = 0; i != csr.num_nonzeros; i++) {
     DUMP("Acol[" << i << "] = " << csr.Acol[i] << std::endl);
@@ -147,7 +149,7 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
       csr.num_rows + 1) {
     fprintf(stderr, "Error reading extent of rows from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   for (unsigned int i = 0; i != csr.num_rows + 1; i++) {
     DUMP("Arow[" << i << "] = " << csr.Arow[i] << std::endl);
@@ -158,15 +160,14 @@ int ReadCsrFile(const char *csr_filename, CsrSparseMatrix &csr, queue &q) {
   if (fread(csr.Anz, sizeof(float), csr.num_nonzeros, f) != csr.num_nonzeros) {
     fprintf(stderr, "Error reading non-zeros from %s\n", csr_filename);
     fclose(f);
-    std::exit(1);
+    return false;
   }
   for (unsigned int i = 0; i != csr.num_nonzeros; i++) {
     DUMP("anz[" << i << "] = " << csr.Anz[i] << std::endl);
   }
 
   fclose(f);
-
-  return 0;
+  return true;
 }
 
 #define OWORD_BUF_ALIGNMENT (4) // Required alignment for OWORD reads
@@ -269,7 +270,7 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
     //--------------------------------------------------------------------
     // Process all elements of one row at a time.
     //--------------------------------------------------------------------
-    auto v_y = v_y_dw.format<ValueType>();
+    auto v_y = v_y_dw.bit_cast_view<ValueType>();
 
     for (ushort i = 0;
          (i < ROWS_PER_THREAD) && (row_number + i * row_stride < max_rows);
@@ -324,7 +325,7 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
               (uint *)X_BUF, v_ac.select<16, 1>(0) * sizeof(ValueType));
           v_x_dw.select<16, 1>(16) = gather<uint, 16>(
               (uint *)X_BUF, v_ac.select<16, 1>(16) * sizeof(ValueType));
-          auto v_x = v_x_dw.format<ValueType>();
+          auto v_x = v_x_dw.bit_cast_view<ValueType>();
           v_y.select<1, 1>(i) +=
               reduce<ValueType>(v_an * v_x.read(), std::plus<>());
         } else if (row_slice_length > 8) {
@@ -350,7 +351,7 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
           simd<uint, 16> v_x_dw;
           v_x_dw.template select<16, 1>(0) = gather<uint, 16>(
               (uint *)X_BUF, v_ac.select<16, 1>(0) * sizeof(ValueType));
-          auto v_x = v_x_dw.template format<ValueType>();
+          auto v_x = v_x_dw.template bit_cast_view<ValueType>();
           v_y.select<1, 1>(i) += reduce<ValueType>(
               v_an.template select<16, 1>(0).read() * v_x.read(),
               std::plus<>());
@@ -374,9 +375,10 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
           // actual compute.
           //-------------------------------------------------------------------------------
           simd<uint, 8> v_x_dw;
+          uint ValueSize = sizeof(ValueType);
           v_x_dw.template select<8, 1>(0) = gather(
-              (uint *)X_BUF, v_ac.select<8, 1>(0).read() * sizeof(ValueType));
-          auto v_x = v_x_dw.template select<8, 1>(0).format<ValueType>();
+              (uint *)X_BUF, v_ac.select<8, 1>(0).read() * ValueSize);
+          auto v_x = v_x_dw.template select<8, 1>(0).bit_cast_view<ValueType>();
           v_y.select<1, 1>(i) += reduce<ValueType>(
               v_an.template select<8, 1>(0).read() * v_x.read(), std::plus<>());
         } else {
@@ -401,9 +403,10 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
           //-------------------------------------------------------------------------------
           simd<uint, 8> v_x_dw;
 
+          uint ValueSize = sizeof(ValueType);
           v_x_dw.template select<8, 1>(0) = gather(
-              (uint *)X_BUF, v_ac.select<8, 1>(0).read() * sizeof(ValueType));
-          auto v_x = v_x_dw.template select<4, 1>(0).format<ValueType>();
+              (uint *)X_BUF, v_ac.select<8, 1>(0).read() * ValueSize);
+          auto v_x = v_x_dw.template select<4, 1>(0).bit_cast_view<ValueType>();
           v_y.select<1, 1>(i) += reduce<ValueType>(
               v_an.template select<4, 1>(0).read() * v_x.read(), std::plus<>());
         }
@@ -431,7 +434,8 @@ static double report_time(const string &msg, event e) {
   return elapsed;
 }
 
-int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
+// Returns non-zero if some error happened, or 0 if success.
+int RunCsrSpmvOnGpu(CsrSparseMatrix &csr, int num_iter, queue &q) {
   // This subroutine is for multiplying a sparse matrix with a vector using
   // the GPU
   // Param csr: is an input sparse matrix stored in CSR format.
@@ -531,7 +535,7 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   }
 
   // Creates num_iter copies of y vectors.
-  float **y_vec = malloc_shared<float **>(num_iter, q);
+  float **y_vec = malloc_shared<float *>(num_iter, q);
 
   for (int i = 0; i < num_iter; i++) {
     y_vec[i] = malloc_shared<float>(rounded_num_rows, q);
@@ -817,9 +821,7 @@ int RunCsrSpmvOnGpu(const CsrSparseMatrix &csr, int num_iter, queue &q) {
   sycl::free(y_vec, q);
   sycl::free(v_st, q);
   sycl::free(dbgBuf, q);
-  sycl::free(csr.Acol, q);
-  sycl::free(csr.Arow, q);
-  sycl::free(csr.Anz, q);
+  csr.deallocate(q);
   return Error;
 }
 
@@ -853,7 +855,11 @@ int main(int argc, char *argv[]) {
           property::queue::enable_profiling{});
 
   CsrSparseMatrix csr;
-  ReadCsrFile(csr_filename, csr, q);
+  if (!ReadCsrFile(csr_filename, csr, q)) {
+    csr.deallocate(q);
+    std::cerr << "Coult not read csr file" << std::endl;
+    return 1;
+  }
 
   std::cout << "Using " << csr.num_rows << "-by-" << csr.num_cols
             << " matrix with " << csr.num_nonzeros << " nonzero values"
