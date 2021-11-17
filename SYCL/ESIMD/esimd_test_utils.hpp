@@ -56,7 +56,7 @@ inline auto createExceptionHandler() {
     for (auto ep : l) {
       try {
         std::rethrow_exception(ep);
-      } catch (cl::sycl::exception &e0) {
+      } catch (sycl::exception &e0) {
         std::cout << "sycl::exception: " << e0.what() << std::endl;
       } catch (std::exception &e) {
         std::cout << "std::exception: " << e.what() << std::endl;
@@ -197,6 +197,10 @@ void display_timing_stats(double const kernelTime,
     std::cout << "Number of iterations: " << uiNumberOfIterations << "\n";
     std::cout << "[KernelTime]:" << kernelTime << "\n";
     std::cout << "[OverallTime][Primary]:" << overallTime << "\n";
+                          double const overallTime) {
+  std::cout << "Number of iterations: " << uiNumberOfIterations << "\n";
+  std::cout << "[KernelTime]:" << kernelTime << "\n";
+  std::cout << "[OverallTime][Primary]:" << overallTime << "\n";
 }
 
 } // namespace esimd_test
