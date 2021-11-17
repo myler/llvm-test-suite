@@ -1,4 +1,3 @@
-// XFAIL: cuda || hip
 // XFAIL: hip
 // RUN: %clangxx -D__SYCL_INTERNAL_API -fsycl -fsycl-targets=%sycl_triple  %s -o %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out

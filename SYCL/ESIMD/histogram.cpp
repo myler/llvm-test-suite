@@ -136,10 +136,6 @@ int main(int argc, char *argv[]) {
   esimd_test::Timer timer;
   double start;
 
-  // Start Timer
-  esimd_test::Timer timer;
-  double start;
-
   // Launches the task on the GPU.
   double kernel_times = 0;
   unsigned num_iters = 10;
@@ -240,9 +236,6 @@ int main(int argc, char *argv[]) {
   // End timer.
   double end = timer.Elapsed();
 
-  esimd_test::display_timing_stats(kernel_times,num_iters,(end-start)*1000);
-  //float kernel_time = kernel_times / num_iters;
-  //std::cerr << "GPU kernel time = " << kernel_time << " msec\n";
   esimd_test::display_timing_stats(kernel_times, num_iters,
                                    (end - start) * 1000);
 

@@ -135,30 +135,6 @@ int main(int argc, char *argv[]) {
                 << ", yoff = " << yoff << ", scale = " << scale
                 << ", thrs = " << thrs << "\n";
     }
-
-    auto e = q.submit([&](sycl::handler &cgh) {
-      auto accOutput =
-          imgOutput.get_access<uint4, sycl::access::mode::write>(cgh);
-
-      cgh.set_specialization_constant<CrunchConst>(crunch);
-      cgh.set_specialization_constant<XoffConst>(xoff);
-      cgh.set_specialization_constant<YoffConst>(yoff);
-      cgh.set_specialization_constant<ScaleConst>(scale);
-      cgh.set_specialization_constant<ThrsConst>(thrs);
-      cgh.parallel_for<Test>(
-          GlobalRange * LocalRange,
-          [=](item<2> it, kernel_handler h) SYCL_ESIMD_KERNEL {
-            uint h_pos = it.get_id(0);
-            uint v_pos = it.get_id(1);
-            mandelbrot(accOutput, h_pos, v_pos,
-                       h.get_specialization_constant<CrunchConst>(),
-                       h.get_specialization_constant<XoffConst>(),
-                       h.get_specialization_constant<YoffConst>(),
-                       h.get_specialization_constant<ScaleConst>(),
-                       h.get_specialization_constant<ThrsConst>());
-          });
-    });
-    e.wait();
     for (int iter = 0; iter <= num_iters; ++iter) {
       auto e = q.submit([&](sycl::handler &cgh) {
         auto accOutput =
