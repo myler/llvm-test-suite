@@ -14,6 +14,7 @@ implied warranties, other than those that are expressly stated in the License.
 // On HW it can also check that lsc_fence is working
 
 // TODO: this test now fails and crashes the PVC machine, enable when fixed.
+// See CMPLRLLVM-32898 for details.
 // REQUIRES: gpu
 // UNSUPPORTED: cuda
 // RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
