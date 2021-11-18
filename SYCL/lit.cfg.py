@@ -85,7 +85,7 @@ if config.extra_environment:
     for env_pair in config.extra_environment.split(','):
         [var,val]=env_pair.split("=")
         if val:
-           llvm_config.with_environment(var,val)
+           llvm_config.with_environment(var,val,append_path=True)
            lit_config.note("\t"+var+"="+val)
         else:
            lit_config.note("\tUnset "+var)
@@ -152,13 +152,11 @@ else:
 if not config.sycl_be:
      lit_config.error("SYCL backend is not specified")
 
-# Mapping from SYCL_BE backend definition style to SYCL_DEVICE_FILTER used
-# for backward compatibility
-try:
-  config.sycl_be = { 'PI_OPENCL': 'opencl',  'PI_CUDA': 'cuda', 'PI_HIP': 'hip', 'PI_LEVEL_ZERO': 'level_zero'}[config.sycl_be]
-except:
-  # do nothing a we expect that new format of plugin values are used
-  pass
+# Transforming from SYCL_BE backend definition style to SYCL_DEVICE_FILTER used
+# for backward compatibility : e.g. 'PI_ABC_XYZ' -> 'abc_xyz'
+if config.sycl_be.startswith("PI_"):
+    config.sycl_be = config.sycl_be[3:]
+config.sycl_be = config.sycl_be.lower()
 
 lit_config.note("Backend: {BACKEND}".format(BACKEND=config.sycl_be))
 
@@ -169,10 +167,16 @@ config.substitutions.append( ('%BE_RUN_PLACEHOLDER', "env SYCL_DEVICE_FILTER={SY
 if config.dump_ir_supported:
    config.available_features.add('dump_ir')
 
-if config.sycl_be not in ['host', 'opencl', 'cuda', 'hip', 'level_zero']:
+supported_sycl_be = ['host',
+                     'opencl',
+                     'cuda',
+                     'hip',
+                     'level_zero']
+
+if config.sycl_be not in supported_sycl_be:
    lit_config.error("Unknown SYCL BE specified '" +
                     config.sycl_be +
-                    "' supported values are opencl, cuda, hip, level_zero")
+                    "'. Supported values are {}".format(', '.join(supported_sycl_be)))
 
 # If HIP_PLATFORM flag is not set, default to AMD, and check if HIP platform is supported
 supported_hip_platforms=["AMD", "NVIDIA"]
@@ -198,8 +202,10 @@ with open(check_sycl_hpp_file, 'w') as fp:
     fp.write('int main() {}')
 
 extra_sycl_include = ""
-sycl_hpp_available = subprocess.getstatusoutput(config.dpcpp_compiler+' -fsycl  ' + check_sycl_hpp_file)
+sycl_hpp_available = subprocess.getstatusoutput(config.dpcpp_compiler + ' -fsycl  ' + check_sycl_hpp_file + ' ' + ("/c" if cl_options else "-c"))
 if sycl_hpp_available[0] != 0:
+    lit_config.note('Simple include of sycl/sycl.hpp failed with output: ' + sycl_hpp_available[1] + 
+                    '\nUsing fake sycl/sycl.hpp (which just points to CL/sycl.hpp)')
     extra_sycl_include = " " + ("/I" if cl_options else "-I") + config.extra_include
 
 config.substitutions.append( ('%clangxx', ' '+ config.dpcpp_compiler + ' ' + config.cxx_flags + ' ' + arch_flag + extra_sycl_include) )
