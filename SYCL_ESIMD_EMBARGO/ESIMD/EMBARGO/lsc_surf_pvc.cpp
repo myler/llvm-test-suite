@@ -11,11 +11,11 @@ implied warranties, other than those that are expressly stated in the License.
 ============================= end_copyright_notice ===========================*/
 
 // This test checks 1d surf lsc intrinsics
-// TODO enable this test on PVC fullsim when LSC patch is merged
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
+
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
 // RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
-// RUNx: %GPU_RUN_PLACEHOLDER %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
 

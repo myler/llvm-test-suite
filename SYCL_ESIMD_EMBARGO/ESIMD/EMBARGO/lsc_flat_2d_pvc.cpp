@@ -11,11 +11,11 @@ implied warranties, other than those that are expressly stated in the License.
 ============================= end_copyright_notice ===========================*/
 
 // This test checks 2d flat lsc intrinsics
-// TODO enable this test on PVC fullsim when LSC patch is merged
-// TODO enable on Windows and Level Zero
-// REQUIRES: linux && gpu && opencl
+
+// REQUIRES: gpu
+// UNSUPPORTED: cuda
 // RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
-// RUNx: %GPU_RUN_PLACEHOLDER %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
 
@@ -36,8 +36,7 @@ int main() {
   unsigned y = 0;
   unsigned size = data_height * data_pitch;
 
-  auto q =
-      queue{esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler()};
+  queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
   auto device = q.get_device();
   std::cout << "Device name: " << device.get_info<info::device::name>()
             << std::endl;

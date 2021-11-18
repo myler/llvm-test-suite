@@ -1,4 +1,4 @@
-//==---------------- vadd_usm.cpp  - DPC++ ESIMD on-device test ------------==//
+//==--- lsc_flat_atomic_cachehint_pvc.cpp  - DPC++ ESIMD on-device test ----==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -24,7 +24,7 @@ class Test;
 using namespace cl::sycl;
 using namespace sycl::ext::intel::experimental::esimd;
 
-ESIMD_INLINE void atomic_add_float(nd_item<1> ndi, DTYPE *sA) {
+ESIMD_INLINE void atomic_add_float(DTYPE *sA, simd_mask<16> M) {
   simd<uint32_t, 16> offsets = {0, 1, 2,  3,  4,  5,  6,  7,
                                 8, 9, 10, 11, 12, 13, 14, 15};
   simd<float, 16> mat = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
@@ -32,14 +32,14 @@ ESIMD_INLINE void atomic_add_float(nd_item<1> ndi, DTYPE *sA) {
   lsc_flat_atomic<float, sycl::ext::intel::experimental::esimd::atomic_op::fadd, 1,
                   lsc_data_size::default_size, CacheHint::Uncached,
                   CacheHint::WriteBack, 16>((float *)sA,
-                                            offsets * sizeof(float), mat, 1);
+                                            offsets * sizeof(float), mat, M);
 }
 
 int main(void) {
   constexpr unsigned Size = 256;
-  constexpr unsigned VL = 4;
-  constexpr unsigned NElts = 1;
-  constexpr unsigned GroupSize = 4;
+  constexpr unsigned VL = 16;
+  constexpr size_t LocalRange = 4;
+  constexpr size_t GlobalRange = 64;
 
   queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
 
@@ -47,17 +47,19 @@ int main(void) {
   std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
   auto ctxt = q.get_context();
 
-  DTYPE *A = malloc_shared<DTYPE>(Size / 16, q);
-  DTYPE *B = malloc_shared<DTYPE>(Size / 16, q);
+  DTYPE *A = malloc_shared<DTYPE>(VL, q);
+  DTYPE *B = malloc_shared<DTYPE>(VL, q);
+  DTYPE *C = malloc_shared<DTYPE>(VL, q);
+  DTYPE *D = malloc_shared<DTYPE>(VL, q);
 
-  for (unsigned i = 0; i < Size / 16; ++i) {
+  for (unsigned i = 0; i < VL; ++i) {
     A[i] = 0;
-    B[i] = 1 * 64 * 0.5;
+    B[i] = GlobalRange * 0.5; // expect changes in all elements
+    C[i] = 0;
+    D[i] = (i & 1) ? B[i] : 0; // expect changes in elements with odd indices
   }
 
-  range<1> GlobalRange{Size / VL / NElts};
-  range<1> LocalRange{GroupSize};
-  nd_range<1> Range(GlobalRange, LocalRange);
+  nd_range<1> Range(range<1>{GlobalRange}, range<1>{LocalRange});
 
   std::vector<kernel_id> kernelId1 = {get_kernel_id<Test>()};
   setenv("SYCL_PROGRAM_COMPILE_OPTIONS", "-vc-codegen -doubleGRF", 1);
@@ -67,38 +69,44 @@ int main(void) {
     q.submit([&](handler &cgh) {
       cgh.use_kernel_bundle(exeBundle1);
       cgh.parallel_for<Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-        atomic_add_float(ndi, A);
+        atomic_add_float(A, 1);
+        simd_mask<16> M({0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1});
+        atomic_add_float(C, M);
       });
     }).wait();
   } catch (sycl::exception const &e) {
     std::cout << "SYCL exception caught: " << e.what() << '\n';
     free(A, q);
     free(B, q);
+    free(C, q);
+    free(D, q);
     return 1;
   }
 
-  for (unsigned i = 0; i < Size / 16; ++i) {
-    std::cout << A[i] << " ";
-  }
   int err_cnt = 0;
-
-  for (unsigned i = 0; i < Size / 16; ++i) {
+  for (unsigned i = 0; i < VL; ++i) {
     if (A[i] != B[i]) {
-      if (++err_cnt < 10) {
-        std::cout << "failed at index " << i << ", " << B[i] << " != " << A[i]
+      if (++err_cnt < 10)
+        std::cerr << "A == B failed at " << i << ": " << A[i] << " != " << B[i]
                   << "\n";
-      }
+    }
+    if (C[i] != D[i]) {
+      if (++err_cnt < 10)
+        std::cerr << "C == D failed at " << i << ": " << C[i] << " != " << D[i]
+                  << "\n";
     }
   }
   if (err_cnt > 0) {
     std::cout << "  pass rate: "
-              << ((float)(Size - err_cnt) / (float)Size) * 100.0f << "% ("
+              << ((float)(VL - err_cnt) / (float)VL) * 100.0f << "% ("
               << (Size - err_cnt) << "/" << Size << ")\n";
   }
 
   std::cout << (err_cnt > 0 ? "FAILED\n" : "Passed\n");
   free(A, q);
   free(B, q);
+  free(C, q);
+  free(D, q);
 
   return err_cnt > 0 ? 1 : 0;
 }
