@@ -61,19 +61,19 @@ int main(void) {
       constexpr unsigned yoff = 0;
 
       simd<float, VL> va =
-          esimd_2d_statelss_load<float, BLKX, BLKY, 1, false, false,
-                                 CacheHint::Streaming, CacheHint::Uncached>(
+          load_2d_stateless<float, BLKX, BLKY, 1, false, false,
+                            CacheHint::Streaming, CacheHint::Uncached>(
               A, width, height, pitch, xoff, yoff);
       simd<float, VL> vb =
-          esimd_2d_statelss_load<float, BLKX, BLKY, 1, false, false,
-                                 CacheHint::Streaming, CacheHint::Uncached>(
+          load_2d_stateless<float, BLKX, BLKY, 1, false, false,
+                            CacheHint::Streaming, CacheHint::Uncached>(
               B, width, height, pitch, xoff, yoff);
 
       simd<float, VL> vc = va + vb;
 
-      esimd_2d_statelss_store<float, BLKX, BLKY, CacheHint::Uncached,
-                              CacheHint::WriteBack>(C, width, height, pitch,
-                                                    xoff, yoff, vc);
+      store_2d_stateless<float, BLKX, BLKY, CacheHint::Uncached,
+                         CacheHint::WriteBack>(C, width, height, pitch,
+                                               xoff, yoff, vc);
     });
   });
   e.wait();

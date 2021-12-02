@@ -51,9 +51,9 @@ int main(void) {
       mb.select<4, 2, 1, 1>(0, 0) = 4;
 
       simd<int, Size> vc(0);
-      vc = esimd_dpasw<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8,
-                       int, int, int, Size, 32, 16>(vc, ma.bit_cast_view<int>(),
-                                                  mb.bit_cast_view<int>());
+      vc = dpasw<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8,
+                 int, int, int, Size, 32, 16>(vc, ma.bit_cast_view<int>(),
+                                              mb.bit_cast_view<int>());
 
       for (int i = 0; i < Size; i += VL) {
         simd<int, VL> output = vc.select<VL, 1>(i);

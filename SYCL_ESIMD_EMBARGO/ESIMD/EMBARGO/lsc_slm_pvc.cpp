@@ -17,7 +17,7 @@ implied warranties, other than those that are expressly stated in the License.
 // RUN: %clangxx -fsycl %s -DESIMD_GEN12_7 -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
-#include "esimd_test_utils.hpp"
+#include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <algorithm>
