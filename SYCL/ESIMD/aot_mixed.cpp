@@ -7,15 +7,13 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device gen9" -o %t.sycl.out -DENABLE_SYCL=0 %s
+// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.sycl.out -DENABLE_SYCL=0 %s
 // RUN: %GPU_RUN_PLACEHOLDER %t.sycl.out
-// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device gen9" -o %t.out %s
+// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.out %s
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
-// XFAIL: *
+// XFAIL: windows
 // TODO: remove XFAIL once ocloc support for automatic scalar/vector SPIRV
-// module dispatching is available in public drivers. Also change 'gen9' (safe
-// variant to reliably get unexpected PASS when ocloc is fixed) to '*' (which
-// stresses ocloc).
+// module dispatching is available in public drivers on windows.
 
 // This test checks ESIMD ahead-of-time compilation scenarios:
 // 1) When the application contains both SYCL and ESIMD kernel, thus requiring
