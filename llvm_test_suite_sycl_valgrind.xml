@@ -102,6 +102,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_buffer_location" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_aocx" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_aocx_win" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_dsp_control" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_io_pipes" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_lsu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_fpga_tests_fpga_pipes" />
@@ -285,6 +286,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_ballot" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_bit_ops" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_binop_integer_promotion" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_copy_to_from" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_mask" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_memory_access" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_negation_operator" />
@@ -295,6 +297,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_rgba" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dp4a" />
@@ -348,6 +351,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_3" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_dgetrf" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_dgetrf_8x8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_globals" />
@@ -494,6 +498,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_su_int8" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcore_double" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_us_int8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_uu_int8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="onlinecompiler" testName="onlinecompiler_online_compiler_l0" />
@@ -505,6 +510,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_level_zero_keep_ownership" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_interop_task_mem" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_make_kernel" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_event_status" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_test" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_device_scope_events" />
@@ -556,6 +562,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_context_is_destroyed_after_exception" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_device_num" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_dummy_event_info" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_event_destruction" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_fp16_with_unnamed_lambda" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_get_subgroup_sizes" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_global_queue" />
@@ -570,6 +577,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_name_inside_sycl_namespace" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_unnamed" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_msvc_crt" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_multiple_targets" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_nontrivial_device_copyable_value" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_optimization_level_debug_info" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_pi_release" />
@@ -617,6 +625,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="specconstants" testName="specconstants_2020_non_native_cpu" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="specconstants" testName="specconstants_2020_non_native_cuda" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="specconstants" testName="specconstants_2020_non_native_gpu" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="specconstants" testName="specconstants_2020_non_native_multiple_targets" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_attributes" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_barrier" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_broadcast" />
