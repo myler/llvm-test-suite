@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "Inputs/common.hpp"
 #include "Inputs/exec_in_order.hpp"
+#include "Inputs/common.hpp"
 
 int main() { return test<1, 4, 32>(); }

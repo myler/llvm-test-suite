@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-#include "Inputs/common.hpp"
 #include "Inputs/multiple_wg.hpp"
+#include "Inputs/common.hpp"
 
 int main() { return test<2, 2, 16>(); }

@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "Inputs/common.hpp"
 #include "Inputs/single_barrier_in_loop.hpp"
+#include "Inputs/common.hpp"
 
 int main() { return test<1, 8, 64>(); }

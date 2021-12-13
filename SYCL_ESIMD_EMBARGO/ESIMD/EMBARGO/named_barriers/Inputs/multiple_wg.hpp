@@ -12,7 +12,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   constexpr unsigned NUM = Threads * Groups; // 4
   constexpr unsigned VL = Size / NUM;        // 4
 
-  esimd_nbarrier_init<bnum>();
+  nbarrier_init<bnum>();
 
   unsigned int localID = ndi.get_local_id(0);
   unsigned int groupID = ndi.get_group(0);
@@ -38,10 +38,10 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   }
 
   // signaling after data stored
-  esimd_nbarrier_signal(bid, flag, producers, consumers);
+  nbarrier_signal(bid, flag, producers, consumers);
 
   if (is_consumer) {
-    esimd_nbarrier_wait(bid); // consumers waiting here for signal from producer
+    nbarrier_wait(bid); // consumers waiting here for signal from producer
     auto ret = slm_block_load<int, Size / 2>(group_off); // reading SLM
     lsc_surf_store<int, Size / 2>(ret, acc, group_off);  // storing it to output
   }

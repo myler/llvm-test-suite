@@ -14,7 +14,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   // number of ints read/written by single thread
   constexpr unsigned VL = SlmSize / Threads;
 
-  esimd_nbarrier_init<bnum>();
+  nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
@@ -40,8 +40,8 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
       slm_block_store(b_off, init); // producer stores to SLM
     }
 
-    esimd_nbarrier_signal(b, flag, producers, consumers);
-    esimd_nbarrier_wait(b); // consumers waiting for signal
+    nbarrier_signal(b, flag, producers, consumers);
+    nbarrier_wait(b); // consumers waiting for signal
 
     auto val = slm_block_load<int, VL>(off); // reading SLM
     // and storing it to output surface

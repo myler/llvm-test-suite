@@ -7,7 +7,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
       Threads; // 3 named barriers, id 0 reserved for unnamed
   constexpr unsigned VL = Size / (2 * Threads); // 4
 
-  esimd_nbarrier_init<bnum>();
+  nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
@@ -24,33 +24,33 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   if (idx == 0) {
     // T0 signals barrier 1 and locks, waiting for first signal from T1
     const int barrier_id = idx + 1;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
   } else if (idx == 1) {
     // T1 signals barrier 1 and locks, waiting for signal from T0
     const int barrier_id = idx;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
 
     // T1 signals barrier 2 and locks, waiting for first signal from T2
     const int barrier_id2 = idx + 1;
-    esimd_nbarrier_signal(barrier_id2, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id2);
+    nbarrier_signal(barrier_id2, flag, producers, consumers);
+    nbarrier_wait(barrier_id2);
   } else if (idx == 2) {
     // T2 signals barrier 2 and locks, waiting for second signal from T1
     const int barrier_id = idx;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
 
     // T2 signals barrier 3 and locks, waiting for signal from T3
     const int barrier_id2 = idx + 1;
-    esimd_nbarrier_signal(barrier_id2, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id2);
+    nbarrier_signal(barrier_id2, flag, producers, consumers);
+    nbarrier_wait(barrier_id2);
   } else {
     // T3 signals barrier 3 and locks, waiting for second signal from T2
     const int barrier_id = idx;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
   }
 
   lsc_surf_store<int, VL * 2>(val, acc, off);

@@ -7,7 +7,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   constexpr unsigned bnum = Threads;
   constexpr unsigned VL = Size / (2 * Threads); // 4
 
-  esimd_nbarrier_init<bnum>();
+  nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
@@ -26,8 +26,8 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
     // thread 2 signals barrier 1
     // thread 3 signals barrier 2
     int barrier_id = idx;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
   }
 
   simd<int, VL * 2> val(idx);
@@ -39,8 +39,8 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
     // thread 2 arrives here next and signals barrier 2, unlocking thread 3
     // thread 3 skips this branch
     int barrier_id = idx + 1;
-    esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
-    esimd_nbarrier_wait(barrier_id);
+    nbarrier_signal(barrier_id, flag, producers, consumers);
+    nbarrier_wait(barrier_id);
   }
 }
 
