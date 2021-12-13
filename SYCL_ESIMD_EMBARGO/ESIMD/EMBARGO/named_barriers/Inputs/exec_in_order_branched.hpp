@@ -3,43 +3,52 @@ using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
 ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
-  constexpr unsigned bnum = Threads - 1;
-
-  constexpr unsigned VL = Size / (2 * Threads);
+  constexpr unsigned bnum =
+      Threads; // 3 named barriers, id 0 reserved for unnamed
+  constexpr unsigned VL = Size / (2 * Threads); // 4
 
   esimd_nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
 
-  int flag = 0;
+  int flag = 0; // producer-consumer mode
   int producers = 2;
   int consumers = 2;
 
   simd<int, VL * 2> val(idx);
 
-  if (idx == 0) { // first thread within a work-group
-    const int barrier_id = idx;
+  // Threads are executed in ascending order of their local ID and each thread
+  // stores data to addresses that partially overlap with addresses used by
+  // previous thread.
+  if (idx == 0) {
+    // T0 signals barrier 1 and locks, waiting for first signal from T1
+    const int barrier_id = idx + 1;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
   } else if (idx == 1) {
-    const int barrier_id = idx - 1;
+    // T1 signals barrier 1 and locks, waiting for signal from T0
+    const int barrier_id = idx;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
 
-    const int barrier_id2 = idx;
+    // T1 signals barrier 2 and locks, waiting for first signal from T2
+    const int barrier_id2 = idx + 1;
     esimd_nbarrier_signal(barrier_id2, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id2);
   } else if (idx == 2) {
-    const int barrier_id = idx - 1;
+    // T2 signals barrier 2 and locks, waiting for second signal from T1
+    const int barrier_id = idx;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
 
-    const int barrier_id2 = idx;
+    // T2 signals barrier 3 and locks, waiting for signal from T3
+    const int barrier_id2 = idx + 1;
     esimd_nbarrier_signal(barrier_id2, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id2);
-  } else { // idx == bnum (last thread within a work-group)
-    const int barrier_id = idx - 1;
+  } else {
+    // T3 signals barrier 3 and locks, waiting for second signal from T2
+    const int barrier_id = idx;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
   }

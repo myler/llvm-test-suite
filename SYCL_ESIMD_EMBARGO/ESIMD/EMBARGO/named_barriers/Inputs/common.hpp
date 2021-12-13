@@ -1,8 +1,7 @@
 using namespace cl::sycl;
 using namespace sycl::ext::intel::experimental::esimd;
 
-template <unsigned Groups, unsigned Threads, unsigned Size>
-int test() {
+template <unsigned Groups, unsigned Threads, unsigned Size> int test() {
   std::vector<int> out(Size, 0);
 
   try {

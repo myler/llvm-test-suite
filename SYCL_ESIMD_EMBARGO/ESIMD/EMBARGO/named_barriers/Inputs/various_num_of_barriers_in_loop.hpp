@@ -3,47 +3,54 @@ using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
 ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
-  constexpr unsigned bnum = 3;
+  constexpr unsigned bnum = 3; // 2 named barriers, id 0 reserved for unnamed
 
-  constexpr unsigned VL = Size / Threads;
+  // SLM size is half of output surface size so
+  // content of SLM can be copied to out buffer on each iteration
+  constexpr unsigned SlmSize = Size / 2;     // 32
+  constexpr unsigned VL = SlmSize / Threads; // 4
 
   esimd_nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
 
+  // 2 producers on first iteration, 1 producer on second
   unsigned int indexes[2][2] = {{1, 2}, {3, 3}}; // local ids of producers
   unsigned int prods[2] = {2, 1};                // number of producers
 
-  slm_init(Size * sizeof(int));
+  slm_init(SlmSize * sizeof(int));
   slm_block_store(off, simd<int, VL>(0));
-  esimd_barrier();
+  barrier();
 
   for (int b = bnum - 1; b > 0; b--) {
-    int j = bnum - b - 1;
+    int j = bnum - b - 1; // iteration index
 
     bool is_producer = idx == indexes[j][0] || idx == indexes[j][1];
     bool is_consumer = !is_producer;
+    // only-consumer or only-producer modes
     unsigned int flag = is_producer ? 0x1 : 0x2;
 
     unsigned int producers = prods[j];
     unsigned int consumers = Threads - producers;
 
     if (is_producer) {
-      unsigned int p_off = j * sizeof(int) * Size / 4;
-      p_off += (producers == 2 ? (idx - 1) : 0) * sizeof(int) * Size / 2;
+      unsigned int p_off = j * sizeof(int) * SlmSize / 4;
+      // second iteration store partialy overlaps first iteration stores
+      p_off += (producers == 2 ? (idx - 1) : 0) * sizeof(int) * SlmSize / 2;
       int v = 0xdead0000 + idx;
-      simd<int, Size / 2> init(v);
-      slm_block_store(p_off, init);
+      simd<int, SlmSize / 2> init(v);
+      slm_block_store(p_off, init); // producer stores to SLM
     }
 
     esimd_nbarrier_signal(b, flag, producers, consumers);
 
     if (is_consumer)
-      esimd_nbarrier_wait(b);
+      esimd_nbarrier_wait(b); // consumers waiting for signal
 
-    auto val = slm_block_load<int, VL>(off);
-    lsc_surf_store<int, VL>(val, acc, off);
+    auto val = slm_block_load<int, VL>(off); // reading SLM
+    // and storing it to output surface
+    lsc_surf_store<int, VL>(val, acc, off + j * SlmSize);
   }
 }
 

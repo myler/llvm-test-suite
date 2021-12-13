@@ -3,21 +3,29 @@ using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
 ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
-  constexpr unsigned bnum = Threads - 1;
-
-  constexpr unsigned VL = Size / (2 * Threads);
+  // 3 named barriers, id 0 reserved for unnamed
+  constexpr unsigned bnum = Threads;
+  constexpr unsigned VL = Size / (2 * Threads); // 4
 
   esimd_nbarrier_init<bnum>();
 
   unsigned int idx = ndi.get_local_id(0);
   unsigned int off = idx * VL * sizeof(int);
 
-  int flag = 0;
+  int flag = 0; // producer-consumer mode
   int producers = 2;
   int consumers = 2;
 
+  // Threads are executed in ascending order of their local ID and each thread
+  // stores data to addresses that partially overlap with addresses used by
+  // previous thread.
+
   if (idx > 0) {
-    int barrier_id = idx - 1;
+    // thread 0 skips this branch and goes straight to lsc_surf_store
+    // thread 1 signals barrier 0
+    // thread 2 signals barrier 1
+    // thread 3 signals barrier 2
+    int barrier_id = idx;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
   }
@@ -26,7 +34,11 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   lsc_surf_store<int, VL * 2>(val, acc, off);
 
   if (idx < bnum) {
-    int barrier_id = idx;
+    // thread 0 arrives here first and signals barrier 0, unlocking thread 1
+    // thread 1 arrives here next and signals barrier 1, unlocking thread 2
+    // thread 2 arrives here next and signals barrier 2, unlocking thread 3
+    // thread 3 skips this branch
+    int barrier_id = idx + 1;
     esimd_nbarrier_signal(barrier_id, flag, producers, consumers);
     esimd_nbarrier_wait(barrier_id);
   }

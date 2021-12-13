@@ -3,14 +3,14 @@ using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
 ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
-  constexpr unsigned bnum = 2;
-  constexpr unsigned barrier = 1;
+  constexpr unsigned bnum = 2; // 1 named barrier, id 0 reserved for unnamed
+  constexpr unsigned bid = 1;
 
   constexpr unsigned producers = 1;
   constexpr unsigned consumers = 1;
 
-  constexpr unsigned NUM = Threads * Groups;
-  constexpr unsigned VL = Size / NUM;
+  constexpr unsigned NUM = Threads * Groups; // 4
+  constexpr unsigned VL = Size / NUM;        // 4
 
   esimd_nbarrier_init<bnum>();
 
@@ -23,23 +23,27 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
 
   slm_init(VL * NUM * sizeof(int));
   slm_block_store(global_off, simd<int, VL>(0));
-  esimd_barrier();
+  barrier();
 
+  // thread with local id 1 is producer in each work-group
   bool is_producer = localID == 1;
   bool is_consumer = !is_producer;
+  // only-producer or only-comsumer modes
   unsigned int flag = is_producer ? 0x1 : 0x2;
-  int v = 0xdead0000 | (groupID << 8) | localID;
 
   if (is_producer) {
+    int v = 0xdead0000 | (groupID << 8) | localID;
+    // producer stores data to SLM
     slm_block_store(group_off, simd<int, Size / 2>(v));
   }
 
-  esimd_nbarrier_signal(barrier, flag, producers, consumers);
+  // signaling after data stored
+  esimd_nbarrier_signal(bid, flag, producers, consumers);
 
   if (is_consumer) {
-    esimd_nbarrier_wait(barrier);
-    auto ret = slm_block_load<int, Size / 2>(group_off);
-    lsc_surf_store<int, Size / 2>(ret, acc, group_off);
+    esimd_nbarrier_wait(bid); // consumers waiting here for signal from producer
+    auto ret = slm_block_load<int, Size / 2>(group_off); // reading SLM
+    lsc_surf_store<int, Size / 2>(ret, acc, group_off);  // storing it to output
   }
 }
 
