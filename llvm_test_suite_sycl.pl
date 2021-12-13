@@ -343,20 +343,17 @@ sub do_run
       my $matrix = "";
       my $jobset = "-j 8";
 
-      if (defined $ENV{'CURRENT_GPU_DEVICE'}) {
-        my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
-        if ($current_gpu =~ m/ats/) {
-          $python = "/usr/bin/python3";
-          $matrix = "-Dmatrix=1";
-          $jobset = "";
-        } elsif ($current_gpu =~ m/pvc/) {
-          $timeset = "--timeout 1800";
-          $jobset = "";
-        }
+      if ( is_ats() ) {
+        $python = "/usr/bin/python3";
+        $matrix = "-Dmatrix=1";
+        $jobset = "";
+      } elsif ( is_pvc() ) {
+        $timeset = "--timeout 1800";
+        $jobset = "";
       }
 
       if ($current_optset =~ m/_spr$/) {
-          $matrix = "-Dmatrix=1";
+        $matrix = "-Dmatrix=1";
       }
 
       if ($current_suite =~ m/valgrind/){
@@ -524,6 +521,7 @@ sub run_cmake
     my $c_cmd_opts = '';
     my $cpp_cmd_opts = '';
     my $thread_opts = '';
+    my $gpu_aot_target_opts = '';
 
     ($c_cmplr, $c_cmd_opts) = remove_opt($c_cmplr);
     ($cpp_cmplr, $cpp_cmd_opts) = remove_opt($cpp_cmplr);
@@ -583,6 +581,16 @@ sub run_cmake
         $device = "cpu";
     }elsif ( $current_optset =~ m/opt_use_gpu/ ){
         $device = "gpu";
+        if ( is_pvc() ) {
+          execute("lspci | grep Display");
+          if( $command_status == 0 and $command_output =~ /([0-9a-f]{4}) \(rev [0-9]{1,}\)/i ) {
+            my $device_id = $1;
+            my $device_rev = $2;
+            $gpu_aot_target_opts = "-DGPU_AOT_TARGET_OPTS=\"-device 0x${device_id} -revision_id ${device_rev}\"";
+          } else {
+            log_command("##Warning: Fail to get device and revision id!");
+          }
+        }
     }elsif ( $current_optset =~ m/opt_use_acc/ ){
         $device = "acc";
     }elsif ( $current_optset =~ m/opt_use_nv_gpu/ ){
@@ -645,6 +653,7 @@ sub run_cmake
                                           . " -DCMAKE_THREAD_LIBS_INIT=\"$thread_opts\""
                                           . " -DTEST_SUITE_COLLECT_CODE_SIZE=\"$collect_code_size\""
                                           . " -DLIT_EXTRA_ENVIRONMENT=\"$lit_extra_env\""
+                                          . " $gpu_aot_target_opts"
                                           . " > $cmake_log 2>&1"
                                       );
     return $command_status, $command_output;
@@ -737,6 +746,22 @@ sub print2file
 
     print FD $s;
     close FD;
+}
+
+sub is_ats {
+    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+    if (defined $current_gpu && $current_gpu =~ m/ats/i) {
+      return 1;
+    }
+    return 0;
+}
+
+sub is_pvc {
+    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+    if (defined $current_gpu && $current_gpu =~ m/pvc/i) {
+      return 1;
+    }
+    return 0;
 }
 
 sub append2file
