@@ -24,6 +24,13 @@
 #include <iostream>
 
 #include "Inputs/exec_in_order_branched.hpp"
-#include "Inputs/common.hpp"
 
-int main() { return test<1, 4, 32>(); }
+int main() {
+  bool passed = true;
+
+  passed &= test<1, 8>();
+  passed &= test<2, 16>();
+  passed &= test<3, 32>();
+
+  return passed ? 0 : 1;
+}

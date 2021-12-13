@@ -23,6 +23,11 @@
 #include <iostream>
 
 #include "Inputs/single_barrier_in_loop.hpp"
-#include "Inputs/common.hpp"
 
-int main() { return test<1, 8, 64>(); }
+int main() {
+  bool passed = true;
+
+  passed &= test<1, 1, 8, 64>();
+
+  return passed ? 0 : 1;
+}

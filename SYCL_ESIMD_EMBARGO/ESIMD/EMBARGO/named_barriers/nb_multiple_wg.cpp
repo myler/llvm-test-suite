@@ -24,6 +24,14 @@
 #include <iostream>
 
 #include "Inputs/multiple_wg.hpp"
-#include "Inputs/common.hpp"
 
-int main() { return test<2, 2, 16>(); }
+int main() {
+  bool passed = true;
+
+  passed &= test<1, 2, 2>();
+  passed &= test<2, 2, 4>();
+  passed &= test<3, 4, 4>();
+  passed &= test<4, 2, 32>();
+
+  return passed ? 0 : 1;
+}

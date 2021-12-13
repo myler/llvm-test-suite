@@ -23,6 +23,15 @@
 #include <iostream>
 
 #include "Inputs/exec_in_order.hpp"
-#include "Inputs/common.hpp"
 
-int main() { return test<1, 4, 32>(); }
+int main() {
+  bool passed = true;
+
+  passed &= test<1, 4, 8>();
+  passed &= test<2, 4, 32>();
+  passed &= test<3, 8, 16>();
+  passed &= test<4, 8, 32>();
+  passed &= test<5, 32, 64>();
+
+  return passed ? 0 : 1;
+}
