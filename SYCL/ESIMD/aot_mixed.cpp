@@ -13,7 +13,6 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // XFAIL: windows
 // TODO: remove XFAIL once ocloc support for automatic scalar/vector SPIRV
-// module dispatching is available in public drivers on windows.
 // module dispatching is available in public drivers. Also change '-device gen9'
 // (safe variant to reliably get unexpected PASS when ocloc is fixed) to
 // %gpu_aot_target_opts aka '-device *' (which stresses ocloc).
