@@ -23,6 +23,12 @@ bool test(uint32_t pmask = 0xffffffff) {
   static_assert(sizeof(T) >= 4,
                 "D8 and D16 are valid only in 2D block load/store");
 
+  if constexpr (!transpose && VS > 1) {
+    static_assert(VL == 16 || VL == 32,
+                  "IGC prohibits execution size less than SIMD size when "
+                  "vector size is greater than 1");
+  }
+
   uint16_t Size = Groups * Threads * VL * VS;
 
   T vmask = (T)-1;
@@ -53,20 +59,13 @@ bool test(uint32_t pmask = 0xffffffff) {
   for (int i = 0; i < Size; i++)
     in[i] = get_rand<T>();
 
-  std::vector<uint32_t> p(VL, 0);
-  if constexpr (!transpose)
-    for (int i = 0; i < VL; i++)
-      p[i] = (pmask >> i) & 1;
-
   try {
     buffer<T, 1> bufo(out.data(), out.size());
     buffer<T, 1> bufi(in.data(), in.size());
-    buffer<uint32_t, 1> bufp(p.data(), p.size());
 
     auto e = q.submit([&](handler &cgh) {
       auto acco = bufo.template get_access<access::mode::write>(cgh);
       auto acci = bufi.template get_access<access::mode::read>(cgh);
-      auto accp = bufp.template get_access<access::mode::read>(cgh);
       cgh.parallel_for<KernelID<case_num>>(
           Range, [=](cl::sycl::nd_item<1> ndi) SYCL_ESIMD_KERNEL {
             uint16_t globalID = ndi.get_global_id(0);
@@ -74,29 +73,26 @@ bool test(uint32_t pmask = 0xffffffff) {
             uint32_t byte_off = elem_off * sizeof(T);
 
             if constexpr (transpose) {
-              auto vals = lsc_surf_load<T, VS, DS, L1H, L3H>(acci, byte_off);
-              lsc_surf_store<T, VS, lsc_data_size::default_size,
-                             CacheHint::None, CacheHint::None>(vals, acco,
-                                                               byte_off);
+              simd<T, VS> vals;
+              vals = lsc_surf_load<T, VS, DS, L1H, L3H>(acci, byte_off);
+              lsc_surf_store<T, VS, lsc_data_size::default_size>(vals, acco,
+                                                                 byte_off);
             } else {
               simd<uint32_t, VL> offset(byte_off, VS * sizeof(T));
-              simd<uint16_t, VL> pred = lsc_surf_load<uint32_t, VL>(accp, 0);
+              simd_mask<VL> pred;
+              for (int i = 0; i < VL; i++)
+                pred.template select<1, 1>(i) = (pmask >> i) & 1;
 
-              auto loaded =
-                  lsc_surf_load<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+              simd<T, VS * VL> vals;
+              vals = lsc_surf_load<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+
               if constexpr (DS == lsc_data_size::u8u32 ||
                             DS == lsc_data_size::u16u32)
-                loaded &= vmask;
-
-              simd<T, VS * VL> vals(old_val);
-              simd<uint16_t, VS * VL> mask;
-              for (int i = 0; i < VS; i++)
-                mask.template select<VL, 1>(i * VL) = pred;
-              vals.merge(loaded, mask);
+                vals &= vmask;
 
               lsc_surf_store<T, VS, lsc_data_size::default_size,
-                             CacheHint::None, CacheHint::None, VL>(vals, acco,
-                                                                   offset);
+                             CacheHint::None, CacheHint::None, VL>(
+                  vals, acco, offset, pred);
             }
           });
     });
@@ -110,11 +106,11 @@ bool test(uint32_t pmask = 0xffffffff) {
 
   if constexpr (transpose) {
     for (int i = 0; i < Size; i++) {
-      if (out[i] != in[i]) {
+      T e = in[i];
+      if (out[i] != e) {
         passed = false;
         std::cout << "out[" << i << "] = 0x" << std::hex << (uint64_t)out[i]
-                  << " vs etalon = 0x" << (uint64_t)in[i] << std::dec
-                  << std::endl;
+                  << " vs etalon = 0x" << (uint64_t)e << std::dec << std::endl;
       }
     }
   } else {
