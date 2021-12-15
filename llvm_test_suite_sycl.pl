@@ -583,7 +583,7 @@ sub run_cmake
         $device = "gpu";
         if ( is_pvc() ) {
           execute("lspci | grep Display");
-          if( $command_status == 0 and $command_output =~ /([0-9a-f]{4}) \(rev [0-9]{1,}\)/i ) {
+          if( $command_status == 0 and $command_output =~ /([0-9a-f]{4}) \(rev ([0-9]{1,})\)/i ) {
             my $device_id = $1;
             my $device_rev = $2;
             $gpu_aot_target_opts = "-DGPU_AOT_TARGET_OPTS=\"-device 0x${device_id} -revision_id ${device_rev}\"";
