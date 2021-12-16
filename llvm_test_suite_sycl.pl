@@ -586,7 +586,7 @@ sub run_cmake
           if( $command_status == 0 and $command_output =~ /([0-9a-f]{4}) \(rev ([0-9]{1,})\)/i ) {
             my $device_id = $1;
             my $device_rev = $2;
-            $gpu_aot_target_opts = "-DGPU_AOT_TARGET_OPTS=\"-device 0x${device_id} -revision_id ${device_rev}\"";
+            $gpu_aot_target_opts = "-DGPU_AOT_TARGET_OPTS=\"\\\'-device 0x${device_id} -revision_id ${device_rev}\\\'\"";
           } else {
             log_command("##Warning: Fail to get device and revision id!");
           }
