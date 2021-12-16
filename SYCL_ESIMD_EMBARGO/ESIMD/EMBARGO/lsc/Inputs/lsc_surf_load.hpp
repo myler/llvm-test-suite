@@ -11,7 +11,8 @@ using namespace sycl::ext::intel::experimental::esimd;
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           uint16_t VL, uint16_t VS, bool transpose,
           lsc_data_size DS = lsc_data_size::default_size,
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None>
+          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None,
+          bool use_prefetch = false>
 bool test(uint32_t pmask = 0xffffffff) {
   static_assert((VL == 1) || !transpose, "Transpose must have exec size 1");
   if constexpr (DS == lsc_data_size::u8u32 || DS == lsc_data_size::u16u32) {
@@ -74,7 +75,12 @@ bool test(uint32_t pmask = 0xffffffff) {
 
             if constexpr (transpose) {
               simd<T, VS> vals;
-              vals = lsc_surf_load<T, VS, DS, L1H, L3H>(acci, byte_off);
+              if constexpr (use_prefetch) {
+                lsc_surf_prefetch<T, VS, DS, L1H, L3H>(acci, byte_off);
+                vals = lsc_surf_load<T, VS, DS>(acci, byte_off);
+              } else {
+                vals = lsc_surf_load<T, VS, DS, L1H, L3H>(acci, byte_off);
+              }
               lsc_surf_store<T, VS, lsc_data_size::default_size>(vals, acco,
                                                                  byte_off);
             } else {
@@ -84,7 +90,14 @@ bool test(uint32_t pmask = 0xffffffff) {
                 pred.template select<1, 1>(i) = (pmask >> i) & 1;
 
               simd<T, VS * VL> vals;
-              vals = lsc_surf_load<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+              if constexpr (use_prefetch) {
+                lsc_surf_prefetch<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+                vals = lsc_surf_load<T, VS, DS, CacheHint::None,
+                                     CacheHint::None, VL>(acci, offset, pred);
+              } else {
+                vals =
+                    lsc_surf_load<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+              }
 
               if constexpr (DS == lsc_data_size::u8u32 ||
                             DS == lsc_data_size::u16u32)
