@@ -90,3 +90,6 @@ SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
 SYCL_ESIMD_EMBARGO @kychendev @kbobrovs @v-vklochkov
 config_sycl_esimd_embargo @kychendev @kbobrovs @v-vklochkov
 SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/lsc @fveselov
+
+# named barriers
+SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/named_barriers @fveselov
