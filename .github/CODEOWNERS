@@ -74,11 +74,11 @@ SYCL/USM @jbrodman @sergey-semenov
 SYCL/Basic/stream @againull
 
 # Test scripts
-*.pl @yuxianch @yamanwan
-*.list @yuxianch @yamanwan
+*.pl @yuxianch @myler @yamanwan
+*.list @yuxianch @myler @yamanwan
 
 # tc files
-*.xml @yuxianch @yamanwan
+*.xml @yuxianch @myler @yamanwan
 
 #BFloat16 conversion
 SYCL/BFloat16 @AlexeySotkin @MrSidims
