@@ -1,0 +1,723 @@
+use Cwd qw(cwd);
+use File::Basename;
+use File::Copy;
+
+my $cmake_log = "$optset_work_dir/cmake.log";
+my $cmake_err = "$optset_work_dir/cmake.err";
+# Use all.lf to store standard output of run.
+my $run_all_lf = "$optset_work_dir/run_all.lf";
+
+my $cwd = cwd();
+
+my $is_suite;
+my @test_to_run_list = ();
+my $short_test_name;
+my $test_info;
+my $config_folder = 'config_sycl';
+my $subdir = "SYCL";
+my $insert_command = "";
+
+my $sycl_backend = "";
+my $device = "";
+my $os_platform = is_windows() ? "windows" : "linux";
+
+my $build_dir = "$optset_work_dir/build";
+my $lit = "../lit/lit.py";
+
+sub lscl {
+    my $args = shift;
+
+    my $os_flavor = is_windows() ? "win.x64" : "lin.x64";
+
+    my $lscl_bin = $ENV{"ICS_TESTDATA"} .
+      "/mainline/CT-SpecialTests/opencl/tools/$os_flavor/bin/lscl";
+
+    my @cmd = ($lscl_bin);
+
+    push(@cmd, @{$args}) if $args;
+
+    # lscl show warning "clGetDeviceInfo failed: Invalid value"
+    # which contains string "fail", cause tc fail
+    # Remove OS type check because RHEL8 has the same issue
+    push(@cmd, "--quiet");
+
+    execute(join(" ", @cmd));
+
+    my $output = "\n  ------ lscl output ------\n"
+               . "$command_output\n";
+
+    return $output;
+}
+
+sub get_tests_list
+{
+    #my @list = ("aot_gpu", "assert_assert_in_kernels");
+    # test name cannot include '/', so replace '/' with '_'
+    @list = map { s/^.*$config_folder\///; s/\.info//; $_ } alloy_find("$optset_work_dir/$config_folder", '.*\.info');
+    #@list = map { s/^$config_folder\///; s/\.info//; $_ } alloy_find("$config_folder", '');
+    log_command("##test list: @list");
+
+    return @list;
+}
+
+sub init_test
+{
+    log_command("In init_test");
+
+    my @folder_list = ("SYCL", $config_folder);
+    my $folder_not_exist = 0;
+    my $sparse_file_in_git = ".git/info/sparse-checkout";
+    my $sparse_co_file = "$optset_work_dir/sparse-checkout";
+    print2file("# Use sparse-checkout to get files\n", $sparse_co_file);
+    foreach my $folder (@folder_list) {
+      append2file("$folder\n", $sparse_co_file);
+      if (! -d "$optset_work_dir/$folder") {
+        $folder_not_exist = 1;
+      }
+    }
+
+    if ($folder_not_exist == 1) {
+      my $compiler_path = "";
+      if (defined $ENV{BASECOMPILER}) {
+        $compiler_path = $ENV{BASECOMPILER};
+      } else {
+        $compiler_path = generate_tool_path("dpcpp", "clang++");
+      }
+  
+      my $branch = "";
+      my $date = "";
+      if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2linux\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
+        $branch = $1;
+        $date = "$2-$3-$4";
+        log_command("##Branch: $branch, Date: $date");
+      } else {
+        $failure_message = "fail to get date of base compiler";
+        return $COMPFAIL;
+      }
+  
+      my $git_repo = unxpath("$ENV{ICS_GIT_MIRROR}/applications.compilers.tests.llvm-project-llvm-test-suite.git");
+  
+      log_command("##Clone repo");
+      #copy($sparse_co_file, $sparse_file_in_git);
+      rmtree(".git"); # Clean .git folder
+      my @get_repo_cmds = ();
+      push(@get_repo_cmds, "git init");
+      push(@get_repo_cmds, "git config core.sparseCheckout true");
+      push(@get_repo_cmds, "cp $sparse_co_file $sparse_file_in_git");
+      push(@get_repo_cmds, "git remote add -t ${branch} -f origin ${git_repo}");
+      push(@get_repo_cmds, "git checkout ${branch}");
+
+      foreach my $cmd (@get_repo_cmds) {
+        execute($cmd);
+        $compiler_output .= $command_output;
+        if ($command_status != 0) {
+          $failure_message = "fail to clone repo";
+          return $COMPFAIL;
+        }
+      }
+  
+      log_command("##Get hash from bare repo");
+      my $get_hash_cmd = "git log -1 --before=\"$date\" --pretty=format:\"%h\"";
+      execute($get_hash_cmd);
+      $compiler_output .= $command_output;
+      if ($command_status != 0) {
+        $failure_message = "fail to get hash before $date in $branch branch";
+        return $COMPFAIL;
+      }
+      my $hash = $command_output;
+      log_command("##hash: $hash");
+
+      my $archive_cmd = "git checkout $hash";
+      execute($archive_cmd);
+      $compiler_output .= $command_output;
+      if ($command_status != 0) {
+        $failure_message = "fail to get folder(s)";
+        return $COMPFAIL;
+      }
+    } else {
+      log_command("##Reuse folder(s)");
+    }
+
+    rmtree($build_dir); # Clean build folder
+    safe_Mkdir($build_dir); # Create build folder
+    chdir_log($build_dir); # Enter build folder
+    return $PASS;
+}
+
+sub init_and_cmake
+{
+    my $init_status = init_test();
+    if ($init_status != $PASS) {
+        return $init_status;
+    }
+    log_command("##Finish getting source code");
+
+    my ( $status, $output) = run_cmake();
+    if ( $status)
+    {
+        log_command("##Fail in cmake. Rename $cmake_log to $cmake_err.");
+        rename($cmake_log, $cmake_err);
+    } else {
+        # If there is no configuration issue, print device info
+        my $lscl_output = lscl();
+        append2file($lscl_output, $cmake_log);
+    }
+    return $PASS;
+}
+
+sub run_and_parse
+{
+    if ( -f $cmake_log)
+    {
+        $compiler_output = file2str($cmake_log);
+        $test_info = get_info();
+        my ( $status, $output) = do_run($test_info);
+        my $res = "";
+        if (-e $run_all_lf)
+        {
+            my $run_output = file2str("$run_all_lf");
+            $res = generate_run_result($run_output);
+            my $filtered_output = generate_run_test_lf($run_output);
+            $execution_output .= $filtered_output;
+        } else {
+            $res = generate_run_result($output);
+        }
+        return $res;
+    } elsif ( -f $cmake_err) {
+        $compiler_output = file2str($cmake_err);
+    }
+
+    $failure_message = "cmake returned non zero exit code" if ($failure_message eq "");
+    return $COMPFAIL;
+}
+
+sub BuildSuite
+{
+    my $status = init_and_cmake();
+    if ($status != $PASS) {
+        log_command("##Fail in init and/or cmake stage.");
+        # Report testing result
+        report_result("ALL", $status, $failure_message, $compiler_output, "");
+        return $status;
+    }
+    # Get test list
+    @test_to_run_list = get_tests_list();
+    return $PASS;
+}
+
+sub RunSuite
+{
+    $is_suite = 1;
+
+    my $run_status = $PASS;
+    foreach my $test (@test_to_run_list) {
+        $current_test = $test;
+        my $status = run_and_parse();
+        if ($status == $SKIP or $status == $PASS) {
+            $failure_message = "";
+        } else {
+            $run_status = $RUNFAIL;
+        }
+        # Report testing result
+        report_result($test, $status, $failure_message, $compiler_output, $execution_output);
+    }
+    return $run_status;
+}
+
+sub BuildTest
+{
+    return 0;
+}
+
+sub RunTest
+{
+    $is_suite = 0;
+
+    @test_to_run_list = get_tests_to_run();
+    if ($current_test eq $test_to_run_list[0])
+    {
+        init_and_cmake();
+    } else {
+        chdir_log($build_dir);
+    }
+    return run_and_parse();
+}
+
+sub do_run
+{
+    my $r = shift;
+    my $path = "$r->{fullpath}";
+
+    if (! -e $run_all_lf) {
+      my $python = "python3";
+      my $timeset = "";
+      # Set matrix to 1 if it's running on ATS or using SPR SDE
+      my $matrix = "";
+      my $jobset = "-j 8";
+
+      if ( is_ats() ) {
+        $python = "/usr/bin/python3";
+        $matrix = "-Dmatrix=1";
+        $jobset = "";
+      } elsif ( is_pvc() ) {
+        $timeset = "--timeout 1800";
+        $jobset = "";
+      }
+
+      if ($current_optset =~ m/_spr$/) {
+        $matrix = "-Dmatrix=1";
+      }
+
+      set_tool_path();
+      if ($is_suite) {
+        execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
+      } else {
+        execute("$python $lit -a $matrix $path $timeset");
+      }
+    }
+
+    $execution_output = "$command_output";
+    return $command_status, $command_output;
+}
+
+sub set_tool_path
+{
+    my $tool_path = "";
+    if ($cmplr_platform{OSFamily} eq "Windows") {
+        $tool_path = "$optset_work_dir/lit/tools/Windows";
+    } else {
+        $tool_path = "$optset_work_dir/lit/tools/Linux";
+    }
+    my $env_path = join($path_sep, $tool_path, $ENV{PATH});
+    set_envvar("PATH", $env_path, join($path_sep, $tool_path, '$PATH'));
+
+    # For the product compiler, add the internal "bin-llvm" directory to PATH.
+    if ($compiler =~ /xmain/) {
+        my $llvm_dir = dirname(qx/dpcpp -print-prog-name=llvm-ar/);
+        my $llvm_path = join($path_sep, $llvm_dir, $ENV{PATH});
+        set_envvar("PATH", $llvm_path, join($path_sep, $llvm_dir, '$PATH'));
+    }
+
+}
+
+sub get_info
+{
+    my $test_name = shift;
+    $test_name = $current_test if ! defined $test_name or $test_name eq "";
+
+    my $test_file = file2str("$optset_work_dir/$config_folder/$test_name.info");
+    $short_test_name = $test_file;
+    $short_test_name =~ s/^$subdir\///;
+
+    my $short_name = basename($test_file);
+    my $path = dirname($test_file);
+    my $r = { dir => $path, short_name => $short_name, fullpath => $test_file};
+
+    return $r;
+}
+
+sub generate_run_result
+{
+    my $output = shift;
+    my $result = "";
+    for my $line (split /^/, $output){
+      if ($line =~ m/^(.*): SYCL :: \Q$short_test_name\E \(.*\)/) {
+        $result = $1;
+        if ($result =~ m/^PASS/ or $result =~ m/^XFAIL/) {
+          # Expected PASS and Expected FAIL
+          return $PASS;
+        } elsif ($result =~ m/^XPASS/) {
+          # Unexpected PASS
+          $failure_message = "Unexpected pass";
+          return $RUNFAIL;
+        } elsif ($result =~ m/^TIMEOUT/) {
+          # Exceed test time limit
+          $failure_message = "Reached timeout";
+          return $RUNFAIL;
+        } elsif ($result =~ m/^FAIL/) {
+          # Unexpected FAIL
+          next;
+        } elsif ($result =~ m/^UNSUPPORTED/) {
+          # Unsupported tests
+          return $SKIP;
+        } else {
+          # Every test should have result.
+          # If not, it is maybe something wrong in processing result or missing result
+          $failure_message = "Result not found";
+          return $FILTERFAIL;
+        }
+      }
+
+      if ($result =~ m/^FAIL/) {
+        if ($line =~ m/Assertion .* failed/ or $line =~ m/Assertion failed:/) {
+          $failure_message = "Assertion failed";
+          return $RUNFAIL;
+        } elsif ($line =~ m/No device of requested type available/) {
+          $failure_message = "No device of requested type available";
+          return $RUNFAIL;
+        } elsif ($line =~ m/error: CHECK.*: .*/) {
+          $failure_message = "Check failed";
+          return $RUNFAIL;
+        } elsif ($line =~ m/fatal error:.* file not found/) {
+          $failure_message = "File not found";
+          return $RUNFAIL;
+        } elsif ($line =~ m/error: command failed with exit status: ([\-]{0,1}[0]{0,1}[x]{0,1}[0-9a-f]{1,})/) {
+          $failure_message = "command failed with exit status $1";
+          return $RUNFAIL;
+        }
+      }
+    }
+
+    # Every test should have result.
+    # If not, it is maybe something wrong in processing result or missing result
+    $failure_message = "Result not found";
+    return $FILTERFAIL;
+}
+
+sub generate_run_test_lf
+{
+    my $output = shift;
+    my $filtered_output = "";
+
+    my $printable = 0;
+    for my $line (split /^/, $output) {
+      if ($line =~ m/^.*: SYCL :: \Q$short_test_name\E \(.*\)/) {
+        $printable = 1;
+        $filtered_output .= $line;
+        next;
+      }
+
+      if ($printable == 1) {
+        if ($line =~ m/^[*]{20}/ and length($line) <= 22) {
+          $filtered_output .= $line;
+          $printable = 0;
+          last;
+        } else {
+          $filtered_output .= $line;
+        }
+      }
+    }
+    return $filtered_output;
+}
+
+# Call a driver to obtain a path to a particular tool. On Windows, backslashes
+# are converted to forward slashes and ".exe" is appended such that CMake will
+# accept the string as a compiler name.
+sub generate_tool_path
+{
+    my $driver = shift;
+    my $tool_name = shift;
+
+    my $tool_path = qx/$driver --print-prog-name=$tool_name/;
+    chomp $tool_path;
+
+    if ($cmplr_platform{OSFamily} eq "Windows") {
+        $tool_path =~ tr#\\#/#;
+        $tool_path = "$tool_path.exe";
+    }
+
+    return $tool_path;
+}
+
+sub run_cmake
+{
+    my $c_flags = "$current_optset_opts $compiler_list_options $compiler_list_options_c $opt_c_compiler_flags";
+    my $cpp_flags = "$current_optset_opts $compiler_list_options $compiler_list_options_cpp $opt_cpp_compiler_flags";
+    my $link_flags = "$linker_list_options $opt_linker_flags";
+    my $c_cmplr = &get_cmplr_cmd('c_compiler');
+    my $cpp_cmplr = &get_cmplr_cmd('cpp_compiler');
+    my $c_cmd_opts = '';
+    my $cpp_cmd_opts = '';
+    my $thread_opts = '';
+    my $gpu_aot_target_opts = '';
+
+    ($c_cmplr, $c_cmd_opts) = remove_opt($c_cmplr);
+    ($cpp_cmplr, $cpp_cmd_opts) = remove_opt($cpp_cmplr);
+    $c_cmd_opts .= $c_flags;
+    $cpp_cmd_opts .= $cpp_flags;
+
+    if ($cmplr_platform{OSFamily} eq "Windows") {
+    # Windows
+        if ($compiler !~ /xmain/) {
+            $c_cmplr = "clang-cl";
+            $cpp_cmplr = "clang-cl";
+            # Add "/EHsc" for syclos
+            $cpp_cmd_opts .= " /EHsc";
+        } else {
+            $c_cmplr = "clang";
+            $cpp_cmplr = 'clang++';
+            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # for absolute paths.
+            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
+            $c_cmd_opts = convert_opt($c_cmd_opts);
+            $cpp_cmd_opts = convert_opt($cpp_cmd_opts);
+        }
+    } else {
+    # Linux
+        $c_cmplr = "clang";
+        if ($compiler =~ /xmain/) {
+            $cpp_cmplr = "clang++";
+            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # for absolute paths.
+            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
+        }
+        $thread_opts = "-lpthread";
+    }
+
+    my $collect_code_size="Off";
+    execute("which llvm-size");
+    if ($command_status == 0)
+    {
+        $collect_code_size="On";
+    }
+
+    if ( $current_optset =~ m/ocl/ )
+    {
+        $sycl_backend = "PI_OPENCL";
+    } elsif ( $current_optset =~ m/nv_gpu/ ) {
+        $sycl_backend = "PI_CUDA";
+    } elsif ( $current_optset =~ m/gpu/ ) {
+        $sycl_backend = "PI_LEVEL_ZERO";
+    } else {
+        $sycl_backend = "PI_OPENCL";
+    }
+
+    if ( $current_optset =~ m/opt_use_cpu/ )
+    {
+        $device = "cpu";
+    }elsif ( $current_optset =~ m/opt_use_gpu/ ){
+        $device = "gpu";
+        if ( is_pvc() ) {
+          execute("lspci | grep Display");
+          if( $command_status == 0 and $command_output =~ /([0-9a-f]{4}) \(rev ([0-9]{1,})\)/i ) {
+            my $device_id = $1;
+            my $device_rev = $2;
+            $gpu_aot_target_opts = "-DGPU_AOT_TARGET_OPTS=\"\\\'-device 0x${device_id} -revision_id ${device_rev}\\\'\"";
+          } else {
+            log_command("##Warning: Fail to get device and revision id!");
+          }
+        }
+    }elsif ( $current_optset =~ m/opt_use_acc/ ){
+        $device = "acc";
+    }elsif ( $current_optset =~ m/opt_use_nv_gpu/ ){
+        $device = "gpu";
+    }else{
+        $device = "host";
+    }
+
+    my $lit_extra_env = "SYCL_ENABLE_HOST_DEVICE=1";
+    $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX");
+    $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX_STRIP");
+    $lit_extra_env = join_extra_env($lit_extra_env,"TC_WRAPPER_PATH");
+    $lit_extra_env = join_extra_env($lit_extra_env,"TBB_DLL_PATH");
+
+    if ( defined $ENV{PIN_CMD} ) {
+        my $pin_cmd = $ENV{PIN_CMD};
+
+        # Only pass PIN_CMD to lit when PIN_CMD includes "=" and does not include " "(space)
+        if ($pin_cmd =~ /=(.*)/) {
+          my $pin_cmd_value = $1;
+          $pin_cmd_value =~ s/\s+$//; # Remove the ending space
+          if ($pin_cmd_value !~ / /) {
+            $lit_extra_env = join(',',$lit_extra_env,$ENV{PIN_CMD});
+          }
+        } elsif ($insert_command eq "") {
+          $insert_command = $pin_cmd;
+        }
+    }
+
+    if ($insert_command ne "") {
+        my $config_file = "$optset_work_dir/SYCL/lit.cfg.py";
+        if (! -f $config_file) {
+          return COMPFAIL, "File SYCL/lit.cfg.py doesn't exist";
+        }
+
+        my $config_file_original = "$config_file.ori";
+        # If using tc -rerun, it may repeat inserting so we need to keep the original file and insert on it
+        if (! -f $config_file_original) {
+          copy($config_file, $config_file_original);
+        }
+
+        open my $in, "<", $config_file_original || die "Cannot open file lit.cfg.py.ori: $!";
+        open my $out, ">", $config_file || die "Cannot open file lit.cfg.py: $!";
+        while (<$in>) {
+          s/env\s+SYCL_DEVICE_FILTER=(\S+)/env SYCL_DEVICE_FILTER=$1 $insert_command /g;
+          print $out $_;
+        }
+        close $in;
+        close $out;
+    }
+
+    execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
+                                          . " -DSYCL_BE=$sycl_backend -DSYCL_TARGET_DEVICES=$device"
+                                          . " -DCMAKE_BUILD_TYPE=None" # to remove predifined options
+                                          . " -DCMAKE_C_COMPILER=\"$c_cmplr\""
+                                          . " -DCMAKE_CXX_COMPILER=\"$cpp_cmplr\""
+                                          . " -DCMAKE_C_FLAGS=\"$c_cmd_opts\""
+                                          . " -DCMAKE_CXX_FLAGS=\"$cpp_cmd_opts\""
+                                          . " -DCMAKE_EXE_LINKER_FLAGS=\"$link_flags\""
+                                          . " -DCMAKE_THREAD_LIBS_INIT=\"$thread_opts\""
+                                          . " -DTEST_SUITE_COLLECT_CODE_SIZE=\"$collect_code_size\""
+                                          . " -DLIT_EXTRA_ENVIRONMENT=\"$lit_extra_env\""
+                                          . " $gpu_aot_target_opts"
+                                          . " > $cmake_log 2>&1"
+                                      );
+    return $command_status, $command_output;
+}
+
+sub convert_opt
+{
+    my $opt = shift;
+
+    # Convert options from MSVC format to clang format
+    # For other options, keep them the original format
+    $opt =~ s/[\/\-]Od/-O0/g;
+    $opt =~ s/[\/]O([0-3]{1})/-O$1/g;
+    $opt =~ s/\/Zi/-g/g;
+    return $opt;
+}
+
+sub remove_opt
+{
+    my $cmplr_info = shift;
+
+    my $cmplr = '';
+    my $cmd_opts = '';
+    if ( $cmplr_info =~ /([^\s]*)\s(.*)/)
+    {
+        $cmplr = $1;
+        $cmd_opts = $2;
+        chomp $cmd_opts;
+        # Do not pass "-c" or "/c" arguments because some commands are executed with onestep
+        $cmd_opts =~ s/[-\/]{1}c$|[-\/]{1}c\s{1,}//;
+        # Do not pass "-fsycl" because it's included in the RUN commands
+        $cmd_opts =~ s/-fsycl$|-fsycl\s{1,}//;
+        # Do not pass "-fsycl-unnamed-lambda"
+        $cmd_opts =~ s/-fsycl-unnamed-lambda$|-fsycl-unnamed-lambda\s{1,}//;
+        # Remove "/EHsc" since it's not supported by clang/clang++
+        $cmd_opts =~ s/\/EHsc$|\/EHsc\s{1,}//;
+    } else {
+        $cmplr = $cmplr_info;
+    }
+    return $cmplr, $cmd_opts;
+}
+
+sub report_result
+{
+    my $testname = shift;
+    my $result = shift;
+    my $message = shift;
+    my $comp_output = shift;
+    my $exec_output = shift;
+
+    finalize_test($testname,
+                  $result,
+                  '', # status
+                  0, # exesize
+                  0, # objsize
+                  0, # compile_time
+                  0, # link_time
+                  0, # execution_time
+                  0, # save_time
+                  0, # execute_time
+                  $message,
+                  0, # total_time
+                  $comp_output,
+                  $exec_output
+    );
+}
+
+sub join_extra_env
+{
+    my $extra_env = shift;
+    my $env_var = shift;
+
+    my $env = '';
+    if (defined $ENV{$env_var}) {
+        $env = "$env_var=$ENV{$env_var}";
+        $extra_env = join(',',$extra_env,$env);
+    }
+
+    return $extra_env;
+}
+
+sub unxpath
+{
+    my $fpath;
+    $fpath = shift;
+    $fpath =~ s/\\/\//g;
+
+    return $fpath;
+}
+
+sub file2str
+{
+    my $file = shift;
+    ###
+    local $/=undef;
+    open FD, "<$file" or die "ERROR: Failed to open file $file!\n";
+    binmode FD;
+    my $str = <FD>;
+    close FD;
+    return $str;
+}
+
+sub print2file
+{
+    my $s = shift;
+    my $file = shift;
+    ###
+    open FD, ">$file" or die("ERROR: Failed to open $file for write.");
+
+    print FD $s;
+    close FD;
+}
+
+sub is_ats {
+    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+    if (defined $current_gpu && $current_gpu =~ m/ats/i) {
+      return 1;
+    }
+    return 0;
+}
+
+sub is_pvc {
+    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+    if (defined $current_gpu && $current_gpu =~ m/pvc/i) {
+      return 1;
+    }
+    return 0;
+}
+
+sub append2file
+{
+    my $s = shift;
+    my $file = shift;
+    ###
+    open FD, ">>$file" or die("ERROR: Failed to open $file for write.");
+
+    my $last = '';
+    while(<FD>) {
+        if ($_ =~ /\Q$s\E/) {
+            $last = $_;
+            last;
+        }
+    }
+    if ($last eq '') {
+        print FD $s;
+    }
+
+    close FD;
+}
+
+sub CleanupTest {
+  #if ($current_test eq $test_to_run_list[-1]) {
+      rename($run_all_lf, "$run_all_lf.last");
+      rename($cmake_err, "$cmake_err.last");
+  #}
+}
+
+1;
+
