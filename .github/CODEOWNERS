@@ -9,6 +9,13 @@ SYCL/AOT @intel/dpcpp-tools-reviewers
 #BFloat16 conversion
 SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
 
+
+# AOT compilation
+SYCL/AOT @intel/dpcpp-tools-reviewers
+
+#BFloat16 conversion
+SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
+
 # Device code split
 SYCL/DeviceCodeSplit @intel/dpcpp-tools-reviewers
 
@@ -18,6 +25,7 @@ SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Functor
 SYCL/Functor @AlexeySachkov
+SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Group algorithms
 SYCL/GroupAlgorithm @Pennycook @intel/llvm-reviewers-runtime
