@@ -694,6 +694,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_vote" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroupmask" testName="subgroupmask_basic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroupmask" testName="subgroupmask_groupsize" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tasksequence" testName="tasksequence_consumer_producer" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tasksequence" testName="tasksequence_mult_and_add" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tasksequence" testName="tasksequence_sum_of_products" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tasksequence" testName="tasksequence_sum_of_products_more_parallelism" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tasksequence" testName="tasksequence_user_sot" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tracing" testName="tracing_buffer_printers" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tracing" testName="tracing_image_printers" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="tracing" testName="tracing_pi_tracing_test" />
