@@ -327,7 +327,12 @@ sub run_and_parse
             my $test_basename = $test_info->{"short_name"};
             my @log_list = alloy_find($valgrind_dir, "v\.$test_basename\.[0-9]{1,}\.log");
             if ( scalar(@log_list) > 0 ) {
-              $failure_message = "VALGRIND reports problems. Original result: $res";
+              $failure_message = "VALGRIND reports problems. Original result: ";
+              if ($res eq $PASS) {
+                $failure_message .= "passed";
+              } else {
+                $failure_message .= "failed";
+              }
               $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
               foreach my $log (@log_list) {
                 $execution_output .= "$log\n";
