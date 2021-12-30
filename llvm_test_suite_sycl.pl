@@ -19,6 +19,7 @@ my $test_info;
 my $config_folder = 'config_sycl';
 my $subdir = "SYCL";
 my $insert_command = "";
+my $valgrind_dir = "$optset_work_dir/_VALGRIND/valgrind_reports";
 
 my $sycl_backend = "";
 my $device = "";
@@ -217,10 +218,9 @@ sub init_test
       log_command("##Removed tests that are not in $current_suite\n");
     }
 
-    if ($suite_feature eq 'sycl_valgrind') {
-      my $valgrind_dir = "$optset_work_dir/_VALGRIND/valgrind_reports";
+    if ($current_suite =~ /valgrind/) {
       safe_Mkdir('-p',$valgrind_dir);
-      $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/log.%%p";
+      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/v.%basename_t.%%p.log";
     }
 
     return PASS;
@@ -322,6 +322,18 @@ sub run_and_parse
         }
         if ($res eq $PASS && is_zperf_run()) {
             extract_perf_results();
+        }
+        if ($current_suite =~ /valgrind/) {
+            my $test_basename = $test_info->{"short_name"};
+            my @log_list = alloy_find($valgrind_dir, "v\.$test_basename\.[0-9]{1,}\.log");
+            if ( scalar(@log_list) > 0 ) {
+              $failure_message = "VALGRIND reports problems. Original result: $res";
+              $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
+              foreach my $log (@log_list) {
+                $execution_output .= "$log\n";
+              }
+              return $RUNFAIL;
+            }
         }
         return $res;
     } elsif ( -f $cmake_err) {
