@@ -428,8 +428,8 @@ More details: http://llvm.org/docs/TestingGuide.html#test-suite-quickstart</desc
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="microbenchmarks_lcals_subsetcrawloops_lcalscraw" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="microbenchmarks_loopinterchange_loopinterchange" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="microbenchmarks_memfunctions_memfunctions" />
-    <test configFile="config/TEMPLATE_llvm_test_suite_xray.xml" testName="microbenchmarks_xray_fdrmode_fdrmode_bench" />
-    <test configFile="config/TEMPLATE_llvm_test_suite_xray.xml" testName="microbenchmarks_xray_returnreference_retref_bench" />
+    <test configFile="config/TEMPLATE_llvm_test_suite_disable.xml" testName="microbenchmarks_xray_fdrmode_fdrmode_bench" />
+    <test configFile="config/TEMPLATE_llvm_test_suite_disable.xml" testName="microbenchmarks_xray_returnreference_retref_bench" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="multisource_applications_aha_aha" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="multisource_applications_alac_decode_alacconvert_decode" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="multisource_applications_alac_encode_alacconvert_encode" />
@@ -1664,7 +1664,7 @@ More details: http://llvm.org/docs/TestingGuide.html#test-suite-quickstart</desc
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19449" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19515" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19606" />
-    <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19687" />
+    <test configFile="config/TEMPLATE_llvm_test_suite_disable.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19687" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr19689" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr20100_1" />
     <test configFile="config/TEMPLATE_llvm_test_suite.xml" testName="singlesource_regression_c_gcc_c_torture_execute_gcc_c_execute_pr20187_1" />
