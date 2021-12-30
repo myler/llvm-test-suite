@@ -1,12 +1,12 @@
-use Cwd qw(cwd);
 use File::Basename;
+use File::Copy;
 
 my $cmake_log = "$optset_work_dir/cmake.log";
 my $cmake_err = "$optset_work_dir/cmake.err";
 # Use all.lf to store standard output of run.
 my $run_all_lf = "$optset_work_dir/run_all.lf";
 
-my $cwd = cwd();
+my $is_dynamic_suite = 0;
 
 # @test_to_run_list stores only the test(s) that will be run
 # For example, for "tc -t llvm_test_suite_sycl/aot_cpu,aot_gpu" it will store 2 tests - aot_cpu and aot_gpu
@@ -24,7 +24,7 @@ my $sycl_backend = "";
 my $device = "";
 my $os_platform = is_windows() ? "windows" : "linux";
 
-my $build_dir = "";
+my $build_dir = "$optset_work_dir/build";
 my $lit = "../lit/lit.py";
 
 sub lscl {
@@ -52,6 +52,14 @@ sub lscl {
     return $output;
 }
 
+sub get_dynamic_test_list
+{
+    @list = map { s/^.*$config_folder\///; s/\.info//; $_ } alloy_find("$optset_work_dir/$config_folder", '.*\.info');
+    #log_command("##test list: @list");
+
+    return @list;
+}
+
 sub is_zperf_run {
     if ((defined $opt_perf && $opt_perf) ||
         (defined $opt_perf_run && $opt_perf_run)) {
@@ -69,41 +77,121 @@ sub is_suite {
 
 sub init_test
 {
+    if ($current_suite =~ /compatibility_llvm_test_suite_sycl/) {
+      my @folder_list = ("SYCL", $config_folder);
+      my $folder_not_exist = 0;
+      my $sparse_file_in_git = ".git/info/sparse-checkout";
+      my $sparse_co_file = "$optset_work_dir/sparse-checkout";
+      print2file("# Use sparse-checkout to get files\n", $sparse_co_file);
+      foreach my $folder (@folder_list) {
+        append2file("$folder\n", $sparse_co_file);
+        if (! -d "$optset_work_dir/$folder") {
+          $folder_not_exist = 1;
+        }
+      }
+
+      if ($folder_not_exist == 1) {
+        my $compiler_path = "";
+        if (defined $ENV{BASECOMPILER}) {
+          $compiler_path = $ENV{BASECOMPILER};
+        } else {
+          $compiler_path = generate_tool_path("dpcpp", "clang++");
+        }
+
+        my $branch = "";
+        my $date = "";
+        if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2linux\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
+          $branch = $1;
+          $date = "$2-$3-$4";
+          log_command("##Branch: $branch, Date: $date");
+        } else {
+          $failure_message = "fail to get date of base compiler";
+          return $COMPFAIL;
+        }
+
+        my $git_repo = unxpath("$ENV{ICS_GIT_MIRROR}/applications.compilers.tests.llvm-project-llvm-test-suite.git");
+
+        log_command("##Clone repo");
+        #copy($sparse_co_file, $sparse_file_in_git);
+        rmtree(".git"); # Clean .git folder
+        my @get_repo_cmds = ();
+        push(@get_repo_cmds, "git init");
+        push(@get_repo_cmds, "git config core.sparseCheckout true");
+        push(@get_repo_cmds, "cp $sparse_co_file $sparse_file_in_git");
+        push(@get_repo_cmds, "git remote add -t ${branch} -f origin ${git_repo}");
+        push(@get_repo_cmds, "git checkout ${branch}");
+
+        foreach my $cmd (@get_repo_cmds) {
+          execute($cmd);
+          $compiler_output .= $command_output;
+          if ($command_status != 0) {
+            $failure_message = "fail to clone repo";
+            return $COMPFAIL;
+          }
+        }
+
+        log_command("##Get hash from bare repo");
+        my $get_hash_cmd = "git log -1 --before=\"$date\" --pretty=format:\"%h\"";
+        execute($get_hash_cmd);
+        $compiler_output .= $command_output;
+        if ($command_status != 0) {
+          $failure_message = "fail to get hash before $date in $branch branch";
+          return $COMPFAIL;
+        }
+        my $hash = $command_output;
+        log_command("##hash: $hash");
+
+        my $archive_cmd = "git checkout $hash";
+        execute($archive_cmd);
+        $compiler_output .= $command_output;
+        if ($command_status != 0) {
+          $failure_message = "fail to get folder(s)";
+          return $COMPFAIL;
+        }
+      } else {
+        log_command("##Reuse folder(s)");
+      }
+
+      # Get test list
+      @test_to_run_list = get_dynamic_test_list();
+
+      return $PASS;
+    }
+
     my $suite_feature = $current_suite;
     $suite_feature =~ s/^llvm_test_suite_//;
     #Remove suffix of suite names if it has
     $suite_feature =~ s/~.*$//;
     if ($suite_feature !~ /^sycl/)
     {
-        $config_folder = $config_folder . '_' . $suite_feature;
-        $subdir = uc $suite_feature;
-        $subdir = 'SYCL_' . $subdir;
+      $config_folder = $config_folder . '_' . $suite_feature;
+      $subdir = uc $suite_feature;
+      $subdir = 'SYCL_' . $subdir;
 
-        my $sycl_dir = "./SYCL";
-        my @file_list = alloy_find($sycl_dir, '(.*\.(h|hpp|H|HPP)|lit\..*|CMakeLists\.txt)');
+      my $sycl_dir = "./SYCL";
+      my @file_list = alloy_find($sycl_dir, '(.*\.(h|hpp|H|HPP)|lit\..*|CMakeLists\.txt)');
 
-        # Copy files to folder $subdir
-        foreach my $file (@file_list) {
-            $file =~ s/^\.\/SYCL\///;
-            my $rel_file_path = dirname($file);
-            my $file_path_in_subdir = "$optset_work_dir/$subdir";
-            if ($rel_file_path ne '.') {
-                $file_path_in_subdir = $file_path_in_subdir . "/$rel_file_path";
-            }
-            my $file_in_sycl = "$optset_work_dir/SYCL/$file";
-            if ( -d $file_path_in_subdir) {
-                cp($file_in_sycl, $file_path_in_subdir);
-            }
+      # Copy files to folder $subdir
+      foreach my $file (@file_list) {
+        $file =~ s/^\.\/SYCL\///;
+        my $rel_file_path = dirname($file);
+        my $file_path_in_subdir = "$optset_work_dir/$subdir";
+        if ($rel_file_path ne '.') {
+          $file_path_in_subdir = $file_path_in_subdir . "/$rel_file_path";
         }
-
-        my $cmake_file = "$subdir/CMakeLists.txt";
-        if ( ! -d "$subdir/External") {
-            `sed -i '/^add_subdirectory(External)/s/^/#/g' $cmake_file`;
+        my $file_in_sycl = "$optset_work_dir/SYCL/$file";
+        if ( -d $file_path_in_subdir) {
+          cp($file_in_sycl, $file_path_in_subdir);
         }
-        if ( ! -d "$subdir/ExtraTests"){
-            `sed -i '/^add_subdirectory(ExtraTests)/s/^/#/g' $cmake_file`;
-        }
+      }
 
+      my $cmake_file = "$subdir/CMakeLists.txt";
+      if ( ! -d "$subdir/External") {
+        `sed -i '/^add_subdirectory(External)/s/^/#/g' $cmake_file`;
+      }
+      if ( ! -d "$subdir/ExtraTests"){
+        `sed -i '/^add_subdirectory(ExtraTests)/s/^/#/g' $cmake_file`;
+      }
     }
 
     #Remove untested source files from $subdir if it run with several subsuites
@@ -130,7 +218,7 @@ sub init_test
     }
 
     if ($suite_feature eq 'sycl_valgrind') {
-      my $valgrind_dir = $cwd . "/_VALGRIND/valgrind_reports";
+      my $valgrind_dir = "$optset_work_dir/_VALGRIND/valgrind_reports";
       safe_Mkdir('-p',$valgrind_dir);
       $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/log.%%p";
     }
@@ -194,41 +282,32 @@ sub extract_perf_results
     }
 }
 
-sub BuildTest
+sub init_and_cmake
 {
-    return 0;
+    my $init_status = init_test();
+    if ($init_status != $PASS) {
+        return $init_status;
+    }
+    log_command("##Finish getting source code");
+
+    my ( $status, $output) = run_cmake();
+    if ( $status)
+    {
+        log_command("##Fail in cmake. Rename $cmake_log to $cmake_err.");
+        rename($cmake_log, $cmake_err);
+    } else {
+        # If there is no configuration issue, print device info
+        my $lscl_output = lscl();
+        append2file($lscl_output, $cmake_log);
+    }
+    return $PASS;
 }
 
-sub RunTest
+sub run_and_parse
 {
-    $build_dir = $cwd . "/build";
-    safe_Mkdir($build_dir);
-
-    if ($current_test eq $test_to_run_list[0])
+    if ( -f $cmake_log)
     {
-        init_test();
-
-        # Before running cmake, add settings for specific tests according to setenv.list
-        add_setting();
-
-        chdir_log($build_dir);
-        my ( $status, $output) = run_cmake();
-        if ( $status)
-        {
-            rename($cmake_log, $cmake_err);
-        } else {
-            # If there is no configuration issue, print device info
-            my $lscl_output = lscl();
-            append2file($lscl_output, $cmake_log);
-        }
-    } else {
-      chdir_log($build_dir);
-    }
-
-    $compiler_output = file2str($cmake_log);
-
-    if ( ! -f $cmake_err)
-    {
+        $compiler_output = file2str($cmake_log);
         $test_info = get_info();
         my ( $status, $output) = do_run($test_info);
         my $res = "";
@@ -245,10 +324,60 @@ sub RunTest
             extract_perf_results();
         }
         return $res;
+    } elsif ( -f $cmake_err) {
+        $compiler_output = file2str($cmake_err);
     }
 
-    $failure_message = "cmake returned non zero exit code";
+    $failure_message = "cmake returned non zero exit code" if ($failure_message eq "");
     return $COMPFAIL;
+}
+
+sub BuildSuite
+{
+    my $status = init_and_cmake();
+    if ($status != $PASS) {
+        log_command("##Fail in init and/or cmake stage.");
+        # Report testing result
+        report_result("ALL", $status, $failure_message, $compiler_output, "");
+        return $status;
+    }
+    return $PASS;
+}
+
+sub RunSuite
+{
+    $is_dynamic_suite = 1;
+
+    my $run_status = $PASS;
+    foreach my $test (@test_to_run_list) {
+        $current_test = $test;
+        my $status = run_and_parse();
+        if ($status == $SKIP or $status == $PASS) {
+            $failure_message = "";
+        } else {
+            $run_status = $RUNFAIL;
+        }
+        # Report testing result
+        report_result($test, $status, $failure_message, $compiler_output, $execution_output);
+    }
+    return $run_status;
+}
+
+sub BuildTest
+{
+    return 0;
+}
+
+sub RunTest
+{
+    $is_dynamic_suite = 0;
+    if ($current_test eq $test_to_run_list[0])
+    {
+        init_and_cmake();
+    } else {
+        chdir_log($build_dir);
+    }
+    return run_and_parse();
 }
 
 sub modify_test_file
@@ -361,7 +490,7 @@ sub do_run
       }
 
       set_tool_path();
-      if (is_suite()) {
+      if ($is_dynamic_suite == 1 or is_suite()) {
         execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
       } else {
         execute("$python $lit -a $matrix $path $timeset");
@@ -642,6 +771,9 @@ sub run_cmake
         close $out;
     }
 
+    rmtree($build_dir); # Clean build folder
+    safe_Mkdir($build_dir); # Create build folder
+    chdir_log($build_dir); # Enter build folder
     execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
                                           . " -DSYCL_BE=$sycl_backend -DSYCL_TARGET_DEVICES=$device"
                                           . " -DCMAKE_BUILD_TYPE=None" # to remove predifined options
@@ -696,6 +828,31 @@ sub remove_opt
     return $cmplr, $cmd_opts;
 }
 
+sub report_result
+{
+    my $testname = shift;
+    my $result = shift;
+    my $message = shift;
+    my $comp_output = shift;
+    my $exec_output = shift;
+
+    finalize_test($testname,
+                  $result,
+                  '', # status
+                  0, # exesize
+                  0, # objsize
+                  0, # compile_time
+                  0, # link_time
+                  0, # execution_time
+                  0, # save_time
+                  0, # execute_time
+                  $message,
+                  0, # total_time
+                  $comp_output,
+                  $exec_output
+    );
+}
+
 sub is_same
 {
     my($array1, $array2) = @_;
@@ -725,12 +882,21 @@ sub join_extra_env
     return $extra_env;
 }
 
+sub unxpath
+{
+    my $fpath;
+    $fpath = shift;
+    $fpath =~ s/\\/\//g;
+
+    return $fpath;
+}
+
 sub file2str
 {
     my $file = shift;
     ###
     local $/=undef;
-    open FD, "<$file" or die "Fail to open file $file!\n";
+    open FD, "<$file" or die "ERROR: Failed to open file $file!\n";
     binmode FD;
     my $str = <FD>;
     close FD;
@@ -742,7 +908,7 @@ sub print2file
     my $s = shift;
     my $file = shift;
     ###
-    open FD, ">$file";
+    open FD, ">$file" or die("ERROR: Failed to open $file for write.");
 
     print FD $s;
     close FD;
@@ -787,8 +953,8 @@ sub append2file
 
 sub CleanupTest {
   if ($current_test eq $test_to_run_list[-1]) {
-      rename($run_all_lf, "$run_all_lf.last");
-      rename($cmake_err, "$cmake_err.last");
+    rename($run_all_lf, "$run_all_lf.last");
+    rename($cmake_log, "$cmake_log.last");
   }
 }
 

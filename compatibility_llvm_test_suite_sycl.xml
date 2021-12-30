@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<suite driverID="dynamic_compatibility_lit">
+  <description>Port of compatibility_llvm_test_suite_sycl.
+Backward compatibility testing of llvm_test_suite_sycl.
+Sources repo https://github.com/intel-innersource/applications.compilers.tests.llvm-project-llvm-test-suite
+</description>
+  <files>
+    <file path="cmake" />
+    <file path="tools" />
+    <file path="CMakeLists.txt" />
+    <file path="litsupport" />
+    <file path="lit.cfg" />
+    <file path="lit.site.cfg.in" />
+    <file path="$INFO_TDRIVE/ref/lit" />
+  </files>
+  <rules>
+  </rules>
+</suite>
