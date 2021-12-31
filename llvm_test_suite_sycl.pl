@@ -340,7 +340,15 @@ sub run_and_parse
                 import process_logs_for_TC;
 
                 $execution_output .= "\nProcess valgrind logs by process_logs_for_TC.pm\n";
+                # Save compilation and execution output because process_logs will overwrite it
+                my $compiler_output_ori = $compiler_output;
+                my $execution_output_ori = $execution_output;
+                $compiler_output = '';
+                $execution_output = '';
                 process_logs(\&finalize_test, $valgrind_dir, $test_basename, $RUNFAIL);
+                # Recover compilation and execution output
+                $execution_output = $execution_output_ori;
+                $compiler_output = $compiler_output_ori;
               }
 
               $failure_message = "VALGRIND reports problems. Original result: ";
