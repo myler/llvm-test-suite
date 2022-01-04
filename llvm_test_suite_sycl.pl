@@ -327,15 +327,35 @@ sub run_and_parse
             my $test_basename = $test_info->{"short_name"};
             my @log_list = alloy_find($valgrind_dir, "v\.$test_basename\.[0-9]{1,}\.log");
             if ( scalar(@log_list) > 0 ) {
+              $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
+              foreach my $log (@log_list) {
+                $execution_output .= "$log\n";
+              }
+
+              my $scrdir = $ENV{TC_MEMCHECK_SCRIPTDIR} ||
+                           "$ENV{ICS_PKG_QATOOLS}/valgrind_tool";
+              if ( -f "$scrdir/process_logs_for_TC.pm") {
+                push @INC, $scrdir;
+                require process_logs_for_TC;
+                import process_logs_for_TC;
+
+                $execution_output .= "\nProcess valgrind logs by process_logs_for_TC.pm\n";
+                # Save compilation and execution output because process_logs will overwrite it
+                my $compiler_output_ori = $compiler_output;
+                my $execution_output_ori = $execution_output;
+                $compiler_output = '';
+                $execution_output = '';
+                process_logs(\&finalize_test, $valgrind_dir, $test_basename, $RUNFAIL);
+                # Recover compilation and execution output
+                $execution_output = $execution_output_ori;
+                $compiler_output = $compiler_output_ori;
+              }
+
               $failure_message = "VALGRIND reports problems. Original result: ";
               if ($res eq $PASS) {
                 $failure_message .= "passed";
               } else {
                 $failure_message .= "failed";
-              }
-              $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
-              foreach my $log (@log_list) {
-                $execution_output .= "$log\n";
               }
               return $RUNFAIL;
             }
