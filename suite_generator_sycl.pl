@@ -157,12 +157,28 @@ sub gen_suite
         }
     }
 
+    # Get tests that need double type support
+    my $double_test_file = "double_test.list";
+    my %double_test_list;
+    if (-f $double_test_file) {
+        my $double_tests = file2str($double_test_file);
+        foreach my $test (split("^", $double_tests)) {
+            $test =~ s/^\s+|\s+$//g;
+            $double_test_list{$test} = 1;
+        }
+    }
+
     foreach my $testname ( sort keys %{ $tests})
     {
         my @pre_xml = ();
         my $pre_xml_name = "";
 
-        my ($group) = split("_", lc($testname));
+        my $group = "";
+        if ( exists($double_test_list{$testname}) ) {
+            $group = "double";
+        } else {
+            ( $group ) = split("_", lc($testname));
+        }
 
         if ( @strings != 0 ) {
             @pre_xml = grep /testName="$testname"/, @strings;
