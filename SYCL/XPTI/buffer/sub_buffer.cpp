@@ -51,7 +51,6 @@ int main() {
                   << " , expected: " << I - 32 << " , got: " << Accessor1[I]
 
     auto Accessor1 = Buffer1.get_access<sycl::access::mode::read>();
-    // Check the results.
     for (size_t I = 32; I < 64; ++I) {
       if (Accessor1[I] != I - 32) {
         std::cout << "The result is incorrect for element: " << I
