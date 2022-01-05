@@ -101,7 +101,7 @@ sub init_test
 
         my $branch = "";
         my $date = "";
-        if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2linux\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
+        if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
           $branch = $1;
           $date = "$2-$3-$4";
           log_command("##Branch: $branch, Date: $date");
