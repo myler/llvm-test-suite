@@ -290,6 +290,9 @@ sub init_and_cmake
     }
     log_command("##Finish getting source code");
 
+    # Before running cmake, add settings for specific tests according to setenv.list
+    add_setting();
+
     my ( $status, $output) = run_cmake();
     if ( $status)
     {
