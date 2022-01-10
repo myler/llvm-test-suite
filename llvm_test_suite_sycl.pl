@@ -28,6 +28,22 @@ my $os_platform = is_windows() ? "windows" : "linux";
 my $build_dir = "$optset_work_dir/build";
 my $lit = "../lit/lit.py";
 
+sub gpu {
+  my $gpus = shift;
+  $gpus = [ $gpus ] if ref($gpus) ne "ARRAY";
+  my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+  if (!defined $current_gpu) {
+    return 0;
+  } else {
+    $current_gpu =~ tr/,//d; # e.g. gen9,/gen9/double/,GEN9
+    if (grep(/$current_gpu/i, @{$gpus})) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
 sub lscl {
     my $args = shift;
 
@@ -811,6 +827,9 @@ sub run_cmake
         close $out;
     }
 
+    my $gpu_opts = "";
+    $gpu_opts = "-Dgpu-intel-dg1=1" if (gpu(['dg1', 'dg2', 'ats-m']));
+
     rmtree($build_dir); # Clean build folder
     safe_Mkdir($build_dir); # Create build folder
     chdir_log($build_dir); # Enter build folder
@@ -825,6 +844,7 @@ sub run_cmake
                                           . " -DCMAKE_THREAD_LIBS_INIT=\"$thread_opts\""
                                           . " -DTEST_SUITE_COLLECT_CODE_SIZE=\"$collect_code_size\""
                                           . " -DLIT_EXTRA_ENVIRONMENT=\"$lit_extra_env\""
+                                          . " $gpu_opts"
                                           . " $gpu_aot_target_opts"
                                           . " > $cmake_log 2>&1"
                                       );
