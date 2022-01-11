@@ -1,5 +1,6 @@
 // XFAIL: cuda || hip
 // UNSUPPORTED: host,ze_debug-1,ze_debug4
+// UNSUPPORTED: host
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
