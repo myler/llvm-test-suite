@@ -515,7 +515,7 @@ sub do_run
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
         $matrix = "-Dmatrix=1";
-        $jobset = "";
+        $jobset = "-j 1";
       } elsif ( is_pvc() ) {
         $timeset = "--timeout 1800";
         $jobset = "";
