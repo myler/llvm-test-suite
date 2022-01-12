@@ -527,6 +527,7 @@ sub do_run
       # Set matrix to 1 if it's running on ATS or using SPR SDE
       my $matrix = "";
       my $jobset = "-j 8";
+      my $gpu_opts = "";
 
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
@@ -545,11 +546,15 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
+      if (gpu(['dg1', 'dg2', 'ats-m'])) {
+        $gpu_opts .= "-Dgpu-intel-dg1=1";
+      }
+
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $gpu_opts $matrix $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $matrix $path $timeset");
+        execute("$python $lit -a $gpu_opts $matrix $path $timeset");
       }
     }
 
@@ -827,9 +832,6 @@ sub run_cmake
         close $out;
     }
 
-    my $gpu_opts = "";
-    $gpu_opts = "-Dgpu-intel-dg1=1" if (gpu(['dg1', 'dg2', 'ats-m']));
-
     rmtree($build_dir); # Clean build folder
     safe_Mkdir($build_dir); # Create build folder
     chdir_log($build_dir); # Enter build folder
@@ -844,7 +846,6 @@ sub run_cmake
                                           . " -DCMAKE_THREAD_LIBS_INIT=\"$thread_opts\""
                                           . " -DTEST_SUITE_COLLECT_CODE_SIZE=\"$collect_code_size\""
                                           . " -DLIT_EXTRA_ENVIRONMENT=\"$lit_extra_env\""
-                                          . " $gpu_opts"
                                           . " $gpu_aot_target_opts"
                                           . " > $cmake_log 2>&1"
                                       );
