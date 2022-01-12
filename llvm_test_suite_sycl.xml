@@ -530,6 +530,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_non_standard_layout" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_struct_kernel_param" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="double" testName="kernelparams_union_kernel_param" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_half" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_ops" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
