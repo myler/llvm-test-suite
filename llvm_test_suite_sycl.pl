@@ -28,6 +28,22 @@ my $os_platform = is_windows() ? "windows" : "linux";
 my $build_dir = "$optset_work_dir/build";
 my $lit = "../lit/lit.py";
 
+sub gpu {
+  my $gpus = shift;
+  $gpus = [ $gpus ] if ref($gpus) ne "ARRAY";
+  my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+  if (!defined $current_gpu) {
+    return 0;
+  } else {
+    $current_gpu =~ tr/,//d; # e.g. gen9,/gen9/double/,GEN9
+    if (grep(/$current_gpu/i, @{$gpus})) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
 sub lscl {
     my $args = shift;
 
@@ -511,6 +527,7 @@ sub do_run
       # Set matrix to 1 if it's running on ATS or using SPR SDE
       my $matrix = "";
       my $jobset = "-j 8";
+      my $gpu_opts = "";
 
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
@@ -529,11 +546,15 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
+      if (gpu(['dg1', 'dg2', 'ats-m'])) {
+        $gpu_opts .= "-Dgpu-intel-dg1=1";
+      }
+
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $gpu_opts $matrix $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $matrix $path $timeset");
+        execute("$python $lit -a $gpu_opts $matrix $path $timeset");
       }
     }
 
