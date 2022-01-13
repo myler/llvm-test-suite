@@ -7,6 +7,7 @@
 # SYCL sub-directory matchers are grouped by code owner first, followed by
 # alphabetical order within the group. Please, keep this ordering.
 
+<<<<<<< HEAD
 # Atomics
 SYCL/AtomicRef @dm-vodopyanov @AlexeySachkov
 
@@ -27,6 +28,8 @@ SYCL/Tracing  @intel/llvm-reviewers-runtime
 SYCL/DeviceLib @vzakhari
 SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 
+=======
+>>>>>>> 34c16eb27 (Update CODEOWNERS (#734))
 # Group algorithms
 /SYCL/GroupAlgorithm/ @Pennycook @intel/llvm-reviewers-runtime
 /SYCL/GroupLocalMemory/ @Pennycook @intel/llvm-reviewers-runtime
@@ -37,6 +40,7 @@ SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 /SYCL/Plugin/*level[-_]zero* @intel/dpcpp-l0-pi-reviewers
 
 # Explicit SIMD
+<<<<<<< HEAD
 config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
 SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
@@ -114,4 +118,20 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/Printf/ @intel/dpcpp-tools-reviewers
 
 # Specialization constant
+=======
+/SYCL/ESIMD/ @intel/dpcpp-esimd-reviewers
+
+# BFloat16 conversion
+/SYCL/BFloat16/ @AlexeySotkin @intel/dpcpp-tools-reviewers
+
+# Compiler tests
+/SYCL/AOT/ @intel/dpcpp-tools-reviewers
+/SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
+/SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
+
+# Printf
+/SYCL/Printf/ @intel/dpcpp-tools-reviewers
+
+# Specialization constant
+>>>>>>> 34c16eb27 (Update CODEOWNERS (#734))
 /SYCL/SpecConstants/ @intel/dpcpp-tools-reviewers
