@@ -527,6 +527,7 @@ sub do_run
       # Set matrix to 1 if it's running on ATS or using SPR SDE
       my $matrix = "";
       my $jobset = "-j 8";
+      my $zedebug = "";
       my $gpu_opts = "";
 
       if ( is_ats() ) {
@@ -542,6 +543,10 @@ sub do_run
         $matrix = "-Dmatrix=1";
       }
 
+      if ($current_optset =~ m/_zedebug/) {
+        $zedebug = "--param ze_debug=-1";
+      }
+
       if ($current_suite =~ m/valgrind/){
         $timeset = "--timeout 0";
       }
@@ -552,9 +557,9 @@ sub do_run
 
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $gpu_opts $matrix $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $gpu_opts $matrix $path $timeset");
+        execute("$python $lit -a $gpu_opts $matrix $zedebug $path $timeset");
       }
     }
 
