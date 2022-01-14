@@ -11,11 +11,6 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
-// This test is failing because of known bug
-// A PR is being developed to fix the bug
-// Will remove the XFAIL once this is fixed
-// XFAIL: *
-
 #include <CL/sycl.hpp>
 #include <iostream>
 
