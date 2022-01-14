@@ -384,6 +384,13 @@ for aot_tool in aot_tools:
     else:
         lit_config.warning("Couldn't find pre-installed AOT device compiler " + aot_tool)
 
+# INTEL_CUSTOMIZATION
+if 'ICS_TESTDATA' in os.environ and platform.system() == "Windows":
+    config.available_features.add('timelimit')
+    # set _NT_SYMBOL_PATH to specify PDB files location
+    config.substitutions.append(('%timelimit', ' env _NT_SYMBOL_PATH='+config.dpcpp_root_dir+'/bin '+os.environ['ICS_TESTDATA']+'/mainline/CT-SpecialTests/opencl/tools/win.x64/bin/timelimit.exe'))
+# end INTEL_CUSTOMIZATION
+
 # Set timeout for test 1 min
 try:
     import psutil
