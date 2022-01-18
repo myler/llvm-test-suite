@@ -14,11 +14,10 @@ SYCL/DeviceCodeSplit @intel/dpcpp-tools-reviewers
 
 # Explicit SIMD
 config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
-SYCL/ESIMD @kbobrovs @v-klochkov @sndmitriev
+SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Functor
 SYCL/Functor @AlexeySachkov
-SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Group algorithms
 SYCL/GroupAlgorithm @Pennycook @intel/llvm-reviewers-runtime
@@ -37,7 +36,7 @@ SYCL/Printf @intel/dpcpp-tools-reviewers
 SYCL/SeparateCompile @intel/dpcpp-tools-reviewers
 
 # Specialization constant
-SYCL/SpecConstants @kbobrovs
+SYCL/SpecConstants @intel/dpcpp-tools-reviewers
 
 # Unified Shared Memory (USM)
 SYCL/USM @jbrodman @sergey-semenov
@@ -67,4 +66,3 @@ SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/lsc @fveselov
 SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/named_barriers @fveselov
 # XPTI and XPTI Framework
 SYCL/XPTI @intel/llvm-reviewers-runtime
-SYCL/SpecConstants @intel/dpcpp-tools-reviewers
