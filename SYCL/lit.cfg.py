@@ -160,6 +160,8 @@ else:
     # x86_64-pc-windows-msvc will cause compile time error on some
     # configurations
     config.substitutions.append( ('%fPIC', ('' if platform.system() == 'Windows' else '-fPIC')) )
+    if platform.system() != "Windows":
+        config.substitutions.append( ('%fPIC', '-fPIC') )
     config.substitutions.append( ('%shared_lib', '-shared') )
 
 if not config.gpu_aot_target_opts:
