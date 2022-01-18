@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 ///
 /// \file
 /// This file provides functions for tests on simd copy constructor.
@@ -13,6 +14,18 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+=======
+// REQUIRES: gpu, level_zero
+// XREQUIRES: gpu
+// TODO gpu and level_zero in REQUIRES due to only this platforms supported yet.
+// The current "REQUIRES" should be replaced with "gpu" only as mentioned in
+// "XREQUIRES".
+// UNSUPPORTED: cuda, hip
+// RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
+//
+// Test for esimd copy constructor.
+>>>>>>> 4dd90b8a6 ([SYCL][ESIMD] Enable simd copy constructor tests (#722)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 
 #include "common.hpp"
 
