@@ -19,6 +19,7 @@ my $test_info;
 my $config_folder = 'config_sycl';
 my $subdir = "SYCL";
 my $insert_command = "";
+my $valgrind_dir = "$optset_work_dir/_VALGRIND/valgrind_reports";
 
 my $sycl_backend = "";
 my $device = "";
@@ -26,6 +27,22 @@ my $os_platform = is_windows() ? "windows" : "linux";
 
 my $build_dir = "$optset_work_dir/build";
 my $lit = "../lit/lit.py";
+
+sub gpu {
+  my $gpus = shift;
+  $gpus = [ $gpus ] if ref($gpus) ne "ARRAY";
+  my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
+  if (!defined $current_gpu) {
+    return 0;
+  } else {
+    $current_gpu =~ tr/,//d; # e.g. gen9,/gen9/double/,GEN9
+    if (grep(/$current_gpu/i, @{$gpus})) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
 
 sub lscl {
     my $args = shift;
@@ -100,7 +117,7 @@ sub init_test
 
         my $branch = "";
         my $date = "";
-        if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2linux\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
+        if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
           $branch = $1;
           $date = "$2-$3-$4";
           log_command("##Branch: $branch, Date: $date");
@@ -217,10 +234,9 @@ sub init_test
       log_command("##Removed tests that are not in $current_suite\n");
     }
 
-    if ($suite_feature eq 'sycl_valgrind') {
-      my $valgrind_dir = "$optset_work_dir/_VALGRIND/valgrind_reports";
+    if ($current_suite =~ /valgrind/) {
       safe_Mkdir('-p',$valgrind_dir);
-      $insert_command = "/rdrive/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/log.%%p";
+      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/v.%basename_t.%%p.log";
     }
 
     return PASS;
@@ -290,6 +306,9 @@ sub init_and_cmake
     }
     log_command("##Finish getting source code");
 
+    # Before running cmake, add settings for specific tests according to setenv.list
+    add_setting();
+
     my ( $status, $output) = run_cmake();
     if ( $status)
     {
@@ -322,6 +341,43 @@ sub run_and_parse
         }
         if ($res eq $PASS && is_zperf_run()) {
             extract_perf_results();
+        }
+        if ($current_suite =~ /valgrind/) {
+            my $test_basename = $test_info->{"short_name"};
+            my @log_list = alloy_find($valgrind_dir, "v\.$test_basename\.[0-9]{1,}\.log");
+            if ( scalar(@log_list) > 0 ) {
+              $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
+              foreach my $log (@log_list) {
+                $execution_output .= "$log\n";
+              }
+
+              my $scrdir = $ENV{TC_MEMCHECK_SCRIPTDIR} ||
+                           "$ENV{ICS_PKG_QATOOLS}/valgrind_tool";
+              if ( -f "$scrdir/process_logs_for_TC.pm") {
+                push @INC, $scrdir;
+                require process_logs_for_TC;
+                import process_logs_for_TC;
+
+                $execution_output .= "\nProcess valgrind logs by process_logs_for_TC.pm\n";
+                # Save compilation and execution output because process_logs will overwrite it
+                my $compiler_output_ori = $compiler_output;
+                my $execution_output_ori = $execution_output;
+                $compiler_output = '';
+                $execution_output = '';
+                process_logs(\&finalize_test, $valgrind_dir, $test_basename, $RUNFAIL);
+                # Recover compilation and execution output
+                $execution_output = $execution_output_ori;
+                $compiler_output = $compiler_output_ori;
+              }
+
+              $failure_message = "VALGRIND reports problems. Original result: ";
+              if ($res eq $PASS) {
+                $failure_message .= "passed";
+              } else {
+                $failure_message .= "failed";
+              }
+              return $RUNFAIL;
+            }
         }
         return $res;
     } elsif ( -f $cmake_err) {
@@ -471,11 +527,13 @@ sub do_run
       # Set matrix to 1 if it's running on ATS or using SPR SDE
       my $matrix = "";
       my $jobset = "-j 8";
+      my $zedebug = "";
+      my $gpu_opts = "";
 
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
         $matrix = "-Dmatrix=1";
-        $jobset = "";
+        $jobset = "-j 1";
       } elsif ( is_pvc() ) {
         $timeset = "--timeout 1800";
         $jobset = "";
@@ -485,15 +543,23 @@ sub do_run
         $matrix = "-Dmatrix=1";
       }
 
+      if ($current_optset =~ m/_zedebug/) {
+        $zedebug = "--param ze_debug=-1";
+      }
+
       if ($current_suite =~ m/valgrind/){
         $timeset = "--timeout 0";
       }
 
+      if (gpu(['dg1', 'dg2', 'ats-m'])) {
+        $gpu_opts .= "-Dgpu-intel-dg1=1";
+      }
+
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $matrix $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $matrix $path $timeset");
+        execute("$python $lit -a $gpu_opts $matrix $zedebug $path $timeset");
       }
     }
 

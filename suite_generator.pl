@@ -110,6 +110,7 @@ sub gen_suite
     $descr .= "More details: http://llvm.org/docs/TestingGuide.html#test-suite-quickstart";
 
     $xml->{description} = { content => $descr};
+    push @{ $xml->{rules}{advancedRule}}, { OSFamily => "Linux", compiler => ".*xmain.*", compilerOptions => "-fp-model=precise"};
     $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'HashProgramOutput.sh'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'Bitcode'}, { path => 'MicroBenchmarks'}, { path => 'MultiSource'}, { path => 'SingleSource'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => 'config'}, { path => 'suite_generator.pl'}]};
 
     my $pre_xml_file = "/rdrive/tests/mainline/CT-SpecialTests/llvm-test-suite/llvm_test_suite.xml";

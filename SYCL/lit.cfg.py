@@ -100,6 +100,11 @@ if lit_config.params.get('gpu-intel-dg1', False):
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
 
+#support for LIT parameter ze_debug<num>
+if lit_config.params.get('ze_debug'):
+    config.ze_debug = lit_config.params.get('ze_debug')
+    lit_config.note("ZE_DEBUG: "+config.ze_debug)
+
 # check if compiler supports CL command line options
 cl_options=False
 sp = subprocess.getstatusoutput(config.dpcpp_compiler+' /help')
@@ -150,7 +155,11 @@ else:
     config.substitutions.append( ('%include_option',  '-include' ) )
     config.substitutions.append( ('%debug_option',  '-g' ) )
     config.substitutions.append( ('%cxx_std_option',  '-std=' ) )
-    config.substitutions.append( ('%fPIC', '-fPIC') )
+    # Position-independent code does not make sence on Windows. At the same
+    # time providing this option for compilation targeting 
+    # x86_64-pc-windows-msvc will cause compile time error on some
+    # configurations
+    config.substitutions.append( ('%fPIC', ('' if platform.system() == 'Windows' else '-fPIC')) )
     config.substitutions.append( ('%shared_lib', '-shared') )
 
 if not config.gpu_aot_target_opts:
@@ -293,6 +302,9 @@ if 'gpu' in config.target_devices.split(','):
 
     if config.sycl_be == "level_zero":
         gpu_l0_check_substitute = "| FileCheck %s"
+        if lit_config.params.get('ze_debug'):
+            gpu_run_substitute = " env ZE_DEBUG={ZE_DEBUG} SYCL_DEVICE_FILTER=level_zero:gpu,host ".format(ZE_DEBUG=config.ze_debug)
+            config.available_features.add('ze_debug'+config.ze_debug)
 
     if platform.system() == "Linux":
         gpu_run_on_linux_substitute = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}:gpu,host ".format(SYCL_PLUGIN=config.sycl_be)
@@ -341,13 +353,10 @@ xptifw_includes = os.path.join(config.dpcpp_root_dir, 'include')
 if os.path.exists(xptifw_lib_dir) and os.path.exists(os.path.join(xptifw_includes, 'xpti', 'xpti_trace_framework.h')):
     config.available_features.add('xptifw')
     config.substitutions.append(('%xptifw_dispatcher', xptifw_dispatcher))
-    if platform.system() == "Linux":
+    if cl_options:
+        config.substitutions.append(('%xptifw_lib', " {}/xptifw.lib /I{} ".format(xptifw_lib_dir, xptifw_includes)))
+    else:
         config.substitutions.append(('%xptifw_lib', " -L{} -lxptifw -I{} ".format(xptifw_lib_dir, xptifw_includes)))
-    elif platform.system() == "Windows":
-        if cl_options:
-            config.substitutions.append(('%xptifw_lib', " {}/xptifw.lib /I{} ".format(xptifw_lib_dir, xptifw_includes)))
-        else:
-            config.substitutions.append(('%xptifw_lib', " {}/xptifw.lib -I{} ".format(xptifw_lib_dir, xptifw_includes)))
 
 
 llvm_tools = ["llvm-spirv", "llvm-link"]
@@ -374,6 +383,13 @@ for aot_tool in aot_tools:
         config.available_features.add(aot_tool)
     else:
         lit_config.warning("Couldn't find pre-installed AOT device compiler " + aot_tool)
+
+# INTEL_CUSTOMIZATION
+if 'ICS_TESTDATA' in os.environ and platform.system() == "Windows":
+    config.available_features.add('timelimit')
+    # set _NT_SYMBOL_PATH to specify PDB files location
+    config.substitutions.append(('%timelimit', ' env _NT_SYMBOL_PATH='+config.dpcpp_root_dir+'/bin '+os.environ['ICS_TESTDATA']+'/mainline/CT-SpecialTests/opencl/tools/win.x64/bin/timelimit.exe'))
+# end INTEL_CUSTOMIZATION
 
 # Set timeout for test 1 min
 try:

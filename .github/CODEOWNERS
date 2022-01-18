@@ -1,75 +1,42 @@
 * @vladimirlaz @romanovvlad @bader
 
+# Use runtime team as the umbrella for most of the tests
+SYCL @intel/llvm-reviewers-runtime
+
 # AOT compilation
-SYCL/AOT @AGindinson @dm-vodopyanov @AlexeySachkov @romanovvlad
+SYCL/AOT @intel/dpcpp-tools-reviewers
 
-# Atomics
-SYCL/AtomicRef @AGindinson 
-
-# SYCL RT specific tests
-SYCL/Assert @intel/llvm-reviewers-runtime
-SYCL/Basic @intel/llvm-reviewers-runtime
-SYCL/Config @intel/llvm-reviewers-runtime
-SYCL/DiscardEvents @intel/llvm-reviewers-runtime
-SYCL/FilterSelector @intel/llvm-reviewers-runtime
-SYCL/HostInteropTask @intel/llvm-reviewers-runtime
-SYCL/InorderQueue @intel/llvm-reviewers-runtime
-SYCL/KernelAndProgram @intel/llvm-reviewers-runtime
-SYCL/KernelParams @intel/llvm-reviewers-runtime
-SYCL/Scheduler @intel/llvm-reviewers-runtime
-SYCL/Tracing  @intel/llvm-reviewers-runtime
+#BFloat16 conversion
+SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
 
 # Device code split
-SYCL/DeviceCodeSplit @AlexeySachkov  @Fznamznon
-
-# Device library
-SYCL/DeviceLib @vzakhari
-SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims @AGindinson
-
-# dot_product API
-SYCL/DotProduct @rdeodhar
+SYCL/DeviceCodeSplit @intel/dpcpp-tools-reviewers
 
 # Explicit SIMD
 config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
-SYCL/ESIMD @kbobrovs @v-klochkov @sndmitriev
+SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Functor
 SYCL/Functor @AlexeySachkov
 
 # Group algorithms
-SYCL/GroupAlgorithm @Pennycook @AlexeySachkov
-SYCL/SubGroup @Pennycook @AlexeySachkov
-SYCL/SubGroupMask @Pennycook @vladimilaz
+SYCL/GroupAlgorithm @Pennycook @intel/llvm-reviewers-runtime
+SYCL/SubGroup @Pennycook @intel/llvm-reviewers-runtime
+SYCL/SubGroupMask @Pennycook @intel/llvm-reviewers-runtime
+SYCL/GroupLocalMemory @Pennycook @intel/llvm-reviewers-runtime
 
-# Group local memory
-SYCL/GroupLocalMemory @sergey-semenov @Pennycook
-
-# Hierarchical parallelism
-SYCL/HierPar @kbobrovs
-
-# Inline assembler
-SYCL/InlineAsm @AlexeySachkov
-
-# Online compiler
-SYCL/OnlineCompiler @v-klochkov
-
-# Plugin interface
-SYCL/Plugin @smaslov-intel
+# Plugin interface for Level Zero
+SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
+SYCL/Plugin/*level_zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
-SYCL/Printf @AlexeySachkov @AGindinson @mlychkov
-
-# Reduction algorithms
-SYCL/Reduction @v-klochkov
-
-# Image sampler
-SYCL/Sampler @cperkinsintel
+SYCL/Printf @intel/dpcpp-tools-reviewers
 
 # Separate compilation
-SYCL/SeparateCompile @AlexeySachkov  @Fznamznon
+SYCL/SeparateCompile @intel/dpcpp-tools-reviewers
 
 # Specialization constant
-SYCL/SpecConstants @kbobrovs
+SYCL/SpecConstants @intel/dpcpp-tools-reviewers
 
 # Unified Shared Memory (USM)
 SYCL/USM @jbrodman @sergey-semenov
