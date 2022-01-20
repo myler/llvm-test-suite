@@ -1,10 +1,10 @@
 * @vladimirlaz @romanovvlad @bader
 
 # AOT compilation
-SYCL/AOT @AGindinson @dm-vodopyanov @AlexeySachkov @romanovvlad
+SYCL/AOT @dm-vodopyanov @AlexeySachkov @romanovvlad
 
 # Atomics
-SYCL/AtomicRef @AGindinson 
+SYCL/AtomicRef @dm-vodopyanov @AlexeySachkov
 
 # SYCL RT specific tests
 SYCL/Assert @intel/llvm-reviewers-runtime
@@ -24,7 +24,7 @@ SYCL/DeviceCodeSplit @AlexeySachkov  @Fznamznon
 
 # Device library
 SYCL/DeviceLib @vzakhari
-SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims @AGindinson
+SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 
 # dot_product API
 SYCL/DotProduct @rdeodhar
@@ -57,7 +57,7 @@ SYCL/OnlineCompiler @v-klochkov
 SYCL/Plugin @smaslov-intel
 
 # Printf
-SYCL/Printf @AlexeySachkov @AGindinson @mlychkov
+SYCL/Printf @AlexeySachkov @mlychkov
 
 # Reduction algorithms
 SYCL/Reduction @v-klochkov
