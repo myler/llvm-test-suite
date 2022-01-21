@@ -41,10 +41,9 @@ public:
 };
 
 template <typename T, size_t M, size_t N>
-void assert_ops_ref(/*const T &C*/ accessor<T, 2, access::mode::read,
-                                            access::target::host_buffer>
-                        C,
-                    const float ref) {
+void assert_ops_ref(
+    accessor<T, 2, access::mode::read, access::target::host_buffer> C,
+    const float ref) {
   for (size_t i = 0; i < M; i++)
     for (size_t j = 0; j < N; j++) {
       auto diff = C[i][j] - ref;
@@ -60,7 +59,7 @@ void matrix_verify_add(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
   q.submit([&](handler &cgh) {
      auto accA = bufA.get_access<access::mode::read_write>(cgh);
 
-     cgh.parallel_for<class imatrix>(r, [accA](nd_item<2> spmd_item) {
+     cgh.parallel_for<class add_matrix>(r, [accA](nd_item<2> spmd_item) {
        const auto global_idx = spmd_item.get_global_id(0);
        const auto global_idy = spmd_item.get_global_id(1);
        const auto sg_startx = global_idx - spmd_item.get_local_id(0);
@@ -92,7 +91,7 @@ void matrix_verify_sub(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
   q.submit([&](handler &cgh) {
      auto accA = bufA.get_access<access::mode::read_write>(cgh);
 
-     cgh.parallel_for<class imatrix>(r, [accA](nd_item<2> spmd_item) {
+     cgh.parallel_for<class sub_matrix>(r, [accA](nd_item<2> spmd_item) {
        const auto global_idx = spmd_item.get_global_id(0);
        const auto global_idy = spmd_item.get_global_id(1);
        const auto sg_startx = global_idx - spmd_item.get_local_id(0);
@@ -124,7 +123,7 @@ void matrix_verify_mul(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
   q.submit([&](handler &cgh) {
      auto accA = bufA.get_access<access::mode::read_write>(cgh);
 
-     cgh.parallel_for<class imatrix>(r, [accA](nd_item<2> spmd_item) {
+     cgh.parallel_for<class mul_matrix>(r, [accA](nd_item<2> spmd_item) {
        const auto global_idx = spmd_item.get_global_id(0);
        const auto global_idy = spmd_item.get_global_id(1);
        const auto sg_startx = global_idx - spmd_item.get_local_id(0);
@@ -156,7 +155,7 @@ void matrix_verify_div(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
   q.submit([&](handler &cgh) {
      auto accA = bufA.get_access<access::mode::read_write>(cgh);
 
-     cgh.parallel_for<class imatrix>(r, [accA](nd_item<2> spmd_item) {
+     cgh.parallel_for<class div_matrix>(r, [accA](nd_item<2> spmd_item) {
        const auto global_idx = spmd_item.get_global_id(0);
        const auto global_idy = spmd_item.get_global_id(1);
        const auto sg_startx = global_idx - spmd_item.get_local_id(0);
@@ -188,7 +187,7 @@ void matrix_verify_logic(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
   q.submit([&](handler &cgh) {
      auto accA = bufA.get_access<access::mode::read_write>(cgh);
 
-     cgh.parallel_for<class imatrix>(r, [accA](nd_item<2> spmd_item) {
+     cgh.parallel_for<class logic_matrix>(r, [accA](nd_item<2> spmd_item) {
        const auto global_idx = spmd_item.get_global_id(0);
        const auto global_idy = spmd_item.get_global_id(1);
        const auto sg_startx = global_idx - spmd_item.get_local_id(0);
@@ -204,7 +203,8 @@ void matrix_verify_logic(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
          if (wi_slice_a[i]) {
            if (wi_slice_a[i] > 2.0 || wi_slice_a[i] >= 2.0 ||
                wi_slice_a[i] < 2.0 || wi_slice_a[i] <= 2.0) {
-             T val = (wi_slice_a[i] != 2.0) ? wi_slice_a[i] : 2.0;
+             T val = (wi_slice_a[i] != 2.0) ? wi_slice_a[i]
+                                            : static_cast<half>(2.0);
              val--;
              val++;
              if (wi_slice_a[i] == 2.0) {
