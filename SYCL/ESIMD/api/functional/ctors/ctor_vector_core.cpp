@@ -41,11 +41,16 @@ int main(int, char **) {
 
   bool passed = true;
 
+<<<<<<< HEAD
   const auto types = get_tested_types<tested_types::core>();
   const auto sizes = get_all_sizes();
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
+=======
+  const auto types = get_tested_types<tested_types::all>();
+  const auto dims = get_all_dimensions();
+>>>>>>> 7ff842b8f ([SYCL][ESIMD] Enable verification for 32 simd vector length (#758))
 
   // Run test for all combinations possible
   passed &=
