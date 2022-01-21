@@ -8,6 +8,23 @@ SYCL/AOT @intel/dpcpp-tools-reviewers
 
 #BFloat16 conversion
 SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
+SYCL/AOT @dm-vodopyanov @AlexeySachkov @romanovvlad
+
+# Atomics
+SYCL/AtomicRef @dm-vodopyanov @AlexeySachkov
+
+# SYCL RT specific tests
+SYCL/Assert @intel/llvm-reviewers-runtime
+SYCL/Basic @intel/llvm-reviewers-runtime
+SYCL/Config @intel/llvm-reviewers-runtime
+SYCL/DiscardEvents @intel/llvm-reviewers-runtime
+SYCL/FilterSelector @intel/llvm-reviewers-runtime
+SYCL/HostInteropTask @intel/llvm-reviewers-runtime
+SYCL/InorderQueue @intel/llvm-reviewers-runtime
+SYCL/KernelAndProgram @intel/llvm-reviewers-runtime
+SYCL/KernelParams @intel/llvm-reviewers-runtime
+SYCL/Scheduler @intel/llvm-reviewers-runtime
+SYCL/Tracing  @intel/llvm-reviewers-runtime
 
 
 # AOT compilation
@@ -15,6 +32,9 @@ SYCL/AOT @intel/dpcpp-tools-reviewers
 
 #BFloat16 conversion
 SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
+# Device library
+SYCL/DeviceLib @vzakhari
+SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 
 # Device code split
 SYCL/DeviceCodeSplit @intel/dpcpp-tools-reviewers
@@ -39,6 +59,13 @@ SYCL/Plugin/*level_zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
 SYCL/Printf @intel/dpcpp-tools-reviewers
+SYCL/Printf @AlexeySachkov @mlychkov
+
+# Reduction algorithms
+SYCL/Reduction @v-klochkov
+
+# Image sampler
+SYCL/Sampler @cperkinsintel
 
 # Separate compilation
 SYCL/SeparateCompile @intel/dpcpp-tools-reviewers
