@@ -8,7 +8,6 @@ SYCL/AOT @intel/dpcpp-tools-reviewers
 
 #BFloat16 conversion
 SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
-SYCL/AOT @dm-vodopyanov @AlexeySachkov @romanovvlad
 
 # Atomics
 SYCL/AtomicRef @dm-vodopyanov @AlexeySachkov
@@ -26,12 +25,6 @@ SYCL/KernelParams @intel/llvm-reviewers-runtime
 SYCL/Scheduler @intel/llvm-reviewers-runtime
 SYCL/Tracing  @intel/llvm-reviewers-runtime
 
-
-# AOT compilation
-SYCL/AOT @intel/dpcpp-tools-reviewers
-
-#BFloat16 conversion
-SYCL/BFloat16 @AlexeySotkin @intel/dpcpp-tools-reviewers
 # Device library
 SYCL/DeviceLib @vzakhari
 SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
@@ -45,7 +38,6 @@ SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Functor
 SYCL/Functor @AlexeySachkov
-SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
 # Group algorithms
 SYCL/GroupAlgorithm @Pennycook @intel/llvm-reviewers-runtime
@@ -55,11 +47,9 @@ SYCL/GroupLocalMemory @Pennycook @intel/llvm-reviewers-runtime
 
 # Plugin interface for Level Zero
 SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
-SYCL/Plugin/*level_zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
 SYCL/Printf @intel/dpcpp-tools-reviewers
-SYCL/Printf @AlexeySachkov @mlychkov
 
 # Reduction algorithms
 SYCL/Reduction @v-klochkov
@@ -86,9 +76,6 @@ SYCL/Basic/stream @againull
 # tc files
 *.xml @yuxianch @myler @yamanwan
 
-#BFloat16 conversion
-SYCL/BFloat16 @AlexeySotkin @MrSidims
-
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
 
@@ -99,5 +86,6 @@ SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/lsc @fveselov
 
 # named barriers
 SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/named_barriers @fveselov
+
 # XPTI and XPTI Framework
 SYCL/XPTI @intel/llvm-reviewers-runtime
