@@ -3,6 +3,7 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 // UNSUPPORTED: ze_debug-1,ze_debug4
+// XFAIL: ze_debug-1,ze_debug4
 #include "program-merge-options.hpp"
 
 // CHECK: piProgramBuild
