@@ -329,10 +329,14 @@ if 'gpu' in config.target_devices.split(','):
         gpu_check_on_linux_substitute = "| FileCheck %s"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if config.sycl_be == "ext_oneapi_cuda":
 =======
     if config.sycl_be == "cuda":
 >>>>>>> 24faf9d67 ([SYCL][CUDA] Set PI_CUDA_ENABLE_IMAGE_SUPPORT before running Image tests (#702))
+=======
+    if config.sycl_be == "ext_oneapi_cuda":
+>>>>>>> 1349fce09 ([SYCL] Update LIT to support the latest BEs (#752))
         gpu_run_substitute += "SYCL_PI_CUDA_ENABLE_IMAGE_SUPPORT=1 "
 
 else:
