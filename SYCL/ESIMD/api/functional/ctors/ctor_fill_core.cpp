@@ -36,6 +36,9 @@ int main(int, char **) {
   // boolean flag.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
   {
     // Validate basic functionality works for every invocation context
     const auto types = named_type_pack<char, int>::generate("char", "int");
@@ -61,7 +64,11 @@ int main(int, char **) {
   }
   {
     // Validate basic functionality works for every type
+<<<<<<< HEAD
     const auto types = get_tested_types<tested_types::core>();
+=======
+    const auto types = get_tested_types<tested_types::all>();
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
     const auto dims = get_all_dimensions();
     const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
     {
@@ -145,6 +152,7 @@ int main(int, char **) {
       }
     }
   }
+<<<<<<< HEAD
 =======
   const auto two_dims = values_pack<1, 8>();
   const auto char_int_types = named_type_pack<char, int>({"char", "int"});
@@ -257,6 +265,8 @@ int main(int, char **) {
                                     ctors::init_val::nan>(queue, single_dim,
                                                           fp_types);
 >>>>>>> 7ff842b8f ([SYCL][ESIMD] Enable verification for 32 simd vector length (#758))
+=======
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;
