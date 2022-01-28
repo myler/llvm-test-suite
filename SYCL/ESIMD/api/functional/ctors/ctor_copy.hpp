@@ -102,9 +102,14 @@ private:
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+=======
+template <typename DataT, typename DimT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = DimT::value;
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
@@ -170,4 +175,23 @@ private:
   }
 };
 
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 } // namespace esimd_test::api::functional::ctors
+=======
+int main(int, char **) {
+  sycl::queue queue(esimd_test::ESIMDSelector{},
+                    esimd_test::createExceptionHandler());
+
+  bool passed = true;
+
+  const auto types = get_tested_types<tested_types::all>();
+  const auto dims = get_all_dimensions();
+  const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
+                                          const_ref>::generate();
+
+  passed &= for_all_combinations<run_test>(types, dims, contexts, queue);
+
+  std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
+  return passed ? 0 : 1;
+}
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp

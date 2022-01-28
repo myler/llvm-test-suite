@@ -133,6 +133,7 @@ template <typename T, T... values> struct value_pack {
   }
 };
 
+<<<<<<< HEAD
 // Alias to use mainly for simd vector sizes; no overhead as alias doesn't
 // declare a new type
 template <int... values> using integer_pack = value_pack<int, values...>;
@@ -152,6 +153,27 @@ template <typename T>
 using is_not_a_type_pack =
     std::enable_if_t<!details::is_type_pack_t<T>::value, bool>;
 
+=======
+// Alias to use mainly for simd vector dimensions; no overhead as alias doesn't
+// declare a new type
+template <int... values> using integer_pack = value_pack<int, values...>;
+
+namespace sfinae {
+namespace details {
+template <typename T> struct is_type_pack_t : std::false_type {};
+
+template <typename... Types>
+struct is_type_pack_t<named_type_pack<Types...>> : std::true_type {};
+
+template <typename... Types>
+struct is_type_pack_t<unnamed_type_pack<Types...>> : std::true_type {};
+} // namespace details
+
+template <typename T>
+using is_not_a_type_pack =
+    std::enable_if_t<!details::is_type_pack_t<T>::value, bool>;
+
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 } // namespace sfinae
 
 // Generic function to run specific action for every combination of each of the
@@ -228,6 +250,7 @@ inline bool for_all_combinations() {
   static_assert(always_false, "No packs provided to iterate over");
 }
 
+<<<<<<< HEAD
 // Provides alias to types that can be used in tests:
 //  core - all C++ data types, except specific data types
 //  fp - all floating point C++ data types
@@ -235,10 +258,14 @@ inline bool for_all_combinations() {
 //  uint - all unsigned C++ integral data types
 //  sint - all signed C++ integral data types
 enum class tested_types { core, fp, fp_extra, uint, sint };
+=======
+enum class tested_types { all, fp, uint, sint };
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 
 // Factory method to retrieve pre-defined named_type_pack, to have the same
 // default type coverage over the tests
 template <tested_types required> auto get_tested_types() {
+<<<<<<< HEAD
   if constexpr (required == tested_types::core) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
     return named_type_pack<
@@ -260,6 +287,21 @@ template <tested_types required> auto get_tested_types() {
                                                          "double");
   } else if constexpr (required == tested_types::uint) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
+=======
+  if constexpr (required == tested_types::all) {
+    return named_type_pack<
+        char, unsigned char, signed char, short, unsigned short, int,
+        unsigned int, long, unsigned long, float, sycl::half, double, long long,
+        unsigned long long>::generate("char", "unsigned char", "signed char",
+                                      "short", "unsigned short", "int",
+                                      "unsigned int", "long", "unsigned long",
+                                      "float", "sycl::half", "double",
+                                      "long long", "unsigned long long");
+  } else if constexpr (required == tested_types::fp) {
+    return named_type_pack<float, sycl::half, double>::generate(
+        "float", "sycl::half", "double");
+  } else if constexpr (required == tested_types::uint) {
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
     if constexpr (!std::is_signed_v<char>) {
       return named_type_pack<unsigned char, unsigned short, unsigned int,
                              unsigned long, unsigned long long,
@@ -273,11 +315,15 @@ template <tested_types required> auto get_tested_types() {
                                         "unsigned int", "unsigned long",
                                         "unsigned long long");
     }
+<<<<<<< HEAD
 #else
     return named_type_pack<unsigned int>::generate("unsigned int");
 #endif
   } else if constexpr (required == tested_types::sint) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
+=======
+  } else if constexpr (required == tested_types::sint) {
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
     if constexpr (std::is_signed_v<char>) {
       return named_type_pack<signed char, short, int, long, long long,
                              char>::generate("signed char", "short", "int",
@@ -287,20 +333,29 @@ template <tested_types required> auto get_tested_types() {
                              long long>::generate("signed char", "short", "int",
                                                   "long", "long long");
     }
+<<<<<<< HEAD
 #else
     return named_type_pack<int, signed char>::generate("int", "signed char");
 #endif
+=======
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
   } else {
     static_assert(required != required, "Unexpected tested type");
   }
 }
 
+<<<<<<< HEAD
 // Syntax sugar to retrieve simd vector sizes in a consistent way
 template <int... Values> auto inline get_sizes() {
+=======
+// Syntax sugar to retrieve simd vector dimensions in a consistent way
+template <int... Values> auto inline get_dimensions() {
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
   return integer_pack<Values...>::generate_unnamed();
 }
 
 // Factory method to retrieve pre-defined values_pack, to have the same
+<<<<<<< HEAD
 // default sizes over the tests
 auto inline get_all_sizes() {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
@@ -319,5 +374,9 @@ auto inline get_all_dimensions() { return get_all_sizes(); }
 template <int... Values> auto inline get_dimensions() {
   return get_sizes<Values...>();
 }
+=======
+// default dimensions over the tests
+auto inline get_all_dimensions() { return get_dimensions<1, 8, 16, 32>(); }
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 
 } // namespace esimd_test::api::functional

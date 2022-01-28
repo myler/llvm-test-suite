@@ -213,6 +213,7 @@ template <init_val... Values> auto get_init_values_pack() {
   return value_pack<init_val, Values...>::generate_unnamed();
 }
 
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT, typename BaseValT,
           typename StepT>
 class run_test {
@@ -231,6 +232,18 @@ public:
       return true;
     }
 
+=======
+template <typename DataT, typename DimT, typename TestCaseT, typename BaseValT,
+          typename StepT>
+class run_test {
+  static constexpr int NumElems = DimT::value;
+  static constexpr init_val BaseVal = BaseValT::value;
+  static constexpr init_val Step = StepT::value;
+  using KernelT = kernel_for_fill<DataT, NumElems, TestCaseT, BaseVal, Step>;
+
+public:
+  bool operator()(sycl::queue &queue, const std::string &data_type) {
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
     shared_vector<DataT> result(NumElems, shared_allocator<DataT>(queue));
 
     const auto base_value = get_value<DataT, BaseVal>();
@@ -262,9 +275,24 @@ public:
 
         if (!std::isnan(result[i])) {
           passed = false;
+<<<<<<< HEAD
           log::fail(TestDescriptionT(data_type, BaseVal, Step),
                     "Unexpected value at index ", i, ", retrieved: ", result[i],
                     ", expected: any NaN value");
+=======
+
+          // TODO: Make ITestDescription architecture more flexible.
+          // We are assuming that the NaN opcode may differ
+          std::string log_msg = "Failed for simd<";
+          log_msg += data_type + ", " + std::to_string(NumElems) + ">";
+          log_msg += ", with context: " + TestCaseT::get_description();
+          log_msg += ". The element at index: " + std::to_string(i) +
+                     ", is not nan, but it should.";
+          log_msg += ", with base value: " + init_val_to_string<BaseVal>();
+          log_msg += ", with step value: " + init_val_to_string<Step>();
+
+          log::note(log_msg);
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
         }
       } else {
 
@@ -279,6 +307,20 @@ public:
     }
     return passed;
   }
+<<<<<<< HEAD
+=======
+
+private:
+  bool fail_test(size_t index, DataT retrieved, DataT expected,
+                 const std::string &data_type) {
+    const auto description =
+        FillCtorTestDescription<DataT, NumElems, TestCaseT, BaseVal, Step>(
+            index, retrieved, expected, data_type);
+    log::fail(description);
+
+    return false;
+  }
+>>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 };
 
 } // namespace esimd_test::api::functional::ctors
