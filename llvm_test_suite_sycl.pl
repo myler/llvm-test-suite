@@ -148,7 +148,7 @@ sub init_test
         }
 
         log_command("##Get hash from bare repo");
-        my $get_hash_cmd = "git log -1 --before=\"$date\" --pretty=format:\"%h\"";
+        my $get_hash_cmd = "git log -1 --before=\"$date\" --pretty=format:\"%h\" --first-parent";
         execute($get_hash_cmd);
         $compiler_output .= $command_output;
         if ($command_status != 0) {
