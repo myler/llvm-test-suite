@@ -7,6 +7,9 @@
 //
 //===----------------------------------------------------------------------===//
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 ///
 /// \file
 /// This file provides functions for tests on simd copy constructor.
@@ -14,6 +17,7 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 =======
 // REQUIRES: gpu, level_zero
@@ -31,6 +35,12 @@
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
+=======
+
+#include "common.hpp"
+
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 
 namespace esimd_test::api::functional::ctors {
 
@@ -176,6 +186,7 @@ private:
 };
 
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 } // namespace esimd_test::api::functional::ctors
 =======
 int main(int, char **) {
@@ -195,3 +206,6 @@ int main(int, char **) {
   return passed ? 0 : 1;
 }
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
+=======
+} // namespace esimd_test::api::functional::ctors
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp

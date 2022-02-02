@@ -13,14 +13,21 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 #include "common.hpp"
 
 #include <algorithm>
 #include <cassert>
 
+<<<<<<< HEAD
 namespace esimd = sycl::ext::intel::esimd;
+=======
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 namespace esimd_test::api::functional::ctors {
 
@@ -84,20 +91,29 @@ public:
 // The core test functionality.
 // Runs a TestCaseT, specific for each C++ context, for a simd<DataT,NumElems>
 // instance
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using KernelName = Kernel<DataT, NumElems, TestCaseT>;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+=======
+template <typename DataT, typename DimT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = DimT::value;
+  using KernelName = ctors::Kernel<DataT, NumElems, TestCaseT>;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
     bool passed = true;
     bool was_moved = false;
+<<<<<<< HEAD
     log::trace<TestDescriptionT>(data_type);
 
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
     const shared_allocator<DataT> data_allocator(queue);
     const shared_allocator<int> flags_allocator(queue);
@@ -162,8 +178,19 @@ public:
 
     if (!was_moved) {
       passed = false;
+<<<<<<< HEAD
       log::fail(TestDescriptionT(data_type),
                 "A copy constructor instead of a move constructor was used.");
+=======
+
+      // TODO: Make ITestDescription architecture more flexible
+      std::string log_msg = "Failed for simd<";
+      log_msg += data_type + ", " + std::to_string(NumElems) + ">";
+      log_msg += ", with context: " + TestCaseT::get_description();
+      log_msg += ". A copy constructor instead of a move constructor was used.";
+
+      log::note(log_msg);
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     } else {
       for (size_t i = 0; i < reference.size(); ++i) {
         const auto &retrieved = result[i];
@@ -171,8 +198,14 @@ public:
 
         if (!are_bitwise_equal(retrieved, expected)) {
           passed = false;
+<<<<<<< HEAD
           log::fail(TestDescriptionT(data_type), "Unexpected value at index ",
                     i, ", retrieved: ", retrieved, ", expected: ", expected);
+=======
+
+          log::fail(ctors::TestDescription<DataT, NumElems, TestCaseT>(
+              i, retrieved, expected, data_type));
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
         }
       }
     }

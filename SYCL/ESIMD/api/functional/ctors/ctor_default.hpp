@@ -13,11 +13,18 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
+=======
+
+#include "common.hpp"
+
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 namespace esimd_test::api::functional::ctors {
 
@@ -77,6 +84,7 @@ struct const_ref {
 };
 
 // Struct that calls simd in provided context and then verifies obtained result.
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
@@ -108,6 +116,34 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
       passed = false;
       log::fail(TestDescriptionT(data_type), "A SYCL exception was caught: ",
                 e.what());
+=======
+template <typename DataT, typename DimT, typename TestCaseT> struct run_test {
+  static constexpr int NumElems = DimT::value;
+
+  bool operator()(sycl::queue &queue, const std::string &data_type) {
+    bool passed = true;
+    DataT default_val{};
+
+    shared_vector<DataT> result(NumElems, shared_allocator<DataT>(queue));
+
+    queue.submit([&](sycl::handler &cgh) {
+      DataT *const out = result.data();
+      cgh.single_task<ctors::Kernel<DataT, NumElems, TestCaseT>>(
+          [=]() SYCL_ESIMD_KERNEL {
+            TestCaseT::template call_simd_ctor<DataT, NumElems>(out);
+          });
+    });
+
+    for (size_t i = 0; i < result.size(); ++i) {
+      if (result[i] != default_val) {
+        passed = false;
+
+        const auto description =
+            ctors::TestDescription<DataT, NumElems, TestCaseT>(
+                i, result[i], default_val, data_type);
+        log::fail(description);
+      }
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     }
 
     return passed;

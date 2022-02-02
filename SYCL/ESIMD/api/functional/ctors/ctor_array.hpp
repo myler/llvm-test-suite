@@ -13,11 +13,18 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
+=======
+
+#include "common.hpp"
+
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 namespace esimd_test::api::functional::ctors {
 
@@ -92,6 +99,7 @@ private:
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
@@ -105,6 +113,15 @@ public:
       return true;
     }
 
+=======
+template <typename DataT, typename DimT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = DimT::value;
+
+public:
+  bool operator()(sycl::queue &queue, const std::string &data_type) {
+
+    bool passed = true;
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -138,7 +155,11 @@ private:
       const DataT *const ref = shared_ref_data.data();
       DataT *const out = result.data();
 
+<<<<<<< HEAD
       cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
+=======
+      cgh.single_task<ctors::Kernel<DataT, NumElems, TestCaseT>>(
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
           [=]() SYCL_ESIMD_KERNEL {
             DataT ref_on_dev[NumElems];
             for (size_t i = 0; i < NumElems; ++i) {
@@ -152,6 +173,7 @@ private:
     queue.wait_and_throw();
 
     for (size_t i = 0; i < result.size(); ++i) {
+<<<<<<< HEAD
       const auto &expected = ref_data[i];
       const auto &retrieved = result[i];
 
@@ -159,6 +181,15 @@ private:
         passed = false;
         log::fail(TestDescriptionT(data_type), "Unexpected value at index ", i,
                   ", retrieved: ", retrieved, ", expected: ", expected);
+=======
+      if (!are_bitwise_equal(ref_data[i], result[i])) {
+        passed = false;
+
+        const auto description =
+            ctors::TestDescription<DataT, NumElems, TestCaseT>(
+                i, result[i], ref_data[i], data_type);
+        log::fail(description);
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
       }
     }
 

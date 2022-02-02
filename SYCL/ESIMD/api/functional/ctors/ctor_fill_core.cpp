@@ -77,6 +77,7 @@ int main(int, char **) {
   {
     // Validate basic functionality works for every type
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   const auto two_dims = values_pack<1, 8>();
   const auto char_int_types = named_type_pack<char, int>({"char", "int"});
@@ -180,6 +181,9 @@ int main(int, char **) {
     const auto sizes = get_all_sizes();
 =======
     const auto types = get_tested_types<tested_types::all>();
+=======
+    const auto types = get_tested_types<tested_types::core>();
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     const auto dims = get_all_dimensions();
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
     const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();

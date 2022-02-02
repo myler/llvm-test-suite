@@ -15,8 +15,13 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
 // Test for simd constructor from an array.
+<<<<<<< HEAD
 // This test uses extra fp data types, sizes and different simd constructor
 // invocation contexts.
+=======
+// This test uses extra fp data types, dimensionality and different simd
+// constructor invocation contexts.
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 // The test does the following actions:
 //  - construct fixed-size array that filled with reference values
 //  - use std::move() to provide it to simd constructor
@@ -33,13 +38,21 @@ int main(int, char **) {
   bool passed = true;
 
   const auto types = get_tested_types<tested_types::fp_extra>();
+<<<<<<< HEAD
   const auto sizes = get_all_sizes();
+=======
+  const auto dims = get_all_dimensions();
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
 
+<<<<<<< HEAD
   passed &=
       for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
+=======
+  passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;
