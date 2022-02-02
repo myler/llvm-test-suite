@@ -26,6 +26,7 @@
 
 using namespace esimd_test::api::functional;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 using namespace sycl::ext::intel::experimental::esimd;
 
@@ -168,6 +169,8 @@ private:
   }
 };
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 int main(int, char **) {
   sycl::queue queue(esimd_test::ESIMDSelector{},
@@ -175,6 +178,7 @@ int main(int, char **) {
 
   bool passed = true;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   const auto types = get_tested_types<tested_types::core>();
   const auto dims = get_all_dimensions();
@@ -194,6 +198,15 @@ int main(int, char **) {
 
   passed &= for_all_combinations<run_test>(types, dims, contexts, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+  const auto types = get_tested_types<tested_types::core>();
+  const auto dims = get_all_dimensions();
+  const auto contexts =
+      unnamed_type_pack<ctors::initializer, ctors::var_decl,
+                        ctors::rval_in_expr, ctors::const_ref>::generate();
+
+  passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

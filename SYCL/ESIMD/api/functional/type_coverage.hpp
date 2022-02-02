@@ -229,6 +229,9 @@ inline bool for_all_combinations() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 // Provides alias to types that can be used in tests:
 //  core - all C++ data types, except specific data types
 //  fp - all floating point C++ data types
@@ -236,13 +239,17 @@ inline bool for_all_combinations() {
 //  uint - all unsigned C++ integral data types
 //  sint - all signed C++ integral data types
 enum class tested_types { core, fp, fp_extra, uint, sint };
+<<<<<<< HEAD
 =======
 enum class tested_types { all, fp, uint, sint };
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 // Factory method to retrieve pre-defined named_type_pack, to have the same
 // default type coverage over the tests
 template <tested_types required> auto get_tested_types() {
+<<<<<<< HEAD
 <<<<<<< HEAD
   if constexpr (required == tested_types::core) {
     return named_type_pack<
@@ -260,6 +267,9 @@ template <tested_types required> auto get_tested_types() {
                                                          "double");
 =======
   if constexpr (required == tested_types::all) {
+=======
+  if constexpr (required == tested_types::core) {
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     return named_type_pack<
         char, unsigned char, signed char, short, unsigned short, int,
         unsigned int, long, unsigned long, float, sycl::half, double, long long,
@@ -269,9 +279,16 @@ template <tested_types required> auto get_tested_types() {
                                       "float", "sycl::half", "double",
                                       "long long", "unsigned long long");
   } else if constexpr (required == tested_types::fp) {
+<<<<<<< HEAD
     return named_type_pack<float, sycl::half, double>::generate(
         "float", "sycl::half", "double");
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+    return named_type_pack<float>::generate("float");
+  } else if constexpr (required == tested_types::fp_extra) {
+    return named_type_pack<sycl::half, double>::generate("sycl::half",
+                                                         "double");
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
   } else if constexpr (required == tested_types::uint) {
     if constexpr (!std::is_signed_v<char>) {
       return named_type_pack<unsigned char, unsigned short, unsigned int,

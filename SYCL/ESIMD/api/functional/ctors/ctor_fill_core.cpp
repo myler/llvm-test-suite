@@ -65,10 +65,14 @@ int main(int, char **) {
   {
     // Validate basic functionality works for every type
 <<<<<<< HEAD
+<<<<<<< HEAD
     const auto types = get_tested_types<tested_types::core>();
 =======
     const auto types = get_tested_types<tested_types::all>();
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+    const auto types = get_tested_types<tested_types::core>();
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     const auto dims = get_all_dimensions();
     const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
     {
