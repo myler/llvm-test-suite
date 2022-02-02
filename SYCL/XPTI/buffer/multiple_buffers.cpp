@@ -16,6 +16,7 @@ int main() {
   sycl::queue Queue{};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|0x0|{{s(hort)*}}|2|1|{4,0,0}|{{.*}}multiple_buffers.cpp:[[# @LINE + 1]]:26
   sycl::buffer<short, 1> Buffer1(4);
   // CHECK:{{[0-9]+}}|Create buffer|[[USERID2:[0-9,a-f,x]+]]|0x0|{{c(har)*}}|1|3|{5,4,3}|{{.*}}multiple_buffers.cpp:[[# @LINE + 1]]:25
@@ -24,6 +25,11 @@ int main() {
   sycl::buffer<short, 1> Buffer1(4);
   // CHECK:{{[0-9]+}}|Create buffer|[[USERID2:[0-9,a-f,x]+]]|{{.*}}multiple_buffers.cpp:[[# @LINE + 1]]:25
 >>>>>>> c1f4fa1c2 ([SYCL][XPTI] Improve tests formatting (#703))
+=======
+  // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|0x0|{{s(hort)*}}|2|1|{4,0,0}|{{.*}}multiple_buffers.cpp:[[# @LINE + 1]]:26
+  sycl::buffer<short, 1> Buffer1(4);
+  // CHECK:{{[0-9]+}}|Create buffer|[[USERID2:[0-9,a-f,x]+]]|0x0|{{c(har)*}}|1|3|{5,4,3}|{{.*}}multiple_buffers.cpp:[[# @LINE + 1]]:25
+>>>>>>> 0d62adf88 ([SYCL] Extend tests to check extra buffer constructors parameters (#788))
   sycl::buffer<char, 3> Buffer2({5, 4, 3});
 
   sycl::range<1> NumOfWorkItems{Buffer1.size()};

@@ -19,10 +19,14 @@ int main() {
   {
     sycl::range<1> NumOfWorkItems{4};
 <<<<<<< HEAD
+<<<<<<< HEAD
     // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|0x{{.*}}|{{i(nt)*}}|4|1|{4,0,0}|{{.*}}host_array.cpp:[[# @LINE + 1]]:26
 =======
     // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|{{.*}}host_array.cpp:[[# @LINE + 1]]:26
 >>>>>>> c1f4fa1c2 ([SYCL][XPTI] Improve tests formatting (#703))
+=======
+    // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|0x{{.*}}|{{i(nt)*}}|4|1|{4,0,0}|{{.*}}host_array.cpp:[[# @LINE + 1]]:26
+>>>>>>> 0d62adf88 ([SYCL] Extend tests to check extra buffer constructors parameters (#788))
     sycl::buffer<int, 1> Buffer1(Array, NumOfWorkItems);
 
     // CHECK:{{[0-9]+}}|Associate buffer|[[USERID1]]|[[BEID1:.*]]
