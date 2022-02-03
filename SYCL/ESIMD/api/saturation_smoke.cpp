@@ -7,8 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
+=======
+>>>>>>> 2206708db ([ESIMD] Add "smoke" test for esimd::saturate (#791))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -18,10 +21,17 @@
 
 #include <CL/sycl.hpp>
 #include <iostream>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
 using namespace sycl::ext::intel::esimd;
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+
+using namespace cl::sycl;
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 2206708db ([ESIMD] Add "smoke" test for esimd::saturate (#791))
 
 template <class T> struct char_to_int {
   using type = typename std::conditional<
