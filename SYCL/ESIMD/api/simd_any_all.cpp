@@ -7,8 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
+=======
+>>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -17,13 +20,22 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+>>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental;
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
 
 struct bit_op {
   enum { any, all, num_ops };
