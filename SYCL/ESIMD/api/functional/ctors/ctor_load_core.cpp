@@ -224,6 +224,7 @@ int main(int, char **) {
 
   bool passed = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   const auto types = get_tested_types<tested_types::core>();
   const auto sizes = get_all_sizes();
@@ -239,6 +240,9 @@ int main(int, char **) {
                                                   alignments, queue);
 =======
   const auto types = get_tested_types<tested_types::all>();
+=======
+  const auto types = get_tested_types<tested_types::core>();
+>>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
   const auto dims = get_all_dimensions();
 
   const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
