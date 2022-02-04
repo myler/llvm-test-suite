@@ -217,10 +217,14 @@ int main(int, char **) {
 
   bool passed = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
   const auto types = get_tested_types<tested_types::core>();
 =======
   const auto types = get_tested_types<tested_types::all>();
 >>>>>>> 1548e68f8 ([SYCL][ESIMD] Add test on simd load ctor (#769))
+=======
+  const auto types = get_tested_types<tested_types::core>();
+>>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
   const auto dims = get_all_dimensions();
 
   const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
