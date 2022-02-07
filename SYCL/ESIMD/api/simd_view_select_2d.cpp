@@ -7,8 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
+=======
+>>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -17,13 +20,22 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+>>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental;
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
 
 template <typename T> struct char_to_int {
   using type = typename std::conditional<
