@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../common.hpp"
+<<<<<<< HEAD
 #include <string>
 
 namespace esimd_test::api::functional::operators {
@@ -45,6 +46,13 @@ private:
 // TODO: Remove deprecated TestDescription from all tests
 template <typename DataT, int NumElems>
 class [[deprecated]]	TestDescription : public ITestDescription {
+=======
+
+namespace esimd_test::api::functional::operators {
+
+template <typename DataT, int NumElems>
+class TestDescription : public ITestDescription {
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 public:
   TestDescription(size_t index, DataT retrieved_val, DataT expected_val,
                   const std::string &data_type)
@@ -52,6 +60,11 @@ public:
         m_expected_val(expected_val), m_index(index) {}
 
   std::string to_string() const override {
+<<<<<<< HEAD
+=======
+    // TODO: Make strings for fp values more short during failure output, may be
+    // by using hex representation
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
     std::string log_msg("Failed for simd<");
 
     log_msg += m_data_type + ", " + std::to_string(NumElems) + ">";
@@ -69,6 +82,9 @@ private:
   const size_t m_index;
 };
 
+<<<<<<< HEAD
 #endif // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
+=======
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 } // namespace esimd_test::api::functional::operators

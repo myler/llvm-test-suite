@@ -24,15 +24,22 @@
 
 #include "operator_assignment.hpp"
 
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 using namespace esimd_test::api::functional;
 
 // Descriptor class for the case of calling move assignment operator.
 struct move_assignment {
   static std::string get_description() { return "move assignment operator"; }
 
+<<<<<<< HEAD
   static constexpr bool is_move_expected() { return true; }
 
+=======
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
   template <typename DataT, int NumElems>
   static bool run(const DataT *const ref_data, DataT *const out) {
     simd<DataT, NumElems> source_simd;
@@ -40,7 +47,11 @@ struct move_assignment {
     simd<DataT, NumElems> simd_obj;
     simd_obj = std::move(source_simd);
     simd_obj.copy_to(out);
+<<<<<<< HEAD
     return simd_obj.get_test_proxy().was_move_destination();
+=======
+    return simd_obj.get_test_proxy().was_move_destination() == true;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
   }
 };
 
@@ -48,8 +59,11 @@ struct move_assignment {
 struct copy_assignment {
   static std::string get_description() { return "copy assignment operator"; }
 
+<<<<<<< HEAD
   static constexpr bool is_move_expected() { return false; }
 
+=======
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
   template <typename DataT, int NumElems>
   static bool run(const DataT *const ref_data, DataT *const out) {
     simd<DataT, NumElems> source_simd;
@@ -57,7 +71,11 @@ struct copy_assignment {
     simd<DataT, NumElems> simd_obj;
     simd_obj = source_simd;
     simd_obj.copy_to(out);
+<<<<<<< HEAD
     return simd_obj.get_test_proxy().was_move_destination();
+=======
+    return simd_obj.get_test_proxy().was_move_destination() == false;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
   }
 };
 
@@ -68,13 +86,22 @@ int main(int, char **) {
   bool passed = true;
 
   const auto types = get_tested_types<tested_types::all>();
+<<<<<<< HEAD
   const auto all_sizes = get_all_sizes();
+=======
+  const auto dims = get_all_dimensions();
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
   const auto context =
       unnamed_type_pack<move_assignment, copy_assignment>::generate();
 
+<<<<<<< HEAD
   passed &= for_all_combinations<operators::run_test>(types, all_sizes, context,
                                                       queue);
+=======
+  passed &=
+      for_all_combinations<operators::run_test>(types, dims, context, queue);
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

@@ -146,10 +146,14 @@ private:
       DataT *const out = result.data();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
 =======
       cgh.single_task<ctors::Kernel<DataT, NumElems, TestCaseT>>(
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+      cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
           [=]() SYCL_ESIMD_KERNEL {
             TestCaseT::template call_simd_ctor<DataT, NumElems>(ref, out);
           });

@@ -187,6 +187,7 @@ inline std::string init_val_to_string(init_val val) {
   return "n/a";
 }
 
+<<<<<<< HEAD
 template <int NumElems, typename ContextT>
 class FillCtorTestDescription : public ITestDescription {
 public:
@@ -196,6 +197,21 @@ public:
 
   std::string to_string() const override {
     std::string log_msg = m_description.to_string();
+=======
+template <typename DataT, int NumElems, typename ContextT, init_val BaseVal,
+          init_val Step>
+class FillCtorTestDescription
+    : public ctors::TestDescription<DataT, NumElems, ContextT> {
+public:
+  FillCtorTestDescription(size_t index, DataT retrieved_val, DataT expected_val,
+                          const std::string &data_type)
+      : ctors::TestDescription<DataT, NumElems, ContextT>(
+            index, retrieved_val, expected_val, data_type) {}
+
+  std::string to_string() const override {
+    std::string log_msg(
+        ctors::TestDescription<DataT, NumElems, ContextT>::to_string());
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
     log_msg += ", with base value: " + init_val_to_string(m_base_val);
     log_msg += ", with step value: " + init_val_to_string(m_step);

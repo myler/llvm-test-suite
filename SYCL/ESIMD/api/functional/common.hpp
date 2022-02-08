@@ -47,7 +47,11 @@ template <typename T> bool are_bitwise_equal(T lhs, T rhs) {
 } // namespace details
 
 // Class used as a kernel ID.
+<<<<<<< HEAD
 template <typename DataT, int NumElems, typename...> struct Kernel;
+=======
+template <typename DataT, int NumElems, typename T> struct Kernel;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
 template <typename DataT>
 using shared_allocator = sycl::usm_allocator<DataT, sycl::usm::alloc::shared>;

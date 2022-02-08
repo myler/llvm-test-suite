@@ -13,7 +13,10 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+=======
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
 // The test proxy is used to verify the move assignment was called actually.
 #define __ESIMD_ENABLE_TEST_PROXY
@@ -25,19 +28,27 @@ namespace esimd_test::api::functional::operators {
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = TestDescription<NumElems, TestCaseT>;
+=======
+template <typename DataT, typename DimT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = DimT::value;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
     bool passed = true;
+<<<<<<< HEAD
     log::trace<TestDescriptionT>(data_type);
 
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
 
+=======
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -67,23 +78,37 @@ private:
     shared_vector<DataT> shared_ref_data(ref_data.begin(), ref_data.end(),
                                          allocator);
 
+<<<<<<< HEAD
     // Initialize operator correctness flag with pre-defined invalid value
     constexpr bool is_move_expected = TestCaseT::is_move_expected();
     shared_element<bool> was_moved(queue, !is_move_expected);
+=======
+    shared_element<bool> is_correct_operator(queue, false);
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
     queue.submit([&](sycl::handler &cgh) {
       const DataT *const ref = shared_ref_data.data();
       DataT *const out = result.data();
+<<<<<<< HEAD
       const auto was_moved_ptr = was_moved.data();
 
       cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
           [=]() SYCL_ESIMD_KERNEL {
             *was_moved_ptr = TestCaseT::template run<DataT, NumElems>(ref, out);
+=======
+      const auto is_correct_operator_storage = is_correct_operator.data();
+
+      cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
+          [=]() SYCL_ESIMD_KERNEL {
+            *is_correct_operator_storage =
+                TestCaseT::template run<DataT, NumElems>(ref, out);
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
           });
     });
     queue.wait_and_throw();
 
     for (size_t i = 0; i < result.size(); ++i) {
+<<<<<<< HEAD
       const auto &expected = ref_data[i];
       const auto &retrieved = result[i];
 
@@ -104,6 +129,22 @@ private:
         log::fail(TestDescriptionT(data_type),
                   "Unexpected simd vector move operator called");
       }
+=======
+      if (!are_bitwise_equal(ref_data[i], result[i])) {
+        passed = false;
+
+        const auto description = TestDescription<DataT, NumElems>(
+            i, result[i], ref_data[i], data_type);
+        log::fail(description);
+      }
+    }
+
+    if (!is_correct_operator.value()) {
+      passed = false;
+      log::note("Test failed due to " + TestCaseT::get_description() +
+                " hasn't called for simd<" + data_type + ", " +
+                std::to_string(NumElems) + ">.");
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
     }
 
     return passed;

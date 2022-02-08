@@ -99,8 +99,12 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
 =======
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
+<<<<<<< HEAD
   using KernelName = ctors::Kernel<DataT, NumElems, TestCaseT>;
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+  using KernelName = Kernel<DataT, NumElems, TestCaseT>;
+>>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
