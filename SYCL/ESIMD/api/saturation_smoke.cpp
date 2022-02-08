@@ -8,10 +8,15 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
 =======
 >>>>>>> 2206708db ([ESIMD] Add "smoke" test for esimd::saturate (#791))
+=======
+// TODO: esimd_emulator fails due to unimplemented 'half' type
+// XFAIL: esimd_emulator
+>>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
