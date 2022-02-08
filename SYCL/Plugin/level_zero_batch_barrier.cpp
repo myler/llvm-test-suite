@@ -31,12 +31,15 @@ int main(int argc, char *argv[]) {
   queue q;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   submit_kernel(q); // this one will immediatelly execute since q is empty
                     // CHECK: ---> piEnqueueKernelLaunch
                     // CHECK: ZE ---> zeCommandQueueExecuteCommandLists
 
 >>>>>>> 4508a3f5f ([SYCL] test for barrier batching (#750))
+=======
+>>>>>>> e9e0c7ef1 ([SYCL] Fix batching barrier test to work with latest changes in L0 plugin (#809))
   submit_kernel(q); // starts a batch
                     // CHECK: ---> piEnqueueKernelLaunch
                     // CHECK-NOT: ZE ---> zeCommandQueueExecuteCommandLists
