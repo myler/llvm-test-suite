@@ -535,6 +535,7 @@ sub do_run
         $matrix = "-Dmatrix=1";
         $jobset = "-j 1";
       } elsif ( is_pvc() ) {
+        $matrix = "-Dmatrix-pvc=1";
         $timeset = "--timeout 1800";
         $jobset = "";
       }
