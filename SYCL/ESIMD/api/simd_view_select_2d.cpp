@@ -8,10 +8,15 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
 =======
 >>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
+=======
+// TODO: esimd_emulator fails due to unimplemented 'single_task()' method
+// XFAIL: esimd_emulator
+>>>>>>> 5061f881f ([SYCL][ESIMD][EMU] XFAIL marking for kernel using unimplemented 'single_task' (#815))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
