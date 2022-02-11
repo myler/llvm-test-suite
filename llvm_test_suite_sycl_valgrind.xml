@@ -568,6 +568,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_interop_task_mem" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_make_kernel" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_barrier" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_event_status" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_test" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_batch_test_copy_with_compute" />
