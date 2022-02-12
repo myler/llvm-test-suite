@@ -7,8 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
+=======
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
@@ -17,12 +20,20 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 
 static constexpr unsigned NAllChs =
     get_num_channels_enabled(rgba_channel_mask::ABGR);
@@ -69,15 +80,26 @@ template <class, int, int> class TestID;
 template <rgba_channel_mask ChMask, unsigned NPixels, class T>
 bool test_impl(queue q) {
   constexpr unsigned NOnChs = get_num_channels_enabled(ChMask);
+<<<<<<< HEAD
   const unsigned Size = NPixels * NAllChs;
+=======
+  unsigned SizeIn = NPixels * NAllChs;
+  unsigned SizeOut = NPixels * NOnChs;
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 
   std::cout << "Testing mask=";
   print_mask(ChMask);
   std::cout << ", T=" << typeid(T).name() << ", NPixels=" << NPixels << "\n";
 
+<<<<<<< HEAD
   T *A = malloc_shared<T>(Size, q);
   T *B = malloc_shared<T>(Size, q);
   T *C = malloc_shared<T>(Size, q);
+=======
+  T *A = malloc_shared<T>(SizeIn, q);
+  T *B = malloc_shared<T>(SizeOut, q);
+  T *C = malloc_shared<T>(SizeOut, q);
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 
   for (unsigned p = 0; p < NPixels; ++p) {
     char ch_names[] = {'R', 'G', 'B', 'A'};
@@ -212,8 +234,11 @@ int main(void) {
   passed &= test<rgba_channel_mask::A>(q);
   passed &= test<rgba_channel_mask::R>(q);
   passed &= test<rgba_channel_mask::B>(q);
+<<<<<<< HEAD
   // TODO disabled due to a compiler bug:
   //passed &= test<rgba_channel_mask::ABR>(q);
+=======
+>>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
 
   std::cout << (passed ? "Test passed\n" : "Test FAILED\n");
   return passed ? 0 : 1;
