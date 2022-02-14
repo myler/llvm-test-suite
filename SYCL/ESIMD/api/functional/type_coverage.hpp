@@ -255,6 +255,7 @@ template <tested_types required> auto get_tested_types() {
     return named_type_pack<
         char, unsigned char, signed char, short, unsigned short, int,
         unsigned int, long, unsigned long, float, long long,
+<<<<<<< HEAD
         unsigned long long>::generate("char", "unsigned char", "signed char",
                                       "short", "unsigned short", "int",
                                       "unsigned int", "long", "unsigned long",
@@ -273,11 +274,13 @@ template <tested_types required> auto get_tested_types() {
     return named_type_pack<
         char, unsigned char, signed char, short, unsigned short, int,
         unsigned int, long, unsigned long, float, sycl::half, double, long long,
+=======
+>>>>>>> f3c83b533 ([SYCL][ESIMD] Remove sycl::half and double from core types (#831))
         unsigned long long>::generate("char", "unsigned char", "signed char",
                                       "short", "unsigned short", "int",
                                       "unsigned int", "long", "unsigned long",
-                                      "float", "sycl::half", "double",
-                                      "long long", "unsigned long long");
+                                      "float", "long long",
+                                      "unsigned long long");
   } else if constexpr (required == tested_types::fp) {
 <<<<<<< HEAD
     return named_type_pack<float, sycl::half, double>::generate(
