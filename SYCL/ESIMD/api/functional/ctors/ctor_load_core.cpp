@@ -122,10 +122,10 @@ struct overal {
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
-template <typename DataT, typename DimT, typename TestCaseT,
+template <typename DataT, typename SizeT, typename TestCaseT,
           typename AlignmentT>
 class run_test {
-  static constexpr int NumElems = DimT::value;
+  static constexpr int NumElems = SizeT::value;
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
@@ -219,6 +219,7 @@ int main(int, char **) {
 <<<<<<< HEAD
 <<<<<<< HEAD
   const auto types = get_tested_types<tested_types::core>();
+<<<<<<< HEAD
 =======
   const auto types = get_tested_types<tested_types::all>();
 >>>>>>> 1548e68f8 ([SYCL][ESIMD] Add test on simd load ctor (#769))
@@ -226,6 +227,9 @@ int main(int, char **) {
   const auto types = get_tested_types<tested_types::core>();
 >>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
   const auto dims = get_all_dimensions();
+=======
+  const auto sizes = get_all_sizes();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
                                           const_ref>::generate();
@@ -234,7 +238,7 @@ int main(int, char **) {
                         alignment::overal>::generate();
 
   passed &=
-      for_all_combinations<run_test>(types, dims, contexts, alignments, queue);
+      for_all_combinations<run_test>(types, sizes, contexts, alignments, queue);
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

@@ -15,8 +15,8 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
 // Test for simd constructor from vector.
-// This test uses different data types, dimensionality and different simd
-// constructor invocation contexts.
+// This test uses different data types, sizes and different simd constructor
+// invocation contexts.
 // The test do the following actions:
 //  - call init_simd.data() to retreive vector_type and then provide it to the
 //    simd constructor
@@ -196,14 +196,19 @@ int main(int, char **) {
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
 =======
   const auto types = get_tested_types<tested_types::core>();
-  const auto dims = get_all_dimensions();
+  const auto sizes = get_all_sizes();
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
 
   // Run test for all combinations possible
+<<<<<<< HEAD
   passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+  passed &=
+      for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;
