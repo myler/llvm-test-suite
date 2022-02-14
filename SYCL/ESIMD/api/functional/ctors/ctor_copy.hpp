@@ -112,6 +112,7 @@ private:
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
+<<<<<<< HEAD
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
@@ -120,6 +121,10 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
+=======
+template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = SizeT::value;
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {

@@ -100,6 +100,7 @@ private:
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
@@ -116,6 +117,10 @@ public:
 =======
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
+=======
+template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = SizeT::value;
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {

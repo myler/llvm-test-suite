@@ -38,11 +38,15 @@ int main(int, char **) {
   // Using single size and context to verify the accuracy of operations
   // with floating point data types
   const auto types = get_tested_types<tested_types::fp>();
+<<<<<<< HEAD
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp.cpp
   const auto single_size = get_sizes<8>();
 =======
   const auto single_dim = get_dimensions<8>();
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
+=======
+  const auto single_size = get_sizes<8>();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   const auto context = unnamed_type_pack<ctors::var_decl>::generate();
 
 // Run for specific combinations of types, base and step values and vector
@@ -52,11 +56,15 @@ int main(int, char **) {
     const auto base_values = ctors::get_init_values_pack<init_val::denorm>();
     const auto step_values = ctors::get_init_values_pack<init_val::ulp>();
     passed &= for_all_combinations<ctors::run_test>(
+<<<<<<< HEAD
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp.cpp
         types, single_size, context, base_values, step_values, queue);
 =======
         types, single_dim, context, base_values, step_values, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
+=======
+        types, single_size, context, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   }
 #endif
   {
@@ -65,11 +73,15 @@ int main(int, char **) {
     const auto step_values =
         ctors::get_init_values_pack<init_val::ulp, init_val::ulp_half>();
     passed &= for_all_combinations<ctors::run_test>(
+<<<<<<< HEAD
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp.cpp
         types, single_size, context, base_values, step_values, queue);
 =======
         types, single_dim, context, base_values, step_values, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
+=======
+        types, single_size, context, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   }
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");

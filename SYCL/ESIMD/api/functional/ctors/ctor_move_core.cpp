@@ -41,8 +41,12 @@ int main(int, char **) {
   const auto sizes = get_all_sizes();
 =======
   const auto types = get_tested_types<tested_types::fp_extra>();
+<<<<<<< HEAD
   const auto dims = get_all_dimensions();
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+  const auto sizes = get_all_sizes();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
@@ -52,11 +56,16 @@ int main(int, char **) {
 
   // Run test for all combinations possible
 <<<<<<< HEAD
+<<<<<<< HEAD
   passed &=
       for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
 =======
   passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+  passed &=
+      for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

@@ -134,6 +134,7 @@ template <typename T, T... values> struct value_pack {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Alias to use mainly for simd vector sizes; no overhead as alias doesn't
 // declare a new type
 template <int... values> using integer_pack = value_pack<int, values...>;
@@ -155,6 +156,9 @@ using is_not_a_type_pack =
 
 =======
 // Alias to use mainly for simd vector dimensions; no overhead as alias doesn't
+=======
+// Alias to use mainly for simd vector sizes; no overhead as alias doesn't
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 // declare a new type
 template <int... values> using integer_pack = value_pack<int, values...>;
 
@@ -357,16 +361,22 @@ template <tested_types required> auto get_tested_types() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Syntax sugar to retrieve simd vector sizes in a consistent way
 template <int... Values> auto inline get_sizes() {
 =======
 // Syntax sugar to retrieve simd vector dimensions in a consistent way
 template <int... Values> auto inline get_dimensions() {
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+// Syntax sugar to retrieve simd vector sizes in a consistent way
+template <int... Values> auto inline get_sizes() {
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   return integer_pack<Values...>::generate_unnamed();
 }
 
 // Factory method to retrieve pre-defined values_pack, to have the same
+<<<<<<< HEAD
 <<<<<<< HEAD
 // default sizes over the tests
 auto inline get_all_sizes() {
@@ -376,6 +386,10 @@ auto inline get_all_sizes() {
   return get_sizes<1, 8>();
 #endif
 }
+=======
+// default sizes over the tests
+auto inline get_all_sizes() { return get_sizes<1, 8, 16, 32>(); }
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
 // It's a deprecated function and it exists only for backward compatibility and
 // it should be deleted in the future. Use get_all_sizes() instead.
@@ -386,9 +400,12 @@ auto inline get_all_dimensions() { return get_all_sizes(); }
 template <int... Values> auto inline get_dimensions() {
   return get_sizes<Values...>();
 }
+<<<<<<< HEAD
 =======
 // default dimensions over the tests
 auto inline get_all_dimensions() { return get_dimensions<1, 8, 16, 32>(); }
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
 } // namespace esimd_test::api::functional

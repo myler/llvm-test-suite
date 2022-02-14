@@ -230,6 +230,7 @@ template <init_val... Values> auto get_init_values_pack() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT, typename BaseValT,
           typename StepT>
 class run_test {
@@ -250,9 +251,12 @@ public:
 
 =======
 template <typename DataT, typename DimT, typename TestCaseT, typename BaseValT,
+=======
+template <typename DataT, typename SizeT, typename TestCaseT, typename BaseValT,
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
           typename StepT>
 class run_test {
-  static constexpr int NumElems = DimT::value;
+  static constexpr int NumElems = SizeT::value;
   static constexpr init_val BaseVal = BaseValT::value;
   static constexpr init_val Step = StepT::value;
   using KernelT = kernel_for_fill<DataT, NumElems, TestCaseT, BaseVal, Step>;

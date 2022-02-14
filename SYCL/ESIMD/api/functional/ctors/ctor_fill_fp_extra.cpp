@@ -16,12 +16,17 @@
 //
 // Test for simd fill constructor for extra fp types.
 <<<<<<< HEAD
+<<<<<<< HEAD
 // This test uses extra fp data types with different sizes, base and step values
 // and different simd constructor invocation contexts.
 =======
 // This test uses extra fp data types with different dimensionality, base and
 // step values and different simd constructor invocation contexts.
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+// This test uses extra fp data types with different sizes, base and step values
+// and different simd constructor invocation contexts.
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 // The test do the following actions:
 //  - construct simd with pre-defined base and step value
 //  - bitwise comparing expected and retrieved values
@@ -37,6 +42,7 @@ int main(int, char **) {
   bool passed = true;
 
   const auto fp_types = get_tested_types<tested_types::fp_extra>();
+<<<<<<< HEAD
 <<<<<<< HEAD
   const auto single_size = get_sizes<8>();
   const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
@@ -57,23 +63,30 @@ int main(int, char **) {
       fp_types, single_size, contexts,
 =======
   const auto single_dim = get_dimensions<8>();
+=======
+  const auto single_size = get_sizes<8>();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
 
   passed &= for_all_combinations<ctors::run_test>(
-      fp_types, single_dim, contexts,
+      fp_types, single_size, contexts,
       ctors::get_init_values_pack<ctors::init_val::neg_inf>(),
       ctors::get_init_values_pack<ctors::init_val::zero>(), queue);
   passed &= for_all_combinations<ctors::run_test>(
-      fp_types, single_dim, contexts,
+      fp_types, single_size, contexts,
       ctors::get_init_values_pack<ctors::init_val::max>(),
       ctors::get_init_values_pack<ctors::init_val::neg_inf>(), queue);
   passed &= for_all_combinations<ctors::run_test>(
-      fp_types, single_dim, contexts,
+      fp_types, single_size, contexts,
       ctors::get_init_values_pack<ctors::init_val::nan>(),
       ctors::get_init_values_pack<ctors::init_val::negative>(), queue);
   passed &= for_all_combinations<ctors::run_test>(
+<<<<<<< HEAD
       fp_types, single_dim, contexts,
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+      fp_types, single_size, contexts,
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       ctors::get_init_values_pack<ctors::init_val::zero>(),
       ctors::get_init_values_pack<ctors::init_val::nan>(), queue);
 

@@ -45,8 +45,12 @@ int main(int, char **) {
   {
     // Validate basic functionality works for every invocation context
     const auto types = named_type_pack<char, int>::generate("char", "int");
+<<<<<<< HEAD
     const auto dims = get_dimensions<1, 8>();
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+    const auto sizes = get_sizes<1, 8>();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     const auto contexts =
         unnamed_type_pack<ctors::initializer, ctors::var_decl,
                           ctors::rval_in_expr, ctors::const_ref>::generate();
@@ -56,10 +60,14 @@ int main(int, char **) {
       const auto step_values = ctors::get_init_values_pack<init_val::zero>();
       passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
           types, sizes, contexts, base_values, step_values, queue);
 =======
           types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+          types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     }
     {
       const auto base_values =
@@ -68,10 +76,14 @@ int main(int, char **) {
           ctors::get_init_values_pack<init_val::positive>();
       passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
           types, sizes, contexts, base_values, step_values, queue);
 =======
           types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+          types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     }
   }
   {
@@ -183,9 +195,13 @@ int main(int, char **) {
     const auto types = get_tested_types<tested_types::all>();
 =======
     const auto types = get_tested_types<tested_types::core>();
+<<<<<<< HEAD
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     const auto dims = get_all_dimensions();
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+    const auto sizes = get_all_sizes();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
     {
       const auto base_values =
@@ -193,10 +209,14 @@ int main(int, char **) {
       const auto step_values = ctors::get_init_values_pack<init_val::zero>();
       passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
           types, sizes, contexts, base_values, step_values, queue);
 =======
           types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+          types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     }
     {
       const auto base_values =
@@ -205,19 +225,27 @@ int main(int, char **) {
           ctors::get_init_values_pack<init_val::positive, init_val::negative>();
       passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
           types, sizes, contexts, base_values, step_values, queue);
 =======
           types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+          types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     }
   }
   {
     // Verify specific cases for different type groups
 <<<<<<< HEAD
+<<<<<<< HEAD
     const auto sizes = get_sizes<8>();
 =======
     const auto dims = get_dimensions<8>();
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+    const auto sizes = get_sizes<8>();
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
     const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
     {
       const auto types = get_tested_types<tested_types::uint>();
@@ -229,10 +257,14 @@ int main(int, char **) {
                                         init_val::negative>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
     }
     {
@@ -243,10 +275,14 @@ int main(int, char **) {
             ctors::get_init_values_pack<init_val::positive>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
       {
         const auto base_values = ctors::get_init_values_pack<init_val::max>();
@@ -254,10 +290,14 @@ int main(int, char **) {
             ctors::get_init_values_pack<init_val::negative>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
     }
     {
@@ -268,10 +308,14 @@ int main(int, char **) {
         const auto step_values = ctors::get_init_values_pack<init_val::max>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
       {
         const auto base_values = ctors::get_init_values_pack<init_val::max>();
@@ -279,10 +323,14 @@ int main(int, char **) {
             ctors::get_init_values_pack<init_val::neg_inf>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
       {
         const auto base_values = ctors::get_init_values_pack<init_val::nan>();
@@ -290,10 +338,14 @@ int main(int, char **) {
             ctors::get_init_values_pack<init_val::negative>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
       {
         const auto base_values =
@@ -301,10 +353,14 @@ int main(int, char **) {
         const auto step_values = ctors::get_init_values_pack<init_val::nan>();
         passed &= for_all_combinations<ctors::run_test>(
 <<<<<<< HEAD
+<<<<<<< HEAD
             types, sizes, contexts, base_values, step_values, queue);
 =======
             types, dims, contexts, base_values, step_values, queue);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+            types, sizes, contexts, base_values, step_values, queue);
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
       }
     }
   }

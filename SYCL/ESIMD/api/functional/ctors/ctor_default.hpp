@@ -85,6 +85,7 @@ struct const_ref {
 
 // Struct that calls simd in provided context and then verifies obtained result.
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
@@ -119,6 +120,10 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
 =======
 template <typename DataT, typename DimT, typename TestCaseT> struct run_test {
   static constexpr int NumElems = DimT::value;
+=======
+template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
+  static constexpr int NumElems = SizeT::value;
+>>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   bool operator()(sycl::queue &queue, const std::string &data_type) {
     bool passed = true;
