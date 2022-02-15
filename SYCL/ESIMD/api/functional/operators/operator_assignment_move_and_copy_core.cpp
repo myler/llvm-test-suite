@@ -85,10 +85,14 @@ int main(int, char **) {
 
   bool passed = true;
 
+<<<<<<< HEAD
   const auto types = get_tested_types<tested_types::all>();
 <<<<<<< HEAD
   const auto all_sizes = get_all_sizes();
 =======
+=======
+  const auto types = get_tested_types<tested_types::core>();
+>>>>>>> d26b27f31 (Hotfix types for operator_assignment_move_and_copy_core (#833))
   const auto dims = get_all_dimensions();
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
 
