@@ -8,10 +8,15 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
 =======
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+// TODO: esimd_emulator fails due to unimplemented 'single_task()' method
+// XFAIL: esimd_emulator
+>>>>>>> b3d790428 ([SYCL][ESIMD][EMU] XFAIL for 'SYCL/ESIMD/api/esimd_rgba_smoke.cpp' (#840))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
