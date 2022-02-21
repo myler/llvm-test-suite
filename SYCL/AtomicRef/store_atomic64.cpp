@@ -7,7 +7,7 @@
 // XFAIL: hip
 // Expected failure because hip does not have atomic64 check implementation
 
-#include "assignment.h"
+#include "store.h"
 #include <iostream>
 using namespace sycl;
 
@@ -20,23 +20,23 @@ int main() {
   }
 
   constexpr int N = 32;
-  assignment_test<double>(q, N);
+  store_test<double>(q, N);
 
   // Include long tests if they are 64 bits wide
   if constexpr (sizeof(long) == 8) {
-    assignment_test<long>(q, N);
-    assignment_test<unsigned long>(q, N);
+    store_test<long>(q, N);
+    store_test<unsigned long>(q, N);
   }
 
   // Include long long tests if they are 64 bits wide
   if constexpr (sizeof(long long) == 8) {
-    assignment_test<long long>(q, N);
-    assignment_test<unsigned long long>(q, N);
+    store_test<long long>(q, N);
+    store_test<unsigned long long>(q, N);
   }
 
   // Include pointer tests if they are 64 bits wide
   if constexpr (sizeof(char *) == 8) {
-    assignment_test<char *>(q, N);
+    store_test<char *>(q, N);
   }
 
   std::cout << "Test passed." << std::endl;
