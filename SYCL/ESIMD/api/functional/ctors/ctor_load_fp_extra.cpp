@@ -1,4 +1,4 @@
-//==------- ctor_load_core.cpp  - DPC++ ESIMD on-device test ---------------==//
+//==------- ctor_load_fp_extra.cpp  - DPC++ ESIMD on-device test -----------==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -30,20 +30,8 @@ int main(int, char **) {
                     esimd_test::createExceptionHandler());
 
   bool passed = true;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  const auto types = get_tested_types<tested_types::core>();
-<<<<<<< HEAD
-=======
-  const auto types = get_tested_types<tested_types::all>();
->>>>>>> 1548e68f8 ([SYCL][ESIMD] Add test on simd load ctor (#769))
-=======
-  const auto types = get_tested_types<tested_types::core>();
->>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
+  const auto types = get_tested_types<tested_types::fp_extra>();
   const auto dims = get_all_dimensions();
-=======
-  const auto sizes = get_all_sizes();
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
@@ -52,7 +40,7 @@ int main(int, char **) {
       unnamed_type_pack<ctors::alignment::element, ctors::alignment::vector,
                         ctors::alignment::overal>::generate();
 
-  passed &= for_all_combinations<ctors::run_test>(types, sizes, contexts,
+  passed &= for_all_combinations<ctors::run_test>(types, dims, contexts,
                                                   alignments, queue);
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
