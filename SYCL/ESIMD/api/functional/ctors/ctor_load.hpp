@@ -13,11 +13,18 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
+=======
+
+#include "common.hpp"
+
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 
 namespace esimd_test::api::functional::ctors {
 
@@ -90,7 +97,10 @@ struct Kernel_for_load_ctor;
 namespace alignment {
 
 struct element {
+<<<<<<< HEAD
   static std::string to_string() { return "element_aligned"; }
+=======
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
   template <typename DataT, int> static size_t get_size() {
     return alignof(DataT);
   }
@@ -98,7 +108,10 @@ struct element {
 };
 
 struct vector {
+<<<<<<< HEAD
   static std::string to_string() { return "vector_aligned"; }
+=======
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
   template <typename DataT, int NumElems> static size_t get_size() {
     // Referring to the simd class specialization on the host side is by design.
     return alignof(esimd::simd<DataT, NumElems>);
@@ -107,6 +120,7 @@ struct vector {
 };
 
 struct overal {
+<<<<<<< HEAD
   static std::string to_string() { return "overaligned"; }
   // Use 16 instead of std::max_align_t because of the fact that long double is
   // not a native type in Intel GPUs. So 16 is not driven by any type, but
@@ -116,10 +130,19 @@ struct overal {
   template <typename, int> static size_t get_size() { return oword_align; }
 
   static constexpr auto get_value() { return esimd::overaligned<oword_align>; }
+=======
+  template <typename, int> static size_t get_size() {
+    return alignof(std::max_align_t);
+  }
+  static constexpr auto get_value() {
+    return esimd::overaligned<alignof(std::max_align_t)>;
+  }
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 };
 
 } // namespace alignment
 
+<<<<<<< HEAD
 // Detailed test case description to use for logs
 template <int NumElems, typename TestCaseT>
 class LoadCtorTestDescription : public ITestDescription {
@@ -151,6 +174,18 @@ public:
     bool passed = true;
     log::trace<TestDescriptionT>(data_type, alignment_name);
 
+=======
+// The main test routine.
+// Using functor class to be able to iterate over the pre-defined data types.
+template <typename DataT, typename DimT, typename TestCaseT,
+          typename AlignmentT>
+class run_test {
+  static constexpr int NumElems = DimT::value;
+
+public:
+  bool operator()(sycl::queue &queue, const std::string &data_type) {
+    bool passed = true;
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -159,19 +194,30 @@ public:
     // whole reference data.
     if constexpr (NumElems == 1) {
       for (size_t i = 0; i < ref_data.size(); ++i) {
+<<<<<<< HEAD
         passed =
             run_verification(queue, {ref_data[i]}, data_type, alignment_name);
       }
     } else {
       passed = run_verification(queue, ref_data, data_type, alignment_name);
+=======
+        passed = run_verification(queue, {ref_data[i]}, data_type);
+      }
+    } else {
+      passed = run_verification(queue, ref_data, data_type);
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
     }
     return passed;
   }
 
 private:
   bool run_verification(sycl::queue &queue, const std::vector<DataT> &ref_data,
+<<<<<<< HEAD
                         const std::string &data_type,
                         const std::string &alignment_name) {
+=======
+                        const std::string &data_type) {
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
     assert(ref_data.size() == NumElems &&
            "Reference data size is not equal to the simd vector length.");
 
@@ -220,6 +266,7 @@ private:
     queue.wait_and_throw();
 
     for (size_t i = 0; i < result.size(); ++i) {
+<<<<<<< HEAD
       const auto &expected = ref_data[i];
       const auto &retrieved = result[i];
 
@@ -229,6 +276,15 @@ private:
         log::fail(TestDescriptionT(data_type, alignment_name),
                   "Unexpected value at index ", i, ", retrieved: ", retrieved,
                   ", expected: ", expected);
+=======
+      if (!are_bitwise_equal(ref_data[i], result[i])) {
+        passed = false;
+
+        const auto description =
+            ctors::TestDescription<DataT, NumElems, TestCaseT>(
+                i, result[i], ref_data[i], data_type);
+        log::fail(description);
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
       }
     }
 

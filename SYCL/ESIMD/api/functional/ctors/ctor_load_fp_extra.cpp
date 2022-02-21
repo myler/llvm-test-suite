@@ -37,8 +37,13 @@ int main(int, char **) {
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
   const auto alignments =
+<<<<<<< HEAD
       named_type_pack<ctors::alignment::element, ctors::alignment::vector,
                       ctors::alignment::overal>::generate();
+=======
+      unnamed_type_pack<ctors::alignment::element, ctors::alignment::vector,
+                        ctors::alignment::overal>::generate();
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 
   passed &= for_all_combinations<ctors::run_test>(types, dims, contexts,
                                                   alignments, queue);

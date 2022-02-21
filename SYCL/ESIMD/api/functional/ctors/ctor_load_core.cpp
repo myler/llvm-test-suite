@@ -22,16 +22,20 @@
 // the reference one.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "ctor_load.hpp"
 
 using namespace esimd_test::api::functional;
 
 =======
 #include "common.hpp"
+=======
+#include "ctor_load.hpp"
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 
-using namespace sycl::ext::intel::experimental::esimd;
 using namespace esimd_test::api::functional;
 
+<<<<<<< HEAD
 // Descriptor class for the case of calling constructor in initializer context.
 struct initializer {
   static std::string get_description() { return "initializer"; }
@@ -218,6 +222,8 @@ private:
 };
 
 >>>>>>> 1548e68f8 ([SYCL][ESIMD] Add test on simd load ctor (#769))
+=======
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 int main(int, char **) {
   sycl::queue queue(esimd_test::ESIMDSelector{},
                     esimd_test::createExceptionHandler());
@@ -249,12 +255,14 @@ int main(int, char **) {
   const auto sizes = get_all_sizes();
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
-  const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
-                                          const_ref>::generate();
+  const auto contexts =
+      unnamed_type_pack<ctors::initializer, ctors::var_decl,
+                        ctors::rval_in_expr, ctors::const_ref>::generate();
   const auto alignments =
-      unnamed_type_pack<alignment::element, alignment::vector,
-                        alignment::overal>::generate();
+      unnamed_type_pack<ctors::alignment::element, ctors::alignment::vector,
+                        ctors::alignment::overal>::generate();
 
+<<<<<<< HEAD
   passed &=
 <<<<<<< HEAD
       for_all_combinations<run_test>(types, dims, contexts, alignments, queue);
@@ -262,6 +270,10 @@ int main(int, char **) {
 =======
       for_all_combinations<run_test>(types, sizes, contexts, alignments, queue);
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
+=======
+  passed &= for_all_combinations<ctors::run_test>(types, sizes, contexts,
+                                                  alignments, queue);
+>>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;
