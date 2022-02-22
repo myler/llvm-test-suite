@@ -25,6 +25,9 @@ struct coeff_struct_t {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
 struct alignas(64) coeff_struct_aligned_t {
   std::array<std::array<float, 3>, 3> c;
 };
@@ -33,6 +36,7 @@ struct alignas(64) coeff_struct_aligned2_t {
   std::array<std::array<float, 3>, 3> c;
   int number;
 };
+<<<<<<< HEAD
 
 template <typename T> constexpr T get_coefficients() {
   return {{{{1.0, 2.0, 3.0}, {1.1, 2.1, 3.1}, {1.2, 2.2, 3.2}}}};
@@ -44,10 +48,16 @@ template <> constexpr coeff_t get_coefficients<coeff_t>() {
 coeff_t get_coefficients() {
   return {{{1.0, 2.0, 3.0}, {1.1, 2.1, 3.1}, {1.2, 2.2, 3.2}}};
 }
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
 
-coeff_struct_t get_coefficient_struct() {
+template <typename T> constexpr T get_coefficients() {
   return {{{{1.0, 2.0, 3.0}, {1.1, 2.1, 3.1}, {1.2, 2.2, 3.2}}}};
 >>>>>>> 6c7a8e6f7 ([SYCL] Add a vector convolution demo of using specialization constants (#747))
+}
+
+template <> constexpr coeff_t get_coefficients<coeff_t>() {
+  return {{{1.0, 2.0, 3.0}, {1.1, 2.1, 3.1}, {1.2, 2.2, 3.2}}};
 }
 
 constexpr specialization_id<coeff_t> coeff_id;
@@ -55,6 +65,9 @@ constexpr specialization_id<coeff_t> coeff_id;
 constexpr specialization_id<coeff_struct_t> coeff_struct_id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
 // Represented in the IR as
 // clang-format off
 // { %struct.coeff_struct_aligned_t { %"class.std::array.0" zeroinitializer, [28 x i8] undef } }
@@ -72,8 +85,11 @@ constexpr specialization_id<coeff_struct_aligned_t> coeff_struct_aligned_id;
 // clang-format on
 constexpr specialization_id<coeff_struct_aligned2_t> coeff_struct_aligned_id2;
 
+<<<<<<< HEAD
 =======
 >>>>>>> 6c7a8e6f7 ([SYCL] Add a vector convolution demo of using specialization constants (#747))
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
 template <typename IN>
 float calc_conv(const coeff_t &coeff, const IN &in, item<2> item_id) {
   float acc = 0;
@@ -103,6 +119,9 @@ void do_conv(buffer<float, 2> in, buffer<float, 2> out, CP coeff_provider) {
     // Set the coefficient of the convolution as constant.
     // This will build a specific kernel the coefficient available as literals.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
     cgh.set_specialization_constant<coeff_id>(get_coefficients<coeff_t>());
     cgh.set_specialization_constant<coeff_struct_id>(
         get_coefficients<coeff_struct_t>());
@@ -110,10 +129,13 @@ void do_conv(buffer<float, 2> in, buffer<float, 2> out, CP coeff_provider) {
         get_coefficients<coeff_struct_aligned_t>());
     cgh.set_specialization_constant<coeff_struct_aligned_id2>(
         get_coefficients<coeff_struct_aligned2_t>());
+<<<<<<< HEAD
 =======
     cgh.set_specialization_constant<coeff_id>(get_coefficients());
     cgh.set_specialization_constant<coeff_struct_id>(get_coefficient_struct());
 >>>>>>> 6c7a8e6f7 ([SYCL] Add a vector convolution demo of using specialization constants (#747))
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
     cgh.parallel_for<KernelName>(
         in.get_range(), [=](item<2> item_id, kernel_handler h) {
           auto coeff = coeff_provider(h);
@@ -175,6 +197,9 @@ int main() {
   compare_result(host_accessor{output, read_only}, expected);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
   do_conv<class Convolution3>(input, output, [](kernel_handler &h) {
     return h.get_specialization_constant<coeff_struct_aligned_id>().c;
   });
@@ -187,8 +212,11 @@ int main() {
 
   compare_result(host_accessor{output, read_only}, expected);
 
+<<<<<<< HEAD
 =======
 >>>>>>> 6c7a8e6f7 ([SYCL] Add a vector convolution demo of using specialization constants (#747))
+=======
+>>>>>>> a621ef9b0 ([SYCL] Extend the SpecConstants/vector-convolution-demo.cpp test (#830))
   std::cout << "Good computation!" << std::endl;
   return 0;
 }
