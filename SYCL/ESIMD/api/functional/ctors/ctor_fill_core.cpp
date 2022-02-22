@@ -90,6 +90,7 @@ int main(int, char **) {
     // Validate basic functionality works for every type
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   const auto two_dims = values_pack<1, 8>();
   const auto char_int_types = named_type_pack<char, int>({"char", "int"});
@@ -194,6 +195,9 @@ int main(int, char **) {
 =======
     const auto types = get_tested_types<tested_types::all>();
 =======
+=======
+
+>>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
     const auto types = get_tested_types<tested_types::core>();
 <<<<<<< HEAD
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))

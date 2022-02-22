@@ -231,6 +231,7 @@ int main(int, char **) {
   bool passed = true;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   const auto types = get_tested_types<tested_types::core>();
   const auto sizes = get_all_sizes();
@@ -247,6 +248,9 @@ int main(int, char **) {
 =======
   const auto types = get_tested_types<tested_types::all>();
 =======
+=======
+
+>>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
   const auto types = get_tested_types<tested_types::core>();
 <<<<<<< HEAD
 >>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
