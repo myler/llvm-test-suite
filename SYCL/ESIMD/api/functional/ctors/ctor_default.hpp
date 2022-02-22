@@ -127,9 +127,12 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
 
   bool operator()(sycl::queue &queue, const std::string &data_type) {
     bool passed = true;
-    DataT default_val{};
 
+    // We use it to avoid empty functions being optimized out by compiler
+    // checking the result of the simd calling because values of the constructed
+    // object's elements are undefined.
     shared_vector<DataT> result(NumElems, shared_allocator<DataT>(queue));
+<<<<<<< HEAD
 
     queue.submit([&](sycl::handler &cgh) {
       DataT *const out = result.data();
@@ -149,6 +152,27 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
         log::fail(description);
       }
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+    // We do not re-throw an exception to test all combinations of types and
+    // vector sizes.
+    try {
+      queue.submit([&](sycl::handler &cgh) {
+        DataT *const out = result.data();
+        cgh.single_task<Kernel<DataT, NumElems, TestCaseT>>(
+            [=]() SYCL_ESIMD_KERNEL {
+              TestCaseT::template call_simd_ctor<DataT, NumElems>(out);
+            });
+      });
+      queue.wait_and_throw();
+    } catch (const sycl::exception &e) {
+      passed = false;
+      std::string error_msg("A SYCL exception was caught:");
+      error_msg += std::string(e.what());
+      error_msg += " for simd<" + data_type;
+      error_msg += ", " + std::to_string(NumElems) + ">";
+      error_msg += ", with context: " + TestCaseT::get_description();
+      log::note(error_msg);
+>>>>>>> deac1c6e6 ([SYCL][ESIMD] Change logic for tests on simd default constructor (#852))
     }
 
     return passed;
