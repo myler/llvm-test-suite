@@ -66,6 +66,10 @@ int main(int, char **) {
     // Validate basic functionality works for every type
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
     const auto types = get_tested_types<tested_types::core>();
 <<<<<<< HEAD
 =======

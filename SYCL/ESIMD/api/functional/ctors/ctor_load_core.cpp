@@ -32,6 +32,10 @@ int main(int, char **) {
   bool passed = true;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
   const auto types = get_tested_types<tested_types::core>();
 <<<<<<< HEAD
 =======
