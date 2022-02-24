@@ -27,7 +27,11 @@
 
 #include "ctor_broadcast.hpp"
 
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 using namespace esimd_test::api::functional;
 
 int main(int, char **) {

@@ -29,6 +29,7 @@ namespace esimd_test::api::functional::operators {
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = TestDescription<NumElems, TestCaseT>;
@@ -36,6 +37,10 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
+  static constexpr int NumElems = SizeT::value;
+>>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {

@@ -86,6 +86,7 @@ int main(int, char **) {
   bool passed = true;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const auto types = get_tested_types<tested_types::all>();
 <<<<<<< HEAD
   const auto all_sizes = get_all_sizes();
@@ -95,10 +96,15 @@ int main(int, char **) {
 >>>>>>> d26b27f31 (Hotfix types for operator_assignment_move_and_copy_core (#833))
   const auto dims = get_all_dimensions();
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+  const auto types = get_tested_types<tested_types::all>();
+  const auto all_sizes = get_all_sizes();
+>>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
   const auto context =
       unnamed_type_pack<move_assignment, copy_assignment>::generate();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   passed &= for_all_combinations<operators::run_test>(types, all_sizes, context,
                                                       queue);
@@ -106,6 +112,10 @@ int main(int, char **) {
   passed &=
       for_all_combinations<operators::run_test>(types, dims, context, queue);
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+  passed &= for_all_combinations<operators::run_test>(types, all_sizes, context,
+                                                      queue);
+>>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

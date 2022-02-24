@@ -17,7 +17,11 @@
 #include "../value_conv.hpp"
 #include "common.hpp"
 
+<<<<<<< HEAD
 namespace esimd = sycl::ext::intel::esimd;
+=======
+namespace esimd = sycl::ext::intel::experimental::esimd;
+>>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
 namespace esimd_test::api::functional::ctors {
 
