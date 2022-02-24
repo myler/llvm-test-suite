@@ -119,24 +119,37 @@ void min_test(queue q, size_t N) {
       (space == access::address_space::generic_space && !TEST_GENERIC_IN_LOCAL);
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
+<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
+=======
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
     if constexpr (do_ext_tests) {
       min_local_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q, N);
     }
+<<<<<<< HEAD
 #else
     min_local_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
 #endif
   }
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
+=======
+    min_local_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
+  }
+  if constexpr (do_global_tests) {
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
     if constexpr (do_ext_tests) {
       min_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q, N);
     }
+<<<<<<< HEAD
 #else
     min_global_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
 #endif
+=======
+    min_global_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   }
 }
 
@@ -145,6 +158,7 @@ template <access::address_space space, typename T,
 void min_test_scopes(queue q, size_t N) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
+<<<<<<< HEAD
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
       scopes.end()) {
     min_test<space, T, order, memory_scope::system>(q, N);
@@ -179,12 +193,81 @@ void min_test_orders_scopes(queue q, size_t N) {
   min_test_scopes<space, T, memory_order::relaxed>(q, N);
 }
 
+=======
+#if defined(SYSTEM)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test<space, T, order, memory_scope::system>(q, N);
+#elif defined(WORK_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test<space, T, order, memory_scope::work_group>(q, N);
+#elif defined(SUB_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test<space, T, order, memory_scope::sub_group>(q, N);
+#else
+  min_test<space, T, order, memory_scope::device>(q, N);
+#endif
+}
+
+template <access::address_space space, typename T>
+void min_test_orders_scopes(queue q, size_t N) {
+  std::vector<memory_order> orders =
+      q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
+#if defined(ACQ_REL)
+  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test_scopes<space, T, memory_order::acq_rel>(q, N);
+#elif defined(ACQUIRE)
+  if (std::find(orders.begin(), orders.end(), memory_order::acquire) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test_scopes<space, T, memory_order::acquire>(q, N);
+#elif defined(RELEASE)
+  if (std::find(orders.begin(), orders.end(), memory_order::release) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  min_test_scopes<space, T, memory_order::release>(q, N);
+#else
+  min_test_scopes<space, T, memory_order::relaxed>(q, N);
+#endif
+}
+
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 template <access::address_space space> void min_test_all() {
   queue q;
 
   constexpr int N = 32;
+<<<<<<< HEAD
 #ifdef FULL_ATOMIC64_COVERAGE
   min_test_orders_scopes<space, double>(q, N);
+=======
+#ifdef ATOMIC64
+  if (!q.get_device().has(aspect::atomic64)) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+
+  min_test_orders_scopes<space, double>(q, N);
+#ifndef FP_TESTS_ONLY
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   if constexpr (sizeof(long) == 8) {
     min_test_orders_scopes<space, long>(q, N);
     min_test_orders_scopes<space, unsigned long>(q, N);
@@ -194,8 +277,14 @@ template <access::address_space space> void min_test_all() {
     min_test_orders_scopes<space, unsigned long long>(q, N);
   }
 #endif
+<<<<<<< HEAD
   min_test_orders_scopes<space, float>(q, N);
 #ifdef FULL_ATOMIC32_COVERAGE
+=======
+#else
+  min_test_orders_scopes<space, float>(q, N);
+#ifndef FP_TESTS_ONLY
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   min_test_orders_scopes<space, int>(q, N);
   min_test_orders_scopes<space, unsigned int>(q, N);
   if constexpr (sizeof(long) == 4) {
@@ -203,6 +292,10 @@ template <access::address_space space> void min_test_all() {
     min_test_orders_scopes<space, unsigned long>(q, N);
   }
 #endif
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 
   std::cout << "Test passed." << std::endl;
 }

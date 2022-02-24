@@ -110,6 +110,7 @@ void or_test(queue q) {
       (space == access::address_space::generic_space && !TEST_GENERIC_IN_LOCAL);
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
+<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
     if constexpr (do_ext_tests) {
       or_local_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(q);
@@ -120,13 +121,25 @@ void or_test(queue q) {
   }
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
+=======
+    if constexpr (do_ext_tests) {
+      or_local_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(q);
+    }
+    or_local_test<::sycl::atomic_ref, space, T, order, scope>(q);
+  }
+  if constexpr (do_global_tests) {
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
     if constexpr (do_ext_tests) {
       or_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q);
     }
+<<<<<<< HEAD
 #else
     or_global_test<::sycl::atomic_ref, space, T, order, scope>(q);
 #endif
+=======
+    or_global_test<::sycl::atomic_ref, space, T, order, scope>(q);
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   }
 }
 
@@ -135,6 +148,7 @@ template <access::address_space space, typename T,
 void or_test_scopes(queue q) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
+<<<<<<< HEAD
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
       scopes.end()) {
     or_test<space, T, order, memory_scope::system>(q);
@@ -148,12 +162,39 @@ void or_test_scopes(queue q) {
     or_test<space, T, order, memory_scope::sub_group>(q);
   }
   or_test<space, T, order, memory_scope::device>(q);
+=======
+#if defined(SYSTEM)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test<space, T, order, memory_scope::system>(q);
+#elif defined(WORK_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test<space, T, order, memory_scope::work_group>(q);
+#elif defined(SUB_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test<space, T, order, memory_scope::sub_group>(q);
+#else
+  or_test<space, T, order, memory_scope::device>(q);
+#endif
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 }
 
 template <access::address_space space, typename T>
 void or_test_orders_scopes(queue q) {
   std::vector<memory_order> orders =
       q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
+<<<<<<< HEAD
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
       orders.end()) {
     or_test_scopes<space, T, memory_order::acq_rel>(q);
@@ -167,13 +208,48 @@ void or_test_orders_scopes(queue q) {
     or_test_scopes<space, T, memory_order::release>(q);
   }
   or_test_scopes<space, T, memory_order::relaxed>(q);
+=======
+#if defined(ACQ_REL)
+  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test_scopes<space, T, memory_order::acq_rel>(q);
+#elif defined(ACQUIRE)
+  if (std::find(orders.begin(), orders.end(), memory_order::acquire) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test_scopes<space, T, memory_order::acquire>(q);
+#elif defined(RELEASE)
+  if (std::find(orders.begin(), orders.end(), memory_order::release) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  or_test_scopes<space, T, memory_order::release>(q);
+#else
+  or_test_scopes<space, T, memory_order::relaxed>(q);
+#endif
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 }
 
 template <access::address_space space> void or_test_all() {
   queue q;
 
   constexpr int N = 32;
+<<<<<<< HEAD
 #ifdef FULL_ATOMIC64_COVERAGE
+=======
+#ifdef ATOMIC64
+  if (!q.get_device().has(aspect::atomic64)) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   if constexpr (sizeof(long) == 8) {
     or_test_orders_scopes<space, long>(q);
     or_test_orders_scopes<space, unsigned long>(q);
@@ -182,9 +258,14 @@ template <access::address_space space> void or_test_all() {
     or_test_orders_scopes<space, long long>(q);
     or_test_orders_scopes<space, unsigned long long>(q);
   }
+<<<<<<< HEAD
 #endif
   or_test_orders_scopes<space, int>(q);
 #ifdef FULL_ATOMIC32_COVERAGE
+=======
+#else
+  or_test_orders_scopes<space, int>(q);
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   or_test_orders_scopes<space, unsigned int>(q);
   if constexpr (sizeof(long) == 4) {
     or_test_orders_scopes<space, long>(q);

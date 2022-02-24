@@ -127,11 +127,15 @@ void compare_exchange_test(queue q, size_t N) {
       (space == access::address_space::generic_space && !TEST_GENERIC_IN_LOCAL);
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
+<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
+=======
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
     if constexpr (do_ext_tests) {
       compare_exchange_local_test<::sycl::ext::oneapi::atomic_ref, space, T,
                                   order, scope>(q, N);
     }
+<<<<<<< HEAD
 #else
     compare_exchange_local_test<::sycl::atomic_ref, space, T, order, scope>(q,
                                                                             N);
@@ -139,14 +143,25 @@ void compare_exchange_test(queue q, size_t N) {
   }
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
+=======
+    compare_exchange_local_test<::sycl::atomic_ref, space, T, order, scope>(q,
+                                                                            N);
+  }
+  if constexpr (do_global_tests) {
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
     if constexpr (do_ext_tests) {
       compare_exchange_global_test<::sycl::ext::oneapi::atomic_ref, space, T,
                                    order, scope>(q, N);
     }
+<<<<<<< HEAD
 #else
     compare_exchange_global_test<::sycl::atomic_ref, space, T, order, scope>(q,
                                                                              N);
 #endif
+=======
+    compare_exchange_global_test<::sycl::atomic_ref, space, T, order, scope>(q,
+                                                                             N);
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   }
 }
 
@@ -155,6 +170,7 @@ template <access::address_space space, typename T,
 void compare_exchange_test_scopes(queue q, size_t N) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
+<<<<<<< HEAD
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
       scopes.end()) {
     compare_exchange_test<space, T, order, memory_scope::system>(q, N);
@@ -168,12 +184,39 @@ void compare_exchange_test_scopes(queue q, size_t N) {
     compare_exchange_test<space, T, order, memory_scope::sub_group>(q, N);
   }
   compare_exchange_test<space, T, order, memory_scope::device>(q, N);
+=======
+#if defined(SYSTEM)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test<space, T, order, memory_scope::system>(q, N);
+#elif defined(WORK_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test<space, T, order, memory_scope::work_group>(q, N);
+#elif defined(SUB_GROUP)
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+      scopes.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test<space, T, order, memory_scope::sub_group>(q, N);
+#else
+  compare_exchange_test<space, T, order, memory_scope::device>(q, N);
+#endif
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 }
 
 template <access::address_space space, typename T>
 void compare_exchange_test_orders_scopes(queue q, size_t N) {
   std::vector<memory_order> orders =
       q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
+<<<<<<< HEAD
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) !=
       orders.end()) {
     compare_exchange_test_scopes<space, T, memory_order::acq_rel>(q, N);
@@ -187,13 +230,47 @@ void compare_exchange_test_orders_scopes(queue q, size_t N) {
     compare_exchange_test_scopes<space, T, memory_order::release>(q, N);
   }
   compare_exchange_test_scopes<space, T, memory_order::relaxed>(q, N);
+=======
+#if defined(ACQ_REL)
+  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test_scopes<space, T, memory_order::acq_rel>(q, N);
+#elif defined(ACQUIRE)
+  if (std::find(orders.begin(), orders.end(), memory_order::acquire) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test_scopes<space, T, memory_order::acquire>(q, N);
+#elif defined(RELEASE)
+  if (std::find(orders.begin(), orders.end(), memory_order::release) ==
+      orders.end()) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+  compare_exchange_test_scopes<space, T, memory_order::release>(q, N);
+#else
+  compare_exchange_test_scopes<space, T, memory_order::relaxed>(q, N);
+#endif
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 }
 
 template <access::address_space space> void compare_exchange_test_all() {
   queue q;
 
   constexpr int N = 32;
+<<<<<<< HEAD
 #ifdef FULL_ATOMIC64_COVERAGE
+=======
+#ifdef ATOMIC64
+  if (!q.get_device().has(aspect::atomic64)) {
+    std::cout << "Skipping test\n";
+    return;
+  }
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   compare_exchange_test_orders_scopes<space, double>(q, N);
   if constexpr (sizeof(long) == 8) {
     compare_exchange_test_orders_scopes<space, long>(q, N);
@@ -203,15 +280,32 @@ template <access::address_space space> void compare_exchange_test_all() {
     compare_exchange_test_orders_scopes<space, long long>(q, N);
     compare_exchange_test_orders_scopes<space, unsigned long long>(q, N);
   }
+<<<<<<< HEAD
 #endif
   compare_exchange_test_orders_scopes<space, float>(q, N);
 #ifdef FULL_ATOMIC32_COVERAGE
   compare_exchange_test_orders_scopes<space, int>(q, N);
   compare_exchange_test_orders_scopes<space, unsigned int>(q, N);
+=======
+  if constexpr (sizeof(char *) == 8) {
+    compare_exchange_test_orders_scopes<space, char *>(q, N);
+  }
+#else
+  compare_exchange_test_orders_scopes<space, int>(q, N);
+  compare_exchange_test_orders_scopes<space, unsigned int>(q, N);
+  compare_exchange_test_orders_scopes<space, float>(q, N);
+
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
   if constexpr (sizeof(long) == 4) {
     compare_exchange_test_orders_scopes<space, long>(q, N);
     compare_exchange_test_orders_scopes<space, unsigned long>(q, N);
   }
+<<<<<<< HEAD
+=======
+  if constexpr (sizeof(char *) == 4) {
+    compare_exchange_test_orders_scopes<space, char *>(q, N);
+  }
+>>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
 #endif
 
   std::cout << "Test passed." << std::endl;
