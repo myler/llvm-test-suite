@@ -121,7 +121,10 @@ struct vector {
 
 struct overal {
 <<<<<<< HEAD
+<<<<<<< HEAD
   static std::string to_string() { return "overaligned"; }
+=======
+>>>>>>> 78c3d9b33 ([SYCL][ESIMD] Replace std::max_align_t with 16 for overaligned (#846))
   // Use 16 instead of std::max_align_t because of the fact that long double is
   // not a native type in Intel GPUs. So 16 is not driven by any type, but
   // rather the "oword alignment" requirement for all block loads. In that
@@ -130,6 +133,7 @@ struct overal {
   template <typename, int> static size_t get_size() { return oword_align; }
 
   static constexpr auto get_value() { return esimd::overaligned<oword_align>; }
+<<<<<<< HEAD
 =======
   template <typename, int> static size_t get_size() {
     return alignof(std::max_align_t);
@@ -138,6 +142,8 @@ struct overal {
     return esimd::overaligned<alignof(std::max_align_t)>;
   }
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+>>>>>>> 78c3d9b33 ([SYCL][ESIMD] Replace std::max_align_t with 16 for overaligned (#846))
 };
 
 } // namespace alignment
