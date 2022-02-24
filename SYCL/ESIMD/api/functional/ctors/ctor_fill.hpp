@@ -242,13 +242,17 @@ class run_test {
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+<<<<<<< HEAD
     bool passed = true;
     log::trace<TestDescriptionT>(data_type, BaseVal, Step);
 
+=======
+>>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
 
+<<<<<<< HEAD
 =======
 template <typename DataT, typename DimT, typename TestCaseT, typename BaseValT,
 =======
@@ -264,6 +268,8 @@ class run_test {
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+>>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
     shared_vector<DataT> result(NumElems, shared_allocator<DataT>(queue));
 
     const auto base_value = get_value<DataT, BaseVal>();

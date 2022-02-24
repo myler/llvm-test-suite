@@ -124,6 +124,9 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+    if (should_skip_test_with<DataT>(queue.get_device())) {
+      return true;
+    }
 
     bool passed = true;
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))

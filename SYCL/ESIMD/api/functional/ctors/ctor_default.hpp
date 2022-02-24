@@ -126,6 +126,10 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+    if (should_skip_test_with<DataT>(queue.get_device())) {
+      return true;
+    }
+
     bool passed = true;
 
     // We use it to avoid empty functions being optimized out by compiler
