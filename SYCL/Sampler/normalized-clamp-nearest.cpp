@@ -3,13 +3,9 @@
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
-// XFAIL: level_zero
 
 // TODO: enable this test after flaky bug is gone on Windows
 // UNSUPPORTED: windows
-
-// LevelZero has a bug wherein it always returns the first pixel value.
-// Will re-enable once fixed.
 
 /*
     This file sets up an image, initializes it with data,
