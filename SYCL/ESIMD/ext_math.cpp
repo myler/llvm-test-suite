@@ -68,7 +68,7 @@ template <MathOp Op> float HostMathFunc(float X);
   template <int VL> struct DeviceMathFunc<VL, MathOp::Op> {                    \
     simd<float, VL>                                                            \
     operator()(const simd<float, VL> &X) const SYCL_ESIMD_FUNCTION {           \
-      return esimd::Op<VL>(X);                                                 \
+      return esimd::Op<float, VL>(X);                                          \
     }                                                                          \
   }
 
