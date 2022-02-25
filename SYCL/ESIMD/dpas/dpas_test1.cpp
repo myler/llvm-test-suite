@@ -14,7 +14,11 @@
 
 #include <CL/sycl.hpp>
 #include <iostream>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+>>>>>>> 6e7b3ce39 ([SYCL][ESIMD] Add tests for dpas API (#866))
 
 using namespace cl::sycl;
 
@@ -40,7 +44,10 @@ int main(void) {
 
   q.submit([&](handler &cgh) {
      cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
+<<<<<<< HEAD
        using namespace sycl::ext::intel::esimd;
+=======
+>>>>>>> 6e7b3ce39 ([SYCL][ESIMD] Add tests for dpas API (#866))
        using namespace sycl::ext::intel::experimental::esimd;
 
        simd<char, Size * 2> va(0);
