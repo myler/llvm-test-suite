@@ -2,6 +2,7 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // REQUIRES: level_zero
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 //
 // This test is disabled because the runtime does not currently pass linker
@@ -13,6 +14,8 @@
 // XFAIL: level_zero
 //
 >>>>>>> e58154164 ([SYCL] Tests for Level Zero linker flags (#713))
+=======
+>>>>>>> 6f2902804 ([SYCL] Enable level-zero-link-flags and fix kernel_bundle_api (#806))
 //==--- level-zero-link-flags.cpp - Error handling for link flags --==//
 //
 // The Level Zero backend does not accept any online linker options.
