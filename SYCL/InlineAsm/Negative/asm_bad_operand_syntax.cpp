@@ -17,7 +17,7 @@ struct KernelFunctor {
 #if defined(__SYCL_DEVICE_ONLY__)
           asm volatile(".decl tmp1 v_type=G type=d num_elts=16 align=GRF\n"
                        ".decl tmp2 v_type=G type=d num_elts=16 align=GRF\n"
-                       "mov (M1_NM, 8) tmp1(0,1)<1>:f tmp2(0,0)<1;1,0>\n");
+                       "mov (M1_NM, 16) tmp1(0,1)<1>:f tmp2(0,0)<1;1,0>\n");
 #endif
         });
   }
