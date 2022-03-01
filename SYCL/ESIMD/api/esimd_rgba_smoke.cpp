@@ -240,10 +240,15 @@ int main(void) {
   passed &= test<rgba_channel_mask::R>(q);
   passed &= test<rgba_channel_mask::B>(q);
 <<<<<<< HEAD
+<<<<<<< HEAD
   // TODO disabled due to a compiler bug:
   //passed &= test<rgba_channel_mask::ABR>(q);
 =======
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+  // TODO disabled due to a compiler bug:
+  //passed &= test<rgba_channel_mask::ABR>(q);
+>>>>>>> 95a81eac8 ([ESIMD] Add ABR mask case to esimd_rgba_smoke (commented out due to a bug). (#837))
 
   std::cout << (passed ? "Test passed\n" : "Test FAILED\n");
   return passed ? 0 : 1;
