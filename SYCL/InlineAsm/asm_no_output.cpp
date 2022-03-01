@@ -18,12 +18,12 @@ template <typename T = dataType> struct KernelFunctor : WithOutputBuffer<T> {
                  .template get_access<cl::sycl::access::mode::write>(cgh);
     cgh.parallel_for<KernelFunctor<T>>(
         cl::sycl::range<1>{this->getOutputBufferSize()}, [=
-    ](cl::sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
+    ](cl::sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
           volatile int local_var = 47;
           local_var += C[0];
 #if defined(__SYCL_DEVICE_ONLY__)
           asm volatile("{\n"
-                       ".decl temp v_type=G type=w num_elts=8 align=GRF\n"
+                       ".decl temp v_type=G type=w num_elts=16 align=GRF\n"
                        "mov (M1,16) temp(0, 0)<1> %0(0,0)<1;1,0>\n"
                        "}\n" ::"rw"(local_var));
 #else
