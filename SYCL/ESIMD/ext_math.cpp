@@ -46,10 +46,14 @@ using namespace sycl::ext::intel::esimd;
 constexpr int accuracy_limit = 32767 * 3.14 - 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T> struct InitTrig {
 =======
 template <class T> struct InitDataFuncTrig {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T> struct InitTrig {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   void operator()(T *In, T *Out, size_t Size) const {
     for (auto I = 0; I < Size; ++I) {
       In[I] = (I + 1) % accuracy_limit;
@@ -59,10 +63,14 @@ template <class T> struct InitDataFuncTrig {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T> struct InitWide {
 =======
 template <class T> struct InitDataFuncWide {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T> struct InitWide {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   void operator()(T *In, T *Out, size_t Size) const {
     for (auto I = 0; I < Size; ++I) {
       In[I] = I + 1.0;
@@ -72,10 +80,14 @@ template <class T> struct InitDataFuncWide {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T> struct InitNarrow {
 =======
 template <class T> struct InitDataFuncNarrow {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T> struct InitNarrow {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   void operator()(T *In, T *Out, size_t Size) const {
     for (auto I = 0; I < Size; ++I) {
       In[I] = 2.0f + 16.0f * ((T)I / (T)(Size - 1)); // in [2..18] range
@@ -85,10 +97,14 @@ template <class T> struct InitDataFuncNarrow {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T> struct InitInRange0_5 {
 =======
 template <class T> struct InitDataInRange0_5 {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T> struct InitInRange0_5 {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   void operator()(T *In, T *Out, size_t Size) const {
     for (auto I = 0; I < Size; ++I) {
       In[I] = 5.0f * ((T)I / (T)(Size - 1)); // in [0..5] range
@@ -98,10 +114,14 @@ template <class T> struct InitDataInRange0_5 {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T> struct InitBin {
 =======
 template <class T> struct InitDataBinFuncNarrow {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T> struct InitBin {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   void operator()(T *In1, T *In2, T *Out, size_t Size) const {
     for (auto I = 0; I < Size; ++I) {
       In1[I] = I % 17 + 1;
@@ -137,6 +157,9 @@ enum class MathOp {
 // --- Template functions calculating given math operation on host and device
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
 enum ArgKind {
   AllVec,
   AllSca,
@@ -148,11 +171,14 @@ template <class T, int N, MathOp Op, int Args=AllVec> struct ESIMDf;
 template <class T, int N, MathOp Op, int Args=AllVec> struct BinESIMDf;
 template <class T, int N, MathOp Op, int Args=AllVec> struct SYCLf;
 
+<<<<<<< HEAD
 =======
 template <class T, int VL, MathOp Op> struct FuncESIMD;
 template <class T, int VL, MathOp Op> struct BinFuncESIMD;
 template <class T, int VL, MathOp Op> struct FuncSYCL;
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
 template <class T, MathOp Op> struct HostFunc;
 
 #define DEFINE_HOST_OP(Op, HostOp)                                             \
@@ -189,19 +215,27 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
 
 #define DEFINE_ESIMD_DEVICE_OP(Op)                                             \
 <<<<<<< HEAD
+<<<<<<< HEAD
   template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllVec> {          \
     simd<T, N> operator()(simd<T, N> X) const SYCL_ESIMD_FUNCTION {            \
+=======
+  template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllVec> {          \
+    simd<T, N> operator()(simd<T, N>X) const SYCL_ESIMD_FUNCTION {             \
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
       return esimd::Op<T, N>(X);                                               \
     }                                                                          \
   };                                                                           \
   template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllSca> {          \
     simd<T, N> operator()(T X) const SYCL_ESIMD_FUNCTION {                     \
       return esimd::Op<T, N>(X);                                               \
+<<<<<<< HEAD
     }                                                                          \
 =======
   template <class T, int VL> struct FuncESIMD<T, VL, MathOp::Op> {             \
     simd<T, VL> operator()(const simd<T, VL> &X) const SYCL_ESIMD_FUNCTION {   \
       return esimd::Op<T, VL>(X);                                              \
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
     }                                                                          \
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
   };
@@ -225,6 +259,9 @@ DEFINE_ESIMD_DEVICE_OP(log2);
 
 #define DEFINE_ESIMD_DEVICE_BIN_OP(Op)                                         \
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   template <class T, int N> struct BinESIMDf<T, N, MathOp::Op, AllSca> {       \
     simd<T, N> operator()(T X,                                                 \
                            T Y) const SYCL_ESIMD_FUNCTION {                    \
@@ -246,6 +283,7 @@ DEFINE_ESIMD_DEVICE_OP(log2);
     simd<T, N> operator()(simd<T, N>X,                                         \
                            T Y) const SYCL_ESIMD_FUNCTION {                    \
       return esimd::Op<T, N>(X, Y);                                            \
+<<<<<<< HEAD
     }                                                                          \
   };
 
@@ -268,6 +306,8 @@ DEFINE_ESIMD_DEVICE_BIN_OP(pow);
     simd<T, VL> operator()(const simd<T, VL> &X,                               \
                            const simd<T, VL> &Y) const SYCL_ESIMD_FUNCTION {   \
       return esimd::Op<T, VL>(X, Y);                                           \
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
     }                                                                          \
   };
 
@@ -275,10 +315,15 @@ DEFINE_ESIMD_DEVICE_BIN_OP(div_ieee);
 DEFINE_ESIMD_DEVICE_BIN_OP(pow);
 
 #define DEFINE_SYCL_DEVICE_OP(Op)                                              \
-  template <class T, int VL> struct FuncSYCL<T, VL, MathOp::Op> {              \
-    simd<T, VL> operator()(const simd<T, VL> &X) const SYCL_ESIMD_FUNCTION {   \
+  template <class T, int N> struct SYCLf<T, N, MathOp::Op, AllVec> {           \
+    simd<T, N> operator()(simd<T, N>X) const SYCL_ESIMD_FUNCTION {             \
       /* T must be float for SYCL, so not a template parameter for sycl::Op*/  \
-      return sycl::Op<VL>(X);                                                  \
+      return sycl::Op<N>(X);                                                   \
+    }                                                                          \
+  };                                                                           \
+  template <class T, int N> struct SYCLf<T, N, MathOp::Op, AllSca> {           \
+    simd<T, N> operator()(T X) const SYCL_ESIMD_FUNCTION {                     \
+      return sycl::Op<N>(X);                                                   \
     }                                                                          \
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
   };
@@ -291,12 +336,17 @@ DEFINE_SYCL_DEVICE_OP(log);
 // --- Generic kernel calculating an extended math operation on array elements
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T, int N, MathOp Op,
           template <class, int, MathOp, int> class Kernel, typename AccIn,
 =======
 template <class T, int VL, MathOp Op,
           template <class, int, MathOp> class Kernel, typename AccIn,
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T, int N, MathOp Op,
+          template <class, int, MathOp, int> class Kernel, typename AccIn,
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
           typename AccOut>
 struct UnaryDeviceFunc {
   AccIn In;
@@ -305,6 +355,7 @@ struct UnaryDeviceFunc {
   UnaryDeviceFunc(AccIn &In, AccOut &Out) : In(In), Out(Out) {}
 
   void operator()(id<1> I) const SYCL_ESIMD_KERNEL {
+<<<<<<< HEAD
 <<<<<<< HEAD
     unsigned int Offset = I * N * sizeof(T);
     simd<T, N> Vx;
@@ -328,10 +379,28 @@ struct UnaryDeviceFunc {
     Kernel<T, VL, Op> DevF{};
     Vx = DevF(Vx);
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+    unsigned int Offset = I * N * sizeof(T);
+    simd<T, N> Vx;
+    Vx.copy_from(In, Offset);
+
+    if (I.get(0) % 2 == 0) {
+      for (int J = 0; J < N; J++) {
+        Kernel<T, N, Op, AllSca> DevF{};
+        T Val = Vx[J];
+        simd<T, N> V = DevF(Val); // scalar arg
+        Vx[J] = V[J];
+      }
+    } else {
+      Kernel<T, N, Op, AllVec> DevF{};
+      Vx = DevF(Vx); // vector arg
+    }
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
     Vx.copy_to(Out, Offset);
   };
 };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 template <class T, int N, MathOp Op,
           template <class, int, MathOp, int> class Kernel, typename AccIn,
@@ -339,6 +408,10 @@ template <class T, int N, MathOp Op,
 template <class T, int VL, MathOp Op,
           template <class, int, MathOp> class Kernel, typename AccIn,
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T, int N, MathOp Op,
+          template <class, int, MathOp, int> class Kernel, typename AccIn,
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
           typename AccOut>
 struct BinaryDeviceFunc {
   AccIn In1;
@@ -350,6 +423,9 @@ struct BinaryDeviceFunc {
 
   void operator()(id<1> I) const SYCL_ESIMD_KERNEL {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
     unsigned int Offset = I * N * sizeof(T);
     simd<T, N> V1(In1, Offset);
     simd<T, N> V2(In2, Offset);
@@ -383,6 +459,7 @@ struct BinaryDeviceFunc {
       Kernel<T, N, Op, AllVec> DevF{};
       V = DevF(V1, V2); // vec 2nd arg
     }
+<<<<<<< HEAD
 =======
     unsigned int Offset = I * VL * sizeof(T);
     simd<T, VL> V1(In1, Offset);
@@ -390,12 +467,15 @@ struct BinaryDeviceFunc {
     Kernel<T, VL, Op> DevF{};
     simd<T, VL> V = DevF(V1, V2);
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
     V.copy_to(Out, Offset);
   };
 };
 
 // --- Generic test function for an extended math operation
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 template <class T, int N, MathOp Op,
           template <class, int, MathOp, int> class Kernel,
@@ -409,6 +489,13 @@ template <class T, int VL, MathOp Op,
 bool test(queue &Q, const std::string &Name,
           InitF InitData = InitDataFuncNarrow<T>{}, float delta = 0.0f) {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T, int N, MathOp Op,
+          template <class, int, MathOp, int> class Kernel,
+          typename InitF = InitNarrow<T>>
+bool test(queue &Q, const std::string &Name,
+          InitF Init = InitNarrow<T>{}, float delta = 0.0f) {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
 
   constexpr size_t Size = 1024 * 128;
   constexpr bool IsBinOp = (Op == MathOp::div_ieee) || (Op == MathOp::pow);
@@ -418,6 +505,7 @@ bool test(queue &Q, const std::string &Name,
   T *C = new T[Size];
   if constexpr (IsBinOp) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     Init(A, B, C, Size);
   } else {
     Init(A, B, Size);
@@ -426,11 +514,19 @@ bool test(queue &Q, const std::string &Name,
     std::is_same_v<Kernel<T, N, Op, AllVec>, ESIMDf<T, N, Op, AllVec>>
 =======
     InitData(A, B, C, Size);
+=======
+    Init(A, B, C, Size);
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   } else {
-    InitData(A, B, Size);
+    Init(A, B, Size);
   }
+<<<<<<< HEAD
   const char *kind = std::is_same_v<Kernel<T, VL, Op>, FuncESIMD<T, VL, Op>>
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+  const char *kind =
+    std::is_same_v<Kernel<T, N, Op, AllVec>, ESIMDf<T, N, Op, AllVec>>
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
                          ? "ESIMD"
                          : "SYCL";
   std::cout << "  " << Name << " test, kind=" << kind << "...\n";
@@ -452,6 +548,7 @@ bool test(queue &Q, const std::string &Name,
       if constexpr (IsBinOp) {
         auto PB = BufB.template get_access<access::mode::read>(CGH);
 <<<<<<< HEAD
+<<<<<<< HEAD
         BinaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(
             PA, PB, PC);
         CGH.parallel_for(nd_range<1>{GlobalRange, LocalRange}, F);
@@ -466,6 +563,14 @@ bool test(queue &Q, const std::string &Name,
         UnaryDeviceFunc<T, VL, Op, Kernel, decltype(PA), decltype(PC)> F(PA,
                                                                          PC);
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+        BinaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(
+            PA, PB, PC);
+        CGH.parallel_for(nd_range<1>{GlobalRange, LocalRange}, F);
+      } else {
+        UnaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(PA,
+                                                                        PC);
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
         CGH.parallel_for(nd_range<1>{GlobalRange, LocalRange}, F);
       }
     });
@@ -516,6 +621,7 @@ bool test(queue &Q, const std::string &Name,
 // --- Tests all extended math operations with given vector length
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <class T, int N> bool testESIMD(queue &Q) {
   bool Pass = true;
 
@@ -565,62 +671,63 @@ template <class T, int N> bool testESIMDPow(queue &Q) {
 template <class T, int N> bool testSYCL(queue &Q) {
 =======
 template <class T, int VL> bool testESIMD(queue &Q) {
+=======
+template <class T, int N> bool testESIMD(queue &Q) {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   bool Pass = true;
 
   std::cout << "--- TESTING ESIMD functions, T=" << typeid(T).name()
-            << ", VL = " << VL << "...\n";
+            << ", N = " << N << "...\n";
 
-  Pass &=
-      test<T, VL, MathOp::sqrt, FuncESIMD>(Q, "sqrt", InitDataFuncWide<T>{});
-  Pass &= test<T, VL, MathOp::inv, FuncESIMD>(Q, "inv");
-  Pass &= test<T, VL, MathOp::rsqrt, FuncESIMD>(Q, "rsqrt");
-  Pass &= test<T, VL, MathOp::sin, FuncESIMD>(Q, "sin", InitDataFuncTrig<T>{});
-  Pass &= test<T, VL, MathOp::cos, FuncESIMD>(Q, "cos", InitDataFuncTrig<T>{});
-  Pass &=
-      test<T, VL, MathOp::exp, FuncESIMD>(Q, "exp", InitDataInRange0_5<T>{});
-  Pass &= test<T, VL, MathOp::log, FuncESIMD>(Q, "log", InitDataFuncWide<T>{});
-  Pass &=
-      test<T, VL, MathOp::exp2, FuncESIMD>(Q, "exp2", InitDataInRange0_5<T>{});
-  Pass &=
-      test<T, VL, MathOp::log2, FuncESIMD>(Q, "log2", InitDataFuncWide<T>{});
-  Pass &=
-      test<T, VL, MathOp::trunc, FuncESIMD>(Q, "trunc", InitDataFuncWide<T>{});
+  Pass &= test<T, N, MathOp::sqrt, ESIMDf>(Q, "sqrt", InitWide<T>{});
+  Pass &= test<T, N, MathOp::inv, ESIMDf>(Q, "inv");
+  Pass &= test<T, N, MathOp::rsqrt, ESIMDf>(Q, "rsqrt");
+  Pass &= test<T, N, MathOp::sin, ESIMDf>(Q, "sin", InitTrig<T>{});
+  Pass &= test<T, N, MathOp::cos, ESIMDf>(Q, "cos", InitTrig<T>{});
+  Pass &= test<T, N, MathOp::exp, ESIMDf>(Q, "exp", InitInRange0_5<T>{});
+  Pass &= test<T, N, MathOp::log, ESIMDf>(Q, "log", InitWide<T>{});
+  Pass &= test<T, N, MathOp::exp2, ESIMDf>(Q, "exp2", InitInRange0_5<T>{});
+  Pass &= test<T, N, MathOp::log2, ESIMDf>(Q, "log2", InitWide<T>{});
+  Pass &= test<T, N, MathOp::trunc, ESIMDf>(Q, "trunc", InitWide<T>{});
   return Pass;
 }
 
-template <class T, int VL> bool testESIMDSqrtIEEE(queue &Q) {
+template <class T, int N> bool testESIMDSqrtIEEE(queue &Q) {
   bool Pass = true;
   std::cout << "--- TESTING ESIMD sqrt_ieee, T=" << typeid(T).name()
-            << ", VL = " << VL << "...\n";
-  Pass &= test<T, VL, MathOp::sqrt_ieee, FuncESIMD>(Q, "sqrt_ieee",
-                                                    InitDataFuncWide<T>{});
+            << ", N = " << N << "...\n";
+  Pass &= test<T, N, MathOp::sqrt_ieee, ESIMDf>(Q, "sqrt_ieee", InitWide<T>{});
   return Pass;
 }
 
-template <class T, int VL> bool testESIMDDivIEEE(queue &Q) {
+template <class T, int N> bool testESIMDDivIEEE(queue &Q) {
   bool Pass = true;
   std::cout << "--- TESTING ESIMD div_ieee, T=" << typeid(T).name()
-            << ", VL = " << VL << "...\n";
-  Pass &= test<T, VL, MathOp::div_ieee, BinFuncESIMD>(
-      Q, "div_ieee", InitDataBinFuncNarrow<T>{});
+            << ", N = " << N << "...\n";
+  Pass &= test<T, N, MathOp::div_ieee, BinESIMDf>(Q, "div_ieee", InitBin<T>{});
   return Pass;
 }
 
-template <class T, int VL> bool testESIMDPow(queue &Q) {
+template <class T, int N> bool testESIMDPow(queue &Q) {
   bool Pass = true;
   std::cout << "--- TESTING ESIMD pow, T=" << typeid(T).name()
-            << ", VL = " << VL << "...\n";
-  Pass &= test<T, VL, MathOp::pow, BinFuncESIMD>(
-      Q, "pow", InitDataBinFuncNarrow<T>{}, 0.1);
+            << ", N = " << N << "...\n";
+  Pass &= test<T, N, MathOp::pow, BinESIMDf>(
+      Q, "pow", InitBin<T>{}, 0.1);
   return Pass;
 }
 
+<<<<<<< HEAD
 template <class T, int VL> bool testSYCL(queue &Q) {
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+template <class T, int N> bool testSYCL(queue &Q) {
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   bool Pass = true;
   // TODO SYCL currently supports only these 4 functions, extend the test when
   // more are available.
   std::cout << "--- TESTING SYCL functions, T=" << typeid(T).name()
+<<<<<<< HEAD
 <<<<<<< HEAD
             << ", N = " << N << "...\n";
   // SYCL functions will have good accuracy for any argument, unlike bare h/w
@@ -638,6 +745,15 @@ template <class T, int VL> bool testSYCL(queue &Q) {
   Pass &= test<T, VL, MathOp::exp, FuncSYCL>(Q, "exp", InitDataInRange0_5<T>{});
   Pass &= test<T, VL, MathOp::log, FuncSYCL>(Q, "log", InitDataFuncWide<T>{});
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+            << ", N = " << N << "...\n";
+  // SYCL functions will have good accuracy for any argument, unlike bare h/w
+  // ESIMD versions, so init with "wide" data set.
+  Pass &= test<T, N, MathOp::sin, SYCLf>(Q, "sin", InitWide<T>{});
+  Pass &= test<T, N, MathOp::cos, SYCLf>(Q, "cos", InitWide<T>{});
+  Pass &= test<T, N, MathOp::exp, SYCLf>(Q, "exp", InitInRange0_5<T>{});
+  Pass &= test<T, N, MathOp::log, SYCLf>(Q, "log", InitWide<T>{});
+>>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
   return Pass;
 }
 
