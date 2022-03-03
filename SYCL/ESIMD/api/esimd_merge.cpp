@@ -7,8 +7,6 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-// TODO: esimd_emulator fails due to memory corruption error from piextUSMFree
-// XFAIL: esimd_emulator
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
@@ -42,6 +40,7 @@ template <class T> void prn(T *arr, int size, const char *title) {
 
 int main(void) {
 <<<<<<< HEAD
+<<<<<<< HEAD
   constexpr unsigned NUM_THREADS = 2;
   constexpr unsigned VL = 16;
   constexpr unsigned FACTOR = 2;
@@ -53,6 +52,13 @@ int main(void) {
   constexpr unsigned SUB_VL = VL / FACTOR / FACTOR;
   constexpr unsigned Size = VL * 2;
 >>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
+=======
+  constexpr unsigned NUM_THREADS = 2;
+  constexpr unsigned VL = 16;
+  constexpr unsigned FACTOR = 2;
+  constexpr unsigned SUB_VL = VL / FACTOR / FACTOR;
+  constexpr unsigned Size = VL * NUM_THREADS;
+>>>>>>> e75a5a577 ([SYCL][ESIMD][EMU] Correction : Number of threads - esimd_merge.cpp (#884))
 
   queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
 
@@ -82,10 +88,14 @@ int main(void) {
   try {
     auto e = q.submit([&](handler &cgh) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       cgh.parallel_for<class Test>(NUM_THREADS, [=](id<1> i) SYCL_ESIMD_KERNEL {
 =======
       cgh.parallel_for<class Test>(Size, [=](id<1> i) SYCL_ESIMD_KERNEL {
 >>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
+=======
+      cgh.parallel_for<class Test>(NUM_THREADS, [=](id<1> i) SYCL_ESIMD_KERNEL {
+>>>>>>> e75a5a577 ([SYCL][ESIMD][EMU] Correction : Number of threads - esimd_merge.cpp (#884))
         simd<int, VL> va(A + i * VL);
         simd<int, VL> vb(B + i * VL);
         simd_mask<SUB_VL> m(M + i * VL);
