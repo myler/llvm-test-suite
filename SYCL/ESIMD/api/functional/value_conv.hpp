@@ -112,6 +112,9 @@ std::vector<SrcT> generate_ref_conv_data() {
   } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                        std::is_unsigned_v<DstT>) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9f807d94c ([SYCL][ESIMD] Remove negative value for converted reference data (#874))
     // We cannot expect negative values to wrap during conversion from
     // the floating point type to the unsigned integral type.
     // The C++17 standard has the following statement:
@@ -121,6 +124,7 @@ std::vector<SrcT> generate_ref_conv_data() {
     // represented in the destination type.
     ref_data =
         details::construct_ref_data<SrcT, NumElems>({0.0, max, max_half});
+<<<<<<< HEAD
   } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                        type_traits::is_sycl_signed_v<DstT>) {
     ref_data = details::construct_ref_data<SrcT, NumElems>(
@@ -134,6 +138,8 @@ std::vector<SrcT> generate_ref_conv_data() {
 =======
     ref_data = details::construct_ref_data<SrcT, NumElems>(
         {-0.0, max, max_half, -max_half});
+=======
+>>>>>>> 9f807d94c ([SYCL][ESIMD] Remove negative value for converted reference data (#874))
   } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                        type_traits::is_sycl_signed_v<DstT>) {
     ref_data = details::construct_ref_data<SrcT, NumElems>(
