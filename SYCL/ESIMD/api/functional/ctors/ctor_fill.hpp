@@ -188,6 +188,7 @@ inline std::string init_val_to_string(init_val val) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 template <int NumElems, typename ContextT>
 class FillCtorTestDescription : public ITestDescription {
 public:
@@ -202,16 +203,23 @@ template <typename DataT, int NumElems, typename ContextT, init_val BaseVal,
           init_val Step>
 class FillCtorTestDescription
     : public ctors::TestDescription<DataT, NumElems, ContextT> {
+=======
+template <int NumElems, typename ContextT>
+class FillCtorTestDescription : public ITestDescription {
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 public:
-  FillCtorTestDescription(size_t index, DataT retrieved_val, DataT expected_val,
-                          const std::string &data_type)
-      : ctors::TestDescription<DataT, NumElems, ContextT>(
-            index, retrieved_val, expected_val, data_type) {}
+  FillCtorTestDescription(const std::string &data_type, init_val base_val,
+                          init_val step)
+      : m_description(data_type), m_base_val(base_val), m_step(step) {}
 
   std::string to_string() const override {
+<<<<<<< HEAD
     std::string log_msg(
         ctors::TestDescription<DataT, NumElems, ContextT>::to_string());
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+    std::string log_msg = m_description.to_string();
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
     log_msg += ", with base value: " + init_val_to_string(m_base_val);
     log_msg += ", with step value: " + init_val_to_string(m_step);
@@ -243,11 +251,17 @@ class run_test {
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     bool passed = true;
     log::trace<TestDescriptionT>(data_type, BaseVal, Step);
 
 =======
 >>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
+=======
+    bool passed = true;
+    log::trace<TestDescriptionT>(data_type, BaseVal, Step);
+
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
@@ -302,6 +316,7 @@ public:
         if (!std::isnan(result[i])) {
           passed = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
           log::fail(TestDescriptionT(data_type, BaseVal, Step),
                     "Unexpected value at index ", i, ", retrieved: ", result[i],
                     ", expected: any NaN value");
@@ -319,6 +334,11 @@ public:
 
           log::note(log_msg);
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+          log::fail(TestDescriptionT(data_type, BaseVal, Step),
+                    "Unexpected value at index ", i, ", retrieved: ", result[i],
+                    ", expected: any NaN value");
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
         }
       } else {
 
@@ -334,6 +354,7 @@ public:
     return passed;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 private:
@@ -347,6 +368,8 @@ private:
     return false;
   }
 >>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 };
 
 } // namespace esimd_test::api::functional::ctors

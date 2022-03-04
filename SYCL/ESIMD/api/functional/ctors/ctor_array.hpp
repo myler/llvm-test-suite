@@ -14,12 +14,16 @@
 
 #pragma once
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
 =======
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "common.hpp"
 
@@ -104,6 +108,7 @@ private:
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+<<<<<<< HEAD
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
@@ -121,15 +126,23 @@ template <typename DataT, typename DimT, typename TestCaseT> class run_test {
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+    bool passed = true;
+    log::trace<TestDescriptionT>(data_type);
+
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
 
+<<<<<<< HEAD
     bool passed = true;
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -186,6 +199,7 @@ private:
 
     for (size_t i = 0; i < result.size(); ++i) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       const auto &expected = ref_data[i];
       const auto &retrieved = result[i];
 
@@ -202,6 +216,15 @@ private:
                 i, result[i], ref_data[i], data_type);
         log::fail(description);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+      const auto &expected = ref_data[i];
+      const auto &retrieved = result[i];
+
+      if (!are_bitwise_equal(expected, retrieved)) {
+        passed = false;
+        log::fail(TestDescriptionT(data_type), "Unexpected value at index ", i,
+                  ", retrieved: ", retrieved, ", expected: ", expected);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
       }
     }
 

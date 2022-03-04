@@ -36,10 +36,15 @@ struct move_assignment {
   static std::string get_description() { return "move assignment operator"; }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   static constexpr bool is_move_expected() { return true; }
 
 =======
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+  static constexpr bool is_move_expected() { return true; }
+
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   template <typename DataT, int NumElems>
   static bool run(const DataT *const ref_data, DataT *const out) {
     simd<DataT, NumElems> source_simd;
@@ -48,10 +53,14 @@ struct move_assignment {
     simd_obj = std::move(source_simd);
     simd_obj.copy_to(out);
 <<<<<<< HEAD
+<<<<<<< HEAD
     return simd_obj.get_test_proxy().was_move_destination();
 =======
     return simd_obj.get_test_proxy().was_move_destination() == true;
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+    return simd_obj.get_test_proxy().was_move_destination();
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   }
 };
 
@@ -60,10 +69,15 @@ struct copy_assignment {
   static std::string get_description() { return "copy assignment operator"; }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   static constexpr bool is_move_expected() { return false; }
 
 =======
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+  static constexpr bool is_move_expected() { return false; }
+
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   template <typename DataT, int NumElems>
   static bool run(const DataT *const ref_data, DataT *const out) {
     simd<DataT, NumElems> source_simd;
@@ -72,10 +86,14 @@ struct copy_assignment {
     simd_obj = source_simd;
     simd_obj.copy_to(out);
 <<<<<<< HEAD
+<<<<<<< HEAD
     return simd_obj.get_test_proxy().was_move_destination();
 =======
     return simd_obj.get_test_proxy().was_move_destination() == false;
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+    return simd_obj.get_test_proxy().was_move_destination();
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   }
 };
 

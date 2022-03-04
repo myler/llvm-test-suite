@@ -17,6 +17,7 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
+<<<<<<< HEAD
 <<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 =======
@@ -36,6 +37,9 @@
 
 namespace esimd = sycl::ext::intel::esimd;
 =======
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "common.hpp"
 
@@ -117,6 +121,7 @@ private:
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+<<<<<<< HEAD
 =======
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
@@ -125,13 +130,11 @@ template <typename DataT, typename DimT, typename TestCaseT> class run_test {
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
-    if (should_skip_test_with<DataT>(queue.get_device())) {
-      return true;
-    }
-
     bool passed = true;
     log::trace<TestDescriptionT>(data_type);
 
@@ -139,6 +142,16 @@ public:
       return true;
     }
 
+<<<<<<< HEAD
+    bool passed = true;
+    log::trace<TestDescriptionT>(data_type);
+
+    if (should_skip_test_with<DataT>(queue.get_device())) {
+      return true;
+    }
+
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each

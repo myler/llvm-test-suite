@@ -14,12 +14,16 @@
 
 #pragma once
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
 =======
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "common.hpp"
 
@@ -98,9 +102,13 @@ namespace alignment {
 
 struct element {
 <<<<<<< HEAD
+<<<<<<< HEAD
   static std::string to_string() { return "element_aligned"; }
 =======
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+  static std::string to_string() { return "element_aligned"; }
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   template <typename DataT, int> static size_t get_size() {
     return alignof(DataT);
   }
@@ -109,9 +117,13 @@ struct element {
 
 struct vector {
 <<<<<<< HEAD
+<<<<<<< HEAD
   static std::string to_string() { return "vector_aligned"; }
 =======
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+  static std::string to_string() { return "vector_aligned"; }
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   template <typename DataT, int NumElems> static size_t get_size() {
     // Referring to the simd class specialization on the host side is by design.
     return alignof(esimd::simd<DataT, NumElems>);
@@ -122,9 +134,13 @@ struct vector {
 struct overal {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   static std::string to_string() { return "overaligned"; }
 =======
 >>>>>>> 78c3d9b33 ([SYCL][ESIMD] Replace std::max_align_t with 16 for overaligned (#846))
+=======
+  static std::string to_string() { return "overaligned"; }
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
   // Use 16 instead of std::max_align_t because of the fact that long double is
   // not a native type in Intel GPUs. So 16 is not driven by any type, but
   // rather the "oword alignment" requirement for all block loads. In that
@@ -149,6 +165,9 @@ struct overal {
 } // namespace alignment
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 // Detailed test case description to use for logs
 template <int NumElems, typename TestCaseT>
 class LoadCtorTestDescription : public ITestDescription {
@@ -166,6 +185,7 @@ private:
   const std::string m_alignment_name;
 };
 
+<<<<<<< HEAD
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
 template <typename DataT, typename SizeT, typename TestCaseT,
@@ -181,17 +201,26 @@ public:
     log::trace<TestDescriptionT>(data_type, alignment_name);
 
 =======
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
-template <typename DataT, typename DimT, typename TestCaseT,
+template <typename DataT, typename SizeT, typename TestCaseT,
           typename AlignmentT>
 class run_test {
-  static constexpr int NumElems = DimT::value;
+  static constexpr int NumElems = SizeT::value;
+  using TestDescriptionT = LoadCtorTestDescription<NumElems, TestCaseT>;
 
 public:
-  bool operator()(sycl::queue &queue, const std::string &data_type) {
+  bool operator()(sycl::queue &queue, const std::string &data_type,
+                  const std::string &alignment_name) {
     bool passed = true;
+<<<<<<< HEAD
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+    log::trace<TestDescriptionT>(data_type, alignment_name);
+
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -200,6 +229,7 @@ public:
     // whole reference data.
     if constexpr (NumElems == 1) {
       for (size_t i = 0; i < ref_data.size(); ++i) {
+<<<<<<< HEAD
 <<<<<<< HEAD
         passed =
             run_verification(queue, {ref_data[i]}, data_type, alignment_name);
@@ -212,6 +242,13 @@ public:
     } else {
       passed = run_verification(queue, ref_data, data_type);
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+        passed =
+            run_verification(queue, {ref_data[i]}, data_type, alignment_name);
+      }
+    } else {
+      passed = run_verification(queue, ref_data, data_type, alignment_name);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     }
     return passed;
   }
@@ -219,11 +256,16 @@ public:
 private:
   bool run_verification(sycl::queue &queue, const std::vector<DataT> &ref_data,
 <<<<<<< HEAD
+<<<<<<< HEAD
                         const std::string &data_type,
                         const std::string &alignment_name) {
 =======
                         const std::string &data_type) {
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+                        const std::string &data_type,
+                        const std::string &alignment_name) {
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     assert(ref_data.size() == NumElems &&
            "Reference data size is not equal to the simd vector length.");
 
@@ -273,10 +315,14 @@ private:
 
     for (size_t i = 0; i < result.size(); ++i) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
       const auto &expected = ref_data[i];
       const auto &retrieved = result[i];
 
       if (!are_bitwise_equal(expected, retrieved)) {
+<<<<<<< HEAD
         passed = false;
 
         log::fail(TestDescriptionT(data_type, alignment_name),
@@ -291,6 +337,13 @@ private:
                 i, result[i], ref_data[i], data_type);
         log::fail(description);
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+        passed = false;
+
+        log::fail(TestDescriptionT(data_type, alignment_name),
+                  "Unexpected value at index ", i, ", retrieved: ", retrieved,
+                  ", expected: ", expected);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
       }
     }
 

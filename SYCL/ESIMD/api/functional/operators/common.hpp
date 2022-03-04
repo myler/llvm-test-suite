@@ -15,6 +15,7 @@
 
 #include "../common.hpp"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <string>
 
 namespace esimd_test::api::functional::operators {
@@ -47,12 +48,40 @@ private:
 template <typename DataT, int NumElems>
 class [[deprecated]]	TestDescription : public ITestDescription {
 =======
+=======
+#include <string>
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 namespace esimd_test::api::functional::operators {
 
-template <typename DataT, int NumElems>
+#ifdef ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+
+template <int NumElems, typename TestCaseT>
 class TestDescription : public ITestDescription {
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+public:
+  TestDescription(const std::string &data_type) : m_data_type(data_type) {}
+
+  std::string to_string() const override {
+    std::string test_description = TestCaseT::get_description();
+
+    test_description += " with simd<" + m_data_type;
+    test_description += ", " + std::to_string(NumElems) + ">";
+
+    return test_description;
+  }
+
+private:
+  const std::string m_data_type;
+};
+
+#else
+
+// Deprecated, use TestDescription<NumElems, ContextT> for new tests instead
+//
+// TODO: Remove deprecated TestDescription from all tests
+template <typename DataT, int NumElems>
+class [[deprecated]]	TestDescription : public ITestDescription {
 public:
   TestDescription(size_t index, DataT retrieved_val, DataT expected_val,
                   const std::string &data_type)
@@ -61,10 +90,13 @@ public:
 
   std::string to_string() const override {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // TODO: Make strings for fp values more short during failure output, may be
     // by using hex representation
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     std::string log_msg("Failed for simd<");
 
     log_msg += m_data_type + ", " + std::to_string(NumElems) + ">";
@@ -83,8 +115,13 @@ private:
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 =======
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+#endif // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 } // namespace esimd_test::api::functional::operators

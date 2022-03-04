@@ -14,9 +14,13 @@
 
 #pragma once
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 =======
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "common.hpp"
 
@@ -97,6 +101,7 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using KernelName = Kernel<DataT, NumElems, TestCaseT>;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+<<<<<<< HEAD
 =======
 template <typename DataT, typename DimT, typename TestCaseT> class run_test {
   static constexpr int NumElems = DimT::value;
@@ -110,13 +115,20 @@ template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   using KernelName = Kernel<DataT, NumElems, TestCaseT>;
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+    bool passed = true;
+    bool was_moved = false;
+    log::trace<TestDescriptionT>(data_type);
+
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
 
+<<<<<<< HEAD
     bool passed = true;
     bool was_moved = false;
 <<<<<<< HEAD
@@ -128,6 +140,8 @@ public:
 =======
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     const shared_allocator<DataT> data_allocator(queue);
     const shared_allocator<int> flags_allocator(queue);
     const auto reference = generate_ref_data<DataT, NumElems>();
@@ -192,6 +206,7 @@ public:
     if (!was_moved) {
       passed = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
       log::fail(TestDescriptionT(data_type),
                 "A copy constructor instead of a move constructor was used.");
 =======
@@ -204,6 +219,10 @@ public:
 
       log::note(log_msg);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+      log::fail(TestDescriptionT(data_type),
+                "A copy constructor instead of a move constructor was used.");
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     } else {
       for (size_t i = 0; i < reference.size(); ++i) {
         const auto &retrieved = result[i];
@@ -212,6 +231,7 @@ public:
         if (!are_bitwise_equal(retrieved, expected)) {
           passed = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
           log::fail(TestDescriptionT(data_type), "Unexpected value at index ",
                     i, ", retrieved: ", retrieved, ", expected: ", expected);
 =======
@@ -219,6 +239,10 @@ public:
           log::fail(ctors::TestDescription<DataT, NumElems, TestCaseT>(
               i, retrieved, expected, data_type));
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
+=======
+          log::fail(TestDescriptionT(data_type), "Unexpected value at index ",
+                    i, ", retrieved: ", retrieved, ", expected: ", expected);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
         }
       }
     }

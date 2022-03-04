@@ -15,9 +15,13 @@
 
 #pragma once
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 =======
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "../mutator.hpp"
 #include "common.hpp"
@@ -120,6 +124,7 @@ struct post_increment {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 template <typename DataT, int NumElems, typename TestCaseT>
 class IncrementAndDecrementTestDescription : public ITestDescription {
@@ -154,6 +159,8 @@ private:
 };
 
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 struct base_test {
   template <typename DataT, int NumElems, typename TestCaseT>
   static std::vector<DataT> generate_input_data() {
@@ -211,9 +218,13 @@ template <typename IsAccuracyTestT, typename DataT, typename SizeT,
 class run_test {
   static constexpr int NumElems = SizeT::value;
 <<<<<<< HEAD
+<<<<<<< HEAD
   using TestDescriptionT = operators::TestDescription<NumElems, TestCaseT>;
 =======
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+  using TestDescriptionT = operators::TestDescription<NumElems, TestCaseT>;
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
@@ -244,9 +255,13 @@ private:
 
     bool passed = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
     log::trace<TestDescriptionT>(data_type);
 =======
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+    log::trace<TestDescriptionT>(data_type);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
     shared_allocator<DataT> allocator(queue);
     shared_vector<DataT> source_simd_out(NumElems, allocator);
@@ -275,6 +290,7 @@ private:
 
       passed &= verify_result(i, expected_source_value, source_simd_out[i],
 <<<<<<< HEAD
+<<<<<<< HEAD
                               "argument modification", data_type);
       passed &= verify_result(i, expected_return_value, result_simd_out[i],
                               "return value", data_type);
@@ -283,6 +299,11 @@ private:
       passed &= verify_result(i, expected_return_value, result_simd_out[i],
                               "unexpected return value", data_type);
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+                              "argument modification", data_type);
+      passed &= verify_result(i, expected_return_value, result_simd_out[i],
+                              "return value", data_type);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     }
 
     return passed;
@@ -290,15 +311,20 @@ private:
 
   bool verify_result(size_t i, DataT expected, DataT retrieved,
 <<<<<<< HEAD
+<<<<<<< HEAD
                      const std::string &value_description,
 =======
                      const std::string &simd_type,
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+                     const std::string &value_description,
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
                      const std::string &data_type) {
     bool passed = true;
     if constexpr (type_traits::is_sycl_floating_point_v<DataT>) {
       if (std::isnan(expected) && !std::isnan(retrieved)) {
         passed = false;
+<<<<<<< HEAD
 <<<<<<< HEAD
         log::fail(TestDescriptionT(data_type), "Unexpected ",
                   value_description, "at index ", i, ", retrieved: ", retrieved,
@@ -314,10 +340,16 @@ private:
 
         log::note(log_msg);
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+        log::fail(TestDescriptionT(data_type), "Unexpected ",
+                  value_description, "at index ", i, ", retrieved: ", retrieved,
+                  ", expected: any NaN value");
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
       }
     }
     if (!are_bitwise_equal(expected, retrieved)) {
       passed = false;
+<<<<<<< HEAD
 <<<<<<< HEAD
       log::fail(TestDescriptionT(data_type), "Unexpected ",
                 value_description, "at index ", i, ", retrieved: ", retrieved,
@@ -329,6 +361,11 @@ private:
               i, retrieved, expected, simd_type, data_type);
       log::fail(description);
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+      log::fail(TestDescriptionT(data_type), "Unexpected ",
+                value_description, "at index ", i, ", retrieved: ", retrieved,
+                ", expected: ", expected);
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     }
     return passed;
   }

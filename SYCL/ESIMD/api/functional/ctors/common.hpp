@@ -19,12 +19,18 @@
 namespace esimd_test::api::functional::ctors {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 template <int NumElems, typename ContextT>
 =======
 template <typename DataT, int NumElems, typename ContextT>
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+#ifdef ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+
+template <int NumElems, typename ContextT>
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 class TestDescription : public ITestDescription {
 public:
   TestDescription(const std::string &data_type) : m_data_type(data_type) {}

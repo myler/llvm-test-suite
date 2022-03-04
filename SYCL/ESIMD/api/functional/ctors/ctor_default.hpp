@@ -14,12 +14,16 @@
 
 #pragma once
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
 =======
+=======
+#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 #include "common.hpp"
 
@@ -123,14 +127,19 @@ template <typename DataT, typename DimT, typename TestCaseT> struct run_test {
 =======
 template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
   static constexpr int NumElems = SizeT::value;
+<<<<<<< HEAD
 >>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
+=======
+  using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
   bool operator()(sycl::queue &queue, const std::string &data_type) {
+    bool passed = true;
+    log::trace<TestDescriptionT>(data_type);
+
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
-
-    bool passed = true;
 
     // We use it to avoid empty functions being optimized out by compiler
     // checking the result of the simd calling because values of the constructed
@@ -170,6 +179,7 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
       queue.wait_and_throw();
     } catch (const sycl::exception &e) {
       passed = false;
+<<<<<<< HEAD
       std::string error_msg("A SYCL exception was caught:");
       error_msg += std::string(e.what());
       error_msg += " for simd<" + data_type;
@@ -177,6 +187,10 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
       error_msg += ", with context: " + TestCaseT::get_description();
       log::note(error_msg);
 >>>>>>> deac1c6e6 ([SYCL][ESIMD] Change logic for tests on simd default constructor (#852))
+=======
+      log::fail(TestDescriptionT(data_type), "A SYCL exception was caught: ",
+                e.what());
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     }
 
     return passed;

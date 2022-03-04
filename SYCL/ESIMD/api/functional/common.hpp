@@ -70,22 +70,32 @@ inline bool should_skip_test_with(const sycl::device &device) {
   if constexpr (std::is_same_v<T, sycl::half>) {
     if (!device.has(sycl::aspect::fp16)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       // TODO: Use TestDescription after removal of the macro
       // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
       log::print_line(
 =======
       log::note(
 >>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
+=======
+      // TODO: Use TestDescription after removal of the macro
+      // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+      log::print_line(
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
           "Device does not support half precision floating point operations");
       return true;
     }
   } else if constexpr (std::is_same_v<T, double>) {
     if (!device.has(sycl::aspect::fp64)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       log::print_line(
 =======
       log::note(
 >>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
+=======
+      log::print_line(
+>>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
           "Device does not support double precision floating point operations");
       return true;
     }
