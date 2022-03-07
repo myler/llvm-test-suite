@@ -7,7 +7,12 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
 // RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.sycl.out -DENABLE_SYCL=0 %s
+=======
+// UNSUPPORTED: esimd_emulator
+// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device gen9" -o %t.sycl.out -DENABLE_SYCL=0 %s
+>>>>>>> 7f0ae77b2 ([SYCL][ESIMD][EMU] ESIMD test updates for esimd_emulator backend (#869))
 // RUN: %GPU_RUN_PLACEHOLDER %t.sycl.out
 // RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.out %s
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
