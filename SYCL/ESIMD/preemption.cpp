@@ -8,9 +8,13 @@
 // REQUIRES: gpu && linux
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
+<<<<<<< HEAD
 // UNSUPPORTED: esimd_emulator
 =======
 >>>>>>> 5e8f630e2 ([SYCL] Align tests with 22.05.22297 GPU RT (#871))
+=======
+// UNSUPPORTED: esimd_emulator
+>>>>>>> 7f0ae77b2 ([SYCL][ESIMD][EMU] ESIMD test updates for esimd_emulator backend (#869))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER IGC_DumpToCustomDir=%t.dump IGC_ShaderDumpEnable=1 %t.out
 // RUN: grep enablePreemption %t.dump/*.asm

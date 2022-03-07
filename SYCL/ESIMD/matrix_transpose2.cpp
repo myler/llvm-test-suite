@@ -27,6 +27,8 @@ using namespace sycl::ext::intel::esimd;
 
 const unsigned int ESIMD_EMULATOR_SIZE_LIMIT = 1U << 10;
 
+const unsigned int ESIMD_EMULATOR_SIZE_LIMIT = 1U << 10;
+
 void initMatrix(int *M, unsigned N) {
   assert(N >= 8 && (((N - 1) & N) == 0) &&
          "only power of 2 (>= 16) is supported");
