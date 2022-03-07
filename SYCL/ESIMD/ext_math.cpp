@@ -134,12 +134,19 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
 
 // --- Specializations per each extended math operation
 
+<<<<<<< HEAD
 #define DEFINE_ESIMD_OP(Op, HostOp)                                            \
   template <> float HostMathFunc<MathOp::Op>(float X) { return HostOp(X); }    \
   template <int VL> struct DeviceMathFunc<VL, MathOp::Op> {                    \
     simd<float, VL>                                                            \
     operator()(const simd<float, VL> &X) const SYCL_ESIMD_FUNCTION {           \
       return esimd::Op<float, VL>(X);                                          \
+=======
+#define DEFINE_ESIMD_DEVICE_OP(Op)                                             \
+  template <class T, int VL> struct FuncESIMD<T, VL, MathOp::Op> {             \
+    simd<T, VL> operator()(const simd<T, VL> &X) const SYCL_ESIMD_FUNCTION {   \
+      return esimd::Op<T, VL>(X);                                              \
+>>>>>>> temp_intel
     }                                                                          \
   };
 
@@ -162,10 +169,17 @@ DEFINE_ESIMD_DEVICE_OP(log2);
       return esimd::Op<T, VL>(X, Y);                                           \
     }                                                                          \
   };
+<<<<<<< HEAD
 
 DEFINE_ESIMD_DEVICE_BIN_OP(div_ieee);
 DEFINE_ESIMD_DEVICE_BIN_OP(pow);
 
+=======
+
+DEFINE_ESIMD_DEVICE_BIN_OP(div_ieee);
+DEFINE_ESIMD_DEVICE_BIN_OP(pow);
+
+>>>>>>> temp_intel
 #define DEFINE_SYCL_DEVICE_OP(Op)                                              \
   template <class T, int VL> struct FuncSYCL<T, VL, MathOp::Op> {              \
     simd<T, VL> operator()(const simd<T, VL> &X) const SYCL_ESIMD_FUNCTION {   \
@@ -288,11 +302,19 @@ bool test(queue &Q, const std::string &Name,
       Gold = HostFunc<T, Op>{}((T)A[I]);
     }
     T Test = C[I];
+<<<<<<< HEAD
 
     if (delta == 0.0f) {
       delta = sizeof(T) > 2 ? 0.0001 : 0.01;
     }
 
+=======
+
+    if (delta == 0.0f) {
+      delta = sizeof(T) > 2 ? 0.0001 : 0.01;
+    }
+
+>>>>>>> temp_intel
     if (abs(Test - Gold) > delta) {
       if (++ErrCnt < 10) {
         std::cout << "    failed at index " << I << ", " << Test

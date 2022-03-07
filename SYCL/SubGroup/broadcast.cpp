@@ -3,8 +3,11 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
+<<<<<<< HEAD
 
 // XFAIL: hip_amd
+=======
+>>>>>>> temp_intel
 
 //==--------- broadcast.cpp - SYCL sub_group broadcast test ----*- C++ -*---==//
 //

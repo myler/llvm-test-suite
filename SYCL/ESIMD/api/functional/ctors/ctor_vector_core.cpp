@@ -14,6 +14,7 @@
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
+<<<<<<< HEAD
 // TODO The tests freezed during runtime when using simd<char, 32>. The
 // SIMD_RUN_TEST_WITH_CHAR_TYPES macros must be enabled when it is resolved.
 //
@@ -22,6 +23,8 @@
 // https://github.com/intel/llvm/issues/5245 and and the
 // SIMD_RUN_TEST_WITH_VECTOR_LEN_32 macros must be enabled when it is resolved.
 //
+=======
+>>>>>>> temp_intel
 // Test for simd constructor from vector.
 // This test uses different data types, dimensionality and different simd
 // constructor invocation contexts.
@@ -30,6 +33,7 @@
 //    simd constructor
 //  - bitwise comparing expected and retrieved values
 
+<<<<<<< HEAD
 #include "common.hpp"
 
 using namespace esimd_test::api::functional;
@@ -156,6 +160,11 @@ private:
     return passed;
   }
 };
+=======
+#include "ctor_vector.hpp"
+
+using namespace esimd_test::api::functional;
+>>>>>>> temp_intel
 
 int main(int, char **) {
   sycl::queue queue(esimd_test::ESIMDSelector{},
@@ -172,6 +181,7 @@ int main(int, char **) {
 
   bool passed = true;
 
+<<<<<<< HEAD
 #ifdef SIMD_RUN_TEST_WITH_CHAR_TYPES
   const auto types = get_tested_types<tested_types::all>();
 #else
@@ -193,6 +203,16 @@ int main(int, char **) {
   passed &= for_all_types_and_dims<run_test, var_decl>(types, dims, queue);
   passed &= for_all_types_and_dims<run_test, rval_in_expr>(types, dims, queue);
   passed &= for_all_types_and_dims<run_test, const_ref>(types, dims, queue);
+=======
+  const auto types = get_tested_types<tested_types::core>();
+  const auto dims = get_all_dimensions();
+  const auto contexts =
+      unnamed_type_pack<ctors::initializer, ctors::var_decl,
+                        ctors::rval_in_expr, ctors::const_ref>::generate();
+
+  // Run test for all combinations possible
+  passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
+>>>>>>> temp_intel
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

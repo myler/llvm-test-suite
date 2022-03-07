@@ -7,7 +7,10 @@
 //
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
+<<<<<<< HEAD
 // This test hangs on dgpus due to XDEPS-3379
+=======
+>>>>>>> temp_intel
 // UNSUPPORTED: gpu-intel-dg1,cuda,hip
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
