@@ -6,7 +6,6 @@
 
 # SYCL sub-directory matchers are grouped by code owner first, followed by
 # alphabetical order within the group. Please, keep this ordering.
-<<<<<<< HEAD
 
 # Atomics
 SYCL/AtomicRef @dm-vodopyanov @AlexeySachkov
@@ -27,8 +26,6 @@ SYCL/Tracing  @intel/llvm-reviewers-runtime
 # Device library
 SYCL/DeviceLib @vzakhari
 SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
-=======
->>>>>>> temp_intel
 
 # Group algorithms
 /SYCL/GroupAlgorithm/ @Pennycook @intel/llvm-reviewers-runtime
@@ -40,7 +37,6 @@ SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 /SYCL/Plugin/*level[-_]zero* @intel/dpcpp-l0-pi-reviewers
 
 # Explicit SIMD
-<<<<<<< HEAD
 config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
 SYCL/ESIMD @intel/dpcpp-esimd-reviewers
 
@@ -78,11 +74,11 @@ SYCL/USM @jbrodman @sergey-semenov
 SYCL/Basic/stream @againull
 
 # Test scripts
-*.pl @yuxianch @myler @yamanwan
-*.list @yuxianch @myler @yamanwan
+*.pl @myler @yamanwan
+*.list @myler @yamanwan
 
 # tc files
-*.xml @yuxianch @myler @yamanwan
+*.xml @myler @yamanwan
 
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
@@ -106,9 +102,6 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 # Plugin interface for Level Zero
 /SYCL/Plugin/*level[-_]zero* @intel/dpcpp-l0-pi-reviewers
 
-# Explicit SIMD
-/SYCL/ESIMD/ @intel/dpcpp-esimd-reviewers
-
 # BFloat16 conversion
 /SYCL/BFloat16/ @AlexeySotkin @intel/dpcpp-tools-reviewers
 
@@ -121,20 +114,4 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/Printf/ @intel/dpcpp-tools-reviewers
 
 # Specialization constant
-=======
-/SYCL/ESIMD/ @intel/dpcpp-esimd-reviewers
-
-# BFloat16 conversion
-/SYCL/BFloat16/ @AlexeySotkin @intel/dpcpp-tools-reviewers
-
-# Compiler tests
-/SYCL/AOT/ @intel/dpcpp-tools-reviewers
-/SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
-/SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
-
-# Printf
-/SYCL/Printf/ @intel/dpcpp-tools-reviewers
-
-# Specialization constant
->>>>>>> temp_intel
 /SYCL/SpecConstants/ @intel/dpcpp-tools-reviewers

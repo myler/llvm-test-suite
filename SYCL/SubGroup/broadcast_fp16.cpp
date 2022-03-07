@@ -1,10 +1,5 @@
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
-<<<<<<< HEAD
-
-// XFAIL: hip_amd
-=======
->>>>>>> temp_intel
 
 //==---- broadcast_fp16.cpp - SYCL sub_group broadcast test ----*- C++ -*---==//
 //

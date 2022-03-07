@@ -18,11 +18,7 @@ int main() {
   int Array[4];
   {
     sycl::range<1> NumOfWorkItems{4};
-<<<<<<< HEAD
-    // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|{{.*}}host_array.cpp:[[# @LINE + 1]]:26
-=======
     // CHECK:{{[0-9]+}}|Create buffer|[[USERID1:[0-9,a-f,x]+]]|0x{{.*}}|{{i(nt)*}}|4|1|{4,0,0}|{{.*}}host_array.cpp:[[# @LINE + 1]]:26
->>>>>>> temp_intel
     sycl::buffer<int, 1> Buffer1(Array, NumOfWorkItems);
 
     // CHECK:{{[0-9]+}}|Associate buffer|[[USERID1]]|[[BEID1:.*]]

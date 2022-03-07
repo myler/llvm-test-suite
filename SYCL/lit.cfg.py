@@ -328,11 +328,7 @@ if 'gpu' in config.target_devices.split(','):
         gpu_run_on_linux_substitute = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}:gpu,host ".format(SYCL_PLUGIN=config.sycl_be)
         gpu_check_on_linux_substitute = "| FileCheck %s"
 
-<<<<<<< HEAD
-    if config.sycl_be == "cuda":
-=======
     if config.sycl_be == "ext_oneapi_cuda":
->>>>>>> temp_intel
         gpu_run_substitute += "SYCL_PI_CUDA_ENABLE_IMAGE_SUPPORT=1 "
 
 else:

@@ -12,14 +12,8 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
-<<<<<<< HEAD
-//
-// Linking issues on AMD
-// XFAIL: hip_amd
 // This test hangs on dgpus due to XDEPS-2432
 // UNSUPPORTED: gpu-intel-dg1
-=======
->>>>>>> temp_intel
 
 // This test checks correctness of hierarchical kernel execution when there is
 // code and data in the work group scope, and when the test is compiled with
