@@ -332,6 +332,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_replicate_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_saturation_smoke" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_any_all" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_binop_integer_promotion" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_copy_to_from" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_mask" />
@@ -583,6 +584,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_dynamic_batch_test" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_event_leak" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_queue_create" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_usm_capabilities" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_max_malloc" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_retain_events" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_sycl_ls" />
