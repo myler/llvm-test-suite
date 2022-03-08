@@ -134,12 +134,10 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
 
 // --- Specializations per each extended math operation
 
-#define DEFINE_ESIMD_OP(Op, HostOp)                                            \
-  template <> float HostMathFunc<MathOp::Op>(float X) { return HostOp(X); }    \
-  template <int VL> struct DeviceMathFunc<VL, MathOp::Op> {                    \
-    simd<float, VL>                                                            \
-    operator()(const simd<float, VL> &X) const SYCL_ESIMD_FUNCTION {           \
-      return esimd::Op<float, VL>(X);                                          \
+#define DEFINE_ESIMD_DEVICE_OP(Op)                                             \
+  template <class T, int VL> struct FuncESIMD<T, VL, MathOp::Op> {             \
+    simd<T, VL> operator()(const simd<T, VL> &X) const SYCL_ESIMD_FUNCTION {   \
+      return esimd::Op<T, VL>(X);                                              \
     }                                                                          \
   };
 

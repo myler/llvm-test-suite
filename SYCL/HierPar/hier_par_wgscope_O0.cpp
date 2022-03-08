@@ -12,9 +12,6 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
-//
-// Linking issues on AMD
-// XFAIL: hip_amd
 // This test hangs on dgpus due to XDEPS-2432
 // UNSUPPORTED: gpu-intel-dg1
 
