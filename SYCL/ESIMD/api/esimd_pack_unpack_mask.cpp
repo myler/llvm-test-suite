@@ -11,7 +11,12 @@
 =======
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
+<<<<<<< HEAD
 >>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
+=======
+// TODO: fails on OpenCL - https://github.com/intel/llvm-test-suite/issues/901
+// UNSUPPORTED: opencl
+>>>>>>> 05909cd65 (Disable esimd_pack_unpack_mask test on OpenCL (#902))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
