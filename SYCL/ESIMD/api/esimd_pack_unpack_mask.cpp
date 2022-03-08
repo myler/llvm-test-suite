@@ -7,6 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+<<<<<<< HEAD
+=======
+// TODO: esimd_emulator fails due to unimplemented 'single_task()' method
+// XFAIL: esimd_emulator
+>>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -15,13 +20,22 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
+=======
+#include <sycl/ext/intel/experimental/esimd.hpp>
+>>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
+=======
+using namespace sycl::ext::intel::experimental;
+using namespace sycl::ext::intel::experimental::esimd;
+>>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
 
 template <int, int> struct test_id;
 using MaskRawElemT = typename simd_mask<1>::raw_element_type;
@@ -77,10 +91,17 @@ bool test_impl(queue q, const char *title, InitF init_f) {
     }
   }
   for (unsigned i = N; i < MAX_N; ++i) {
+<<<<<<< HEAD
     if (res_unpacked[i] != 0) {
       ++err_cnt;
       std::cout << "    ERROR: non-zero lane " << i << ": 0x" << std::hex
                 << res_unpacked[i] << std::dec << " in unpacked result\n";
+=======
+    if (test_data[i] != 0) {
+      ++err_cnt;
+      std::cout << "    ERROR: non-zero lane " << i << ": 0x" << std::hex
+                << test_data[i] << std::dec << "\n";
+>>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
     }
   }
   std::cout << (err_cnt > 0 ? "  FAILED\n" : "  Passed\n");
