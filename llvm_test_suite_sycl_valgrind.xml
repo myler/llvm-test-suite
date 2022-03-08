@@ -312,24 +312,24 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_accessor_load_store" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_aot_mixed" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_ballot" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_bin_and_cmp_ops_heavy" />
+    <test configFile="config_sycl/esimd_api_bin_and_cmp_ops_heavy.xml" splitGroup="esimd" testName="esimd_api_bin_and_cmp_ops_heavy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_bit_ops" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_array_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_copy_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_default_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_default_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_default_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_default_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_accuracy_fp" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_accuracy_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_fill_accuracy_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_accuracy_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_fill_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_core" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_move_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_vector_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_replicate_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_saturation_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_any_all" />
@@ -346,7 +346,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_rgba" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_unary_ops_heavy" />
+    <test configFile="config_sycl/esimd_api_unary_ops_heavy.xml" splitGroup="esimd" testName="esimd_api_unary_ops_heavy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dp4a" />
