@@ -26,14 +26,19 @@
 
 #include <CL/sycl.hpp>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 =======
 #include <sycl/ext/intel/experimental/esimd.hpp>
 >>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 <<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
@@ -41,6 +46,10 @@ using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental;
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
+=======
+using namespace sycl::ext::intel;
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 template <int, int> struct test_id;
 using MaskRawElemT = typename simd_mask<1>::raw_element_type;

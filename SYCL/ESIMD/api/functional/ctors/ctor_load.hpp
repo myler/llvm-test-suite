@@ -20,6 +20,7 @@
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
+<<<<<<< HEAD
 =======
 =======
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
@@ -29,6 +30,8 @@ namespace esimd = sycl::ext::intel::esimd;
 
 namespace esimd = sycl::ext::intel::experimental::esimd;
 >>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
+=======
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 namespace esimd_test::api::functional::ctors {
 

@@ -26,19 +26,27 @@
 
 #include <CL/sycl.hpp>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 =======
 #include <sycl/ext/intel/experimental/esimd.hpp>
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <iostream>
 
 using namespace cl::sycl;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
 =======
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 static constexpr unsigned NAllChs =
     get_num_channels_enabled(rgba_channel_mask::ABGR);

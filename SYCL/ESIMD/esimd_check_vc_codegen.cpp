@@ -17,10 +17,14 @@
 #include <CL/sycl.hpp>
 #include <iostream>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 =======
 #include <sycl/ext/intel/experimental/esimd.hpp>
 >>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 using namespace cl::sycl;
 
@@ -60,10 +64,14 @@ int main(void) {
       cgh.parallel_for<class Test>(
           GlobalRange * LocalRange, [=](id<1> i) SYCL_ESIMD_KERNEL {
 <<<<<<< HEAD
+<<<<<<< HEAD
             using namespace sycl::ext::intel::esimd;
 =======
             using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
+=======
+            using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
             unsigned int offset = i * VL * sizeof(float);
             simd<float, VL> va;
             va.copy_from(PA, offset);

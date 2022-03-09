@@ -26,14 +26,19 @@
 
 #include <CL/sycl.hpp>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 =======
 #include <sycl/ext/intel/experimental/esimd.hpp>
 >>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <iostream>
 
 using namespace cl::sycl;
+<<<<<<< HEAD
 <<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
@@ -41,6 +46,10 @@ using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental;
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
+=======
+using namespace sycl::ext::intel;
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 struct bit_op {
   enum { any, all, num_ops };

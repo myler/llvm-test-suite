@@ -43,8 +43,12 @@ namespace esimd = sycl::ext::intel::esimd;
 
 #include "common.hpp"
 
+<<<<<<< HEAD
 namespace esimd = sycl::ext::intel::experimental::esimd;
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
+=======
+namespace esimd = sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 namespace esimd_test::api::functional::ctors {
 

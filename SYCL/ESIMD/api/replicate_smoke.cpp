@@ -27,6 +27,7 @@
 #include <CL/sycl.hpp>
 #include <iostream>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
@@ -37,6 +38,12 @@ using namespace sycl::ext::intel::esimd;
 using namespace cl::sycl;
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 22f86b532 ([ESIMD] Add smoke test for simd::replicate_vs_w_hs. (#799))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+
+using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 template <class T> struct char_to_int {
   using type = typename std::conditional<

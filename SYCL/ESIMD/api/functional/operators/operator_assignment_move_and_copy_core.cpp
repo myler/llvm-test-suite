@@ -25,10 +25,14 @@
 #include "operator_assignment.hpp"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
 =======
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
+=======
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 using namespace esimd_test::api::functional;
 
 // Descriptor class for the case of calling move assignment operator.

@@ -18,10 +18,14 @@
 #include "common.hpp"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 namespace esimd = sycl::ext::intel::esimd;
 =======
 namespace esimd = sycl::ext::intel::experimental::esimd;
 >>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
+=======
+namespace esimd = sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 namespace esimd_test::api::functional::ctors {
 

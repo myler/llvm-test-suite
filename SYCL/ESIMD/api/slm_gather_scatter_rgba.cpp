@@ -17,8 +17,11 @@ using namespace cl::sycl;
 constexpr int MASKED_LANE_NUM_REV = 1;
 constexpr int NUM_RGBA_CHANNELS =
     get_num_channels_enabled(sycl::ext::intel::esimd::rgba_channel_mask::ABGR);
+<<<<<<< HEAD
 
 template <class T> inline constexpr T marker = (T)0xcafebabe;
+=======
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 template <typename T, unsigned VL, auto CH_MASK> struct Kernel {
   T *bufOut;

@@ -22,6 +22,7 @@
 #include <CL/sycl.hpp>
 #include <CL/sycl/builtins_esimd.hpp>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 #include <cmath>
@@ -29,6 +30,9 @@
 =======
 #include <sycl/ext/intel/experimental/esimd.hpp>
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <cmath>
 #include <iostream>
@@ -239,6 +243,17 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
     }                                                                          \
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
   };
+#define DEFINE_EXP_ESIMD_DEVICE_OP(Op)                                         \
+  template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllVec> {          \
+    simd<T, N> operator()(simd<T, N> X) const SYCL_ESIMD_FUNCTION {            \
+      return experimental::esimd::Op<T, N>(X);                                 \
+    }                                                                          \
+  };                                                                           \
+  template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllSca> {          \
+    simd<T, N> operator()(T X) const SYCL_ESIMD_FUNCTION {                     \
+      return experimental::esimd::Op<T, N>(X);                                 \
+    }                                                                          \
+  };
 
 DEFINE_ESIMD_DEVICE_OP(sin);
 DEFINE_ESIMD_DEVICE_OP(cos);
@@ -249,11 +264,15 @@ DEFINE_ESIMD_DEVICE_OP(sqrt);
 DEFINE_ESIMD_DEVICE_OP(sqrt_ieee);
 DEFINE_ESIMD_DEVICE_OP(rsqrt);
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEFINE_ESIMD_DEVICE_OP(floor);
 DEFINE_ESIMD_DEVICE_OP(ceil);
 =======
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
 DEFINE_ESIMD_DEVICE_OP(trunc);
+=======
+DEFINE_EXP_ESIMD_DEVICE_OP(trunc);
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 DEFINE_ESIMD_DEVICE_OP(exp2);
 DEFINE_ESIMD_DEVICE_OP(log2);
 

@@ -27,10 +27,14 @@
 #include "common.hpp"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
 =======
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> 95fd782fd ([SYCL][ESIMD] Add test on logical not operator (#784))
+=======
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 using namespace esimd_test::api::functional;
 
 // Descriptor class for the case of calling logical not operator.

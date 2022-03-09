@@ -28,10 +28,14 @@
 #include "ctor_broadcast.hpp"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 using namespace sycl::ext::intel::esimd;
 =======
 using namespace sycl::ext::intel::experimental::esimd;
 >>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
+=======
+using namespace sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 using namespace esimd_test::api::functional;
 
 int main(int, char **) {

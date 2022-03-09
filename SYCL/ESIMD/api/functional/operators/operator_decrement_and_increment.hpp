@@ -27,10 +27,14 @@
 #include "common.hpp"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 namespace esimd = sycl::ext::intel::esimd;
 =======
 namespace esimd = sycl::ext::intel::experimental::esimd;
 >>>>>>> d6527a558 ([SYCL][ESIMD] Add tests on simd increment and decrement operators (#827))
+=======
+namespace esimd = sycl::ext::intel::esimd;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 namespace esimd_functional = esimd_test::api::functional;
 
 namespace esimd_test::api::functional::operators {

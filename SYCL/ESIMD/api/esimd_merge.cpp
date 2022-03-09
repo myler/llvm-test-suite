@@ -18,6 +18,7 @@
 #include <CL/sycl.hpp>
 #include <iostream>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 using namespace sycl::ext::intel::esimd;
@@ -28,6 +29,12 @@ using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::experimental::esimd;
 using namespace sycl::ext::intel::experimental;
 >>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
+=======
+#include <sycl/ext/intel/esimd.hpp>
+
+using namespace sycl::ext::intel::esimd;
+using namespace sycl::ext::intel;
+>>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 using namespace cl::sycl;
 
 template <class T> void prn(T *arr, int size, const char *title) {
