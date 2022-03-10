@@ -70,6 +70,7 @@ void store_local_test(queue q, size_t N) {
   assert(store >= T(0) && store <= T(N - 1));
 }
 
+<<<<<<< HEAD
 template <access::address_space space, typename T,
           memory_order order = memory_order::relaxed,
           memory_scope scope = memory_scope::device>
@@ -132,6 +133,15 @@ void store_test_orders_scopes(queue q, size_t N) {
     store_test_scopes<space, T, memory_order::release>(q, N);
   }
   store_test_scopes<space, T, memory_order::relaxed>(q, N);
+=======
+template <typename T> void store_test(queue q, size_t N) {
+#ifdef RUN_DEPRECATED
+  store_test<::sycl::ext::oneapi::atomic_ref,
+             access::address_space::global_space, T>(q, N);
+#else
+  store_test<::sycl::atomic_ref, access::address_space::global_space, T>(q, N);
+#endif
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space> void store_test_all() {

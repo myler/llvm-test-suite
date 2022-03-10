@@ -244,13 +244,18 @@ void add_test(queue q, size_t N) {
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
 =======
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#ifdef RUN_DEPRECATED
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       add_fetch_local_test<::sycl::ext::oneapi::atomic_ref, space, T,
                            Difference, order, scope>(q, N);
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 #else
     add_fetch_local_test<::sycl::atomic_ref, space, T, Difference, order,
@@ -260,11 +265,19 @@ void add_test(queue q, size_t N) {
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
 =======
+=======
+#else
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     add_fetch_local_test<::sycl::atomic_ref, space, T, Difference, order,
                          scope>(q, N);
+#endif
   }
   if constexpr (do_global_tests) {
+<<<<<<< HEAD
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#ifdef RUN_DEPRECATED
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       add_fetch_test<::sycl::ext::oneapi::atomic_ref, space, T, Difference,
                      order, scope>(q, N);
@@ -278,9 +291,13 @@ void add_test(queue q, size_t N) {
       }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
 =======
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#else
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     add_fetch_test<::sycl::atomic_ref, space, T, Difference, order, scope>(q,
                                                                            N);
     add_plus_equal_test<::sycl::atomic_ref, space, T, Difference, order, scope>(
@@ -292,9 +309,13 @@ void add_test(queue q, size_t N) {
           q, N);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif
 =======
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#endif
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   }
 }
 
@@ -303,6 +324,7 @@ template <access::address_space space, typename T, typename Difference = T,
 void add_test_scopes(queue q, size_t N) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
+<<<<<<< HEAD
 <<<<<<< HEAD
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
       scopes.end()) {
@@ -320,35 +342,33 @@ void add_test_scopes(queue q, size_t N) {
 =======
 #if defined(SYSTEM)
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+=======
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test<space, T, Difference, order, memory_scope::system>(q, N);
   }
-  add_test<space, T, Difference, order, memory_scope::system>(q, N);
-#elif defined(WORK_GROUP)
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::work_group) !=
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test<space, T, Difference, order, memory_scope::work_group>(q, N);
   }
-  add_test<space, T, Difference, order, memory_scope::work_group>(q, N);
-#elif defined(SUB_GROUP)
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::sub_group) !=
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test<space, T, Difference, order, memory_scope::sub_group>(q, N);
   }
-  add_test<space, T, Difference, order, memory_scope::sub_group>(q, N);
-#else
   add_test<space, T, Difference, order, memory_scope::device>(q, N);
+<<<<<<< HEAD
 #endif
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space, typename T, typename Difference = T>
 void add_test_orders_scopes(queue q, size_t N) {
   std::vector<memory_order> orders =
       q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
+<<<<<<< HEAD
 <<<<<<< HEAD
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) !=
       orders.end()) {
@@ -366,35 +386,33 @@ void add_test_orders_scopes(queue q, size_t N) {
 =======
 #if defined(ACQ_REL)
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
+=======
+  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) !=
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test_scopes<space, T, Difference, memory_order::acq_rel>(q, N);
   }
-  add_test_scopes<space, T, Difference, memory_order::acq_rel>(q, N);
-#elif defined(ACQUIRE)
-  if (std::find(orders.begin(), orders.end(), memory_order::acquire) ==
+  if (std::find(orders.begin(), orders.end(), memory_order::acquire) !=
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test_scopes<space, T, Difference, memory_order::acquire>(q, N);
   }
-  add_test_scopes<space, T, Difference, memory_order::acquire>(q, N);
-#elif defined(RELEASE)
-  if (std::find(orders.begin(), orders.end(), memory_order::release) ==
+  if (std::find(orders.begin(), orders.end(), memory_order::release) !=
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    add_test_scopes<space, T, Difference, memory_order::release>(q, N);
   }
-  add_test_scopes<space, T, Difference, memory_order::release>(q, N);
-#else
   add_test_scopes<space, T, Difference, memory_order::relaxed>(q, N);
+<<<<<<< HEAD
 #endif
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space> void add_test_all() {
   queue q;
 
   constexpr int N = 32;
+<<<<<<< HEAD
 <<<<<<< HEAD
 #ifdef FULL_ATOMIC64_COVERAGE
   add_test_orders_scopes<space, double>(q, N);
@@ -408,6 +426,10 @@ template <access::address_space space> void add_test_all() {
   add_test_orders_scopes<space, double>(q, N);
 #ifndef FP_TESTS_ONLY
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#ifdef FULL_ATOMIC64_COVERAGE
+  add_test_orders_scopes<space, double>(q, N);
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   if constexpr (sizeof(long) == 8) {
     add_test_orders_scopes<space, long>(q, N);
     add_test_orders_scopes<space, unsigned long>(q, N);
@@ -421,6 +443,7 @@ template <access::address_space space> void add_test_all() {
   }
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
   add_test_orders_scopes<space, float>(q, N);
 #ifdef FULL_ATOMIC32_COVERAGE
 =======
@@ -428,6 +451,10 @@ template <access::address_space space> void add_test_all() {
   add_test_orders_scopes<space, float>(q, N);
 #ifndef FP_TESTS_ONLY
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+  add_test_orders_scopes<space, float>(q, N);
+#ifdef FULL_ATOMIC32_COVERAGE
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   add_test_orders_scopes<space, int>(q, N);
   add_test_orders_scopes<space, unsigned int>(q, N);
   if constexpr (sizeof(long) == 4) {
@@ -439,9 +466,12 @@ template <access::address_space space> void add_test_all() {
   }
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #endif
 
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   std::cout << "Test passed." << std::endl;
 }

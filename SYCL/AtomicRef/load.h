@@ -82,6 +82,7 @@ void load_global_test(queue q, size_t N) {
                      [&](T x) { return (x == initial); }));
 }
 
+<<<<<<< HEAD
 template <access::address_space space, typename T,
           memory_order order = memory_order::relaxed,
           memory_scope scope = memory_scope::device>
@@ -144,6 +145,15 @@ void load_test_orders_scopes(queue q, size_t N) {
     load_test_scopes<space, T, memory_order::acquire>(q, N);
   }
   load_test_scopes<space, T, memory_order::relaxed>(q, N);
+=======
+template <typename T> void load_test(queue q, size_t N) {
+#ifdef RUN_DEPRECATED
+  load_test<::sycl::ext::oneapi::atomic_ref,
+            access::address_space::global_space, T>(q, N);
+#else
+  load_test<::sycl::atomic_ref, access::address_space::global_space, T>(q, N);
+#endif
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space> void load_test_all() {

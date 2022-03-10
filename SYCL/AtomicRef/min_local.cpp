@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70
 =======
 // Each combination of 64/32 bit atomic, relaxed/acquire/release/acq_rel
@@ -146,11 +147,15 @@
 
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70 -DACQ_REL -DSYSTEM -DATOMIC64
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+// RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // Barrier is not supported on host. HIP and ACC do not support floating
 // point atomics.
@@ -160,6 +165,11 @@
 // point atomics.
 // XFAIL: host, hip, opencl
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+// Barrier is not supported on host. HIP and ACC do not support floating
+// point atomics.
+// XFAIL: host, hip, acc
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 
 #include "min.h"
 

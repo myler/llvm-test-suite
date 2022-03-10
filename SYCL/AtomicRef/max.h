@@ -122,13 +122,18 @@ void max_test(queue q, size_t N) {
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
 =======
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#ifdef RUN_DEPRECATED
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       max_local_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q, N);
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 #else
     max_local_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
@@ -137,15 +142,26 @@ void max_test(queue q, size_t N) {
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
 =======
+=======
+#else
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     max_local_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
+#endif
   }
   if constexpr (do_global_tests) {
+<<<<<<< HEAD
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+#ifdef RUN_DEPRECATED
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       max_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q, N);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 #else
     max_global_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
 #endif
@@ -158,6 +174,7 @@ void max_test_scopes(queue q, size_t N) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
+<<<<<<< HEAD
       scopes.end()) {
     max_test<space, T, order, memory_scope::system>(q, N);
   }
@@ -228,71 +245,46 @@ void max_test_scopes(queue q, size_t N) {
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
 #if defined(SYSTEM)
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+=======
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test<space, T, order, memory_scope::system>(q, N);
   }
-  max_test<space, T, order, memory_scope::system>(q, N);
-#elif defined(WORK_GROUP)
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::work_group) !=
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test<space, T, order, memory_scope::work_group>(q, N);
   }
-  max_test<space, T, order, memory_scope::work_group>(q, N);
-#elif defined(SUB_GROUP)
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
+  if (std::find(scopes.begin(), scopes.end(), memory_scope::sub_group) !=
       scopes.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test<space, T, order, memory_scope::sub_group>(q, N);
   }
-  max_test<space, T, order, memory_scope::sub_group>(q, N);
-#else
   max_test<space, T, order, memory_scope::device>(q, N);
-#endif
 }
 
 template <access::address_space space, typename T>
 void max_test_orders_scopes(queue q, size_t N) {
   std::vector<memory_order> orders =
       q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
-#if defined(ACQ_REL)
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test_scopes<space, T, memory_order::acq_rel>(q, N);
   }
-  max_test_scopes<space, T, memory_order::acq_rel>(q, N);
-#elif defined(ACQUIRE)
   if (std::find(orders.begin(), orders.end(), memory_order::acquire) ==
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test_scopes<space, T, memory_order::acquire>(q, N);
   }
-  max_test_scopes<space, T, memory_order::acquire>(q, N);
-#elif defined(RELEASE)
   if (std::find(orders.begin(), orders.end(), memory_order::release) ==
       orders.end()) {
-    std::cout << "Skipping test\n";
-    return;
+    max_test_scopes<space, T, memory_order::release>(q, N);
   }
-  max_test_scopes<space, T, memory_order::release>(q, N);
-#else
   max_test_scopes<space, T, memory_order::relaxed>(q, N);
-#endif
 }
 template <access::address_space space> void max_test_all() {
   queue q;
 
   constexpr int N = 32;
-#ifdef ATOMIC64
-  if (!q.get_device().has(aspect::atomic64)) {
-    std::cout << "Skipping test\n";
-    return;
-  }
-
+#ifdef FULL_ATOMIC64_COVERAGE
   max_test_orders_scopes<space, double>(q, N);
-#ifndef FP_TESTS_ONLY
   if constexpr (sizeof(long) == 8) {
     max_test_orders_scopes<space, long>(q, N);
     max_test_orders_scopes<space, unsigned long>(q, N);
@@ -302,16 +294,14 @@ template <access::address_space space> void max_test_all() {
     max_test_orders_scopes<space, unsigned long long>(q, N);
   }
 #endif
-#else
   max_test_orders_scopes<space, float>(q, N);
-#ifndef FP_TESTS_ONLY
+#ifdef FULL_ATOMIC32_COVERAGE
   max_test_orders_scopes<space, int>(q, N);
   max_test_orders_scopes<space, unsigned int>(q, N);
   if constexpr (sizeof(long) == 4) {
     max_test_orders_scopes<space, long>(q, N);
     max_test_orders_scopes<space, unsigned long>(q, N);
   }
-#endif
 #endif
 
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 // See https://github.com/intel/llvm-test-suite/issues/867 for detailed status
 // UNSUPPORTED: hip
 
@@ -152,6 +153,12 @@
 
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70 -DACQ_REL -DSYSTEM -DATOMIC64
 >>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
+=======
+// See https://github.com/intel/llvm-test-suite/issues/867 for detailed status
+// UNSUPPORTED: hip
+
+// RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-device-code-split=per_kernel -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70
+>>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
