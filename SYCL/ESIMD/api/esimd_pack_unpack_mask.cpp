@@ -8,6 +8,7 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
@@ -17,6 +18,8 @@
 // TODO: fails on OpenCL - https://github.com/intel/llvm-test-suite/issues/901
 // UNSUPPORTED: opencl
 >>>>>>> 05909cd65 (Disable esimd_pack_unpack_mask test on OpenCL (#902))
+=======
+>>>>>>> e3ff34842 ([ESIMD] Size correction for array containing result values (#913))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -106,6 +109,7 @@ bool test_impl(queue q, const char *title, InitF init_f) {
   }
   for (unsigned i = N; i < MAX_N; ++i) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (res_unpacked[i] != 0) {
       ++err_cnt;
       std::cout << "    ERROR: non-zero lane " << i << ": 0x" << std::hex
@@ -116,6 +120,12 @@ bool test_impl(queue q, const char *title, InitF init_f) {
       std::cout << "    ERROR: non-zero lane " << i << ": 0x" << std::hex
                 << test_data[i] << std::dec << "\n";
 >>>>>>> 3c06ec209 ([ESIMD] Add smoke test for pack_mask/unpack_mask APIs. (#826))
+=======
+    if (res_unpacked[i] != 0) {
+      ++err_cnt;
+      std::cout << "    ERROR: non-zero lane " << i << ": 0x" << std::hex
+                << res_unpacked[i] << std::dec << " in unpacked result\n";
+>>>>>>> e3ff34842 ([ESIMD] Size correction for array containing result values (#913))
     }
   }
   std::cout << (err_cnt > 0 ? "  FAILED\n" : "  Passed\n");

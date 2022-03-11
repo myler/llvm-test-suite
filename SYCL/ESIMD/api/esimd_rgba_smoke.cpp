@@ -94,16 +94,21 @@ template <rgba_channel_mask ChMask, unsigned NPixels, class T>
 bool test_impl(queue q) {
   constexpr unsigned NOnChs = get_num_channels_enabled(ChMask);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const unsigned Size = NPixels * NAllChs;
 =======
   unsigned SizeIn = NPixels * NAllChs;
   unsigned SizeOut = NPixels * NOnChs;
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+  const unsigned Size = NPixels * NAllChs;
+>>>>>>> e3ff34842 ([ESIMD] Size correction for array containing result values (#913))
 
   std::cout << "Testing mask=";
   print_mask(ChMask);
   std::cout << ", T=" << typeid(T).name() << ", NPixels=" << NPixels << "\n";
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   T *A = malloc_shared<T>(Size, q);
   T *B = malloc_shared<T>(Size, q);
@@ -113,6 +118,11 @@ bool test_impl(queue q) {
   T *B = malloc_shared<T>(SizeOut, q);
   T *C = malloc_shared<T>(SizeOut, q);
 >>>>>>> 5ed4bac7d ([ESIMD] Add gather/scatter_rgba smoke test, can be used as an example. (#835))
+=======
+  T *A = malloc_shared<T>(Size, q);
+  T *B = malloc_shared<T>(Size, q);
+  T *C = malloc_shared<T>(Size, q);
+>>>>>>> e3ff34842 ([ESIMD] Size correction for array containing result values (#913))
 
   for (unsigned p = 0; p < NPixels; ++p) {
     char ch_names[] = {'R', 'G', 'B', 'A'};
