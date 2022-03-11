@@ -147,10 +147,15 @@ enum class MathOp {
   log,
   rsqrt,
 <<<<<<< HEAD
+<<<<<<< HEAD
   floor,
   ceil,
 =======
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+  floor,
+  ceil,
+>>>>>>> ad174cfbf ([SYCL][ESIMD] Move rounding functions out of experimental namespace (#914))
   trunc,
   exp2,
   log2,
@@ -199,10 +204,15 @@ DEFINE_HOST_OP(sqrt, std::sqrt(X));
 DEFINE_HOST_OP(sqrt_ieee, std::sqrt(X));
 DEFINE_HOST_OP(rsqrt, 1.0f / std::sqrt(X));
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEFINE_HOST_OP(floor, std::floor(X));
 DEFINE_HOST_OP(ceil, std::ceil(X));
 =======
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
+=======
+DEFINE_HOST_OP(floor, std::floor(X));
+DEFINE_HOST_OP(ceil, std::ceil(X));
+>>>>>>> ad174cfbf ([SYCL][ESIMD] Move rounding functions out of experimental namespace (#914))
 DEFINE_HOST_OP(trunc, std::trunc(X));
 DEFINE_HOST_OP(exp2, std::exp2(X));
 DEFINE_HOST_OP(log2, std::log2(X));
@@ -224,8 +234,12 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
     simd<T, N> operator()(simd<T, N> X) const SYCL_ESIMD_FUNCTION {            \
 =======
   template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllVec> {          \
+<<<<<<< HEAD
     simd<T, N> operator()(simd<T, N>X) const SYCL_ESIMD_FUNCTION {             \
 >>>>>>> fa80b79ce ([ESIMD] Add scalar argument test cases to esimd_math.cpp (#864))
+=======
+    simd<T, N> operator()(simd<T, N> X) const SYCL_ESIMD_FUNCTION {            \
+>>>>>>> ad174cfbf ([SYCL][ESIMD] Move rounding functions out of experimental namespace (#914))
       return esimd::Op<T, N>(X);                                               \
     }                                                                          \
   };                                                                           \
@@ -243,17 +257,6 @@ DEFINE_HOST_BIN_OP(pow, std::pow(X, Y));
     }                                                                          \
 >>>>>>> 217ea1d8a ([ESIMD] Enhance ext math test and cover sycl::half. (#711))
   };
-#define DEFINE_EXP_ESIMD_DEVICE_OP(Op)                                         \
-  template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllVec> {          \
-    simd<T, N> operator()(simd<T, N> X) const SYCL_ESIMD_FUNCTION {            \
-      return experimental::esimd::Op<T, N>(X);                                 \
-    }                                                                          \
-  };                                                                           \
-  template <class T, int N> struct ESIMDf<T, N, MathOp::Op, AllSca> {          \
-    simd<T, N> operator()(T X) const SYCL_ESIMD_FUNCTION {                     \
-      return experimental::esimd::Op<T, N>(X);                                 \
-    }                                                                          \
-  };
 
 DEFINE_ESIMD_DEVICE_OP(sin);
 DEFINE_ESIMD_DEVICE_OP(cos);
@@ -265,6 +268,7 @@ DEFINE_ESIMD_DEVICE_OP(sqrt_ieee);
 DEFINE_ESIMD_DEVICE_OP(rsqrt);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEFINE_ESIMD_DEVICE_OP(floor);
 DEFINE_ESIMD_DEVICE_OP(ceil);
 =======
@@ -273,6 +277,11 @@ DEFINE_ESIMD_DEVICE_OP(trunc);
 =======
 DEFINE_EXP_ESIMD_DEVICE_OP(trunc);
 >>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
+=======
+DEFINE_ESIMD_DEVICE_OP(floor);
+DEFINE_ESIMD_DEVICE_OP(ceil);
+DEFINE_ESIMD_DEVICE_OP(trunc);
+>>>>>>> ad174cfbf ([SYCL][ESIMD] Move rounding functions out of experimental namespace (#914))
 DEFINE_ESIMD_DEVICE_OP(exp2);
 DEFINE_ESIMD_DEVICE_OP(log2);
 
@@ -707,6 +716,8 @@ template <class T, int N> bool testESIMD(queue &Q) {
   Pass &= test<T, N, MathOp::log, ESIMDf>(Q, "log", InitWide<T>{});
   Pass &= test<T, N, MathOp::exp2, ESIMDf>(Q, "exp2", InitInRange0_5<T>{});
   Pass &= test<T, N, MathOp::log2, ESIMDf>(Q, "log2", InitWide<T>{});
+  Pass &= test<T, N, MathOp::floor, ESIMDf>(Q, "floor", InitWide<T>{});
+  Pass &= test<T, N, MathOp::ceil, ESIMDf>(Q, "ceil", InitWide<T>{});
   Pass &= test<T, N, MathOp::trunc, ESIMDf>(Q, "trunc", InitWide<T>{});
   return Pass;
 }
