@@ -552,7 +552,7 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
-      if (gpu(['dg1', 'dg2', 'ats-m'])) {
+      if (gpu(['dg1', 'dg2', 'ats', 'pvc'])) {
         $gpu_opts .= "-Dgpu-intel-dg1=1";
       }
 
