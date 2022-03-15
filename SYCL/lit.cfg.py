@@ -103,9 +103,6 @@ if lit_config.params.get('gpu-intel-pvc', False):
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
 
-if lit_config.params.get('matrix-pvc', False):
-    config.available_features.add('matrix-pvc')
-
 #support for LIT parameter ze_debug<num>
 if lit_config.params.get('ze_debug'):
     config.ze_debug = lit_config.params.get('ze_debug')
@@ -331,15 +328,7 @@ if 'gpu' in config.target_devices.split(','):
         gpu_run_on_linux_substitute = "env SYCL_DEVICE_FILTER={SYCL_PLUGIN}:gpu,host ".format(SYCL_PLUGIN=config.sycl_be)
         gpu_check_on_linux_substitute = "| FileCheck %s"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     if config.sycl_be == "ext_oneapi_cuda":
-=======
-    if config.sycl_be == "cuda":
->>>>>>> 24faf9d67 ([SYCL][CUDA] Set PI_CUDA_ENABLE_IMAGE_SUPPORT before running Image tests (#702))
-=======
-    if config.sycl_be == "ext_oneapi_cuda":
->>>>>>> 1349fce09 ([SYCL] Update LIT to support the latest BEs (#752))
         gpu_run_substitute += "SYCL_PI_CUDA_ENABLE_IMAGE_SUPPORT=1 "
 
 else:
@@ -415,13 +404,6 @@ for aot_tool in aot_tools:
         config.available_features.add(aot_tool)
     else:
         lit_config.warning("Couldn't find pre-installed AOT device compiler " + aot_tool)
-
-# INTEL_CUSTOMIZATION
-if 'ICS_TESTDATA' in os.environ and platform.system() == "Windows":
-    config.available_features.add('timelimit')
-    # set _NT_SYMBOL_PATH to specify PDB files location
-    config.substitutions.append(('%timelimit', ' env _NT_SYMBOL_PATH='+config.dpcpp_root_dir+'/bin '+os.environ['ICS_TESTDATA']+'/mainline/CT-SpecialTests/opencl/tools/win.x64/bin/timelimit.exe'))
-# end INTEL_CUSTOMIZATION
 
 # Set timeout for test 1 min
 try:

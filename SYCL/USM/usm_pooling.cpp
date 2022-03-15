@@ -14,15 +14,9 @@
 // RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=";;1M,4,64K" %t.out s 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-12345
 
 // With pooling enabled and capacity=1: 1,2,4,5 allocs lead to ZE call.
-<<<<<<< HEAD
-// RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=2,1,256 %t.out h 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
-// RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=2,1,256 %t.out d 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
-// RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=2,1,256 %t.out s 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
-=======
 // RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=";;2M,1,64K" %t.out h 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
 // RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=";;2M,1,64K" %t.out d 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
 // RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=";;2M,1,64K" %t.out s 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245
->>>>>>> f763b7f65 ([SYCL] Reenable USM pooling tests after feature has been made default. (#891))
 
 // With pooling enabled and MaxPoolSize=2MB: 1,2,4,5 allocs lead to ZE call.
 // RUN: env ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER SYCL_PI_LEVEL_ZERO_USM_ALLOCATOR=";2M;2M,4,64K" %t.out h 2> %t1.out; cat %t1.out %GPU_CHECK_PLACEHOLDER --check-prefix CHECK-1245

@@ -7,23 +7,11 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-<<<<<<< HEAD
-// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.sycl.out -DENABLE_SYCL=0 %s
-=======
 // UNSUPPORTED: esimd_emulator
 // RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device gen9" -o %t.sycl.out -DENABLE_SYCL=0 %s
->>>>>>> 7f0ae77b2 ([SYCL][ESIMD][EMU] ESIMD test updates for esimd_emulator backend (#869))
 // RUN: %GPU_RUN_PLACEHOLDER %t.sycl.out
-// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device *" -o %t.out %s
+// RUN: %clangxx -fsycl -fsycl-targets=spir64_gen -Xsycl-target-backend=spir64_gen "-device gen9" -o %t.out %s
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
-<<<<<<< HEAD
-// XFAIL: windows
-// TODO: remove XFAIL once ocloc support for automatic scalar/vector SPIRV
-// module dispatching is available in public drivers. Also change '-device gen9'
-// (safe variant to reliably get unexpected PASS when ocloc is fixed) to
-// %gpu_aot_target_opts aka '-device *' (which stresses ocloc).
-=======
->>>>>>> 79d449f33 ([ESIMD] Enable aot_mixed.cpp (#848))
 
 // This test checks the following ESIMD ahead-of-time compilation scenarios:
 // 1) When the application contains both SYCL and ESIMD kernel, thus requiring

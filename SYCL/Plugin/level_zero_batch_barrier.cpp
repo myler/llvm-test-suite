@@ -1,14 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 // See https://github.com/intel/llvm-test-suite/issues/811
 // REQUIRES: gpu, level_zero, TEMPORARILY_DISABLED
-=======
-// REQUIRES: gpu, level_zero
->>>>>>> 4508a3f5f ([SYCL] test for barrier batching (#750))
-=======
-// See https://github.com/intel/llvm-test-suite/issues/811
-// REQUIRES: gpu, level_zero, TEMPORARILY_DISABLED
->>>>>>> 977a7ce75 ([SYCL] Disable flaky tests (#812))
 
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %level_zero_options %s -o %t.out
 // RUN: env SYCL_PI_TRACE=2 ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER %t.out 2>&1 %GPU_CHECK_PLACEHOLDER

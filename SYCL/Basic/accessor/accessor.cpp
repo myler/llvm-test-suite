@@ -31,20 +31,9 @@ struct IdxID3 {
 };
 
 template <typename T>
-<<<<<<< HEAD
-<<<<<<< HEAD
 using AccAlias =
     sycl::accessor<T, 1, sycl::access::mode::write, sycl::target::device>;
 
-=======
-using AccAlias = cl::sycl::accessor<T, 1, cl::sycl::access::mode::write,
-                                    cl::sycl::access::target::device>;
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-using AccAlias =
-    sycl::accessor<T, 1, sycl::access::mode::write, sycl::target::device>;
-
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
 template <typename T> struct InheritedAccessor : public AccAlias<T> {
 
   using AccAlias<T>::AccAlias;
@@ -441,15 +430,7 @@ int main() {
         sycl::queue queue;
         queue.submit([&](sycl::handler &cgh) {
           sycl::accessor<int, 0, sycl::access::mode::read_write,
-<<<<<<< HEAD
-<<<<<<< HEAD
                          sycl::target::device>
-=======
-                         sycl::access::target::device>
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-                         sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
               B(b, cgh);
           cgh.single_task<class acc_with_zero_dim>([=]() {
             auto B2 = B;
@@ -481,8 +462,6 @@ int main() {
     sycl::queue queue;
     queue.submit([&](sycl::handler &cgh) {
       sycl::accessor<int, 0, sycl::access::mode::read_write,
-<<<<<<< HEAD
-<<<<<<< HEAD
                      sycl::target::device>
           acc1(buf1, cgh);
       sycl::accessor<int, 1, sycl::access::mode::read_write,
@@ -490,22 +469,6 @@ int main() {
           acc2(buf2, cgh);
       sycl::accessor<int, 1, sycl::access::mode::read_write,
                      sycl::target::device>
-=======
-                     sycl::access::target::device>
-=======
-                     sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
-          acc1(buf1, cgh);
-      sycl::accessor<int, 1, sycl::access::mode::read_write,
-                     sycl::target::device>
-          acc2(buf2, cgh);
-      sycl::accessor<int, 1, sycl::access::mode::read_write,
-<<<<<<< HEAD
-                     sycl::access::target::device>
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-                     sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
           acc3(buf3, cgh, sycl::range<1>(1));
       cgh.single_task<class acc_alloc_buf>([=]() {
         acc1 *= 2;
@@ -539,15 +502,7 @@ int main() {
         sycl::queue queue;
         queue.submit([&](sycl::handler &cgh) {
           sycl::accessor<int, 1, sycl::access::mode::write,
-<<<<<<< HEAD
-<<<<<<< HEAD
                          sycl::target::device>
-=======
-                         sycl::access::target::device>
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-                         sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
               D(d, cgh);
           sycl::accessor<int, 1, sycl::access::mode::read,
                          sycl::target::constant_buffer>
@@ -576,16 +531,7 @@ int main() {
         sycl::buffer<int, 1> d(&data, sycl::range<1>(1));
         sycl::buffer<int, 1> c(&cnst, sycl::range<1>(1));
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         sycl::accessor<int, 1, sycl::access::mode::write, sycl::target::device,
-=======
-        sycl::accessor<int, 1, sycl::access::mode::write,
-                       sycl::access::target::device,
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-        sycl::accessor<int, 1, sycl::access::mode::write, sycl::target::device,
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
                        sycl::access::placeholder::true_t>
             D(d);
         sycl::accessor<int, 1, sycl::access::mode::read,
@@ -623,15 +569,7 @@ int main() {
         sycl::queue queue;
         queue.submit([&](sycl::handler &cgh) {
           sycl::accessor<int, 1, sycl::access::mode::write,
-<<<<<<< HEAD
-<<<<<<< HEAD
                          sycl::target::device>
-=======
-                         sycl::access::target::device>
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-                         sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
               AccA(A, cgh);
           sycl::accessor<int, 1, sycl::access::mode::read,
                          sycl::target::constant_buffer>
@@ -666,15 +604,7 @@ int main() {
         sycl::queue queue;
         queue.submit([&](sycl::handler &cgh) {
           sycl::accessor<int, 1, sycl::access::mode::read_write,
-<<<<<<< HEAD
-<<<<<<< HEAD
                          sycl::target::device>
-=======
-                         sycl::access::target::device>
->>>>>>> 2058d1246 ([SYCL] Rename deprecated access::target::global_buffer (#647))
-=======
-                         sycl::target::device>
->>>>>>> cc8ee1e0c ([SYCL] Use the sycl:: namespace instead of cl::sycl:: one (#749))
               B(b, cgh);
           auto B1 = b1.template get_access<sycl::access::mode::read_write>(cgh);
 

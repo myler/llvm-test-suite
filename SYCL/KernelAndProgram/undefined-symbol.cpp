@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-// XFAIL: cuda || hip
-// UNSUPPORTED: host,ze_debug-1,ze_debug4
-// UNSUPPORTED: host
-=======
 // XFAIL: cuda || hip || (opencl && gpu)
->>>>>>> 7d91e53c2 ([SYCL] Enable test for ZE_DEBUG=4 (#824))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out

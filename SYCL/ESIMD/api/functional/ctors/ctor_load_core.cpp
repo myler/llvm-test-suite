@@ -30,24 +30,9 @@ int main(int, char **) {
                     esimd_test::createExceptionHandler());
 
   bool passed = true;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
   const auto types = get_tested_types<tested_types::core>();
-<<<<<<< HEAD
-=======
-  const auto types = get_tested_types<tested_types::all>();
->>>>>>> 1548e68f8 ([SYCL][ESIMD] Add test on simd load ctor (#769))
-=======
-  const auto types = get_tested_types<tested_types::core>();
->>>>>>> 3caa01663 ([SYCL][ESIMD] Replace using tested_types::all with tested_types::core (#798))
-  const auto dims = get_all_dimensions();
-=======
   const auto sizes = get_all_sizes();
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,

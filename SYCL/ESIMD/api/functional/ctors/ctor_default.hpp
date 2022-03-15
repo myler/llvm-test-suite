@@ -114,27 +114,4 @@ template <typename DataT, typename SizeT, typename TestCaseT> struct run_test {
   }
 };
 
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_default.hpp
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_default.hpp
 } // namespace esimd_test::api::functional::ctors
-=======
-int main(int, char **) {
-  sycl::queue queue(esimd_test::ESIMDSelector{},
-                    esimd_test::createExceptionHandler());
-
-  bool passed = true;
-
-  const auto types = get_tested_types<tested_types::all>();
-  const auto dims = get_all_dimensions();
-  const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
-                                          const_ref>::generate();
-
-  passed &= for_all_combinations<run_test>(types, dims, contexts, queue);
-
-  std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
-  return passed ? 0 : 1;
-}
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_default.cpp
-=======
-} // namespace esimd_test::api::functional::ctors
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_default.cpp
