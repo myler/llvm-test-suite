@@ -30,8 +30,10 @@ int main(void) {
   passed &= test<3, uint64_t, 1, 4, 4, 1, false>(rand());
   passed &= test<4, uint64_t, 1, 1, 1, 1, false>(1);
   passed &= test<5, uint64_t, 2, 1, 1, 1, false>(1);
-  // passed &= test<6, uint64_t, 1, 4, 8, 2>(rand()); // merge fail
-  // passed &= test<7, uint64_t, 1, 4, 8, 3>(rand()); // exec fail
+
+  // IGC prohibits exec_size less than simd_size when vector size > 1
+  // passed &= test<6, uint32_t, 1, 4, 8, 2, false>(rand());
+  // passed &= test<7, uint32_t, 1, 4, 8, 3, false>(rand());
 
   // transpose
   passed &= test<8, uint64_t, 1, 4, 1, 32, true>();

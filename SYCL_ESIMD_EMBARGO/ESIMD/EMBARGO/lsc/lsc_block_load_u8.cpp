@@ -15,30 +15,30 @@ implied warranties, other than those that are expressly stated in the License.
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
 
-#include "Inputs/lsc_flat_load.hpp"
+#include "Inputs/lsc_block_load.hpp"
 
-constexpr uint32_t seed = 187;
+constexpr uint32_t seed = 322;
+using T = uint8_t;
 
 int main(void) {
   srand(seed);
   bool passed = true;
 
-  // non transpose
-  passed &= test<0, uint64_t, 1, 4, 32, 1, false>(rand());
-  passed &= test<1, uint64_t, 1, 4, 32, 2, false>(rand());
-  passed &= test<2, uint64_t, 1, 4, 16, 2, false>(rand());
-  passed &= test<3, uint64_t, 1, 4, 4, 1, false>(rand());
-  passed &= test<4, uint64_t, 1, 1, 1, 1, false>(1);
-  passed &= test<5, uint64_t, 2, 1, 1, 1, false>(1);
+  // These parameters require unpadding. It is not implemented yet
+  // passed &= test<0, T, 2, 2, 2, 2>(16, 4, 16, 1, 1);
 
-  // IGC prohibits exec_size less than simd_size when vector size > 1
-  // passed &= test<6, uint64_t, 1, 4, 8, 2, false>(rand());
-  // passed &= test<7, uint64_t, 1, 4, 8, 3, false>(rand());
+  // non transposed, non transformed
+  passed &= test<1, T, 1, 1, 16, 32, 2>(40, 64, 64, 4, 21);
+  passed &= test<2, T, 2, 2, 8, 8, 2>(16, 16, 64, 8, 5);
+  passed &= test<3, T, 1, 1, 8, 32, 2>(16, 80, 64, 4, 1);
 
-  // transpose
-  passed &= test<8, uint64_t, 1, 4, 1, 32, true>();
-  passed &= test<9, uint64_t, 2, 2, 1, 16, true>();
-  passed &= test<10, uint64_t, 4, 4, 1, 4, true>();
+  // transformed
+  passed &= test<4, T, 1, 1, 16, 4, 4, false, true>(100, 10, 128, 16, 5);
+  passed &= test<5, T, 1, 1, 12, 20, 1, false, true>(16, 40, 64, 0, 0);
+  passed &= test<6, T, 1, 1, 16, 4, 2, false, true>(32, 4, 64, 4, 1);
+  passed &= test<7, T, 2, 2, 4, 16, 2, false, true>(4, 20, 64, 0, 3);
+  passed &= test<8, T, 1, 1, 16, 32, 1, false, true>(24, 80, 64, 4, 14);
+  passed &= test<9, T, 1, 1, 16, 4, 4, false, true>(64, 10, 64, 0, 0);
 
   std::cout << (passed ? "Passed\n" : "FAILED\n");
   return passed ? 0 : 1;

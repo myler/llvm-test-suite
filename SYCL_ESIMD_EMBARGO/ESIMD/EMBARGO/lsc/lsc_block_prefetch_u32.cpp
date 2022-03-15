@@ -15,30 +15,38 @@ implied warranties, other than those that are expressly stated in the License.
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUNx: %ESIMD_RUN_PLACEHOLDER %t.out
 
-#include "Inputs/lsc_flat_load.hpp"
+#include "Inputs/lsc_block_load.hpp"
 
-constexpr uint32_t seed = 187;
+constexpr uint32_t seed = 322;
+using T = uint32_t;
+
+constexpr CacheHint L1H = CacheHint::Uncached;
+constexpr CacheHint L3H = CacheHint::Uncached;
 
 int main(void) {
   srand(seed);
   bool passed = true;
 
-  // non transpose
-  passed &= test<0, uint64_t, 1, 4, 32, 1, false>(rand());
-  passed &= test<1, uint64_t, 1, 4, 32, 2, false>(rand());
-  passed &= test<2, uint64_t, 1, 4, 16, 2, false>(rand());
-  passed &= test<3, uint64_t, 1, 4, 4, 1, false>(rand());
-  passed &= test<4, uint64_t, 1, 1, 1, 1, false>(1);
-  passed &= test<5, uint64_t, 2, 1, 1, 1, false>(1);
+  // These parameters require unpadding. It is not implemented yet
+  // passed &= test<0, T, 2, 2, 2, 2>(16, 4, 16, 1, 1);
 
-  // IGC prohibits exec_size less than simd_size when vector size > 1
-  // passed &= test<6, uint64_t, 1, 4, 8, 2, false>(rand());
-  // passed &= test<7, uint64_t, 1, 4, 8, 3, false>(rand());
+  // non transposed, non transformed
+  passed &= test<1, T, 1, 1, 16, 4, 1, false, false, L1H, L3H, true>(16, 16, 32,
+                                                                     2, 1);
+  passed &=
+      test<2, T, 2, 2, 8, 4, 1, false, false, L1H, L3H, true>(16, 16, 16, 1, 5);
+  passed &=
+      test<3, T, 1, 1, 8, 2, 2, false, false, L1H, L3H, true>(16, 4, 16, 3, 1);
 
-  // transpose
-  passed &= test<8, uint64_t, 1, 4, 1, 32, true>();
-  passed &= test<9, uint64_t, 2, 2, 1, 16, true>();
-  passed &= test<10, uint64_t, 4, 4, 1, 4, true>();
+  // transposed
+  passed &=
+      test<4, T, 1, 1, 1, 16, 1, true, false, L1H, L3H, true>(16, 20, 16, 1, 2);
+  passed &=
+      test<5, T, 1, 1, 2, 8, 1, true, false, L1H, L3H, true>(16, 10, 16, 10, 1);
+  passed &=
+      test<6, T, 1, 1, 4, 8, 1, true, false, L1H, L3H, true>(16, 10, 16, 11, 1);
+  passed &=
+      test<7, T, 2, 2, 8, 2, 1, true, false, L1H, L3H, true>(16, 4, 16, 1, 1);
 
   std::cout << (passed ? "Passed\n" : "FAILED\n");
   return passed ? 0 : 1;
