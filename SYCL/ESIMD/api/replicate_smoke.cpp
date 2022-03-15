@@ -9,6 +9,7 @@
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
 =======
@@ -17,6 +18,8 @@
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
 >>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
+=======
+>>>>>>> 1947aed85 ([SYCL][ESIMD][EMU] Removing 'XFAIL' markings for 'single_task' tests (#910))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //

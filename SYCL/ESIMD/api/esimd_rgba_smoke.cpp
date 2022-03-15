@@ -9,6 +9,7 @@
 // UNSUPPORTED: cuda || hip
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
 =======
@@ -17,6 +18,8 @@
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
 >>>>>>> b3d790428 ([SYCL][ESIMD][EMU] XFAIL for 'SYCL/ESIMD/api/esimd_rgba_smoke.cpp' (#840))
+=======
+>>>>>>> 1947aed85 ([SYCL][ESIMD][EMU] Removing 'XFAIL' markings for 'single_task' tests (#910))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
