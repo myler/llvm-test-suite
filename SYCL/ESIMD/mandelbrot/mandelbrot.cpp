@@ -8,6 +8,8 @@
 
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
+// TODO: esimd_emulator fails due to outdated __esimd_media_st
+// XFAIL: esimd_emulator
 // RUN: %clangxx -fsycl %s -I%S/.. -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out %T/output.ppm %S/golden_hw.ppm
 
@@ -16,10 +18,10 @@
 #include <array>
 #include <iostream>
 #include <memory>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
-using namespace sycl::ext::intel::experimental::esimd;
+using namespace sycl::ext::intel::esimd;
 
 #ifdef _SIM_MODE_
 #define CRUNCH 32

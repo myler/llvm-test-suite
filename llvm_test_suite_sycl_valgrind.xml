@@ -43,9 +43,17 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="assert" testName="assert_assert_in_simultaneously_multiple_tus_one_ndebug" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_accessor" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_generic_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_generic_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_add_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_and" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_and_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_and_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_and_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_assignment" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_assignment_atomic64" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_assignment_atomic64_generic" />
@@ -53,33 +61,53 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_atomic_memory_order" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_atomic_memory_order_acq_rel" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_exchange_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_load_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_generic_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_generic_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_max_native_fp" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_generic_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_generic_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_min_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_or" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_or_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_or_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_or_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_store_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_atomic64" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_atomic64_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_generic_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_generic_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_local_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_sub_native_fp" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_xor" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_xor_generic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_xor_generic_local" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_xor_local" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_access_to_subset" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_accessor_accessor" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_accessor_device_accessor_deduction" />
@@ -101,6 +129,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_buffer_native_buffer_creation_flags" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_buffer_reinterpret" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_buffer_subbuffer" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_build_log" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_compare_exchange_strong" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_context_platforms" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_context_with_multiple_devices" />
@@ -132,6 +161,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_get_backend" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_get_nonhost_devices" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_group_async_copy" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_group_local_id" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_half_type" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_handler_handler_copy_with_offset" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_handler_handler_generic_integral_lambda" />
@@ -314,8 +344,15 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_ballot" />
     <test configFile="config_sycl/esimd_api_bin_and_cmp_ops_heavy.xml" splitGroup="esimd" testName="esimd_api_bin_and_cmp_ops_heavy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_bit_ops" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_merge" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_pack_unpack_mask" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_esimd_rgba_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_array_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_fp_extra" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_broadcast_core" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_broadcast_fp_extra" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_converting_core" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_converting_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_copy_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_default_core" />
@@ -325,11 +362,17 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_fill_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_move_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_vector_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_fp_extra" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_assignment_move_and_copy_core" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_accuracy_core" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_accuracy_fp_extra" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_core" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_fp_extra" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_logical_not" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_replicate_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_saturation_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_any_all" />
@@ -341,6 +384,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_subscript_operator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_copy_move_assign" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_negation_operator" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_select_2d" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_subscript_operator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
@@ -350,6 +394,10 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dp4a" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test1" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test2" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_dpas_dpasw_test" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_esimd_check_vc_codegen" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_esimd_verify" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_ext_math" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_fp_args_size_fp_args_char_int_size_192" />
@@ -549,8 +597,12 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_non_standard_layout" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_struct_kernel_param" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="double" testName="kernelparams_union_kernel_param" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_bf16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_half" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8_packed" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_ops" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_elemwise_irreg_size_ops_bf16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
@@ -573,6 +625,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_level_zero" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_level_zero_interop_task_mem" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_level_zero_keep_ownership" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_level_zero_thread" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_interop_task_mem" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_interop_opencl_make_kernel" />
@@ -584,6 +637,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_dynamic_batch_test" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_event_leak" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_queue_create" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_queue_profiling" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_track_indirect_access_memory" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_level_zero_usm_capabilities" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_max_malloc" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="plugin" testName="plugin_retain_events" />
@@ -646,12 +701,14 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_host_unified_memory" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_image_access" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_implicit_atomic_conversion" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_implicit_kernel_bundle_image_filtering" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_implicit_offset_debug_info" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_intel_std_container_intrinsic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_bundle_ignore_sycl_external" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_name_class" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_name_inside_sycl_namespace" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_kernel_unnamed" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_local_arg_align" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_msvc_crt" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_multiple_targets" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_nontrivial_device_copyable_value" />
@@ -760,6 +817,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_hmemllaligned" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_math" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_memadvise" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_memadvise_cuda" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_memcpy" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_memset" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="usm" testName="usm_mixed" />
