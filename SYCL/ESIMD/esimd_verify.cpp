@@ -1,9 +1,9 @@
 // RUN: not %clangxx -fsycl -fsycl-device-only %s 2>&1 | FileCheck %s
 
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
-using namespace sycl::ext::intel::experimental::esimd;
+using namespace sycl::ext::intel::esimd;
 
 // CHECK: error: function 'cl::sycl::multi_ptr<{{.+}}> cl::sycl::accessor<{{.+}}>::get_pointer<{{.+}}>() const' is not supported in ESIMD context
 
