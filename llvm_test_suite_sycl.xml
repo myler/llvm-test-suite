@@ -377,7 +377,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_saturation_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_any_all" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_binop_integer_promotion" />
-    <test configFile="config_sycl/esimd_api_simd_copy_to_from.xml" splitGroup="double" testName="esimd_api_simd_copy_to_from" />
+    <test configFile="config_sycl/esimd_api_simd_copy_to_from.xml" splitGroup="esimd" testName="esimd_api_simd_copy_to_from" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_mask" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_memory_access" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_negation_operator" />
@@ -596,12 +596,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_array_kernel_param_run" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_non_standard_layout" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="kernelparams" testName="kernelparams_struct_kernel_param" />
-<<<<<<< HEAD
     <test configFile="config_sycl/kernelparams_union_kernel_param.xml" splitGroup="double" testName="kernelparams_union_kernel_param" />
-=======
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="double" testName="kernelparams_union_kernel_param" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_bf16" />
->>>>>>> target/xmain-cand
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_half" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8_packed" />
