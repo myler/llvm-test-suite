@@ -10,6 +10,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
@@ -25,6 +26,8 @@
 // TODO: esimd_emulator fails due to a bug in __esimd_pack_mask() intrinsic
 // XFAIL: esimd_emulator
 >>>>>>> 1947aed85 ([SYCL][ESIMD][EMU] Removing 'XFAIL' markings for 'single_task' tests (#910))
+=======
+>>>>>>> 0c984891c ([SYCL][ESIMD][EMU] Removing XFAIL for test enabled with memory intrinsic updates (#928))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
