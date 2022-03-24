@@ -97,11 +97,11 @@ config.substitutions.append( ('%sycl_include',  config.sycl_include ) )
 if lit_config.params.get('gpu-intel-dg1', False):
     config.available_features.add('gpu-intel-dg1')
 
+if lit_config.params.get('gpu-intel-pvc', False):
+    config.available_features.add('gpu-intel-pvc')
+
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
-
-if lit_config.params.get('matrix-pvc', False):
-    config.available_features.add('matrix-pvc')
 
 #support for LIT parameter ze_debug<num>
 if lit_config.params.get('ze_debug'):
@@ -396,7 +396,7 @@ if find_executable('cmc'):
 
 # Device AOT compilation tools aren't part of the SYCL project,
 # so they need to be pre-installed on the machine
-aot_tools = ["ocloc", "aoc", "opencl-aot"]
+aot_tools = ["ocloc", "opencl-aot"]
 
 for aot_tool in aot_tools:
     if find_executable(aot_tool) is not None:
@@ -404,13 +404,6 @@ for aot_tool in aot_tools:
         config.available_features.add(aot_tool)
     else:
         lit_config.warning("Couldn't find pre-installed AOT device compiler " + aot_tool)
-
-# INTEL_CUSTOMIZATION
-if 'ICS_TESTDATA' in os.environ and platform.system() == "Windows":
-    config.available_features.add('timelimit')
-    # set _NT_SYMBOL_PATH to specify PDB files location
-    config.substitutions.append(('%timelimit', ' env _NT_SYMBOL_PATH='+config.dpcpp_root_dir+'/bin '+os.environ['ICS_TESTDATA']+'/mainline/CT-SpecialTests/opencl/tools/win.x64/bin/timelimit.exe'))
-# end INTEL_CUSTOMIZATION
 
 # Set timeout for test 1 min
 try:
