@@ -42,6 +42,7 @@ SYCL/GroupLocalMemory @Pennycook @intel/llvm-reviewers-runtime
 
 # Plugin interface for Level Zero
 /SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
+/SYCL/Plugin/*level_zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
 SYCL/Printf @intel/dpcpp-tools-reviewers
