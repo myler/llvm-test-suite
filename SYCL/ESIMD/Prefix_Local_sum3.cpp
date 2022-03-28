@@ -8,14 +8,13 @@
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 // RUN: %clangxx -fsycl %s -o %t.out
-// RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
 #include <iostream>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #define MAX_TS_WIDTH 1024
 // kernel can handle TUPLE_SZ 1, 2, or 4
@@ -38,7 +37,7 @@
 #define REMAINING_ENTRIES 64
 
 using namespace cl::sycl;
-using namespace sycl::ext::intel::experimental::esimd;
+using namespace sycl::ext::intel::esimd;
 
 void compute_local_prefixsum(unsigned int prefixSum[], unsigned int size,
                              unsigned elem_stride, unsigned thread_stride,

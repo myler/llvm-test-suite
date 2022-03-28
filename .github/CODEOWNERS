@@ -27,15 +27,6 @@ SYCL/Tracing  @intel/llvm-reviewers-runtime
 SYCL/DeviceLib @vzakhari
 SYCL/DeviceLib/ITTAnnotations @vzakhari @MrSidims
 
-# Group algorithms
-/SYCL/GroupAlgorithm/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/GroupLocalMemory/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/SubGroup/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/SubGroupMask/ @Pennycook @intel/llvm-reviewers-runtime
-
-# Plugin interface for Level Zero
-/SYCL/Plugin/*level[-_]zero* @intel/dpcpp-l0-pi-reviewers
-
 # Explicit SIMD
 config_sycl/esimd* @kychendev @kbobrovs @v-vklochkov
 SYCL/ESIMD @intel/dpcpp-esimd-reviewers
@@ -50,7 +41,7 @@ SYCL/SubGroupMask @Pennycook @intel/llvm-reviewers-runtime
 SYCL/GroupLocalMemory @Pennycook @intel/llvm-reviewers-runtime
 
 # Plugin interface for Level Zero
-SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
+/SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
 SYCL/Printf @intel/dpcpp-tools-reviewers
@@ -74,11 +65,12 @@ SYCL/USM @jbrodman @sergey-semenov
 SYCL/Basic/stream @againull
 
 # Test scripts
-*.pl @myler @yamanwan
-*.list @myler @yamanwan
+*.pl @myler @wanyaman
+*.list @myler @wanyaman
 
 # tc files
-*.xml @myler @yamanwan
+*.xml @myler @wanyaman
+config_sycl/* @myler @wanyaman
 
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
@@ -93,25 +85,11 @@ SYCL_ESIMD_EMBARGO/ESIMD/EMBARGO/named_barriers @fveselov
 
 # XPTI and XPTI Framework
 SYCL/XPTI @intel/llvm-reviewers-runtime
-# Group algorithms
-/SYCL/GroupAlgorithm/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/GroupLocalMemory/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/SubGroup/ @Pennycook @intel/llvm-reviewers-runtime
-/SYCL/SubGroupMask/ @Pennycook @intel/llvm-reviewers-runtime
-
-# Plugin interface for Level Zero
-/SYCL/Plugin/*level[-_]zero* @intel/dpcpp-l0-pi-reviewers
 
 # BFloat16 conversion
-/SYCL/BFloat16/ @AlexeySotkin @intel/dpcpp-tools-reviewers
+/SYCL/BFloat16/ @intel/dpcpp-tools-reviewers
 
 # Compiler tests
 /SYCL/AOT/ @intel/dpcpp-tools-reviewers
 /SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
 /SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
-
-# Printf
-/SYCL/Printf/ @intel/dpcpp-tools-reviewers
-
-# Specialization constant
-/SYCL/SpecConstants/ @intel/dpcpp-tools-reviewers
