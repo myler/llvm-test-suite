@@ -1,18 +1,20 @@
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #include <iostream>
 
 #include "common.hpp"
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
+using namespace sycl::ext::intel::experimental::esimd::detail;
 
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           int BlockWidth, int BlockHeight = 1,
           int N = get_lsc_block_2d_data_size<T, 1u, BlockHeight, BlockWidth,
                                              false, false>(),
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None>
+          cache_hint L1H = cache_hint::none, cache_hint L3H = cache_hint::none>
 bool test(unsigned SurfaceWidth, unsigned SurfaceHeight, unsigned SurfacePitch,
           int X, int Y) {
   static_assert(BlockWidth > 0, "Block width must be positive");
@@ -55,10 +57,9 @@ bool test(unsigned SurfaceWidth, unsigned SurfaceHeight, unsigned SurfacePitch,
 
             simd<T, N> vals(new_val + off, 1);
             // IUT
-            lsc_flat_store2d<T, BlockWidth, BlockHeight, false, false, L1H,
-                             L3H>(out + off, SurfaceWidth * sizeof(T) - 1,
-                                  SurfaceHeight - 1,
-                                  SurfacePitch * sizeof(T) - 1, X, Y, vals);
+            lsc_store2d<T, BlockWidth, BlockHeight, L1H, L3H>(
+                out + off, SurfaceWidth * sizeof(T) - 1, SurfaceHeight - 1,
+                SurfacePitch * sizeof(T) - 1, X, Y, vals);
           });
     });
     e.wait();

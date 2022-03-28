@@ -1,17 +1,18 @@
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #include <iostream>
 
 #include "common.hpp"
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           uint16_t VL, uint16_t VS, bool transpose,
           lsc_data_size DS = lsc_data_size::default_size,
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None>
+          cache_hint L1H = cache_hint::none, cache_hint L3H = cache_hint::none>
 bool test(uint32_t pmask = 0xffffffff) {
   static_assert((VL == 1) || !transpose, "Transpose must have exec size 1");
   if constexpr (DS == lsc_data_size::u8u32 || DS == lsc_data_size::u16u32) {
@@ -70,7 +71,7 @@ bool test(uint32_t pmask = 0xffffffff) {
 
             if constexpr (transpose) {
               simd<T, VS> vals(new_val + elem_off, 1);
-              lsc_surf_store<T, VS, DS, L1H, L3H>(vals, acco, byte_off);
+              lsc_block_store<T, VS, DS, L1H, L3H>(acco, byte_off, vals);
             } else {
               simd<uint32_t, VL> offset(byte_off, VS * sizeof(T));
               simd_mask<VL> pred;
@@ -83,7 +84,7 @@ bool test(uint32_t pmask = 0xffffffff) {
                 for (int j = 0; j < VS; j++)
                   vals.template select<1, 1>(i + j * VL) = val++;
 
-              lsc_surf_store<T, VS, DS, L1H, L3H, VL>(vals, acco, offset, pred);
+              lsc_scatter<T, VS, DS, L1H, L3H, VL>(acco, offset, vals, pred);
             }
           });
     });

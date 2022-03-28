@@ -20,8 +20,8 @@ implied warranties, other than those that are expressly stated in the License.
 constexpr uint32_t seed = 322;
 using T = uint32_t;
 
-constexpr CacheHint L1H = CacheHint::Uncached;
-constexpr CacheHint L3H = CacheHint::Uncached;
+constexpr cache_hint L1H = cache_hint::cached;
+constexpr cache_hint L3H = cache_hint::uncached;
 
 int main(void) {
   srand(seed);

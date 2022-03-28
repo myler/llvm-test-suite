@@ -13,11 +13,12 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <array>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 #define NUM_BINS 256
@@ -61,7 +62,7 @@ int checkHistogram(unsigned int *refHistogram, unsigned int *hist) {
   return 1;
 }
 
-template <EsimdAtomicOpType Op, typename T, int n>
+template <atomic_op Op, typename T, int n>
 ESIMD_INLINE void atomic_write(T *bins, simd<unsigned, n> offset,
                                simd<T, n> src0, simd_mask<n> pred) {
   simd<T, n> oldDst;
@@ -216,8 +217,8 @@ int main(int argc, char *argv[]) {
 #ifdef __SYCL_DEVICE_ONLY__
               // flat_atomic<EsimdAtomicOpType::ATOMIC_ADD, unsigned int,
               // 8>(bins, offset, src, 1);
-              atomic_write<sycl::ext::intel::experimental::esimd::atomic_op::add, unsigned int, 8>(
-                  bins, offset, src, 1);
+              atomic_update<sycl::ext::intel::esimd::atomic_op::add,
+                            unsigned int, 8>(bins, offset, src, 1);
               offset += 8 * sizeof(unsigned int);
 #else
               simd<unsigned int, 8> vals;

@@ -22,7 +22,7 @@
 #include <string>
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #ifdef DUMP_ENABLE
 #define DUMP(x) std::cout << x
@@ -77,7 +77,7 @@ struct CsrSparseMatrix {
 
 using ushort = unsigned short;
 using namespace cl::sycl;
-using namespace sycl::ext::intel::experimental::esimd;
+using namespace sycl::ext::intel::esimd;
 using namespace std;
 
 using IndexType = unsigned int;

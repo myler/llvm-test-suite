@@ -23,10 +23,11 @@ implied warranties, other than those that are expressly stated in the License.
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 int main() {
   using namespace cl::sycl;
+  using namespace sycl::ext::intel::esimd;
   using namespace sycl::ext::intel::experimental::esimd;
   auto size = size_t{128};
   auto constexpr SIMDSize = unsigned{4};
@@ -62,34 +63,34 @@ int main() {
                                                     sizeof(int));
             auto data = simd<int, SIMDSize>(id * SIMDSize, 1);
             auto pred = simd_mask<SIMDSize>(1);
-            auto add = simd<uint16_t, SIMDSize>(5);
-            auto compare = simd<uint32_t, SIMDSize>(id * SIMDSize, 1);
+            auto add = simd<int, SIMDSize>(5);
+            auto compare = simd<int, SIMDSize>(id * SIMDSize, 1);
             auto swap = compare * 2;
 
             slm_init(4096);
-            lsc_slm_store<int, SIMDSize>(data * 2, offset);
-            auto data_0 = lsc_slm_load<int, SIMDSize>(offset);
-            lsc_surf_store<int, SIMDSize>(data_0, access_0, offset);
+            lsc_slm_block_store<int, SIMDSize>(offset, data * 2);
+            auto data_0 = lsc_slm_block_load<int, SIMDSize>(offset);
+            lsc_block_store<int, SIMDSize>(access_0, offset, data_0);
 
-            lsc_slm_store<int>(data * 2, offsets);
-            auto data_1 = lsc_slm_load<int>(offsets);
-            lsc_surf_store<int, SIMDSize>(data_1, access_1, offset);
+            lsc_slm_scatter<int>(offsets, data * 2);
+            auto data_1 = lsc_slm_gather<int>(offsets);
+            lsc_block_store<int, SIMDSize>(access_1, offset, data_1);
 
-            lsc_slm_store<int, SIMDSize>(data, offset);
-            lsc_slm_atomic<int, atomic_op::inc>(offsets, pred);
-            auto data_2 = lsc_slm_load<int, SIMDSize>(offset);
-            lsc_surf_store<int, SIMDSize>(data_2, access_2, offset);
+            lsc_slm_block_store<int, SIMDSize>(offset, data);
+            lsc_slm_atomic_update<atomic_op::inc, int>(offsets, pred);
+            auto data_2 = lsc_slm_block_load<int, SIMDSize>(offset);
+            lsc_block_store<int, SIMDSize>(access_2, offset, data_2);
 
-            lsc_slm_store<int, SIMDSize>(data, offset);
-            lsc_slm_atomic<int, atomic_op::add>(offsets, add, pred);
-            auto data_3 = lsc_slm_load<int, SIMDSize>(offset);
-            lsc_surf_store<int, SIMDSize>(data_3, access_3, offset);
+            lsc_slm_block_store<int, SIMDSize>(offset, data);
+            lsc_slm_atomic_update<atomic_op::add, int>(offsets, add, pred);
+            auto data_3 = lsc_slm_block_load<int, SIMDSize>(offset);
+            lsc_block_store<int, SIMDSize>(access_3, offset, data_3);
 
-            lsc_slm_store<int, SIMDSize>(data, offset);
-            lsc_slm_atomic<int, atomic_op::cmpxchg>(offsets, compare, swap,
-                                                    pred);
-            auto data_4 = lsc_slm_load<int, SIMDSize>(offset);
-            lsc_surf_store<int, SIMDSize>(data_4, access_4, offset);
+            lsc_slm_block_store<int, SIMDSize>(offset, data);
+            lsc_slm_atomic_update<atomic_op::cmpxchg, int>(offsets, compare,
+                                                           swap, pred);
+            auto data_4 = lsc_slm_block_load<int, SIMDSize>(offset);
+            lsc_block_store<int, SIMDSize>(access_4, offset, data_4);
           });
     });
     q.wait();

@@ -7,14 +7,14 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda
-// RUN: %clangxx -fsycl -DESIMD_GEN12_7 %s -o %t.out
+// RUN: %clangxx -fsycl -DESIMD_XE_HPG %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
 
@@ -39,28 +39,29 @@ int main(void) {
   nd_range<1> Range(GroupRange, TaskRange);
 
   q.submit([&](handler &cgh) {
-    cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-      using namespace sycl::ext::intel::experimental::esimd;
+     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
+       using namespace sycl::ext::intel::esimd;
+       using namespace sycl::ext::intel::experimental::esimd;
 
-      simd<char, Size * 2> va(0);
-      auto ma = va.bit_cast_view<char, 8, 32>();
-      ma.select<2, 1, 8, 4>(0, 0) = 4;
+       simd<char, Size * 2> va(0);
+       auto ma = va.bit_cast_view<char, 8, 32>();
+       ma.select<2, 1, 8, 4>(0, 0) = 4;
 
-      simd<char, Size> vb(0);
-      auto mb = vb.bit_cast_view<char, 8, 16>();
-      mb.select<8, 1, 1, 1>(0, 0) = 4;
+       simd<char, Size> vb(0);
+       auto mb = vb.bit_cast_view<char, 8, 16>();
+       mb.select<8, 1, 1, 1>(0, 0) = 4;
 
-      simd<int, Size> vc(0);
-      vc = dpas<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8, int,
-                int, int, Size, 64, 32>(vc, ma.bit_cast_view<int>(),
-                                        mb.bit_cast_view<int>());
+       simd<int, Size> vc(0);
+       vc =
+           dpas<argument_type::S2, argument_type::S2, 8, 8, int, int, int, Size,
+                64, 32>(vc, ma.bit_cast_view<int>(), mb.bit_cast_view<int>());
 
-      for (int i = 0; i < Size; i += VL) {
-        simd<int, VL> output = vc.select<VL, 1>(i);
-        output.copy_to(C + i);
-      }
-    });
-  }).wait();
+       for (int i = 0; i < Size; i += VL) {
+         simd<int, VL> output = vc.select<VL, 1>(i);
+         output.copy_to(C + i);
+       }
+     });
+   }).wait();
 
   int err_cnt = 0;
   for (unsigned i = 0; i < Size && err_cnt < 10; ++i)

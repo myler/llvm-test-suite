@@ -1,17 +1,18 @@
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #include <iostream>
 
 #include "common.hpp"
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           uint16_t VL, uint16_t VS, bool transpose,
           lsc_data_size DS = lsc_data_size::default_size,
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None,
+          cache_hint L1H = cache_hint::none, cache_hint L3H = cache_hint::none,
           bool use_prefetch = false>
 bool test(uint32_t pmask = 0xffffffff) {
   static_assert((VL == 1) || !transpose, "Transpose must have exec size 1");
@@ -76,13 +77,13 @@ bool test(uint32_t pmask = 0xffffffff) {
             if constexpr (transpose) {
               simd<T, VS> vals;
               if constexpr (use_prefetch) {
-                lsc_surf_prefetch<T, VS, DS, L1H, L3H>(acci, byte_off);
-                vals = lsc_surf_load<T, VS, DS>(acci, byte_off);
+                lsc_prefetch<T, VS, DS, L1H, L3H>(acci, byte_off);
+                vals = lsc_block_load<T, VS, DS>(acci, byte_off);
               } else {
-                vals = lsc_surf_load<T, VS, DS, L1H, L3H>(acci, byte_off);
+                vals = lsc_block_load<T, VS, DS, L1H, L3H>(acci, byte_off);
               }
-              lsc_surf_store<T, VS, lsc_data_size::default_size>(vals, acco,
-                                                                 byte_off);
+              lsc_block_store<T, VS, lsc_data_size::default_size>(
+                  acco, byte_off, vals);
             } else {
               simd<uint32_t, VL> offset(byte_off, VS * sizeof(T));
               simd_mask<VL> pred;
@@ -91,21 +92,19 @@ bool test(uint32_t pmask = 0xffffffff) {
 
               simd<T, VS * VL> vals;
               if constexpr (use_prefetch) {
-                lsc_surf_prefetch<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
-                vals = lsc_surf_load<T, VS, DS, CacheHint::None,
-                                     CacheHint::None, VL>(acci, offset, pred);
+                lsc_prefetch<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+                vals = lsc_gather<T, VS, DS, cache_hint::none, cache_hint::none,
+                                  VL>(acci, offset, pred);
               } else {
-                vals =
-                    lsc_surf_load<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
+                vals = lsc_gather<T, VS, DS, L1H, L3H, VL>(acci, offset, pred);
               }
 
               if constexpr (DS == lsc_data_size::u8u32 ||
                             DS == lsc_data_size::u16u32)
                 vals &= vmask;
 
-              lsc_surf_store<T, VS, lsc_data_size::default_size,
-                             CacheHint::None, CacheHint::None, VL>(
-                  vals, acco, offset, pred);
+              lsc_scatter<T, VS, lsc_data_size::default_size, cache_hint::none,
+                          cache_hint::none, VL>(acco, offset, vals, pred);
             }
           });
     });

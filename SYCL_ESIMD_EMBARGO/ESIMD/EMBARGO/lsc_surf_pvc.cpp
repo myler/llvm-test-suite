@@ -23,10 +23,11 @@ implied warranties, other than those that are expressly stated in the License.
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 int main() {
   using namespace cl::sycl;
+  using namespace sycl::ext::intel::esimd;
   using namespace sycl::ext::intel::experimental::esimd;
   auto size = size_t{128};
   auto constexpr SIMDSize = unsigned{4};
@@ -66,26 +67,27 @@ int main() {
             auto offsets = simd<uint32_t, SIMDSize>(id * SIMDSize * sizeof(int),
                                                     sizeof(int));
             auto pred = simd_mask<SIMDSize>(1);
-            auto add = simd<uint16_t, SIMDSize>(5);
-            auto compare = simd<uint32_t, SIMDSize>(id * SIMDSize, 1);
+            auto add = simd<int, SIMDSize>(5);
+            auto compare = simd<int, SIMDSize>(id * SIMDSize, 1);
             auto swap = compare * 2;
 
-            lsc_surf_prefetch<int, SIMDSize, lsc_data_size::default_size,
-                              CacheHint::Uncached, CacheHint::Uncached>(
-                access_0, offset);
-            auto data_0 = lsc_surf_load<int, SIMDSize>(access_0, offset);
-            lsc_surf_store<int, SIMDSize>(data_0 * 2, access_0, offset);
+            lsc_prefetch<int, SIMDSize, lsc_data_size::default_size,
+                         cache_hint::cached, cache_hint::uncached>(access_0,
+                                                                   offset);
+            auto data_0 = lsc_block_load<int, SIMDSize>(access_0, offset);
+            lsc_block_store<int, SIMDSize>(access_0, offset, data_0 * 2);
 
-            lsc_surf_prefetch<int, 1, lsc_data_size::default_size,
-                              CacheHint::Uncached, CacheHint::Uncached>(
-                access_1, offsets);
-            auto data_1 = lsc_surf_load<int>(access_1, offsets);
-            lsc_surf_store<int>(data_1 * 2, access_1, offsets);
+            lsc_prefetch<int, 1, lsc_data_size::default_size,
+                         cache_hint::cached, cache_hint::uncached>(access_1,
+                                                                   offsets);
+            auto data_1 = lsc_gather<int>(access_1, offsets);
+            lsc_scatter<int>(access_1, offsets, data_1 * 2);
 
-            lsc_surf_atomic<int, atomic_op::inc>(access_2, offsets, pred);
-            lsc_surf_atomic<int, atomic_op::add>(access_3, offsets, add, pred);
-            lsc_surf_atomic<int, atomic_op::cmpxchg>(access_4, offsets, compare,
-                                                     swap, pred);
+            lsc_atomic_update<atomic_op::inc, int>(access_2, offsets, pred);
+            lsc_atomic_update<atomic_op::add, int>(access_3, offsets, add,
+                                                   pred);
+            lsc_atomic_update<atomic_op::cmpxchg, int>(access_4, offsets,
+                                                       compare, swap, pred);
           });
     });
     q.wait();

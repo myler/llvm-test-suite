@@ -1,4 +1,5 @@
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned prods, unsigned cons, unsigned Size, typename AccessorTy>
@@ -47,7 +48,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
     nbarrier_wait(bid); // consumers waiting for signal
 
   auto val = slm_block_load<int, VL>(off); // reading SLM
-  lsc_surf_store<int, VL>(val, acc, off);  // and storing it to output surface
+  lsc_block_store<int, VL>(acc, off, val); // and storing it to output surface
 }
 
 template <int case_num> class KernelID;

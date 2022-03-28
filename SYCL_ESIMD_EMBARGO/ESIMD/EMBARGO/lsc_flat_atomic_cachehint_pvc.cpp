@@ -13,26 +13,26 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
 #include <stdlib.h>
+#include <sycl/ext/intel/esimd.hpp>
 
 class Test;
 
 #define DTYPE float
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 ESIMD_INLINE void atomic_add_float(DTYPE *sA, simd_mask<16> M) {
-  simd<uint32_t, 16> offsets = {0, 1, 2,  3,  4,  5,  6,  7,
-                                8, 9, 10, 11, 12, 13, 14, 15};
-  simd<float, 16> mat = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-                         0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
-  lsc_flat_atomic<float, sycl::ext::intel::experimental::esimd::atomic_op::fadd, 1,
-                  lsc_data_size::default_size, CacheHint::Uncached,
-                  CacheHint::WriteBack, 16>((float *)sA,
-                                            offsets * sizeof(float), mat, M);
+  simd<uint32_t, 16> offsets(
+      {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+  simd<float, 16> mat({0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                       0.5, 0.5, 0.5, 0.5, 0.5});
+  lsc_atomic_update<atomic_op::fadd, float, 16, lsc_data_size::default_size,
+                    cache_hint::uncached, cache_hint::write_back>(
+      (float *)sA, offsets * sizeof(float), mat, M);
 }
 
 int main(void) {

@@ -13,9 +13,9 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <array>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
 
       cgh.parallel_for<class Hist>(
           Range, [=](nd_item<2> ndi) SYCL_ESIMD_KERNEL {
-            using namespace sycl::ext::intel::experimental::esimd;
+            using namespace sycl::ext::intel::esimd;
 
             // Get thread origin offsets
             uint h_pos = ndi.get_group(0) * BLOCK_WIDTH;
@@ -190,8 +190,8 @@ int main(int argc, char *argv[]) {
               src = histogram.select<8, 1>(i);
 
 #ifdef __SYCL_DEVICE_ONLY__
-              atomic_update<sycl::ext::intel::experimental::esimd::atomic_op::add, unsigned int, 8>(
-                  bins, offset, src, 1);
+              atomic_update<sycl::ext::intel::esimd::atomic_op::add,
+                            unsigned int, 8>(bins, offset, src, 1);
               offset += 8 * sizeof(unsigned int);
 #else
 	      simd<unsigned int, 8> vals;

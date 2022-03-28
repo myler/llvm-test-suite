@@ -24,10 +24,11 @@ implied warranties, other than those that are expressly stated in the License.
 #include <cmath>
 #include <numeric>
 #include <random>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 int main() {
   using namespace cl::sycl;
+  using namespace sycl::ext::intel::esimd;
   using namespace sycl::ext::intel::experimental::esimd;
   unsigned data_height = 4;
   unsigned data_width = 9;
@@ -64,17 +65,16 @@ int main() {
     q.submit([&](handler &h) {
       h.parallel_for<class SimplestKernel>(
           range<1>{1}, [=](id<1> id) SYCL_ESIMD_KERNEL {
-            lsc_flat_prefetch2d<int, Width, Height, NumBlocks, false, false,
-                                CacheHint::Uncached, CacheHint::Uncached>(
+            lsc_prefetch2d<int, Width, Height, NumBlocks, cache_hint::cached,
+                           cache_hint::uncached>(
                 input, (data_width * sizeof(int)) - 1, data_height - 1,
                 (data_pitch * sizeof(int)) - 1, x, y);
-            auto data =
-                lsc_flat_load2d<int, Width, Height, NumBlocks, false, false,
-                                CacheHint::Uncached, CacheHint::Uncached>(
-                    input, (data_width * sizeof(int)) - 1, data_height - 1,
-                    (data_pitch * sizeof(int)) - 1, x, y);
-            lsc_flat_store2d<int, Width, Height, false, false,
-                             CacheHint::Uncached, CacheHint::Uncached>(
+            auto data = lsc_load2d<int, Width, Height, NumBlocks, false, false,
+                                   cache_hint::uncached, cache_hint::uncached>(
+                input, (data_width * sizeof(int)) - 1, data_height - 1,
+                (data_pitch * sizeof(int)) - 1, x, y);
+            lsc_store2d<int, Width, Height, cache_hint::uncached,
+                        cache_hint::uncached>(
                 block_store, (data_width * sizeof(int)) - 1, data_height - 1,
                 (data_pitch * sizeof(int)) - 1, x, y, data);
           });

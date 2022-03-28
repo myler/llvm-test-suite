@@ -1,4 +1,5 @@
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
@@ -56,7 +57,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
     unsigned int off = localID * VL * sizeof(int);
     // read SLM and store to output
     auto ret = slm_block_load<int, VL2>(group_off + off);
-    lsc_surf_store<int, VL2>(ret, acc, group_off + off);
+    lsc_block_store<int, VL2>(acc, group_off + off, ret);
   }
 }
 

@@ -1,18 +1,20 @@
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #include <iostream>
 
 #include "common.hpp"
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
+using namespace sycl::ext::intel::esimd::detail;
 using namespace sycl::ext::intel::experimental::esimd;
 using namespace sycl::ext::intel::experimental::esimd::detail;
 
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           int BlockWidth, int BlockHeight = 1, int NBlocks = 1,
           bool Transposed = false, bool Transformed = false,
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None,
+          cache_hint L1H = cache_hint::none, cache_hint L3H = cache_hint::none,
           bool use_prefetch = false>
 bool test(unsigned SurfaceWidth, unsigned SurfaceHeight, unsigned SurfacePitch,
           int X, int Y) {
@@ -77,7 +79,7 @@ bool test(unsigned SurfaceWidth, unsigned SurfaceHeight, unsigned SurfacePitch,
    * and rounds up BlockHeight.
    */
   constexpr int SH = Transformed
-                         ? roundUpNextMultiple(BlockHeight, 4 / sizeof(T))
+                         ? roundUpNextMultiple<BlockHeight, 4 / sizeof(T)>()
                          : BlockHeight;
   constexpr int SW = Transformed ? getNextPowerOf2<BlockWidth>() : BlockWidth;
   constexpr int SN = get_lsc_block_2d_data_size<T, 1u, 1u, SW, false, false>();
@@ -126,23 +128,22 @@ bool test(unsigned SurfaceWidth, unsigned SurfaceHeight, unsigned SurfacePitch,
 
             simd<T, N> vals;
             if constexpr (use_prefetch) {
-              lsc_flat_prefetch2d<T, BlockWidth, BlockHeight, NBlocks,
-                                  Transposed, Transformed, L1H, L3H>(
+              lsc_prefetch2d<T, BlockWidth, BlockHeight, NBlocks, L1H, L3H>(
                   in + off, width, height, pitch, X, Y);
-              vals = lsc_flat_load2d<T, BlockWidth, BlockHeight, NBlocks,
-                                     Transposed, Transformed>(
-                  in + off, width, height, pitch, X, Y);
+              vals =
+                  lsc_load2d<T, BlockWidth, BlockHeight, NBlocks, Transposed,
+                             Transformed>(in + off, width, height, pitch, X, Y);
             } else {
-              vals = lsc_flat_load2d<T, BlockWidth, BlockHeight, NBlocks,
-                                     Transposed, Transformed, L1H, L3H>(
-                  in + off, width, height, pitch, X, Y);
+              vals = lsc_load2d<T, BlockWidth, BlockHeight, NBlocks, Transposed,
+                                Transformed, L1H, L3H>(in + off, width, height,
+                                                       pitch, X, Y);
             }
 
             for (int i = 0; i < NBlocks; i++) {
               for (int j = 0; j < SH; j++) {
                 simd<T, SN> v =
                     vals.template select<SN, 1>(i * SN * SH + j * SW);
-                lsc_flat_store2d<T, SW>(
+                lsc_store2d<T, SW>(
                     out + off, SurfaceWidth * sizeof(T) - 1, SurfaceHeight - 1,
                     SurfacePitch * sizeof(T) - 1, X + i * SW, Y + j, v);
               }

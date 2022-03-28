@@ -26,10 +26,11 @@ implied warranties, other than those that are expressly stated in the License.
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 int main() {
   using namespace cl::sycl;
+  using namespace sycl::ext::intel::esimd;
   using namespace sycl::ext::intel::experimental::esimd;
   auto size = size_t{512};
   unsigned constexpr SIMDSize = 8;
@@ -56,24 +57,25 @@ int main() {
               // First thread: write data and condition
               // and provoke gpu to reorder instructions
               auto data = simd<int, SIMDSize>(offset, 1);
-              lsc_slm_store<int, SIMDSize>(data * 10, byte_offset);
-              lsc_slm_store<int, SIMDSize>(data * 5, byte_offset);
-              lsc_slm_store<int, SIMDSize>(data, byte_offset);
+              lsc_slm_block_store<int, SIMDSize>(byte_offset, data * 10);
+              lsc_slm_block_store<int, SIMDSize>(byte_offset, data * 5);
+              lsc_slm_block_store<int, SIMDSize>(byte_offset, data);
               // Protect from reordering for the last two instructions
-              lsc_fence<lsc_sfid::slm>();
-              lsc_slm_store<int, SIMDSize>(simd<int, SIMDSize>(1), cond_offset);
+              lsc_fence<lsc_memory_kind::shared_local>();
+              lsc_slm_block_store<int, SIMDSize>(cond_offset,
+                                                 simd<int, SIMDSize>(1));
             } else {
               auto condition = simd<int, SIMDSize>(0);
               int imax = 1000;
               int i = 0;
               while (condition[0] == 0 && i < imax) {
-                condition = lsc_slm_load<int, SIMDSize>(cond_offset);
+                condition = lsc_slm_block_load<int, SIMDSize>(cond_offset);
                 ++i;
               }
               // Protect from reordering for the while cycle and data read
-              lsc_fence<lsc_sfid::slm>();
-              auto data = lsc_slm_load<int, SIMDSize>(byte_offset);
-              lsc_flat_store<int, SIMDSize>(res_vec + offset, data);
+              lsc_fence<lsc_memory_kind::shared_local>();
+              auto data = lsc_slm_block_load<int, SIMDSize>(byte_offset);
+              lsc_block_store<int, SIMDSize>(res_vec + offset, data);
             }
           });
     });

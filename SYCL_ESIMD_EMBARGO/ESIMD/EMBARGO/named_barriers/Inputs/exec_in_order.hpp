@@ -1,4 +1,5 @@
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Threads, unsigned Size, typename AccessorTy>
@@ -39,7 +40,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
   }
 
   simd<int, VL * 2> val(idx);
-  lsc_surf_store<int, VL * 2>(val, acc, off);
+  lsc_block_store<int, VL * 2>(acc, off, val);
 
   if (idx < Threads - 1) {
     // thread 0 arrives here first and signals barrier 1, unlocking thread 1

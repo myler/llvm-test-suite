@@ -1,17 +1,18 @@
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
+#include <sycl/ext/intel/esimd.hpp>
 
 #include <iostream>
 
 #include "common.hpp"
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <int case_num, typename T, uint32_t Groups, uint32_t Threads,
           uint16_t VL, uint16_t VS, bool transpose,
           lsc_data_size DS = lsc_data_size::default_size,
-          CacheHint L1H = CacheHint::None, CacheHint L3H = CacheHint::None>
+          cache_hint L1H = cache_hint::none, cache_hint L3H = cache_hint::none>
 bool test(uint32_t pmask = 0xffffffff) {
   static_assert((VL == 1) || !transpose, "Transpose must have exec size 1");
   if constexpr (DS == lsc_data_size::u8u32 || DS == lsc_data_size::u16u32) {
@@ -87,12 +88,12 @@ bool test(uint32_t pmask = 0xffffffff) {
 
             if constexpr (transpose) {
               simd<T, VS> vals(new_val + elem_off, 1);
-              lsc_slm_store<T, VS, DS, L1H, L3H>(vals, byte_off);
+              lsc_slm_block_store<T, VS, DS>(byte_off, vals);
 
               barrier();
 
-              auto ret = lsc_slm_load<T, VS, DS>(byte_off);
-              lsc_flat_store<T, VS>(out + elem_off, ret);
+              auto ret = lsc_slm_block_load<T, VS, DS>(byte_off);
+              lsc_block_store<T, VS>(out + elem_off, ret);
             } else {
               simd<uint32_t, VL> offset(byte_off, VS * sizeof(T));
               simd_mask<VL> pred;
@@ -105,16 +106,14 @@ bool test(uint32_t pmask = 0xffffffff) {
                 for (int j = 0; j < VS; j++)
                   vals.template select<1, 1>(i + j * VL) = val++;
 
-              lsc_slm_store<T, VS, DS, L1H, L3H, VL>(vals, offset, pred);
+              lsc_slm_scatter<T, VS, DS, VL>(offset, vals, pred);
 
               barrier();
 
-              auto ret =
-                  lsc_slm_load<T, VS, lsc_data_size::default_size,
-                               CacheHint::None, CacheHint::None, VL>(offset);
-              lsc_flat_store<T, VS, lsc_data_size::default_size,
-                             CacheHint::None, CacheHint::None, VL>(out, ret,
-                                                                   offset);
+              auto ret = lsc_slm_gather<T, VS, lsc_data_size::default_size, VL>(
+                  offset);
+              lsc_scatter<T, VS, lsc_data_size::default_size, cache_hint::none,
+                          cache_hint::none, VL>(out, offset, ret);
             }
           });
     });

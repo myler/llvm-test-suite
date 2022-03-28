@@ -16,10 +16,11 @@
 #include "../../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <int N> class Test;

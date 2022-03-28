@@ -1,4 +1,5 @@
 using namespace cl::sycl;
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 template <unsigned Groups, unsigned Threads, unsigned Size, typename AccessorTy>
@@ -50,7 +51,7 @@ ESIMD_INLINE void work(AccessorTy acc, cl::sycl::nd_item<1> ndi) {
 
     auto val = slm_block_load<int, VL>(off); // reading SLM
     // and storing it to output surface
-    lsc_surf_store<int, VL>(val, acc, off + j * SlmSize * sizeof(int));
+    lsc_block_store<int, VL>(acc, off + j * SlmSize * sizeof(int), val);
 
     barrier();
   }

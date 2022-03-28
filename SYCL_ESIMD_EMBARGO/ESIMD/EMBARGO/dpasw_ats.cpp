@@ -13,8 +13,8 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
 
@@ -39,28 +39,29 @@ int main(void) {
   nd_range<1> Range(GroupRange, TaskRange);
 
   q.submit([&](handler &cgh) {
-    cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
-      using namespace sycl::ext::intel::experimental::esimd;
+     cgh.parallel_for<class Test>(Range, [=](nd_item<1> ndi) SYCL_ESIMD_KERNEL {
+       using namespace sycl::ext::intel::esimd;
+       using namespace sycl::ext::intel::experimental::esimd;
 
-      simd<char, Size * 2> va(0);
-      auto ma = va.bit_cast_view<char, 8, 16>();
-      ma.select<2, 1, 4, 4>(0, 0) = 4;
+       simd<char, Size * 2> va(0);
+       auto ma = va.bit_cast_view<char, 8, 16>();
+       ma.select<2, 1, 4, 4>(0, 0) = 4;
 
-      simd<char, 8 * 8> vb(0);
-      auto mb = vb.bit_cast_view<char, 8, 8>();
-      mb.select<4, 2, 1, 1>(0, 0) = 4;
+       simd<char, 8 * 8> vb(0);
+       auto mb = vb.bit_cast_view<char, 8, 8>();
+       mb.select<4, 2, 1, 1>(0, 0) = 4;
 
-      simd<int, Size> vc(0);
-      vc = dpasw<EsimdPrecisionType::S2, EsimdPrecisionType::S2, 8, 8,
-                 int, int, int, Size, 32, 16>(vc, ma.bit_cast_view<int>(),
-                                              mb.bit_cast_view<int>());
+       simd<int, Size> vc(0);
+       vc = dpasw<argument_type::S2, argument_type::S2, 8, 8, int, int, int,
+                  Size, 32, 16>(vc, ma.bit_cast_view<int>(),
+                                mb.bit_cast_view<int>());
 
-      for (int i = 0; i < Size; i += VL) {
-        simd<int, VL> output = vc.select<VL, 1>(i);
-        output.copy_to(C + i);
-      }
-    });
-  }).wait();
+       for (int i = 0; i < Size; i += VL) {
+         simd<int, VL> output = vc.select<VL, 1>(i);
+         output.copy_to(C + i);
+       }
+     });
+   }).wait();
 
   int err_cnt = 0;
   for (unsigned i = 0; i < Size && err_cnt < 10; ++i)

@@ -13,11 +13,11 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-#include <sycl/ext/intel/experimental/esimd.hpp>
 #include <iostream>
+#include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
-
+using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
 #define WIDTH 16
@@ -62,18 +62,18 @@ int main(void) {
 
       simd<float, VL> va =
           load_2d_stateless<float, BLKX, BLKY, 1, false, false,
-                            CacheHint::Streaming, CacheHint::Uncached>(
+                            cache_hint::streaming, cache_hint::uncached>(
               A, width, height, pitch, xoff, yoff);
       simd<float, VL> vb =
           load_2d_stateless<float, BLKX, BLKY, 1, false, false,
-                            CacheHint::Streaming, CacheHint::Uncached>(
+                            cache_hint::streaming, cache_hint::uncached>(
               B, width, height, pitch, xoff, yoff);
 
       simd<float, VL> vc = va + vb;
 
-      store_2d_stateless<float, BLKX, BLKY, CacheHint::Uncached,
-                         CacheHint::WriteBack>(C, width, height, pitch,
-                                               xoff, yoff, vc);
+      store_2d_stateless<float, BLKX, BLKY, cache_hint::uncached,
+                         cache_hint::write_back>(C, width, height, pitch, xoff,
+                                                 yoff, vc);
     });
   });
   e.wait();
