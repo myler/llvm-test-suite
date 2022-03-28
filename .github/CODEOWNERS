@@ -42,7 +42,6 @@ SYCL/GroupLocalMemory @Pennycook @intel/llvm-reviewers-runtime
 
 # Plugin interface for Level Zero
 /SYCL/Plugin/*level-zero* @intel/dpcpp-l0-pi-reviewers
-/SYCL/Plugin/*level_zero* @intel/dpcpp-l0-pi-reviewers
 
 # Printf
 SYCL/Printf @intel/dpcpp-tools-reviewers
@@ -66,11 +65,12 @@ SYCL/USM @jbrodman @sergey-semenov
 SYCL/Basic/stream @againull
 
 # Test scripts
-*.pl @myler @yamanwan
-*.list @myler @yamanwan
+*.pl @myler @wanyaman
+*.list @myler @wanyaman
 
 # tc files
-*.xml @myler @yamanwan
+*.xml @myler @wanyaman
+config_sycl/* @myler @wanyaman
 
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
@@ -93,4 +93,3 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/AOT/ @intel/dpcpp-tools-reviewers
 /SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
 /SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
-
