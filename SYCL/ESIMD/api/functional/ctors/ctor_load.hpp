@@ -1,4 +1,4 @@
-//===-- ctor_load.hpp - Functions for tests on simd load constructor definition.
+//===-- ctor_load.hpp - Functions for tests on simd load constructor.
 //      -------------------------------------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -8,14 +8,17 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file provides functions for tests on simd load constructor.
+/// This file provides functions for tests on simd load constructor
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
+=======
+>>>>>>> 11cb2778d ([SYCL][ESIMD] Rename tests on USM simd load constructors  (#950))
 
 #include "common.hpp"
 
@@ -35,72 +38,11 @@ namespace esimd = sycl::ext::intel::experimental::esimd;
 
 namespace esimd_test::api::functional::ctors {
 
-// Descriptor class for the case of calling constructor in initializer context.
-struct initializer {
-  static std::string get_description() { return "initializer"; }
-
-  template <typename DataT, int NumElems, typename AlignmentT>
-  static void call_simd_ctor(const DataT *ref_data, DataT *const out,
-                             AlignmentT alignment) {
-    esimd::simd<DataT, NumElems> simd_by_init =
-        esimd::simd<DataT, NumElems>(ref_data, alignment);
-    simd_by_init.copy_to(out);
-  }
-};
-
-// Descriptor class for the case of calling constructor in variable declaration
-// context.
-struct var_decl {
-  static std::string get_description() { return "variable declaration"; }
-
-  template <typename DataT, int NumElems, typename AlignmentT>
-  static void call_simd_ctor(const DataT *ref_data, DataT *const out,
-                             AlignmentT alignment) {
-    esimd::simd<DataT, NumElems> simd_by_var_decl(ref_data, alignment);
-    simd_by_var_decl.copy_to(out);
-  }
-};
-
-// Descriptor class for the case of calling constructor in rvalue in an
-// expression context.
-struct rval_in_expr {
-  static std::string get_description() { return "rvalue in an expression"; }
-
-  template <typename DataT, int NumElems, typename AlignmentT>
-  static void call_simd_ctor(const DataT *ref_data, DataT *const out,
-                             AlignmentT alignment) {
-    esimd::simd<DataT, NumElems> simd_by_rval;
-    simd_by_rval = esimd::simd<DataT, NumElems>(ref_data, alignment);
-    simd_by_rval.copy_to(out);
-  }
-};
-
-// Descriptor class for the case of calling constructor in const reference
-// context.
-class const_ref {
-public:
-  static std::string get_description() { return "const reference"; }
-
-  template <typename DataT, int NumElems, typename AlignmentT>
-  static void call_simd_ctor(const DataT *ref_data, DataT *const out,
-                             AlignmentT alignment) {
-    call_simd_by_const_ref<DataT, NumElems>(
-        esimd::simd<DataT, NumElems>(ref_data, alignment), out);
-  }
-
-private:
-  template <typename DataT, int NumElems>
-  static void
-  call_simd_by_const_ref(const esimd::simd<DataT, NumElems> &simd_by_const_ref,
-                         DataT *out) {
-    simd_by_const_ref.copy_to(out);
-  }
-};
-
 // Dummy kernel for submitting some code into device side.
 template <typename DataT, int NumElems, typename T, typename Alignment>
 struct Kernel_for_load_ctor;
 
+// Alignment tags
 namespace alignment {
 
 struct element {
@@ -188,6 +130,7 @@ private:
   const std::string m_alignment_name;
 };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
@@ -354,4 +297,6 @@ private:
   }
 };
 
+=======
+>>>>>>> 11cb2778d ([SYCL][ESIMD] Rename tests on USM simd load constructors  (#950))
 } // namespace esimd_test::api::functional::ctors

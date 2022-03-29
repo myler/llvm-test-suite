@@ -1,4 +1,4 @@
-//==------- ctor_load_core.cpp  - DPC++ ESIMD on-device test ---------------==//
+//==------- ctor_load_usm_core.cpp  - DPC++ ESIMD on-device test -----------==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -17,13 +17,17 @@
 // Test for simd load constructor.
 // The test uses reference data and different alignment flags. Invokes simd
 // constructors in different contexts with provided reference data and alignment
-// flag.
+// flag using USM pointer as input.
 // It is expected for destination simd instance to store a bitwise same data as
 // the reference one.
 
+<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_load_core.cpp
 <<<<<<< HEAD
 <<<<<<< HEAD
 #include "ctor_load.hpp"
+=======
+#include "ctor_load_usm.hpp"
+>>>>>>> 11cb2778d ([SYCL][ESIMD] Rename tests on USM simd load constructors  (#950)):SYCL/ESIMD/api/functional/ctors/ctor_load_usm_core.cpp
 
 using namespace esimd_test::api::functional;
 
