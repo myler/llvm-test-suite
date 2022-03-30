@@ -20,11 +20,6 @@ Last Changed Revision: ef8d279737bdd77995b1d76880aca9fc7e86d505    Mon Dec 20 11
   </files>
   <tests>
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_api_fp_conversions_ats" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_dpas_ats" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_dpas_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_dpasw_ats" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_histogram_2d_ats" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_histogram_raw_send_ats" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_fence_pvc" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_flat_2d_pvc" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_flat_atomic_cachehint_pvc" />
@@ -82,8 +77,6 @@ Last Changed Revision: ef8d279737bdd77995b1d76880aca9fc7e86d505    Mon Dec 20 11
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_named_barriers_named_barrier_5" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_named_barriers_named_barrier_6" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_sparsematrixmul_pvc_sparsematrixmul_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_vadd_2d_ats" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_vadd_2d_stateless_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_vadd_raw_send_ats" />
   </tests>
 </suite>
