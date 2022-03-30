@@ -419,7 +419,7 @@ ESIMD_INLINE void SpmvCsr(ValueType *ANZ_BUF,  // CURBE  parameter
     //--------------------------------------------------------------------
     baseAddr = (IndexType *)((char *)Y_BUF + row_number * sizeof(ValueType));
 
-    scatter<ValueType, ROWS_PER_THREAD>((ValueType *)baseAddr, v_y, v_st);
+    scatter<ValueType, ROWS_PER_THREAD>((ValueType *)baseAddr, v_st, v_y);
   }
 }
 
