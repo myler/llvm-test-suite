@@ -1,4 +1,3 @@
 #	TEST				ADDED BY	TRACKER	DATE		COMMENT
 #
 esimd_embargo_SparseMatrixMul_pvc       kchen24         N/A     12/15/20        ESIMD emabrgo tests can't run yet (need Gen12+)
-esimd_embargo_vadd_2d_stateless_pvc     kchen24         N/A     12/15/20        ESIMD emabrgo tests can't run yet (need Gen12+)
