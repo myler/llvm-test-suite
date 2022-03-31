@@ -21,33 +21,7 @@ Last Changed Revision: ef8d279737bdd77995b1d76880aca9fc7e86d505    Mon Dec 20 11
   <tests>
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_api_fp_conversions_ats" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_fence_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_flat_2d_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_flat_atomic_cachehint_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_flat_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_load_u16" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_load_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_load_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_load_u8" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_prefetch_u16" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_prefetch_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_prefetch_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_prefetch_u8" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_store_u16" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_store_u32" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_store_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_block_store_u8" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_load_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_load_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_load_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_load_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_prefetch_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_prefetch_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_prefetch_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_prefetch_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_store_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_store_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_store_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_flat_store_u8u32" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_load_u16u32" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_load_u32" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_load_u64" />
@@ -56,20 +30,6 @@ Last Changed Revision: ef8d279737bdd77995b1d76880aca9fc7e86d505    Mon Dec 20 11
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_store_u32" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_store_u64" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_slm_store_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_load_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_load_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_load_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_load_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_prefetch_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_prefetch_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_prefetch_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_prefetch_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_store_u16u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_store_u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_store_u64" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_lsc_surf_store_u8u32" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_slm_pvc" />
-    <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_lsc_surf_pvc" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_named_barriers_named_barrier_1" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_named_barriers_named_barrier_2" />
     <test configFile="config_sycl_esimd_embargo/TEMPLATE_llvm_test_suite_esimd_embargo.xml" splitGroup="esimd" testName="esimd_embargo_named_barriers_named_barrier_3" />
