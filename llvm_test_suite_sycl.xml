@@ -352,7 +352,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_broadcast_core" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_broadcast_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_converting_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_converting_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_converting_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_converting_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_copy_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_copy_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_default_core" />
@@ -362,16 +362,16 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_fill_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_move_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_vector_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_assignment_move_and_copy_core" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_accuracy_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_accuracy_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_operators_operator_decrement_and_increment_accuracy_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_accuracy_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_operators_operator_decrement_and_increment_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_decrement_and_increment_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_logical_not" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_replicate_smoke" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_saturation_smoke" />
@@ -384,7 +384,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_subscript_operator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_copy_move_assign" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_negation_operator" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_select_2d" />
+    <test configFile="config_sycl/esimd_api_simd_view_select_2d.xml" splitGroup="esimd" testName="esimd_api_simd_view_select_2d" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_simd_view_subscript_operator" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
