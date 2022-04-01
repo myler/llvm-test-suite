@@ -268,7 +268,7 @@ int main(int, char **) {
                         ctors::rval_in_expr, ctors::const_ref>::generate();
   const auto alignments =
       named_type_pack<ctors::alignment::element, ctors::alignment::vector,
-                      ctors::alignment::overal>::generate();
+                      ctors::alignment::overal<>>::generate();
 
 <<<<<<< HEAD
   passed &=
