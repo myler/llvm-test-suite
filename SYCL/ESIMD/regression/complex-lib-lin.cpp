@@ -6,6 +6,7 @@
 // More details can be found in intel/llvm#4927.
 //
 // REQUIRES: linux,gpu
+<<<<<<< HEAD
 // UNSUPPORTED: cuda || hip
 // TODO/DEBUG Segmentation fault occurs with esimd_emulator backend
 // XFAIL: esimd_emulator
@@ -22,6 +23,10 @@
 >>>>>>> 5e8f630e2 ([SYCL] Align tests with 22.05.22297 GPU RT (#871))
 =======
 >>>>>>> b8c62d2d5 ([ESIMD] Fix the complex-lib-lin checking compilation from static library (#923))
+=======
+// UNSUPPORTED: cuda || hip || esimd_emulator
+// TODO: running non-ESIMD kernels on esimd_emulator backend.
+>>>>>>> b17112500 ([SYCL][ESIMD][EMU] Running non-ESIMD kernels on esimd_emulator backend is not supported. (#953))
 //
 // RUN: %clangxx -fsycl -fPIC -O3 %S/Inputs/complex-lib-sycl.cpp -c -o %t-lib-sycl.o
 // RUN: %clangxx -fsycl -fPIC -O3 %S/Inputs/complex-lib-esimd.cpp -c -o %t-lib-esimd.o
