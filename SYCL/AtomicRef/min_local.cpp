@@ -85,6 +85,7 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
+<<<<<<< HEAD
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %s -o %t.out -Xsycl-target-backend=nvptx64-nvidia-cuda --cuda-gpu-arch=sm_70 -DRELEASE -DATOMIC64
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
@@ -170,6 +171,11 @@
 // point atomics.
 // XFAIL: host, hip, acc
 >>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
+=======
+// Barrier is not supported on host. HIP does not support floating point
+// atomics.
+// XFAIL: host, hip
+>>>>>>> 11417e4c1 (Fix wrong uses of accelerator LIT feature. (#969))
 
 #include "min.h"
 
