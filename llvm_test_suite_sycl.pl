@@ -800,6 +800,7 @@ sub run_cmake
     $lit_extra_env = join_extra_env($lit_extra_env,"GCOV_PREFIX_STRIP");
     $lit_extra_env = join_extra_env($lit_extra_env,"TC_WRAPPER_PATH");
     $lit_extra_env = join_extra_env($lit_extra_env,"TBB_DLL_PATH");
+    $lit_extra_env = join_extra_env($lit_extra_env,"ZE_AFFINITY_MASK");
 
     if ( defined $ENV{PIN_CMD} ) {
         my $pin_cmd = $ENV{PIN_CMD};
