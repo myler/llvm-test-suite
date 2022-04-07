@@ -21,6 +21,10 @@ my $command_output = "";
 
 my $test_suite_repo = '.';
 my $testbase = "/rdrive/tests/mainline/CT-SpecialTests/llvm-test-suite";
+if (defined $ENV{TESTROOT}) {
+  $testbase = "$ENV{TESTROOT}/CT-SpecialTests/llvm-test-suite";
+}
+
 my %feature_subsuite = ('SYCL' => {'Matrix'});
 
 my $sycl_dir = '';
