@@ -839,7 +839,7 @@ sub run_cmake
         close $out;
     }
 
-    sleep(1); # CMPLRTOOLS-26045: sleep for 1 second to correctly remove the folder
+    sleep(30) if (is_windows()); # CMPLRTOOLS-26045: sleep for 30 second to correctly remove the folder
     rmtree($build_dir); # Clean build folder
     safe_Mkdir($build_dir); # Create build folder
     chdir_log($build_dir); # Enter build folder
