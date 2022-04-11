@@ -25,7 +25,7 @@ if (defined $ENV{TESTROOT}) {
   $testbase = "$ENV{TESTROOT}/CT-SpecialTests/llvm-test-suite";
 }
 
-my %feature_subsuite = ('SYCL' => {'Matrix'});
+my %feature_subsuite = ('SYCL' => {'Matrix'}, 'SYCL' => {'ESIMD'});
 
 my $sycl_dir = '';
 
