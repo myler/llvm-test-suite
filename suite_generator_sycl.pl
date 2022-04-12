@@ -187,6 +187,10 @@ sub gen_suite
         if ( @strings != 0 ) {
             @pre_xml = grep /testName="$testname"/, @strings;
         }
+        if (-f "${config_folder}/$testname.xml") {
+            push @{ $xml->{tests}{test}}, { configFile => "${config_folder}/$testname.xml", testName => $testname, splitGroup => $group};
+            next;
+        }
         if (@pre_xml != 0 and $pre_xml[0] =~ m/configFile="([^\s]*\.xml)"/) {
             $pre_xml_name = $1;
             my $pre_xml_file = basename($pre_xml_name);
