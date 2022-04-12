@@ -18,6 +18,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <file dst="SYCL/External/CMakeLists.txt" path="SYCL/External/CMakeLists.txt" />
     <file dst="SYCL/ExtraTests/CMakeLists.txt" path="SYCL/ExtraTests/CMakeLists.txt" />
     <file dst="SYCL/ESIMD" path="SYCL/ESIMD" />
+    <file dst="SYCL/include" path="SYCL/include" />
     <file path="$INFO_TDRIVE/ref/lit" />
     <file path="config_sycl" />
     <file path=".github/CODEOWNERS" />
