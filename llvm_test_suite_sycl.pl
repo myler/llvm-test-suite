@@ -7,6 +7,7 @@ my $cmake_err = "$optset_work_dir/cmake.err";
 my $run_all_lf = "$optset_work_dir/run_all.lf";
 
 my $is_dynamic_suite = 0;
+my $prebuilt_buildstamp = "";
 
 # @test_to_run_list stores only the test(s) that will be run
 # For example, for "tc -t llvm_test_suite_sycl/aot_cpu,aot_gpu" it will store 2 tests - aot_cpu and aot_gpu
@@ -97,16 +98,34 @@ sub compatibility_win {
   # can be run on new runtime, it is difficult to set the correct environment by ics infra because
   # both compiler executables *.exe and compiler libraries *.dll are in the %PATH% environment.
   # So, we put pre-built tests on rdrive and use the backward compatibility testing on Windows
-  my $compiler_path = $ENV{BASECOMPILER};
-  my $date = "";
-  if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
-    $branch = $1;
-    $date = "$2-$3-$4";
-    log_command("##Branch: $branch, Date: $date");
+  my $compiler_path = "";
+  if (not defined $ENV{BASECOMPILER}) {
+    $failure_message = "fail to get path of base compiler, requiers option: \"base=1\"";
+    return $COMPFAIL;
   } else {
-    $failure_message = "fail to get date of base compiler";
+    $compiler_path = $ENV{BASECOMPILER};
+  }
+
+  if ($compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{8})_([0-9]{6})/) {
+    $prebuilt_buildstamp = "$2\_$3";
+  } else {
+    $failure_message = "fail to get buildstamp of base compiler";
     return $COMPFAIL;
   }
+
+  if (not ($current_optset eq "opt_use_cpu" or $current_optset eq "opt_use_gpu")) {
+    $failure_message = "backward compatibility testing only supports 1) opt_use_cpu and 2) opt_use_gpu";
+    return $COMPFAIL;
+  }
+
+  # Always use mainline testbase for both xmain and xmain-rel.
+  my $prebuilt = "$ENV{ICS_TESTDATA}/mainline/CT-SpecialTests/llvm_test_suite/$prebuilt_buildstamp/win/$current_optset/prebuilt.tar.gz";
+  execute("tar -xzf $prebuilt");
+  if ($command_status != 0) {
+    $failure_message = "fail to extract $prebuilt";
+    return $COMPFAIL;
+  }
+
   # Get test list
   @test_to_run_list = get_dynamic_test_list();
   return $PASS;
@@ -577,9 +596,8 @@ sub do_run
         $gpu_opts .= "-Dgpu-intel-dg1=1";
       }
 
-      my $basecompiler = $ENV{BASECOMPILER};
       my $backward_compatibility_opts = "";
-      if (defined $basecompiler and is_windows()) {
+      if (is_windows()) {
         $backward_compatibility_opts = "-Dcompatibility_testing=1";
       }
 
