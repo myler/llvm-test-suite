@@ -137,7 +137,7 @@ sub gen_suite
     if ($feature_folder eq "SYCL") {
         if ($subsuite ne "") {
             # For subsuite
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL/CMakeLists.txt', dst => 'SYCL/CMakeLists.txt'}, { path => 'SYCL/lit.cfg.py', dst => 'SYCL/lit.cfg.py'}, {path => 'SYCL/lit.site.cfg.py.in', dst => 'SYCL/lit.site.cfg.py.in'}, {path => 'SYCL/helpers.hpp', dst => 'SYCL/helpers.hpp'}, {path => 'SYCL/External/CMakeLists.txt', dst => 'SYCL/External/CMakeLists.txt'}, {path => 'SYCL/ExtraTests/CMakeLists.txt', dst => 'SYCL/ExtraTests/CMakeLists.txt'}, { path => "SYCL/${subsuite}", dst => "SYCL/${subsuite}"}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
+            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL/CMakeLists.txt', dst => 'SYCL/CMakeLists.txt'}, { path => 'SYCL/lit.cfg.py', dst => 'SYCL/lit.cfg.py'}, {path => 'SYCL/lit.site.cfg.py.in', dst => 'SYCL/lit.site.cfg.py.in'}, {path => 'SYCL/helpers.hpp', dst => 'SYCL/helpers.hpp'}, {path => 'SYCL/External/CMakeLists.txt', dst => 'SYCL/External/CMakeLists.txt'}, {path => 'SYCL/ExtraTests/CMakeLists.txt', dst => 'SYCL/ExtraTests/CMakeLists.txt'}, { path => "SYCL/${subsuite}", dst => "SYCL/${subsuite}"}, {path => 'SYCL/include', dst => 'SYCL/include'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
         } else {
             $xml->{rules} = { advancedRule => [{ perfSupport => 'accurate'}]};
             $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}, { path => 'setenv.list'}]};
@@ -186,6 +186,10 @@ sub gen_suite
 
         if ( @strings != 0 ) {
             @pre_xml = grep /testName="$testname"/, @strings;
+        }
+        if (-f "${config_folder}/$testname.xml") {
+            push @{ $xml->{tests}{test}}, { configFile => "${config_folder}/$testname.xml", testName => $testname, splitGroup => $group};
+            next;
         }
         if (@pre_xml != 0 and $pre_xml[0] =~ m/configFile="([^\s]*\.xml)"/) {
             $pre_xml_name = $1;
