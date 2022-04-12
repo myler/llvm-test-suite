@@ -7,6 +7,7 @@ my $cmake_err = "$optset_work_dir/cmake.err";
 my $run_all_lf = "$optset_work_dir/run_all.lf";
 
 my $is_dynamic_suite = 0;
+my $prebuilt_buildstamp = "";
 
 # @test_to_run_list stores only the test(s) that will be run
 # For example, for "tc -t llvm_test_suite_sycl/aot_cpu,aot_gpu" it will store 2 tests - aot_cpu and aot_gpu
@@ -92,9 +93,48 @@ sub is_suite {
     return is_same(\@current_test_list, \@whole_suite_test);
 }
 
+sub compatibility_win {
+  # The backward compatibility testing requires applications that were built by old released compiler
+  # can be run on new runtime, it is difficult to set the correct environment by ics infra because
+  # both compiler executables *.exe and compiler libraries *.dll are in the %PATH% environment.
+  # So, we put pre-built tests on rdrive and use the backward compatibility testing on Windows
+  my $compiler_path = "";
+  if (not defined $ENV{BASECOMPILER}) {
+    $failure_message = "fail to get path of base compiler, requiers option: \"base=1\"";
+    return $COMPFAIL;
+  } else {
+    $compiler_path = $ENV{BASECOMPILER};
+  }
+
+  if ($compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{8})_([0-9]{6})/) {
+    $prebuilt_buildstamp = "$2\_$3";
+  } else {
+    $failure_message = "fail to get buildstamp of base compiler";
+    return $COMPFAIL;
+  }
+
+  if (not ($current_optset eq "opt_use_cpu" or $current_optset eq "opt_use_gpu")) {
+    $failure_message = "backward compatibility testing only supports 1) opt_use_cpu and 2) opt_use_gpu";
+    return $COMPFAIL;
+  }
+
+  # Always use mainline testbase for both xmain and xmain-rel.
+  my $prebuilt = "$ENV{ICS_TESTDATA}/mainline/CT-SpecialTests/llvm_test_suite/$prebuilt_buildstamp/win/$current_optset/prebuilt.tar.gz";
+  execute("tar -xzf $prebuilt");
+  if ($command_status != 0) {
+    $failure_message = "fail to extract $prebuilt";
+    return $COMPFAIL;
+  }
+
+  # Get test list
+  @test_to_run_list = get_dynamic_test_list();
+  return $PASS;
+}
+
 sub init_test
 {
     if ($current_suite =~ /compatibility_llvm_test_suite_sycl/) {
+      return compatibility_win() if (is_windows());
       my @folder_list = ("SYCL", $config_folder);
       my $folder_not_exist = 0;
       my $sparse_file_in_git = ".git/info/sparse-checkout";
@@ -556,9 +596,14 @@ sub do_run
         $gpu_opts .= "-Dgpu-intel-dg1=1";
       }
 
+      my $backward_compatibility_opts = "";
+      if (is_windows()) {
+        $backward_compatibility_opts = "-Dcompatibility_testing=1";
+      }
+
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $backward_compatibility_opts $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
         execute("$python $lit -a $gpu_opts $matrix $zedebug $path $timeset");
       }
