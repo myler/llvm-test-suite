@@ -92,9 +92,30 @@ sub is_suite {
     return is_same(\@current_test_list, \@whole_suite_test);
 }
 
+sub compatibility_win {
+  # The backward compatibility testing requires applications that were built by old released compiler
+  # can be run on new runtime, it is difficult to set the correct environment by ics infra because
+  # both compiler executables *.exe and compiler libraries *.dll are in the %PATH% environment.
+  # So, we put pre-built tests on rdrive and use the backward compatibility testing on Windows
+  my $compiler_path = $ENV{BASECOMPILER};
+  my $date = "";
+  if ( $compiler_path =~ /deploy_(xmain-rel)\/xmainefi2[a-z]{1,}\/([0-9]{4})([0-9]{2})([0-9]{2})_[0-9]{6}/) {
+    $branch = $1;
+    $date = "$2-$3-$4";
+    log_command("##Branch: $branch, Date: $date");
+  } else {
+    $failure_message = "fail to get date of base compiler";
+    return $COMPFAIL;
+  }
+  # Get test list
+  @test_to_run_list = get_dynamic_test_list();
+  return $PASS;
+}
+
 sub init_test
 {
     if ($current_suite =~ /compatibility_llvm_test_suite_sycl/) {
+      return compatibility_win() if (is_windows());
       my @folder_list = ("SYCL", $config_folder);
       my $folder_not_exist = 0;
       my $sparse_file_in_git = ".git/info/sparse-checkout";
@@ -556,9 +577,15 @@ sub do_run
         $gpu_opts .= "-Dgpu-intel-dg1=1";
       }
 
+      my $basecompiler = $ENV{BASECOMPILER};
+      my $backward_compatibility_opts = "";
+      if (defined $basecompiler and is_windows()) {
+        $backward_compatibility_opts = "-Dcompatibility_testing=1";
+      }
+
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $backward_compatibility_opts $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
         execute("$python $lit -a $gpu_opts $matrix $zedebug $path $timeset");
       }
