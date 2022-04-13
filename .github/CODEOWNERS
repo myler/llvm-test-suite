@@ -94,3 +94,4 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/AOT/ @intel/dpcpp-tools-reviewers
 /SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
 /SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
+
