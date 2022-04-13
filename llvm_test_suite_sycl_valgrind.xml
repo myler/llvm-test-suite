@@ -851,6 +851,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_buffer_recursion" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_buffer_sub_buffer" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_buffer_use_host_ptr" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_kernel_basic" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_kernel_content" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="xpti" testName="xpti_mem_alloc_events_linux" />
   </tests>
 </suite>
