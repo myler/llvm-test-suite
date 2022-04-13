@@ -7,19 +7,6 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-// TODO: esimd_emulator fails due to unimplemented 'half' type
-// XFAIL: esimd_emulator
-=======
->>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
-=======
-// TODO: esimd_emulator fails due to unimplemented 'half' type
-// XFAIL: esimd_emulator
->>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
-=======
->>>>>>> 4242cb83d ([SYCL][ESIMD][EMU]Removing XFAIL for tests enabled with PI_API debug (#937))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -28,31 +15,13 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
-=======
-#include <sycl/ext/intel/experimental/esimd.hpp>
->>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
-=======
-#include <sycl/ext/intel/esimd.hpp>
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <iostream>
 
 using namespace cl::sycl;
-<<<<<<< HEAD
-<<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
-=======
-using namespace sycl::ext::intel::experimental;
-using namespace sycl::ext::intel::experimental::esimd;
->>>>>>> 38486e7dc ([ESIMD] Add smoke test for simd_obj_impl::any/all. (#802))
-=======
-using namespace sycl::ext::intel;
-using namespace sycl::ext::intel::esimd;
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 struct bit_op {
   enum { any, all, num_ops };

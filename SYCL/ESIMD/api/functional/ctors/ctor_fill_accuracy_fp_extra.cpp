@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+//==------- ctor_fill_accuracy_fp.cpp  - DPC++ ESIMD on-device test --------==//
+=======
 //==------- ctor_fill_accuracy_fp_extra.cpp  - DPC++ ESIMD on-device test --==//
+>>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -39,23 +43,18 @@ int main(int, char **) {
   bool passed = true;
 
 <<<<<<< HEAD
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp_extra.cpp
-  const auto types = get_tested_types<tested_types::fp_extra>();
-  const auto single_size = get_sizes<8>();
-  const auto context = unnamed_type_pack<ctors::var_decl>::generate();
-=======
   // Using single dimension and context to verify the accuracy of operations
   // with floating point data types
   const auto types = get_tested_types<tested_types::fp>();
-  const auto dims = get_dimensions<8>();
-  const auto contexts = unnamed_type_pack<ctors::var_decl>::generate();
+  const auto single_dim = get_dimensions<8>();
+  const auto context = unnamed_type_pack<ctors::var_decl>::generate();
 
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
 // Run for specific combinations of types, base and step values and vector
 // length.
 #ifdef SIMD_RUN_TEST_WITH_DENORM_INIT_VAL_AND_ULP_STEP
   {
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp_extra.cpp
+    const auto base_values = ctors::get_init_values_pack<init_val::denorm>();
+    const auto step_values = ctors::get_init_values_pack<init_val::ulp>();
 =======
   const auto types = get_tested_types<tested_types::fp_extra>();
   const auto single_size = get_sizes<8>();
@@ -66,57 +65,30 @@ int main(int, char **) {
 // it's a step value.
 #ifdef SIMD_RUN_TEST_WITH_DENORM_INIT_VAL_AND_ULP_STEP
   {
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
     const auto base_values =
         ctors::get_init_values_pack<ctors::init_val::denorm>();
     const auto step_values =
         ctors::get_init_values_pack<ctors::init_val::ulp>();
-    passed &= for_all_combinations<ctors::run_test>(
-<<<<<<< HEAD
-<<<<<<< HEAD
-        types, single_size, context, base_values, step_values, queue);
-=======
-    const auto base_values = ctors::get_init_values_pack<init_val::denorm>();
-    const auto step_values = ctors::get_init_values_pack<init_val::ulp>();
-    passed &= for_all_combinations<ctors::run_test>(
-        types, dims, contexts, base_values, step_values, queue);
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
-=======
-        types, single_dim, context, base_values, step_values, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
+    passed &= for_all_combinations<ctors::run_test>(
         types, single_size, context, base_values, step_values, queue);
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   }
 #endif
   {
     const auto base_values =
 <<<<<<< HEAD
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_fp_extra.cpp
+        ctors::get_init_values_pack<init_val::inexact, init_val::min>();
+    const auto step_values =
+        ctors::get_init_values_pack<init_val::ulp, init_val::ulp_half>();
 =======
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
         ctors::get_init_values_pack<ctors::init_val::inexact,
                                     ctors::init_val::min>();
     const auto step_values =
         ctors::get_init_values_pack<ctors::init_val::ulp,
                                     ctors::init_val::ulp_half>();
-    passed &= for_all_combinations<ctors::run_test>(
-<<<<<<< HEAD
-<<<<<<< HEAD
-        types, single_size, context, base_values, step_values, queue);
-=======
-        ctors::get_init_values_pack<init_val::inexact, init_val::min>();
-    const auto step_values =
-        ctors::get_init_values_pack<init_val::ulp, init_val::ulp_half>();
-    passed &= for_all_combinations<ctors::run_test>(
-        types, dims, contexts, base_values, step_values, queue);
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_fill_accuracy_core.cpp
-=======
-        types, single_dim, context, base_values, step_values, queue);
 >>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
+    passed &= for_all_combinations<ctors::run_test>(
         types, single_size, context, base_values, step_values, queue);
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   }
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");

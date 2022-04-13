@@ -8,16 +8,8 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: gpu-intel-dg1,cuda,hip
-<<<<<<< HEAD
-<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'raw_send' intrinsic
 // XFAIL: esimd_emulator
-=======
->>>>>>> 3a9a0d3c0 ([ESIMD] Exclude esimd_vadd_raw_send and histogram_raw_send from DG1 testing (#728))
-=======
-// TODO: esimd_emulator fails due to unimplemented 'raw_send' intrinsic
-// XFAIL: esimd_emulator
->>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 

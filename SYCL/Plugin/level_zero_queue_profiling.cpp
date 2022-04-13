@@ -10,15 +10,7 @@
 // Check the expected output when queue::enable_profiling is not specified
 //
 // WITHOUT: ze_event_pool_desc_t flags set to: 1
-<<<<<<< HEAD
-<<<<<<< HEAD
 // WITHOUT: SYCL exception caught: get_profiling_info() can't be used without set 'enable_profiling' queue property
-=======
-// WITHOUT: SYCL exception caught: Native API failed. Native API returns: -7 (CL_PROFILING_INFO_NOT_AVAILABLE)
->>>>>>> da509b851 (Honor property::queue::enable_profiling (#825))
-=======
-// WITHOUT: SYCL exception caught: get_profiling_info() can't be used without set 'enable_profiling' queue property
->>>>>>> c5012d60a ([SYCL] Change level_zero_queue_profiling.cpp (#863))
 
 // Check the expected output when queue::enable_profiling is specified
 //

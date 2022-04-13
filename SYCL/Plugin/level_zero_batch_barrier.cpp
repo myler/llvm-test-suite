@@ -1,14 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 // See https://github.com/intel/llvm-test-suite/issues/811
 // REQUIRES: gpu, level_zero, TEMPORARILY_DISABLED
-=======
-// REQUIRES: gpu, level_zero
->>>>>>> 4508a3f5f ([SYCL] test for barrier batching (#750))
-=======
-// See https://github.com/intel/llvm-test-suite/issues/811
-// REQUIRES: gpu, level_zero, TEMPORARILY_DISABLED
->>>>>>> 977a7ce75 ([SYCL] Disable flaky tests (#812))
 
 // RUN: %clangxx -fsycl -fsycl-unnamed-lambda -fsycl-targets=%sycl_triple %level_zero_options %s -o %t.out
 // RUN: env SYCL_PI_TRACE=2 ZE_DEBUG=1 SYCL_PI_LEVEL_ZERO_DEVICE_SCOPE_EVENTS=2 SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS=0 %GPU_RUN_PLACEHOLDER %t.out 2>&1 %GPU_CHECK_PLACEHOLDER
@@ -30,16 +21,6 @@ void submit_kernel(queue &q) {
 int main(int argc, char *argv[]) {
   queue q;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  submit_kernel(q); // this one will immediatelly execute since q is empty
-                    // CHECK: ---> piEnqueueKernelLaunch
-                    // CHECK: ZE ---> zeCommandQueueExecuteCommandLists
-
->>>>>>> 4508a3f5f ([SYCL] test for barrier batching (#750))
-=======
->>>>>>> e9e0c7ef1 ([SYCL] Fix batching barrier test to work with latest changes in L0 plugin (#809))
   submit_kernel(q); // starts a batch
                     // CHECK: ---> piEnqueueKernelLaunch
                     // CHECK-NOT: ZE ---> zeCommandQueueExecuteCommandLists

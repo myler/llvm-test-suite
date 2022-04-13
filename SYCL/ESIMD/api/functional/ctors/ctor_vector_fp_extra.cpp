@@ -11,35 +11,12 @@
 // The current "REQUIRES" should be replaced with "gpu" only as mentioned in
 // "XREQUIRES".
 // UNSUPPORTED: cuda, hip
-<<<<<<< HEAD
-<<<<<<< HEAD
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
 // Test for simd constructor from vector.
 // This test uses different data types, sizes and different simd constructor
 // invocation contexts.
-=======
-// XRUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
-// XRUN: %GPU_RUN_PLACEHOLDER %t.out
-// RUN: false
-// XFAIL: *
-// TODO The simd can't be constructed with sycl::half data type. The issue was
-// created (https://github.com/intel/llvm/issues/5077) and the test must be
-// enabled when it is resolved.
-//
-// Test for simd constructor from vector.
-// This test uses extra fp data types, dimensionality and different simd
-// constructor invocation contexts.
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
-// RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
-// RUN: %GPU_RUN_PLACEHOLDER %t.out
-//
-// Test for simd constructor from vector.
-// This test uses different data types, sizes and different simd constructor
-// invocation contexts.
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 // The test do the following actions:
 //  - call init_simd.data() to retreive vector_type and then provide it to the
 //    simd constructor
@@ -56,31 +33,14 @@ int main(int, char **) {
   bool passed = true;
 
   const auto types = get_tested_types<tested_types::fp_extra>();
-<<<<<<< HEAD
-<<<<<<< HEAD
   const auto sizes = get_all_sizes();
-=======
-  const auto dims = get_all_dimensions();
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
-  const auto sizes = get_all_sizes();
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   const auto contexts =
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
 
   // Run test for all combinations possible
-<<<<<<< HEAD
-<<<<<<< HEAD
   passed &=
       for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
-=======
-  passed &= for_all_combinations<ctors::run_test>(types, dims, contexts, queue);
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
-  passed &=
-      for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

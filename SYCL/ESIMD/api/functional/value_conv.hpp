@@ -15,14 +15,7 @@
 
 #pragma once
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include "type_traits.hpp"
-=======
->>>>>>> cfb578f75 ([SYCL][ESIMD] Add utility function for constructing conversion ref data (#696))
-=======
-#include "type_traits.hpp"
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 #include "value.hpp"
 
 namespace esimd_test::api::functional {
@@ -33,15 +26,7 @@ namespace esimd_test::api::functional {
 // static_cast<int>(unsigned int).
 template <typename SrcT, typename DstT> struct value_conv {
   static inline SrcT denorm_min() {
-<<<<<<< HEAD
-<<<<<<< HEAD
     if constexpr (!type_traits::is_sycl_floating_point_v<SrcT>) {
-=======
-    if constexpr (!type_traits::is_sycl_floating_point_v<DataT>) {
->>>>>>> cfb578f75 ([SYCL][ESIMD] Add utility function for constructing conversion ref data (#696))
-=======
-    if constexpr (!type_traits::is_sycl_floating_point_v<SrcT>) {
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
       // Return zero for any integral type the same way std::denorm_min does
       return 0;
     } else if constexpr (sizeof(SrcT) > sizeof(DstT)) {
@@ -67,54 +52,25 @@ std::vector<SrcT> generate_ref_conv_data() {
 
   // TODO: Implement functions for obtain lowest and max values without UB
   // cases.
-<<<<<<< HEAD
-<<<<<<< HEAD
   static const SrcT positive = static_cast<SrcT>(126.75);
   static const SrcT max = 10;
   // Use zero for unsigned types
   static const SrcT min = std::min<SrcT>(-max, 0);
   static const SrcT max_half = max / 2;
   static const SrcT min_half = min / 2;
-=======
-  static const SrcT nan = value<SrcT>::nan();
-  static const SrcT inf = value<SrcT>::inf();
-  static const SrcT denorm = value_conv<SrcT, DstT>::denorm_min();
-  static const SrcT positive = static_cast<SrcT>(126.75);
->>>>>>> cfb578f75 ([SYCL][ESIMD] Add utility function for constructing conversion ref data (#696))
-=======
-  static const SrcT positive = static_cast<SrcT>(126.75);
-  static const SrcT max = 10;
-  // Use zero for unsigned types
-  static const SrcT min = std::min<SrcT>(-max, 0);
-  static const SrcT max_half = max / 2;
-  static const SrcT min_half = min / 2;
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
   std::vector<SrcT> ref_data;
 
   if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                 type_traits::is_sycl_floating_point_v<DstT>) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
     static const SrcT nan = value<SrcT>::nan();
     static const SrcT inf = value<SrcT>::inf();
     static const SrcT denorm = value_conv<SrcT, DstT>::denorm_min();
 
-<<<<<<< HEAD
-=======
->>>>>>> cfb578f75 ([SYCL][ESIMD] Add utility function for constructing conversion ref data (#696))
-=======
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
     ref_data = details::construct_ref_data<SrcT, NumElems>(
         {min, max, -0.0, +0.0, 0.1, denorm, nan, -inf});
   } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                        std::is_unsigned_v<DstT>) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9f807d94c ([SYCL][ESIMD] Remove negative value for converted reference data (#874))
     // We cannot expect negative values to wrap during conversion from
     // the floating point type to the unsigned integral type.
     // The C++17 standard has the following statement:
@@ -124,7 +80,6 @@ std::vector<SrcT> generate_ref_conv_data() {
     // represented in the destination type.
     ref_data =
         details::construct_ref_data<SrcT, NumElems>({0.0, max, max_half});
-<<<<<<< HEAD
   } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
                        type_traits::is_sycl_signed_v<DstT>) {
     ref_data = details::construct_ref_data<SrcT, NumElems>(
@@ -135,26 +90,6 @@ std::vector<SrcT> generate_ref_conv_data() {
         {min, min_half, 0, max_half, max});
   } else if constexpr (type_traits::is_sycl_signed_v<SrcT> &&
                        std::is_unsigned_v<DstT>) {
-=======
-    ref_data = details::construct_ref_data<SrcT, NumElems>(
-        {-0.0, max, max_half, -max_half});
-=======
->>>>>>> 9f807d94c ([SYCL][ESIMD] Remove negative value for converted reference data (#874))
-  } else if constexpr (type_traits::is_sycl_floating_point_v<SrcT> &&
-                       type_traits::is_sycl_signed_v<DstT>) {
-    ref_data = details::construct_ref_data<SrcT, NumElems>(
-        {-0.0, max, max_half, min, min_half});
-  } else if constexpr (type_traits::is_sycl_signed_v<SrcT> &&
-                       type_traits::is_sycl_signed_v<DstT>) {
-    ref_data = details::construct_ref_data<SrcT, NumElems>(
-        {min, min_half, 0, max_half, max});
-<<<<<<< HEAD
-  } else if constexpr (std::is_signed_v<SrcT> && std::is_unsigned_v<DstT>) {
->>>>>>> cfb578f75 ([SYCL][ESIMD] Add utility function for constructing conversion ref data (#696))
-=======
-  } else if constexpr (type_traits::is_sycl_signed_v<SrcT> &&
-                       std::is_unsigned_v<DstT>) {
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
     static const SrcT src_min = value<SrcT>::lowest();
     static const SrcT src_min_half = src_min / 2;
 

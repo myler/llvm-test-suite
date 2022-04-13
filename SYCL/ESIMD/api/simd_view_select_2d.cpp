@@ -7,16 +7,8 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-<<<<<<< HEAD
-<<<<<<< HEAD
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator
-=======
->>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
-=======
-// TODO: esimd_emulator fails due to unimplemented 'single_task()' method
-// XFAIL: esimd_emulator
->>>>>>> 5061f881f ([SYCL][ESIMD][EMU] XFAIL marking for kernel using unimplemented 'single_task' (#815))
 // RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -25,31 +17,13 @@
 #include "../esimd_test_utils.hpp"
 
 #include <CL/sycl.hpp>
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
-=======
-#include <sycl/ext/intel/experimental/esimd.hpp>
->>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
-=======
-#include <sycl/ext/intel/esimd.hpp>
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 #include <iostream>
 
 using namespace cl::sycl;
-<<<<<<< HEAD
-<<<<<<< HEAD
 using namespace sycl::ext::intel;
 using namespace sycl::ext::intel::esimd;
-=======
-using namespace sycl::ext::intel::experimental;
-using namespace sycl::ext::intel::experimental::esimd;
->>>>>>> 66029faaf ([ESIMD] Add smoke test for 2D simd_view_impl::select. (#805))
-=======
-using namespace sycl::ext::intel;
-using namespace sycl::ext::intel::esimd;
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 template <typename T> struct char_to_int {
   using type = typename std::conditional<

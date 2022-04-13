@@ -28,19 +28,8 @@
 #define VAL1 0x9E3779B9
 #define VAL2 0xBB67AE85
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 inline void foo(sycl::ext::intel::esimd::simd<std::uint32_t, 16> &k) {
   sycl::ext::intel::esimd::simd<std::uint32_t, 16> k_add(
-=======
-inline void
-foo(sycl::ext::intel::experimental::esimd::simd<std::uint32_t, 16> &k) {
-  sycl::ext::intel::experimental::esimd::simd<std::uint32_t, 16> k_add(
->>>>>>> 4d087cf06 ([SYCL][ESIMD] Eliminate use of deprecated API (#772))
-=======
-inline void foo(sycl::ext::intel::esimd::simd<std::uint32_t, 16> &k) {
-  sycl::ext::intel::esimd::simd<std::uint32_t, 16> k_add(
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
       {VAL1, VAL2, VAL1, VAL2, VAL1, VAL2, VAL1, VAL2, VAL1, VAL2, VAL1, VAL2,
        VAL1, VAL2, VAL1, VAL2});
   k += k_add;
@@ -67,15 +56,7 @@ int main(int argc, char **argv) {
           sycl::range<1>{nsamples / SIMD_WIDTH},
           [=](sycl::item<1> item) SYCL_ESIMD_KERNEL {
             size_t id = item.get_id(0);
-<<<<<<< HEAD
-<<<<<<< HEAD
             sycl::ext::intel::esimd::simd<std::uint32_t, 16> key(
-=======
-            sycl::ext::intel::experimental::esimd::simd<std::uint32_t, 16> key(
->>>>>>> 4d087cf06 ([SYCL][ESIMD] Eliminate use of deprecated API (#772))
-=======
-            sycl::ext::intel::esimd::simd<std::uint32_t, 16> key(
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
             foo(key);
             key.copy_to(r_acc, id * SIMD_WIDTH * sizeof(std::uint32_t));

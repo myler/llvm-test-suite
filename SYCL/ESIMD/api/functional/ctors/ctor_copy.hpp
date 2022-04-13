@@ -6,10 +6,6 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
-=======
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 ///
 /// \file
 /// This file provides functions for tests on simd copy constructor.
@@ -17,38 +13,11 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-<<<<<<< HEAD
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 #define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
-=======
-// REQUIRES: gpu, level_zero
-// XREQUIRES: gpu
-// TODO gpu and level_zero in REQUIRES due to only this platforms supported yet.
-// The current "REQUIRES" should be replaced with "gpu" only as mentioned in
-// "XREQUIRES".
-// UNSUPPORTED: cuda, hip
-// RUN: %clangxx -fsycl %s -fsycl-device-code-split=per_kernel -o %t.out
-// RUN: %GPU_RUN_PLACEHOLDER %t.out
-//
-// Test for esimd copy constructor.
->>>>>>> 4dd90b8a6 ([SYCL][ESIMD] Enable simd copy constructor tests (#722)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
 
 #include "common.hpp"
 
 namespace esimd = sycl::ext::intel::esimd;
-=======
-=======
-#define ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
-
-#include "common.hpp"
-
-<<<<<<< HEAD
-namespace esimd = sycl::ext::intel::experimental::esimd;
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
-=======
-namespace esimd = sycl::ext::intel::esimd;
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 namespace esimd_test::api::functional::ctors {
 
@@ -120,22 +89,9 @@ private:
 
 // The main test routine.
 // Using functor class to be able to iterate over the pre-defined data types.
-<<<<<<< HEAD
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
   static constexpr int NumElems = SizeT::value;
   using TestDescriptionT = ctors::TestDescription<NumElems, TestCaseT>;
-<<<<<<< HEAD
-=======
-template <typename DataT, typename DimT, typename TestCaseT> class run_test {
-  static constexpr int NumElems = DimT::value;
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
-=======
-template <typename DataT, typename SizeT, typename TestCaseT> class run_test {
-  static constexpr int NumElems = SizeT::value;
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
-=======
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
@@ -146,16 +102,6 @@ public:
       return true;
     }
 
-<<<<<<< HEAD
-    bool passed = true;
-    log::trace<TestDescriptionT>(data_type);
-
-    if (should_skip_test_with<DataT>(queue.get_device())) {
-      return true;
-    }
-
-=======
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     const std::vector<DataT> ref_data = generate_ref_data<DataT, NumElems>();
 
     // If current number of elements is equal to one, then run test with each
@@ -211,27 +157,4 @@ private:
   }
 };
 
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
-<<<<<<< HEAD:SYCL/ESIMD/api/functional/ctors/ctor_copy.hpp
 } // namespace esimd_test::api::functional::ctors
-=======
-int main(int, char **) {
-  sycl::queue queue(esimd_test::ESIMDSelector{},
-                    esimd_test::createExceptionHandler());
-
-  bool passed = true;
-
-  const auto types = get_tested_types<tested_types::all>();
-  const auto dims = get_all_dimensions();
-  const auto contexts = unnamed_type_pack<initializer, var_decl, rval_in_expr,
-                                          const_ref>::generate();
-
-  passed &= for_all_combinations<run_test>(types, dims, contexts, queue);
-
-  std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
-  return passed ? 0 : 1;
-}
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp
-=======
-} // namespace esimd_test::api::functional::ctors
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748)):SYCL/ESIMD/api/functional/ctors/ctor_copy.cpp

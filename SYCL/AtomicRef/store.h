@@ -70,10 +70,6 @@ void store_local_test(queue q, size_t N) {
   assert(store >= T(0) && store <= T(N - 1));
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d94406530 ([SYCL][CUDA] Added tests for atomic loads and stores for various orders and scopes (#648))
 template <access::address_space space, typename T,
           memory_order order = memory_order::relaxed,
           memory_scope scope = memory_scope::device>
@@ -96,7 +92,6 @@ void store_test(queue q, size_t N) {
 #endif
   }
   if constexpr (do_global_tests) {
-<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
     if constexpr (do_ext_tests) {
       store_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order,
@@ -137,58 +132,8 @@ void store_test_orders_scopes(queue q, size_t N) {
     store_test_scopes<space, T, memory_order::release>(q, N);
   }
   store_test_scopes<space, T, memory_order::relaxed>(q, N);
-=======
-template <typename T> void store_test(queue q, size_t N) {
-=======
->>>>>>> d94406530 ([SYCL][CUDA] Added tests for atomic loads and stores for various orders and scopes (#648))
-#ifdef RUN_DEPRECATED
-    if constexpr (do_ext_tests) {
-      store_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order,
-                        scope>(q, N);
-    }
-#else
-    store_global_test<::sycl::atomic_ref, space, T, order, scope>(q, N);
-#endif
-<<<<<<< HEAD
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
-=======
-  }
-}
-
-template <access::address_space space, typename T,
-          memory_order order = memory_order::relaxed>
-void store_test_scopes(queue q, size_t N) {
-  std::vector<memory_scope> scopes =
-      q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
-      scopes.end()) {
-    store_test<space, T, order, memory_scope::system>(q, N);
-  }
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::work_group) !=
-      scopes.end()) {
-    store_test<space, T, order, memory_scope::work_group>(q, N);
-  }
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::sub_group) !=
-      scopes.end()) {
-    store_test<space, T, order, memory_scope::sub_group>(q, N);
-  }
-  store_test<space, T, order, memory_scope::device>(q, N);
-}
-
-template <access::address_space space, typename T>
-void store_test_orders_scopes(queue q, size_t N) {
-  std::vector<memory_order> orders =
-      q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
-  if (std::find(orders.begin(), orders.end(), memory_order::release) !=
-      orders.end()) {
-    store_test_scopes<space, T, memory_order::release>(q, N);
-  }
-  store_test_scopes<space, T, memory_order::relaxed>(q, N);
-}
-
->>>>>>> d94406530 ([SYCL][CUDA] Added tests for atomic loads and stores for various orders and scopes (#648))
 template <access::address_space space> void store_test_all() {
   queue q;
 

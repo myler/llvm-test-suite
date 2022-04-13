@@ -110,56 +110,24 @@ void xor_test(queue q) {
       (space == access::address_space::generic_space && !TEST_GENERIC_IN_LOCAL);
   constexpr bool do_ext_tests = space != access::address_space::generic_space;
   if constexpr (do_local_tests) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 #ifdef RUN_DEPRECATED
-=======
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
-#ifdef RUN_DEPRECATED
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       xor_local_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #else
     xor_local_test<::sycl::atomic_ref, space, T, order, scope>(q);
 #endif
   }
   if constexpr (do_global_tests) {
 #ifdef RUN_DEPRECATED
-=======
-=======
-#else
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
-    xor_local_test<::sycl::atomic_ref, space, T, order, scope>(q);
-#endif
-  }
-  if constexpr (do_global_tests) {
-<<<<<<< HEAD
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
-#ifdef RUN_DEPRECATED
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
     if constexpr (do_ext_tests) {
       xor_global_test<::sycl::ext::oneapi::atomic_ref, space, T, order, scope>(
           q);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #else
     xor_global_test<::sycl::atomic_ref, space, T, order, scope>(q);
 #endif
-=======
-    xor_global_test<::sycl::atomic_ref, space, T, order, scope>(q);
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
-#else
-    xor_global_test<::sycl::atomic_ref, space, T, order, scope>(q);
-#endif
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   }
 }
 
@@ -168,8 +136,6 @@ template <access::address_space space, typename T,
 void xor_test_scopes(queue q) {
   std::vector<memory_scope> scopes =
       q.get_device().get_info<info::device::atomic_memory_scope_capabilities>();
-<<<<<<< HEAD
-<<<<<<< HEAD
   if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
       scopes.end()) {
     xor_test<space, T, order, memory_scope::system>(q);
@@ -183,37 +149,12 @@ void xor_test_scopes(queue q) {
     xor_test<space, T, order, memory_scope::sub_group>(q);
   }
   xor_test<space, T, order, memory_scope::device>(q);
-=======
-#if defined(SYSTEM)
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) ==
-=======
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::system) !=
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
-      scopes.end()) {
-    xor_test<space, T, order, memory_scope::system>(q);
-  }
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::work_group) !=
-      scopes.end()) {
-    xor_test<space, T, order, memory_scope::work_group>(q);
-  }
-  if (std::find(scopes.begin(), scopes.end(), memory_scope::sub_group) !=
-      scopes.end()) {
-    xor_test<space, T, order, memory_scope::sub_group>(q);
-  }
-  xor_test<space, T, order, memory_scope::device>(q);
-<<<<<<< HEAD
-#endif
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space, typename T>
 void xor_test_orders_scopes(queue q) {
   std::vector<memory_order> orders =
       q.get_device().get_info<info::device::atomic_memory_order_capabilities>();
-<<<<<<< HEAD
-<<<<<<< HEAD
   if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) !=
       orders.end()) {
     xor_test_scopes<space, T, memory_order::acq_rel>(q);
@@ -227,49 +168,13 @@ void xor_test_orders_scopes(queue q) {
     xor_test_scopes<space, T, memory_order::release>(q);
   }
   xor_test_scopes<space, T, memory_order::relaxed>(q);
-=======
-#if defined(ACQ_REL)
-  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) ==
-=======
-  if (std::find(orders.begin(), orders.end(), memory_order::acq_rel) !=
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
-      orders.end()) {
-    xor_test_scopes<space, T, memory_order::acq_rel>(q);
-  }
-  if (std::find(orders.begin(), orders.end(), memory_order::acquire) !=
-      orders.end()) {
-    xor_test_scopes<space, T, memory_order::acquire>(q);
-  }
-  if (std::find(orders.begin(), orders.end(), memory_order::release) !=
-      orders.end()) {
-    xor_test_scopes<space, T, memory_order::release>(q);
-  }
-  xor_test_scopes<space, T, memory_order::relaxed>(q);
-<<<<<<< HEAD
-#endif
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
 }
 
 template <access::address_space space> void xor_test_all() {
   queue q;
 
   constexpr int N = 32;
-<<<<<<< HEAD
-<<<<<<< HEAD
 #ifdef FULL_ATOMIC64_COVERAGE
-=======
-#ifdef ATOMIC64
-  if (!q.get_device().has(aspect::atomic64)) {
-    std::cout << "Skipping test\n";
-    return;
-  }
-
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
-#ifdef FULL_ATOMIC64_COVERAGE
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   if constexpr (sizeof(long) == 8) {
     xor_test_orders_scopes<space, long>(q);
     xor_test_orders_scopes<space, unsigned long>(q);
@@ -278,20 +183,9 @@ template <access::address_space space> void xor_test_all() {
     xor_test_orders_scopes<space, long long>(q);
     xor_test_orders_scopes<space, unsigned long long>(q);
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #endif
   xor_test_orders_scopes<space, int>(q);
 #ifdef FULL_ATOMIC32_COVERAGE
-=======
-#else
-  xor_test_orders_scopes<space, int>(q);
->>>>>>> 88ee9d1a0 ([SYCL] Add tests for atomics with various memory orders and scopes (#534))
-=======
-#endif
-  xor_test_orders_scopes<space, int>(q);
-#ifdef FULL_ATOMIC32_COVERAGE
->>>>>>> a5f90c0cd ([SYCL] Speed up atomic_ref tests (#879))
   xor_test_orders_scopes<space, unsigned int>(q);
   if constexpr (sizeof(long) == 4) {
     xor_test_orders_scopes<space, long>(q);

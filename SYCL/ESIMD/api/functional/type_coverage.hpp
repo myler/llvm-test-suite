@@ -311,58 +311,9 @@ template <typename T, T... values> struct value_pack {
   }
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-// Alias to use mainly for simd vector sizes; no overhead as alias doesn't
-// declare a new type
-template <int... values> using integer_pack = value_pack<int, values...>;
-
-namespace sfinae {
-namespace details {
-template <typename T> struct is_type_pack_t : std::false_type {};
-
-template <typename... Types>
-struct is_type_pack_t<named_type_pack<Types...>> : std::true_type {};
-
-template <typename... Types>
-struct is_type_pack_t<unnamed_type_pack<Types...>> : std::true_type {};
-} // namespace details
-
-template <typename T>
-using is_not_a_type_pack =
-    std::enable_if_t<!details::is_type_pack_t<T>::value, bool>;
-
-=======
-// Alias to use mainly for simd vector dimensions; no overhead as alias doesn't
-=======
-// Alias to use mainly for simd vector sizes; no overhead as alias doesn't
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
-// declare a new type
-template <int... values> using integer_pack = value_pack<int, values...>;
-
-namespace sfinae {
-namespace details {
-template <typename T> struct is_type_pack_t : std::false_type {};
-
-template <typename... Types>
-struct is_type_pack_t<named_type_pack<Types...>> : std::true_type {};
-
-template <typename... Types>
-struct is_type_pack_t<unnamed_type_pack<Types...>> : std::true_type {};
-} // namespace details
-
-template <typename T>
-using is_not_a_type_pack =
-    std::enable_if_t<!details::is_type_pack_t<T>::value, bool>;
-
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-} // namespace sfinae
-=======
 //----------------------------------------------------------------------------//
 // Support of the combinatorial type and value packs usage
 //----------------------------------------------------------------------------//
->>>>>>> 4bea4cc42 ([SYCL][ESIMD] Add filtration support for type packs (#926))
 
 // Generic function to run specific action for every combination of each of the
 // types given by appropriate type pack instances.
@@ -438,17 +389,10 @@ inline bool for_all_combinations() {
   static_assert(always_false, "No packs provided to iterate over");
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
 //----------------------------------------------------------------------------//
 // Specific pack generation helpers
 //----------------------------------------------------------------------------//
 
->>>>>>> 4bea4cc42 ([SYCL][ESIMD] Add filtration support for type packs (#926))
 // Provides alias to types that can be used in tests:
 //  core - all C++ data types, except specific data types
 //  fp - all floating point C++ data types
@@ -456,18 +400,10 @@ inline bool for_all_combinations() {
 //  uint - all unsigned C++ integral data types
 //  sint - all signed C++ integral data types
 enum class tested_types { core, fp, fp_extra, uint, sint };
-<<<<<<< HEAD
-=======
-enum class tested_types { all, fp, uint, sint };
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
 
 // Factory method to retrieve pre-defined named_type_pack, to have the same
 // default type coverage over the tests
 template <tested_types required> auto get_tested_types() {
-<<<<<<< HEAD
-<<<<<<< HEAD
   if constexpr (required == tested_types::core) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
     return named_type_pack<
@@ -489,38 +425,6 @@ template <tested_types required> auto get_tested_types() {
                                                          "double");
   } else if constexpr (required == tested_types::uint) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
-=======
-  if constexpr (required == tested_types::all) {
-=======
-  if constexpr (required == tested_types::core) {
-<<<<<<< HEAD
->>>>>>> c1366f1d7 ([SYCL][ESIMD] Split tests on simd constructors into core and fp_extra (#748))
-=======
-#ifdef ESIMD_TESTS_FULL_COVERAGE
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
-    return named_type_pack<
-        char, unsigned char, signed char, short, unsigned short, int,
-        unsigned int, long, unsigned long, float, long long,
-        unsigned long long>::generate("char", "unsigned char", "signed char",
-                                      "short", "unsigned short", "int",
-                                      "unsigned int", "long", "unsigned long",
-                                      "float", "long long",
-                                      "unsigned long long");
-#else
-    return named_type_pack<float, int, unsigned int, signed char>::generate(
-        "float", "int", "unsigned int", "signed char");
-#endif
-  } else if constexpr (required == tested_types::fp) {
-    return named_type_pack<float>::generate("float");
-  } else if constexpr (required == tested_types::fp_extra) {
-    return named_type_pack<sycl::half, double>::generate("sycl::half",
-                                                         "double");
-  } else if constexpr (required == tested_types::uint) {
-<<<<<<< HEAD
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
-#ifdef ESIMD_TESTS_FULL_COVERAGE
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
     if constexpr (!std::is_signed_v<char>) {
       return named_type_pack<unsigned char, unsigned short, unsigned int,
                              unsigned long, unsigned long long,
@@ -534,23 +438,11 @@ template <tested_types required> auto get_tested_types() {
                                         "unsigned int", "unsigned long",
                                         "unsigned long long");
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #else
     return named_type_pack<unsigned int>::generate("unsigned int");
 #endif
   } else if constexpr (required == tested_types::sint) {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
-=======
-  } else if constexpr (required == tested_types::sint) {
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
-#else
-    return named_type_pack<unsigned int>::generate("unsigned int");
-#endif
-  } else if constexpr (required == tested_types::sint) {
-#ifdef ESIMD_TESTS_FULL_COVERAGE
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
     if constexpr (std::is_signed_v<char>) {
       return named_type_pack<signed char, short, int, long, long long,
                              char>::generate("signed char", "short", "int",
@@ -560,41 +452,20 @@ template <tested_types required> auto get_tested_types() {
                              long long>::generate("signed char", "short", "int",
                                                   "long", "long long");
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
 #else
     return named_type_pack<int, signed char>::generate("int", "signed char");
 #endif
-=======
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
-#else
-    return named_type_pack<int, signed char>::generate("int", "signed char");
-#endif
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
   } else {
     static_assert(required != required, "Unexpected tested type");
   }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // Syntax sugar to retrieve simd vector sizes in a consistent way
 template <int... Values> auto inline get_sizes() {
-=======
-// Syntax sugar to retrieve simd vector dimensions in a consistent way
-template <int... Values> auto inline get_dimensions() {
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
-// Syntax sugar to retrieve simd vector sizes in a consistent way
-template <int... Values> auto inline get_sizes() {
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
   return integer_pack<Values...>::generate_unnamed();
 }
 
 // Factory method to retrieve pre-defined values_pack, to have the same
-<<<<<<< HEAD
-<<<<<<< HEAD
 // default sizes over the tests
 auto inline get_all_sizes() {
 #ifdef ESIMD_TESTS_FULL_COVERAGE
@@ -603,20 +474,6 @@ auto inline get_all_sizes() {
   return get_sizes<1, 8>();
 #endif
 }
-=======
-// default sizes over the tests
-<<<<<<< HEAD
-auto inline get_all_sizes() { return get_sizes<1, 8, 16, 32>(); }
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
-=======
-auto inline get_all_sizes() {
-#ifdef ESIMD_TESTS_FULL_COVERAGE
-  return get_sizes<1, 8, 16, 32>();
-#else
-  return get_sizes<1, 8>();
-#endif
-}
->>>>>>> d43bc4e32 ([SYCL][ESIMD] Decrease type coverage for core tests (#832))
 
 // It's a deprecated function and it exists only for backward compatibility and
 // it should be deleted in the future. Use get_all_sizes() instead.
@@ -627,12 +484,5 @@ auto inline get_all_dimensions() { return get_all_sizes(); }
 template <int... Values> auto inline get_dimensions() {
   return get_sizes<Values...>();
 }
-<<<<<<< HEAD
-=======
-// default dimensions over the tests
-auto inline get_all_dimensions() { return get_dimensions<1, 8, 16, 32>(); }
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
 
 } // namespace esimd_test::api::functional

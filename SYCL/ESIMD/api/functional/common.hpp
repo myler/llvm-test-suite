@@ -47,15 +47,7 @@ template <typename T> bool are_bitwise_equal(T lhs, T rhs) {
 } // namespace details
 
 // Class used as a kernel ID.
-<<<<<<< HEAD
-<<<<<<< HEAD
 template <typename DataT, int NumElems, typename...> struct Kernel;
-=======
-template <typename DataT, int NumElems, typename T> struct Kernel;
->>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
-=======
-template <typename DataT, int NumElems, typename...> struct Kernel;
->>>>>>> e737b795e ([SYCL][ESIMD] Add tests for simd broadcast constructor (#690))
 
 template <typename DataT>
 using shared_allocator = sycl::usm_allocator<DataT, sycl::usm::alloc::shared>;
@@ -75,33 +67,15 @@ template <typename T>
 inline bool should_skip_test_with(const sycl::device &device) {
   if constexpr (std::is_same_v<T, sycl::half>) {
     if (!device.has(sycl::aspect::fp16)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       // TODO: Use TestDescription after removal of the macro
       // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
       log::print_line(
-=======
-      log::note(
->>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
-=======
-      // TODO: Use TestDescription after removal of the macro
-      // ESIMD_TESTS_DISABLE_DEPRECATED_TEST_DESCRIPTION_FOR_LOGS
-      log::print_line(
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
           "Device does not support half precision floating point operations");
       return true;
     }
   } else if constexpr (std::is_same_v<T, double>) {
     if (!device.has(sycl::aspect::fp64)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       log::print_line(
-=======
-      log::note(
->>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
-=======
-      log::print_line(
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
           "Device does not support double precision floating point operations");
       return true;
     }

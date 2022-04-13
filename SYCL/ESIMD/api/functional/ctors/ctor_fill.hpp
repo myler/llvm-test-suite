@@ -187,8 +187,6 @@ inline std::string init_val_to_string(init_val val) {
   return "n/a";
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 template <int NumElems, typename ContextT>
 class FillCtorTestDescription : public ITestDescription {
 public:
@@ -198,28 +196,6 @@ public:
 
   std::string to_string() const override {
     std::string log_msg = m_description.to_string();
-=======
-template <typename DataT, int NumElems, typename ContextT, init_val BaseVal,
-          init_val Step>
-class FillCtorTestDescription
-    : public ctors::TestDescription<DataT, NumElems, ContextT> {
-=======
-template <int NumElems, typename ContextT>
-class FillCtorTestDescription : public ITestDescription {
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
-public:
-  FillCtorTestDescription(const std::string &data_type, init_val base_val,
-                          init_val step)
-      : m_description(data_type), m_base_val(base_val), m_step(step) {}
-
-  std::string to_string() const override {
-<<<<<<< HEAD
-    std::string log_msg(
-        ctors::TestDescription<DataT, NumElems, ContextT>::to_string());
->>>>>>> 1017d075e ([SYCL][ESIMD] Add tests on simd copy and move assignment operators (#762))
-=======
-    std::string log_msg = m_description.to_string();
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 
     log_msg += ", with base value: " + init_val_to_string(m_base_val);
     log_msg += ", with step value: " + init_val_to_string(m_step);
@@ -237,8 +213,6 @@ template <init_val... Values> auto get_init_values_pack() {
   return value_pack<init_val, Values...>::generate_unnamed();
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 template <typename DataT, typename SizeT, typename TestCaseT, typename BaseValT,
           typename StepT>
 class run_test {
@@ -250,40 +224,13 @@ class run_test {
 
 public:
   bool operator()(sycl::queue &queue, const std::string &data_type) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     bool passed = true;
     log::trace<TestDescriptionT>(data_type, BaseVal, Step);
 
-=======
->>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
-=======
-    bool passed = true;
-    log::trace<TestDescriptionT>(data_type, BaseVal, Step);
-
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
     if (should_skip_test_with<DataT>(queue.get_device())) {
       return true;
     }
 
-<<<<<<< HEAD
-=======
-template <typename DataT, typename DimT, typename TestCaseT, typename BaseValT,
-=======
-template <typename DataT, typename SizeT, typename TestCaseT, typename BaseValT,
->>>>>>> e37c07509 ([SYCL][ESIMD] Replace "dim", "dimensions" with "size", "sizes", etc. (#803))
-          typename StepT>
-class run_test {
-  static constexpr int NumElems = SizeT::value;
-  static constexpr init_val BaseVal = BaseValT::value;
-  static constexpr init_val Step = StepT::value;
-  using KernelT = kernel_for_fill<DataT, NumElems, TestCaseT, BaseVal, Step>;
-
-public:
-  bool operator()(sycl::queue &queue, const std::string &data_type) {
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
->>>>>>> dacacdff7 ([SYCL][ESIMD] Add checks that device has fp16/fp64 aspects (#839))
     shared_vector<DataT> result(NumElems, shared_allocator<DataT>(queue));
 
     const auto base_value = get_value<DataT, BaseVal>();
@@ -315,30 +262,9 @@ public:
 
         if (!std::isnan(result[i])) {
           passed = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
           log::fail(TestDescriptionT(data_type, BaseVal, Step),
                     "Unexpected value at index ", i, ", retrieved: ", result[i],
                     ", expected: any NaN value");
-=======
-
-          // TODO: Make ITestDescription architecture more flexible.
-          // We are assuming that the NaN opcode may differ
-          std::string log_msg = "Failed for simd<";
-          log_msg += data_type + ", " + std::to_string(NumElems) + ">";
-          log_msg += ", with context: " + TestCaseT::get_description();
-          log_msg += ". The element at index: " + std::to_string(i) +
-                     ", is not nan, but it should.";
-          log_msg += ", with base value: " + init_val_to_string<BaseVal>();
-          log_msg += ", with step value: " + init_val_to_string<Step>();
-
-          log::note(log_msg);
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
-          log::fail(TestDescriptionT(data_type, BaseVal, Step),
-                    "Unexpected value at index ", i, ", retrieved: ", result[i],
-                    ", expected: any NaN value");
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
         }
       } else {
 
@@ -353,23 +279,6 @@ public:
     }
     return passed;
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-private:
-  bool fail_test(size_t index, DataT retrieved, DataT expected,
-                 const std::string &data_type) {
-    const auto description =
-        FillCtorTestDescription<DataT, NumElems, TestCaseT, BaseVal, Step>(
-            index, retrieved, expected, data_type);
-    log::fail(description);
-
-    return false;
-  }
->>>>>>> 6870ea3ee ([SYCL][ESIMD] Provide the for_all_combinations utility (#721))
-=======
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
 };
 
 } // namespace esimd_test::api::functional::ctors

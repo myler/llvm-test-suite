@@ -37,22 +37,8 @@ int main(int, char **) {
       unnamed_type_pack<ctors::initializer, ctors::var_decl,
                         ctors::rval_in_expr, ctors::const_ref>::generate();
   const auto alignments =
-<<<<<<< HEAD
-<<<<<<< HEAD
       named_type_pack<ctors::alignment::element, ctors::alignment::vector,
-<<<<<<< HEAD
-                      ctors::alignment::overal>::generate();
-=======
-      unnamed_type_pack<ctors::alignment::element, ctors::alignment::vector,
-                        ctors::alignment::overal>::generate();
->>>>>>> 7ffc560aa ([SYCL][ESIMD] Add test on simd load constructor for fp_extra types (#797))
-=======
-      named_type_pack<ctors::alignment::element, ctors::alignment::vector,
-                      ctors::alignment::overal>::generate();
->>>>>>> 05418ade9 ([SYCL][ESIMD] Make logs architecture more flexible (#838))
-=======
                       ctors::alignment::overal<>>::generate();
->>>>>>> 034142eb8 ([SYCL][ESIMD] Add tests on simd load from accessors (#921))
 
   passed &= for_all_combinations<ctors::run_test>(types, dims, contexts,
                                                   alignments, queue);

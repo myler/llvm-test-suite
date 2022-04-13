@@ -17,24 +17,10 @@
 
 #include <CL/sycl.hpp>
 #include <iostream>
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel;
-=======
-#include <sycl/ext/intel/experimental/esimd.hpp>
-
-using namespace sycl::ext::intel::experimental::esimd;
-using namespace sycl::ext::intel::experimental;
->>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
-=======
-#include <sycl/ext/intel/esimd.hpp>
-
-using namespace sycl::ext::intel::esimd;
-using namespace sycl::ext::intel;
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 using namespace cl::sycl;
 
 template <class T> void prn(T *arr, int size, const char *title) {
@@ -46,26 +32,11 @@ template <class T> void prn(T *arr, int size, const char *title) {
 }
 
 int main(void) {
-<<<<<<< HEAD
-<<<<<<< HEAD
   constexpr unsigned NUM_THREADS = 2;
   constexpr unsigned VL = 16;
   constexpr unsigned FACTOR = 2;
   constexpr unsigned SUB_VL = VL / FACTOR / FACTOR;
   constexpr unsigned Size = VL * NUM_THREADS;
-=======
-  constexpr unsigned VL = 16;
-  constexpr unsigned FACTOR = 2;
-  constexpr unsigned SUB_VL = VL / FACTOR / FACTOR;
-  constexpr unsigned Size = VL * 2;
->>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
-=======
-  constexpr unsigned NUM_THREADS = 2;
-  constexpr unsigned VL = 16;
-  constexpr unsigned FACTOR = 2;
-  constexpr unsigned SUB_VL = VL / FACTOR / FACTOR;
-  constexpr unsigned Size = VL * NUM_THREADS;
->>>>>>> e75a5a577 ([SYCL][ESIMD][EMU] Correction : Number of threads - esimd_merge.cpp (#884))
 
   queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
 
@@ -94,15 +65,7 @@ int main(void) {
 
   try {
     auto e = q.submit([&](handler &cgh) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       cgh.parallel_for<class Test>(NUM_THREADS, [=](id<1> i) SYCL_ESIMD_KERNEL {
-=======
-      cgh.parallel_for<class Test>(Size, [=](id<1> i) SYCL_ESIMD_KERNEL {
->>>>>>> 52feaa59e ([ESIMD] Add test for esimd::merge (#739))
-=======
-      cgh.parallel_for<class Test>(NUM_THREADS, [=](id<1> i) SYCL_ESIMD_KERNEL {
->>>>>>> e75a5a577 ([SYCL][ESIMD][EMU] Correction : Number of threads - esimd_merge.cpp (#884))
         simd<int, VL> va(A + i * VL);
         simd<int, VL> vb(B + i * VL);
         simd_mask<SUB_VL> m(M + i * VL);

@@ -7,19 +7,6 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-// TODO: esimd_emulator fails due to unimplemented 'half' type
-// XFAIL: esimd_emulator
-=======
->>>>>>> 22f86b532 ([ESIMD] Add smoke test for simd::replicate_vs_w_hs. (#799))
-=======
-// TODO: esimd_emulator fails due to unimplemented 'half' type
-// XFAIL: esimd_emulator
->>>>>>> d98407d06 ([SYCL][ESIMD][EMU] Marking ESIMD kernels for esimd_emulator backend (#751))
-=======
->>>>>>> 1947aed85 ([SYCL][ESIMD][EMU] Removing 'XFAIL' markings for 'single_task' tests (#910))
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
@@ -29,24 +16,10 @@
 
 #include <CL/sycl.hpp>
 #include <iostream>
-<<<<<<< HEAD
-<<<<<<< HEAD
 #include <sycl/ext/intel/esimd.hpp>
 
 using namespace cl::sycl;
 using namespace sycl::ext::intel::esimd;
-=======
-#include <sycl/ext/intel/experimental/esimd.hpp>
-
-using namespace cl::sycl;
-using namespace sycl::ext::intel::experimental::esimd;
->>>>>>> 22f86b532 ([ESIMD] Add smoke test for simd::replicate_vs_w_hs. (#799))
-=======
-#include <sycl/ext/intel/esimd.hpp>
-
-using namespace cl::sycl;
-using namespace sycl::ext::intel::esimd;
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 template <class T> struct char_to_int {
   using type = typename std::conditional<

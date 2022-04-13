@@ -24,11 +24,6 @@
 using namespace cl::sycl;
 using namespace std;
 using namespace sycl::ext::intel::esimd;
-<<<<<<< HEAD
-
-const unsigned int ESIMD_EMULATOR_SIZE_LIMIT = 1U << 10;
-=======
->>>>>>> b2897f953 ([SYCL][ESIMD] Move some ESIMD APIs outside of experimental namespace (#892))
 
 const unsigned int ESIMD_EMULATOR_SIZE_LIMIT = 1U << 10;
 
