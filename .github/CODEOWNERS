@@ -66,12 +66,12 @@ SYCL/USM @jbrodman @sergey-semenov
 SYCL/Basic/stream @againull
 
 # Test scripts
-*.pl @myler @wanyaman
-*.list @myler @wanyaman
+*.pl @myler @wanyaman @duanhanbing
+*.list @myler @wanyaman @duanhanbing
 
 # tc files
-*.xml @myler @wanyaman
-config_sycl/* @myler @wanyaman
+*.xml @myler @wanyaman @duanhanbing
+config_sycl/* @myler @wanyaman @duanhanbing
 
 # Deprecated features
 SYCL/DeprecatedFeatures @intel/llvm-reviewers-runtime
