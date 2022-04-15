@@ -222,7 +222,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_vadd_2d" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_vadd_2d_acc" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_vadd_half" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_vadd_raw_send" />
+    <test configFile="config_sycl/TEMPLATE_skip_pvc.xml" splitGroup="esimd" testName="esimd_vadd_raw_send" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_vadd_usm" />
   </tests>
 </suite>
