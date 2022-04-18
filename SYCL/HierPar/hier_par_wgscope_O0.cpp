@@ -5,7 +5,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-
+// UNSUPPORTED: gpu-intel-dg
 // RUN: %clangxx -O0 -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
