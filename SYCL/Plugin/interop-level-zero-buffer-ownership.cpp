@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 // REQUIRES: level_zero, level_zero_dev_kit
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+// REQUIRES: gpu, level_zero, level_zero_dev_kit
+>>>>>>> 36a78e871 ([SYCL] Ownership test for L0 buffer interop requires gpu (#993))
 // L0 plugin incorrectly reports memory leaks because it doesn't take into
 // account direct calls to L0 API.
 // UNSUPPORTED: ze_debug-1,ze_debug4
