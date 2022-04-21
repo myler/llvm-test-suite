@@ -39,7 +39,5 @@ subgroup_generic_shuffle
 subgroup_info
 subgroup_load_store
 subgroup_shuffle_fp64
-TEMPLATE_llvm_test_suite_sycl
-TEMPLATE_skip_pvc
 usm_copy
 usm_fill
