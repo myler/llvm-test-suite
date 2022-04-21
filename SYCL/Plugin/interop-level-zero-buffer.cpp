@@ -1,16 +1,7 @@
 // REQUIRES: level_zero, level_zero_dev_kit
-<<<<<<< HEAD
-<<<<<<< HEAD
 // L0 plugin incorrectly reports memory leaks because it doesn't take into
 // account direct calls to L0 API.
 // UNSUPPORTED: ze_debug-1,ze_debug4
-=======
->>>>>>> de5539051 ([SYCL] Test buffer interop for the Level Zero backend (#708))
-=======
-// L0 plugin incorrectly reports memory leaks because it doesn't take into
-// account direct calls to L0 API.
-// UNSUPPORTED: ze_debug-1,ze_debug4
->>>>>>> 9337032ca ([SYCL] Disable ze_debug4 check for L0 buffer interop tests (#992))
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %level_zero_options %s -o %t.out
 // RUN: env SYCL_DEVICE_FILTER=level_zero ZE_DEBUG=1 %GPU_RUN_PLACEHOLDER %t.out
 
