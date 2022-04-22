@@ -365,9 +365,9 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_fill_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_fill_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_fill_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_acc_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_acc_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_acc_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_load_acc_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_usm_core" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_usm_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_usm_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_usm_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_move_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_core" />
@@ -505,7 +505,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_dgetrf" />
+    <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
     <test configFile="config_sycl/esimd_regression_dgetrf_8x8.xml" splitGroup="double" testName="esimd_regression_dgetrf_8x8" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_globals" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
