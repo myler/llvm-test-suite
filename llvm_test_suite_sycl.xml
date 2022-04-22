@@ -215,7 +215,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_range_offset_fit_in_int" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_reqd_work_group_size" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_sampler_sampler" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="double" testName="basic_scalar_vec_access" />
+    <test configFile="config_sycl/basic_scalar_vec_access.xml" splitGroup="double" testName="basic_scalar_vec_access" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_span" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_stream_auto_flush" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="basic" testName="basic_stream_blocking_pipes_and_stream" />
@@ -368,7 +368,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_acc_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_acc_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_load_acc_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_usm_core" />
-    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_usm_fp_extra.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_load_usm_fp_extra" />
+    <test configFile="config_sycl/esimd_api_functional_ctors_ctor_load_usm_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_load_usm_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_move_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_move_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_move_fp_extra" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_vector_core" />
@@ -837,7 +837,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/subgroup_broadcast_fp64.xml" splitGroup="double" testName="subgroup_broadcast_fp64" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_common" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_generic_reduce" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="double" testName="subgroup_generic_shuffle" />
+    <test configFile="config_sycl/subgroup_generic_shuffle.xml" splitGroup="double" testName="subgroup_generic_shuffle" />
     <test configFile="config_sycl/subgroup_info.xml" splitGroup="double" testName="subgroup_info" />
     <test configFile="config_sycl/subgroup_load_store.xml" splitGroup="double" testName="subgroup_load_store" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="subgroup" testName="subgroup_reduce" />
