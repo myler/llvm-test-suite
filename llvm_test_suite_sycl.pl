@@ -592,8 +592,12 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
-      if (gpu(['dg1', 'dg2', 'ats', 'pvc'])) {
+      if (gpu(['dg1','ats'])) {
         $gpu_opts .= "-Dgpu-intel-dg1=1";
+      } elsif (gpu(['dg2'])) {
+        $gpu_opts .= "-Dgpu-intel-dg2=1";
+      } elsif (gpu(['pvc'])) {
+        $gpu_opts .= "-Dgpu-intel-pvc=1";
       }
 
       my $backward_compatibility_opts = "";
