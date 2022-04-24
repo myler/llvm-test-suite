@@ -419,7 +419,11 @@ sub run_and_parse
               return $RUNFAIL;
             }
         }
-        return $res;
+        if ($res eq $RUNFAIL and $opt_compile) {
+          return $COMPFAIL;
+        } else {
+          return $res;
+        }
     } elsif ( -f $cmake_err) {
         $compiler_output = file2str($cmake_err);
     }
