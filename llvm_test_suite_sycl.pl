@@ -601,7 +601,7 @@ sub do_run
       }
 
       my $backward_compatibility_opts = "";
-      if (is_windows()) {
+      if (is_windows() and $current_suite =~ /compatibility_llvm_test_suite_sycl/) {
         $backward_compatibility_opts = "-Dcompatibility_testing=1";
       }
 
