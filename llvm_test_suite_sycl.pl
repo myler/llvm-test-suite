@@ -817,6 +817,8 @@ sub run_cmake
         $sycl_backend = "PI_CUDA";
     } elsif ( $current_optset =~ m/gpu/ ) {
         $sycl_backend = "PI_LEVEL_ZERO";
+    } elsif ( $current_optset =~ m/opt_use_esimd_emu/ ) {
+        $sycl_backend = "ext_intel_esimd_emulator";
     } else {
         $sycl_backend = "PI_OPENCL";
     }
@@ -839,6 +841,8 @@ sub run_cmake
     }elsif ( $current_optset =~ m/opt_use_acc/ ){
         $device = "acc";
     }elsif ( $current_optset =~ m/opt_use_nv_gpu/ ){
+        $device = "gpu";
+    }elsif ( $current_optset =~ m/opt_use_esimd_emu/ ){
         $device = "gpu";
     }else{
         $device = "host";
