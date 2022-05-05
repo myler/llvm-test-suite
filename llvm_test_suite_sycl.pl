@@ -419,7 +419,11 @@ sub run_and_parse
               return $RUNFAIL;
             }
         }
-        return $res;
+        if ($res eq $RUNFAIL and $opt_compile) {
+          return $COMPFAIL;
+        } else {
+          return $res;
+        }
     } elsif ( -f $cmake_err) {
         $compiler_output = file2str($cmake_err);
     }
@@ -461,7 +465,16 @@ sub RunSuite
 
 sub BuildTest
 {
+  if ($opt_compile) {
+    if ($current_test eq $test_to_run_list[0]) {
+      init_and_cmake();
+    } else {
+      chdir_log($build_dir);
+    }
+    return run_and_parse();
+  } else {
     return 0;
+  }
 }
 
 sub RunTest
@@ -603,6 +616,13 @@ sub do_run
       my $backward_compatibility_opts = "";
       if (is_windows() and $current_suite =~ /compatibility_llvm_test_suite_sycl/) {
         $backward_compatibility_opts = "-Dcompatibility_testing=1";
+      }
+
+      if ($opt_compile and $current_suite eq "llvm_test_suite_esimd_embargo") {
+        foreach my $test (@test_to_run_list) {
+          modify_test_file($test, '%GPU_RUN_PLACEHOLDER', "true");
+          modify_test_file($test, '%ESIMD_RUN_PLACEHOLDER', "true");
+        }
       }
 
       set_tool_path();
