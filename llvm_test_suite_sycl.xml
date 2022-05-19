@@ -341,6 +341,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="discardevents" testName="discardevents_invalid_event_exceptions" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="dotproduct" testName="dotproduct_dot_product_int_test" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="dotproduct" testName="dotproduct_dot_product_vec_test" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_acc_gather_scatter_rgba" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_accessor" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_accessor_gather_scatter" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="esimd" testName="esimd_accessor_load_store" />
@@ -565,6 +566,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_all_of" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_any_of" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_back_to_back_collectives" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_barrier" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_broadcast" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_exclusive_scan" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="groupalgorithm" testName="groupalgorithm_exclusive_scan_over_group" />
@@ -665,6 +667,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_element_wise_ops" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_elemwise_irreg_size_ops_bf16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_int8_vnni" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
@@ -728,17 +731,19 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="printf" testName="printf_mixed_address_space" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="printf" testName="printf_percent_symbol" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_big_data" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_dynamic_span" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_conditional" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_ext_double" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_ext_half" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_lambda" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_n_queue_shortcut" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_n_vars" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_queue_shortcut" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_s0_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_s0_rw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_s1_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_nd_s1_rw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_placeholder" />
-    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_queue_parallel_for" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_1d_s0_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_1d_s0_rw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_1d_s1_dw" />
@@ -748,8 +753,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_3d_s1_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_3d_s1_rw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_lambda" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_queue_shortcut" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_range_usm_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_reducer_op_eq" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_span" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_span_pack" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_usm" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="reduction" testName="reduction_reduction_usm_dw" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="regression" testName="regression_2020_spec_constants_debug_info" />
