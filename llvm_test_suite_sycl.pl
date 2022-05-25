@@ -908,8 +908,16 @@ sub run_cmake
         close $out;
     }
 
-    sleep(30) if (is_windows()); # CMPLRTOOLS-26045: sleep for 30 second to correctly remove the folder
-    rmtree($build_dir); # Clean build folder
+    if (-d $build_dir) {
+        execute( "rm -rf $build_dir" );
+        if ($command_status != $PASS) {
+            sleep(30) if (is_windows()); # CMPLRTOOLS-26045: sleep for 30 second to correctly remove the folder
+            execute( "rm -rf $build_dir" ); # Device or resource busy, rm again.
+            if ($command_status != $PASS) {
+                $build_dir = $build_dir . "_" . int(rand(~0));
+            }
+        }
+    }
     safe_Mkdir($build_dir); # Create build folder
     chdir_log($build_dir); # Enter build folder
     execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
