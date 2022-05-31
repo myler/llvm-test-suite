@@ -60,6 +60,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_assignment_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_atomic_memory_order" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_atomic_memory_order_acq_rel" />
+    <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_atomic_memory_order_seq_cst" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_generic" />
     <test configFile="config_sycl/TEMPLATE_llvm_test_suite_sycl.xml" splitGroup="atomicref" testName="atomicref_compare_exchange_generic_local" />
