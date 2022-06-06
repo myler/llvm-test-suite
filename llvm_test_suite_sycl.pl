@@ -1,3 +1,9 @@
+BEGIN
+{
+    use lib $ENV{ICS_PERLLIB};
+}
+use icpuid;
+
 use File::Basename;
 use File::Copy;
 
@@ -34,6 +40,10 @@ sub gpu {
   $gpus = [ $gpus ] if ref($gpus) ne "ARRAY";
   my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
   if (!defined $current_gpu) {
+    my @avaliable_gpu_features = get_gpu_features();
+    foreach my $gpu (@{$gpus}) {
+      return 1 if (grep(/$gpu/i, @avaliable_gpu_features));
+    }
     return 0;
   } else {
     $current_gpu =~ tr/,//d; # e.g. gen9,/gen9/double/,GEN9
@@ -582,6 +592,8 @@ sub do_run
       my $jobset = "-j 8";
       my $zedebug = "";
       my $gpu_opts = "";
+      my $sycl2020_aspects = "";
+      my $sycl2020_non_aspect_features = "";
 
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
@@ -605,12 +617,45 @@ sub do_run
         $timeset = "--timeout 0";
       }
 
-      if (gpu(['dg1','ats'])) {
-        $gpu_opts .= "-Dgpu-intel-dg1=1";
-      } elsif (gpu(['dg2'])) {
-        $gpu_opts .= "-Dgpu-intel-dg2=1";
-      } elsif (gpu(['pvc'])) {
-        $gpu_opts .= "-Dgpu-intel-pvc=1";
+      # Detail lit-feature-checks in https://github.com/intel/llvm-test-suite/tree/intel/SYCL#lit-feature-checks
+      # Platform names that appear in external user interactions (e.g. command-line arguments) should be all lowercase, with dashes (-).
+      # Platform names that appear in external user interactions in Open Source (OS) version of SW tools must come from any of the following URL:
+      # https://github.com/intel-innersource/drivers.gpu.specification.platforms/blob/generated_cs/gen/templates/doc/listing.md#listing-of-all-known-gpu-platforms
+      # FAMILY
+      if (gpu(['gen9'])) {
+          $gpu_opts .= " -Dgpu-intel-gen9=1 ";
+      }
+      if (gpu(['gen11'])) {
+          $gpu_opts .= " -Dgpu-intel-gen11=1 ";
+      }
+      if (gpu(['gen12'])) {
+          $gpu_opts .= " -Dgpu-intel-gen12=1 ";
+      }
+      # DEVICE
+      if (gpu(['ats'])) {
+          $gpu_opts .= " -Dgpu-intel-ats=1 ";
+      }
+      if (gpu(['atsm'])) {
+          $gpu_opts .= " -Dgpu-intel-ats-m=1 ";
+      }
+      if (gpu(['dg1'])) {
+          $gpu_opts .= " -Dgpu-intel-dg1=1 ";
+      }
+      if (gpu(['dg2'])) {
+          $gpu_opts .= " -Dgpu-intel-acm=1 ";
+      }
+      if (gpu(['pvc'])) {
+          $gpu_opts .= " -Dgpu-intel-pvc=1 ";
+      }
+
+      # SYCL 2020 device aspects: https://www.khronos.org/registry/SYCL/specs/sycl-2020/html/sycl-2020.html#sec:device-aspects
+      # ASPECT
+      if ($current_optset !~ m/gpu/ or gpu(['double'])) {
+          $sycl2020_aspects .= " -Daspect-fp64=1 ";
+      }
+      # SUPPORTS
+      if (gpu(['subdevice'])) {
+          $sycl2020_non_aspect_features .= " -Dsupports-subdevice=1 ";
       }
 
       my $backward_compatibility_opts = "";
@@ -627,9 +672,9 @@ sub do_run
 
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $backward_compatibility_opts $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $backward_compatibility_opts $sycl2020_aspects $sycl2020_non_aspect_features $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $gpu_opts $matrix $zedebug $path $timeset");
+        execute("$python $lit -a $sycl2020_aspects $sycl2020_non_aspect_features $gpu_opts $matrix $zedebug $path $timeset");
       }
     }
 
@@ -1061,19 +1106,11 @@ sub print2file
 }
 
 sub is_ats {
-    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
-    if (defined $current_gpu && $current_gpu =~ m/ats/i) {
-      return 1;
-    }
-    return 0;
+    return gpu("ats");
 }
 
 sub is_pvc {
-    my $current_gpu = $ENV{'CURRENT_GPU_DEVICE'};
-    if (defined $current_gpu && $current_gpu =~ m/pvc/i) {
-      return 1;
-    }
-    return 0;
+    return gpu("pvc");
 }
 
 sub append2file
@@ -1105,4 +1142,5 @@ sub CleanupTest {
 }
 
 1;
+
 
