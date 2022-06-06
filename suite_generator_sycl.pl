@@ -248,14 +248,14 @@ sub token2feature
     if (substr($ut, 0, 1) eq '!') {
       my $subtoken = substr($ut, 1);
       foreach my $feature (@all_gpu_features) {
-        if ($subtoken eq "$lit_feature_prefix$feature") {
+        if ($subtoken eq "$lit_feature_prefix$feature" or $subtoken eq "aspect-fp64" and $feature eq "double") {
           push(@tokens, "!$feature");
           last;
         }
       }
     } else {
       foreach my $feature (@all_gpu_features) {
-        if ($ut eq "$lit_feature_prefix$feature") {
+        if ($ut eq "$lit_feature_prefix$feature" or $ut eq "aspect-fp64" and $feature eq "double") {
           push(@tokens, $feature);
           last;
         }
@@ -270,7 +270,7 @@ sub token2feature
     if (substr($rt, 0, 1) eq '!') {
       my $subtoken = substr($rt, 1);
       foreach my $feature (@all_gpu_features) {
-        if ($subtoken eq "$lit_feature_prefix$feature") {
+        if ($subtoken eq "$lit_feature_prefix$feature"or $subtoken eq "aspect-fp64" and $feature eq "double") {
           my $seen = 0;
           foreach my $ref (@tokens) {
             my $ref_token = $ref;
@@ -287,7 +287,7 @@ sub token2feature
     } else {
       foreach my $feature (@all_gpu_features) {
       #if (grep(/\Q$lit_feature_prefix$rt/, @all_gpu_features)) {
-        if ($rt eq "$lit_feature_prefix$feature") {
+        if ($rt eq "$lit_feature_prefix$feature" or $rt eq "aspect-fp64" and $feature eq "double") {
           my $seen = 0;
           foreach my $ref (@tokens) {
             my $ref_token = $ref;
@@ -347,10 +347,10 @@ sub translate_gpu_feature
     # Not support "AND", "OR", "()"
     if ($line =~ /\/\/ REQUIRES: *(.*)$/) {
       my $token_str = $1;
-      @require_tokens = split(/[ ,]/, $token_str);
+      @require_tokens = split(/, |,| \&\& |\&\&| \|\| |\|\|/, $token_str);
     } elsif ($line =~ /\/\/ UNSUPPORTED: *(.*)$/) {
       my $token_str = $1;
-      @unsupported_tokens = split(/[ ,]/, $token_str);
+      @unsupported_tokens = split(/, |,| \&\& |\&\&| \|\| |\|\|/, $token_str);
     }
   }
 
