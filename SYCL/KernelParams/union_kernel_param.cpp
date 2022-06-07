@@ -1,3 +1,4 @@
+// REQUIRES: aspect-fp64
 // This test checks kernel execution with union type as kernel parameters.
 
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out

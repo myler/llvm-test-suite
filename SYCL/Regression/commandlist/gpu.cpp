@@ -1,4 +1,4 @@
-// REQUIRES: gpu, linux
+// REQUIRES: aspect-fp64, gpu, linux
 // UNSUPPORTED: cuda || hip
 // UNSUPPORTED: ze_debug-1,ze_debug4
 //

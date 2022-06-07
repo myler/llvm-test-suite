@@ -100,15 +100,21 @@ elif platform.system() == "Linux":
     config.substitutions.append( ('%obj_ext', '.o') )
 config.substitutions.append( ('%sycl_include',  config.sycl_include ) )
 
+# Intel GPU DEVICE availability
 if lit_config.params.get('gpu-intel-dg1', False):
     config.available_features.add('gpu-intel-dg1')
-
 if lit_config.params.get('gpu-intel-dg2', False):
     config.available_features.add('gpu-intel-dg2')
-
 if lit_config.params.get('gpu-intel-pvc', False):
     config.available_features.add('gpu-intel-pvc')
 
+# SYCL 2020 device aspects: https://www.khronos.org/registry/SYCL/specs/sycl-2020/html/sycl-2020.html#sec:device-aspects
+# ASPECT
+if lit_config.params.get('aspect-fp64'):
+    config.available_features.add('aspect-fp64')
+# SUPPORTS for non-aspect optional features
+if lit_config.params.get('supports-subdevice'):
+    config.available_features.add('supports-subdevice')
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
 

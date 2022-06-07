@@ -1,5 +1,5 @@
 // UNSUPPORTED: cuda || hip_nvidia
-// REQUIRES: gpu,linux
+// REQUIRES: aspect-fp64, gpu,linux
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 

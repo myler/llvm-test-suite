@@ -1,4 +1,4 @@
-// REQUIRES: gpu
+// REQUIRES: aspect-fp64, gpu
 // UNSUPPORTED: cuda || hip
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out

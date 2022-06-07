@@ -1,3 +1,4 @@
+// REQUIRES: aspect-fp64
 //==---- copy.cpp - USM copy test ------------------------------------------==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
