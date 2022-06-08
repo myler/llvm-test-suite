@@ -632,17 +632,11 @@ sub do_run
           $gpu_opts .= " -Dgpu-intel-gen12=1 ";
       }
       # DEVICE
-      if (gpu(['ats'])) {
-          $gpu_opts .= " -Dgpu-intel-ats=1 ";
-      }
-      if (gpu(['atsm'])) {
-          $gpu_opts .= " -Dgpu-intel-ats-m=1 ";
-      }
       if (gpu(['dg1'])) {
           $gpu_opts .= " -Dgpu-intel-dg1=1 ";
       }
       if (gpu(['dg2'])) {
-          $gpu_opts .= " -Dgpu-intel-acm=1 ";
+          $gpu_opts .= " -Dgpu-intel-dg2=1 ";
       }
       if (gpu(['pvc'])) {
           $gpu_opts .= " -Dgpu-intel-pvc=1 ";
