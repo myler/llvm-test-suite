@@ -1,4 +1,3 @@
-// REQUIRES: aspect-fp64
 // See https://github.com/intel/llvm/issues/2922 for more info
 // UNSUPPORTED: cuda || hip
 

@@ -5,7 +5,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// REQUIRES: aspect-fp64, gpu, level_zero
+// REQUIRES: gpu, level_zero
 // XREQUIRES: gpu
 // TODO Remove the level_zero restriction once the test is supported on other
 // platforms

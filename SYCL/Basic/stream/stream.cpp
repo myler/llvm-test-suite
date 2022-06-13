@@ -1,4 +1,3 @@
-// REQUIRES: aspect-fp64
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 // FIXME Disabled on host until sporadic failure is fixed
 // RUNx: %HOST_RUN_PLACEHOLDER %t.out %HOST_CHECK_PLACEHOLDER

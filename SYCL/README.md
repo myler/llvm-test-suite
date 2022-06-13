@@ -169,8 +169,6 @@ unavailable.
  * **gpu-intel-dg1** - Intel GPU DG1 availability;
  * **gpu-intel-dg2** - Intel GPU DG2 availability;
  * **gpu-intel-pvc** - Intel GPU PVC availability;
- * **aspect-fp64**   - SYCL 2020 aspects availablility;
- * **supports-subdevice** - SYCL 2020 non-aspect optional feature availablility;
  * **dump_ir**: - compiler can / cannot dump IR;
 
 ## llvm-lit parameters

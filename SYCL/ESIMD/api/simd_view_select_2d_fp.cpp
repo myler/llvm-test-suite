@@ -5,7 +5,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// REQUIRES: aspect-fp64, gpu
+// REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method
 // XFAIL: esimd_emulator

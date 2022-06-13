@@ -1,4 +1,3 @@
-// REQUIRES: aspect-fp64
 // This test is intended to check basic operations with SYCL 2020 specialization
 // constants using sycl::kernel_bundle and sycl::kernel_handler APIs:
 // - test that specialization constants can be accessed in kernel and they
