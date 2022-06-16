@@ -115,6 +115,8 @@ if lit_config.params.get('gpu-intel-dg2', False):
     config.available_features.add('gpu-intel-dg2')
 if lit_config.params.get('gpu-intel-pvc', False):
     config.available_features.add('gpu-intel-pvc')
+if lit_config.params.get('gpu-intel-ats', False):
+    config.available_features.add('gpu-intel-ats')
 
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
