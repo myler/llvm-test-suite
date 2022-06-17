@@ -5,6 +5,7 @@ BEGIN
 {
     use lib $ENV{ICS_PERLLIB};
 }
+use icpuid;
 
 use File::Basename;
 use File::Spec;
@@ -27,6 +28,14 @@ if (defined $ENV{TESTROOT}) {
 
 my %feature_subsuite = ('SYCL' => {'Matrix'}, 'SYCL' => {'ESIMD'});
 
+# HW/features depends on the output of 'tc show -gpu', or
+# the feature list can be query by alloy API get_all_gpu_features();
+# Supported HW/features are:
+#   ats atsm dg1 dg2 double gen11 gen12 gen9 pvc subdevice
+my @all_gpu_features = get_all_gpu_features();
+# Reference: https://github.com/intel/llvm-test-suite/tree/intel/SYCL#lit-feature-checks
+my $lit_feature_prefix = "gpu-intel-";
+
 my $sycl_dir = '';
 
 my $feature_folder = "SYCL";
@@ -48,6 +57,18 @@ my $help_info = "Suite files generator for sycl tests\n\n"
               . "          2)Generate tc files for folder SYCL_FEATURE_FOLDER; and use the description in file DES.TXT\n"
               . "                perl suite_generator_sycl.pl SYCL_FEATURE_FOLDER DES.TXT\n\n";
 
+sub append_file
+{
+  my $f = shift;
+
+  my $fd;
+  open $fd, ">>", $f or die "Failed to open for writing: $f: $!";
+  # binmode as some our files have UTF-8 symbols
+  binmode $fd; #, ':utf8';
+  print $fd @_;
+  close $fd or die "Failed to close after writing: $f: $!";
+}
+
 sub main
 {
     $test_suite_repo = File::Spec->rel2abs($test_suite_repo);
@@ -55,7 +76,8 @@ sub main
 
     execute("cd $sycl_dir && find -iname '*.cpp' | grep -vw 'Inputs' | sort");
     my @list = split( "\n", $command_output);
-    execute("rm -rf $config_folder && mkdir $config_folder");
+    # execute("rm -rf $config_folder && mkdir $config_folder");
+    execute("mv $config_folder $config_folder.old && mkdir $config_folder");
 
     my $tests = {};
     my %subsuite_tests;
@@ -89,8 +111,7 @@ sub main
         $tests->{ $name} = $r;
 
         print( Dumper( $r));
-        my $xml_text = gen_test( $r);
-        print2file( $xml_text, "./$config_folder/TEMPLATE_$suite_name.xml");
+        gen_test($r, "$name.xml");
 
         # Save tests for subsuites
         foreach my $subsuite (sort keys %{ $feature_subsuite{$feature_folder} }) {
@@ -110,6 +131,8 @@ sub main
         print "\nThe number of tests in $subsuite_name: ";
         print scalar keys %{ $subsuite_tests{$subsuite} };
     }
+
+    execute("rm -rf $config_folder.old");
 }
 
 sub gen_suite
@@ -137,17 +160,17 @@ sub gen_suite
     if ($feature_folder eq "SYCL") {
         if ($subsuite ne "") {
             # For subsuite
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL/CMakeLists.txt', dst => 'SYCL/CMakeLists.txt'}, { path => 'SYCL/lit.cfg.py', dst => 'SYCL/lit.cfg.py'}, {path => 'SYCL/lit.site.cfg.py.in', dst => 'SYCL/lit.site.cfg.py.in'}, {path => 'SYCL/helpers.hpp', dst => 'SYCL/helpers.hpp'}, {path => 'SYCL/External/CMakeLists.txt', dst => 'SYCL/External/CMakeLists.txt'}, {path => 'SYCL/ExtraTests/CMakeLists.txt', dst => 'SYCL/ExtraTests/CMakeLists.txt'}, { path => "SYCL/${subsuite}", dst => "SYCL/${subsuite}"}, {path => 'SYCL/include', dst => 'SYCL/include'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
+            $xml->{files}       = { file => [ { path => 'suite_generator_sycl.pl'}, { path => 'double_test.list'}, { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL/CMakeLists.txt', dst => 'SYCL/CMakeLists.txt'}, { path => 'SYCL/lit.cfg.py', dst => 'SYCL/lit.cfg.py'}, {path => 'SYCL/lit.site.cfg.py.in', dst => 'SYCL/lit.site.cfg.py.in'}, {path => 'SYCL/helpers.hpp', dst => 'SYCL/helpers.hpp'}, {path => 'SYCL/External/CMakeLists.txt', dst => 'SYCL/External/CMakeLists.txt'}, {path => 'SYCL/ExtraTests/CMakeLists.txt', dst => 'SYCL/ExtraTests/CMakeLists.txt'}, { path => "SYCL/${subsuite}", dst => "SYCL/${subsuite}"}, {path => 'SYCL/include', dst => 'SYCL/include'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}]};
         } else {
             $xml->{rules} = { advancedRule => [{ perfSupport => 'accurate'}]};
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}, { path => 'setenv.list'}]};
+            $xml->{files}       = { file => [ { path => 'suite_generator_sycl.pl'}, { path => 'double_test.list'}, { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => '.github/CODEOWNERS'}, { path => 'setenv.list'}]};
         }
     } else {
         if ($subsuite ne "") {
             # For subsuite
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => "$feature_folder/$subsuite", dst => "SYCL_${subsuite}/$subsuite"}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}]};
+            $xml->{files}       = { file => [ { path => 'suite_generator_sycl.pl'}, { path => 'double_test.list'}, { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => "$feature_folder/$subsuite", dst => "SYCL_${subsuite}/$subsuite"}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}]};
         } else {
-            $xml->{files}       = { file => [ { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => $feature_folder}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => 'setenv.list'}]};
+            $xml->{files}       = { file => [ { path => 'suite_generator_sycl.pl'}, { path => 'double_test.list'}, { path => 'cmake'}, { path => 'tools'}, { path => 'CMakeLists.txt'}, { path => 'litsupport'}, { path => 'lit.cfg'}, { path => 'lit.site.cfg.in'}, { path => 'SYCL'}, { path => $feature_folder}, { path => '$INFO_TDRIVE/ref/lit'}, { path => $config_folder}, { path => 'setenv.list'}]};
         }
     }
 
@@ -166,6 +189,7 @@ sub gen_suite
     my %double_test_list;
     if (-f $double_test_file) {
         my $double_tests = file2str($double_test_file);
+        execute("sort -u double_test.list -o double_test.list");
         foreach my $test (split("^", $double_tests)) {
             $test =~ s/^\s+|\s+$//g;
             $double_test_list{$test} = 1;
@@ -196,28 +220,186 @@ sub gen_suite
             my $pre_xml_file = basename($pre_xml_name);
             if (-f "${testbase}/$pre_xml_name" and ! -f "$pre_xml_file") {
                 copy("${testbase}/$pre_xml_name", "./$config_folder/") or die "copy failed: $!";
-                push @{ $xml->{tests}{test}}, { configFile => "$pre_xml_name", testName => $testname, splitGroup => $group};
+                push @{ $xml->{tests}{test}}, { configFile => "${config_folder}/$testname.xml", testName => $testname, splitGroup => $group};
                 next;
             }
         }
         # Suite and its subsuite use the same TEMPLATE xml file
-        push @{ $xml->{tests}{test}}, { configFile => "${config_folder}/TEMPLATE_$suite_name.xml", testName => $testname, splitGroup => $group};
+        push @{ $xml->{tests}{test}}, { configFile => "${config_folder}/$testname.xml", testName => $testname, splitGroup => $group};
     }
 
     return XMLout( $xml, xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>', RootName => 'suite');
 }
 
+sub token2feature
+{
+  my $r = shift;
+  my $require_tokens = shift;
+  my $unsupported_tokens = shift;
+
+  my @tokens = ();
+
+  # To the opposite to "// REQUIRES:" rule.
+  # But with higher priority, e.g.
+  # A test with following two lines:
+  # // REQUIRES: pvc
+  # // UNSUPPORTED: pvc
+  # Then the test would be skipped in pvc.
+  foreach my $ut (@{$unsupported_tokens}) {
+    next if (not defined $ut or $ut eq "");
+    if (substr($ut, 0, 1) eq '!') {
+      my $subtoken = substr($ut, 1);
+      foreach my $feature (@all_gpu_features) {
+        if ($subtoken eq "$lit_feature_prefix$feature") {
+          push(@tokens, "!$feature");
+          last;
+        }
+      }
+    } else {
+      foreach my $feature (@all_gpu_features) {
+        if ($ut eq "$lit_feature_prefix$feature") {
+          push(@tokens, $feature);
+          last;
+        }
+      }
+    }
+  }
+
+  # the main rule is to exclude running some unwanted test.
+  # so a require is met, that is to say we won't skip exclude it, so '!' prefix is required.
+  foreach my $rt (@{$require_tokens}) {
+    next if (not defined $rt or $rt eq "");
+    if (substr($rt, 0, 1) eq '!') {
+      my $subtoken = substr($rt, 1);
+      foreach my $feature (@all_gpu_features) {
+        if ($subtoken eq "$lit_feature_prefix$feature") {
+          my $seen = 0;
+          foreach my $ref (@tokens) {
+            my $ref_token = $ref;
+            $ref_token = substr($ref, 1) if (substr($ref, 0, 1) eq '!');
+            if ($subtoken eq $ref_token) {
+              $seen = 1;
+              last;
+            }
+          }
+          push(@tokens, $feature) if (not $seen);
+          last;
+        }
+      }
+    } else {
+      foreach my $feature (@all_gpu_features) {
+      #if (grep(/\Q$lit_feature_prefix$rt/, @all_gpu_features)) {
+        if ($rt eq "$lit_feature_prefix$feature") {
+          my $seen = 0;
+          foreach my $ref (@tokens) {
+            my $ref_token = $ref;
+            $ref_token = substr($ref, 1) if (substr($ref, 0, 1) eq '!');
+            if ($rt eq $ref_token) {
+              $seen = 1;
+              last;
+            }
+          }
+          push(@tokens, "!$feature") if (not $seen);
+        }
+      }
+    }
+  }
+
+  # Remove duplicated tokens.
+  my %hash_tmp = map { $_, 1 } @tokens;
+  @tokens = keys %hash_tmp;
+
+  foreach my $token (@tokens) {
+    # special handler for specified tokens.
+    if ($token eq "!double") {
+      append_file("double_test.list", "$r->{name}\n") if (-f "double_test.list");
+    }
+  }
+
+  return @tokens;
+}
+
+sub feature2rule
+{
+  my $xml_ref = shift;
+  my $features_ref = shift;
+  my $test_xml = shift;
+
+  if (scalar @${features_ref}) {
+    $$xml_ref->{rules} = { optlevelRule => []};
+  }
+
+  foreach my $feature (@{$features_ref}) {
+    push(@{$$xml_ref->{rules}{optlevelRule}}, { GPUFeature => "$feature", excludeOptlevelNameString => 'gpu'});
+  }
+
+  # CMPLRTST-16836: after the 'double' type tests are splitted done, this workaround can be removed.
+  if (-f "config_sycl.old/$test_xml") {
+    my @lines = read_file("config_sycl.old/$test_xml");
+    foreach my $line (@lines) {
+      if ($line =~ m/\QGPUFeature="!double"/) {
+        push(@{$$xml_ref->{rules}{optlevelRule}}, { GPUFeature => "!double", excludeOptlevelNameString => 'gpu'});
+        last;
+      }
+    }
+  }
+}
+
+sub translate_gpu_feature
+{
+  my $r = shift;
+  my $xml_ref = shift;
+  my $test_xml = shift;
+
+  my $f = $r->{fullpath};
+  my @gpu_features = ();
+
+  my $lines = file2str($f);
+  my @require_tokens = ();
+  my @unsupported_tokens = ();
+  foreach my $line (split /^/, $lines) {
+    # Only ' ', ','  and ' ,' are the separate delimilers.
+    # '!' is supported to reverse a require, e.g. "!pvc" means the test is skipped on pvc.
+    # Not support "AND", "OR", "()"
+    if ($line =~ /\/\/ REQUIRES: *(.*)$/) {
+      my $token_str = $1;
+      @require_tokens = split(/, |,| \&\& |\&\&| \|\| |\|\|/, $token_str);
+    } elsif ($line =~ /\/\/ UNSUPPORTED: *(.*)$/) {
+      my $token_str = $1;
+      @unsupported_tokens = split(/, |,| \&\& |\&\&| \|\| |\|\|/, $token_str);
+    }
+  }
+
+  @gpu_features = token2feature($r, \@require_tokens, \@unsupported_tokens);
+  feature2rule($xml_ref, \@gpu_features, $test_xml);
+}
+
+sub requires2rule
+{
+  my $r = shift;
+  my $xml_ref = shift;
+  my $test_xml = shift;
+
+  translate_gpu_feature($r, $xml_ref, $test_xml);
+}
+
 sub gen_test
 {
     my $r = shift;
+    my $test_xml = shift;
+
+    my $f = $r->{fullpath};
     my $xml = {};
     $xml->{driverID} = 'llvm_test_suite_sycl';
-    $xml->{name}     = 'TEMPLATE';
-    $xml->{description} = { content => "This config file is used for several tests.\nIt must have a non-empty 'decription' field\nand name='TEMPLATE'. "};
+    $xml->{name}     = "$r->{name}";
+    $xml->{description} = { content => "WARNING: DON'T UPDATE THIS FILE MANUALLY!!!\nThis config file auto-generated by suite_generator_sycl.pl."};
+
+    requires2rule($r, \$xml, $test_xml);
 
     print2file( "$r->{path}/$r->{short_name}.cpp", "./$config_folder/$r->{name}.info");
 
-    return XMLout( $xml, xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>', RootName => 'test');
+    my $xml_text = XMLout( $xml, xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>', RootName => 'test');
+    print2file( $xml_text, "$config_folder/$test_xml");
 }
 
 sub file2str
@@ -249,6 +431,24 @@ sub dump2file
     my $file = shift;
     ###
     print2file( Dumper( $r), $file);
+}
+
+sub read_file
+{
+  my $f = shift;
+
+  my $fd;
+  open $fd, $f or die "Failed to open for reading: $f: $!";
+  # binmode as some our source files have utf-8 symbold and perl issues warnings like:
+  # Malformed UTF-8 character (unexpected continuation byte 0x96, with no preceding start byte) in pattern match (m//)
+  # at /home/cmplr/icl_tools/omirochn/git/filter-intel-feature.pl line 242.
+  binmode $fd;#, ':utf8';
+  my @in = <$fd>;
+  close $fd or die "Failed to close after reading: $f: $!";
+
+  # remove the BOM character at the begining of a file, because this tool will insert Intel header in front of this line.
+  $in[0] =~ s/^\xEF\xBB\xBF// if scalar(@in);
+  return @in;
 }
 
 sub execute
@@ -310,4 +510,3 @@ if ( $suite_name eq "llvm_test_suite_sycl" ) {
     copy("$suite_name.xml", "$valgrind_suite_name.xml");
     print "\n\nFinish the generation of $valgrind_suite_name Successfully.\n";
 }
-
