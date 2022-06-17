@@ -641,6 +641,9 @@ sub do_run
       if (gpu(['pvc'])) {
           $gpu_opts .= " -Dgpu-intel-pvc=1 ";
       }
+      if (gpu(['ats'])) {
+          $gpu_opts .= " -Dgpu-intel-ats=1 ";
+      }
 
       # SYCL 2020 device aspects: https://www.khronos.org/registry/SYCL/specs/sycl-2020/html/sycl-2020.html#sec:device-aspects
       # ASPECT
