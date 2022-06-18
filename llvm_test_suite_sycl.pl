@@ -272,6 +272,12 @@ sub init_test
         rmtree($path);
       }
       log_command("##Removed tests that are not in $current_suite\n");
+    } else {
+      # lit.cfg.py set test_exec_root and test_source_root to SYCL/ESIMD, "-t" mode is not supported.
+      if ($current_optset =~ m/opt_use_esimd_emu/) {
+        `sed -i "s/config\\.test_source_root += \\\"\\/ESIMD\\\"/config\\.test_source_root += \\\"\\\"/g" "$optset_work_dir/SYCL/lit.cfg.py"`;
+        `sed -i "s/config\\.test_exec_root += \\\"\\/ESIMD\\\"/config\\.test_exec_root += \\\"\\\"/g" "$optset_work_dir/SYCL/lit.cfg.py"`;
+      }
     }
 
     if ($current_suite =~ /valgrind/) {
