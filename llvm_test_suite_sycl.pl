@@ -282,6 +282,12 @@ sub init_test
         rmtree($path);
       }
       log_command("##Removed tests that are not in $current_suite\n");
+    } else {
+      # lit.cfg.py set test_exec_root and test_source_root to SYCL/ESIMD, "-t" mode is not supported.
+      if ($current_optset =~ m/opt_use_esimd_emu/) {
+        `sed -i "s/config\\.test_source_root += \\\"\\/ESIMD\\\"/config\\.test_source_root += \\\"\\\"/g" "$optset_work_dir/SYCL/lit.cfg.py"`;
+        `sed -i "s/config\\.test_exec_root += \\\"\\/ESIMD\\\"/config\\.test_exec_root += \\\"\\\"/g" "$optset_work_dir/SYCL/lit.cfg.py"`;
+      }
     }
 
     if ($current_suite =~ /valgrind/) {
@@ -708,6 +714,10 @@ sub get_info
     $short_test_name = $test_file;
     $short_test_name =~ s/^$subdir\///;
 
+    if ($current_optset =~ m/opt_use_esimd_emu/) {
+      $short_test_name =~ s/^ESIMD\///;
+    }
+
     my $short_name = basename($test_file);
     my $path = dirname($test_file);
     my $r = { dir => $path, short_name => $short_name, fullpath => $test_file};
@@ -719,6 +729,9 @@ sub generate_run_result
 {
     my $output = shift;
     my $result = "";
+
+    return $SKIP if ($current_optset =~ m/opt_use_esimd_emu/ and $current_test !~ m/^esimd_/);
+
     for my $line (split /^/, $output){
       if ($line =~ m/^(.*): SYCL :: \Q$short_test_name\E \(.*\)/) {
         $result = $1;
@@ -879,6 +892,8 @@ sub run_cmake
         $sycl_backend = "PI_CUDA";
     } elsif ( $current_optset =~ m/gpu/ ) {
         $sycl_backend = "PI_LEVEL_ZERO";
+    } elsif ( $current_optset =~ m/opt_use_esimd_emu/ ) {
+        $sycl_backend = "ext_intel_esimd_emulator";
     } else {
         $sycl_backend = "PI_OPENCL";
     }
@@ -901,6 +916,8 @@ sub run_cmake
     }elsif ( $current_optset =~ m/opt_use_acc/ ){
         $device = "acc";
     }elsif ( $current_optset =~ m/opt_use_nv_gpu/ ){
+        $device = "gpu";
+    }elsif ( $current_optset =~ m/opt_use_esimd_emu/ ){
         $device = "gpu";
     }else{
         $device = "host";
