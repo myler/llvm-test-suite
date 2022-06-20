@@ -1,7 +1,7 @@
 add_subdirectory(ieee)
 
 # GCC C Torture Suite is conventionally run without warnings
-list(APPEND CFLAGS "-w")
+list(APPEND CFLAGS -Wno-implicit-int -Wno-implicit-function-declaration -w)
 
 set(TestsToSkip)
 
@@ -56,20 +56,13 @@ file(GLOB UnsupportedTests CONFIGURE_DEPENDS
   # Initialization of flexible array member
   pr28865.c
 
+  # Initialization of union is not required to initialize padding.
+  pr19687.c
+
   # GCC Extension: __builtin_*
-  20071018-1.c       # __builtin_malloc
-  20071120-1.c       # __builtin_malloc
-  builtin-bitops-1.c # __builtin_clrsb, __builtin_clrsbl, __builtin_clrsbll
-  pr36765.c          # __builtin_malloc
   pr39228.c          # __builtin_isinff, __builtin_isinfl
-  pr43008.c          # __builtin_malloc
   pr47237.c          # __builtin_apply, __builtin_apply_args
-  pr78586.c          # __builtin_sprintf
-  pr79327.c          # __builtin_sprintf
-  pr84339.c          # __builtin_malloc, __builtin_free
-  pr84478.c          # __builtin_malloc
   pr85331.c          # __builtin_shuffle
-  strlen-7.c         # __builtin_malloc
   va-arg-pack-1.c    # __builtin_va_arg_pack
 
   # Clang does not support 'DD' suffix on floating constant
@@ -140,6 +133,9 @@ file(GLOB UnsupportedTests CONFIGURE_DEPENDS
   vfprintf-chk-1.c
   vprintf-chk-1.c
 
+  # Clang at -O0 does not enable -finstrument-functions
+  # (https://bugs.llvm.org/show_bug.cgi?id=49143)
+  eeprof-1.c
 )
 list(APPEND TestsToSkip ${UnsupportedTests})
 
@@ -190,6 +186,7 @@ file(GLOB TestRequiresWNoReturnType CONFIGURE_DEPENDS
 file(GLOB TestRequiresLibM CONFIGURE_DEPENDS
   980709-1.c
   float-floor.c
+  complex-5.c  # -lm needed on FreeBSD
 )
 
 # Tests that require newnlib Nano IO (--undefined=_printf_float ldflag)

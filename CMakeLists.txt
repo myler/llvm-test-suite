@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.3)
+cmake_minimum_required(VERSION 3.13.4)
 
 include(CheckSymbolExists)
 
@@ -53,7 +53,10 @@ if(${TEST_SUITE_SUPPRESS_WARNINGS})
 endif()
 
 # We want reproducible builds, so using __DATE__ and __TIME__ is bad
-add_definitions(-Werror=date-time)
+# FIXME: Add this unconditionally when flang starts supporting it.
+if(NOT CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
+  add_definitions(-Werror=date-time)
+endif()
 
 # Add path for custom modules
 set(CMAKE_MODULE_PATH
@@ -210,31 +213,28 @@ endif()
 set(CMAKE_EXE_LINKER_FLAGS
     "${CMAKE_EXE_LINKER_FLAGS} ${TEST_SUITE_EXTRA_EXE_LINKER_FLAGS}")
 
-# Use X/OPEN compatibility flag on AIX for C tests to avoid problems
-# with some versions of the system headers.
 if(CMAKE_SYSTEM_NAME STREQUAL "AIX")
+  # Use X/OPEN compatibility flag on AIX for C tests to avoid problems
+  # with some versions of the system headers.
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_XOPEN_SOURCE=700")
-endif()
-
-# This is either directly the C++ ABI library or the full C++ library
-# which pulls in the ABI transitively.
-set(TEST_SUITE_CXX_ABI "default" CACHE STRING "Specify C++ ABI library to use.")
-set(CXXABIS "none default libstdc++ libsupc++ libc++ libc++abi")
-set_property(CACHE TEST_SUITE_CXX_ABI PROPERTY STRINGS "${CXXABIS}")
-if (TEST_SUITE_CXX_ABI STREQUAL "default")
-  if (APPLE OR CMAKE_SYSTEM_NAME MATCHES "FreeBSD|Fuchsia")
-    set(TEST_SUITE_CXX_ABI_LIBNAME "c++abi")
-  else()
-    set(TEST_SUITE_CXX_ABI_LIBNAME "supc++")
+  # On AIX, the environment variable 'OBJECT_MODE' specifies the bit
+  # mode for compilation.
+  if(DEFINED ENV{OBJECT_MODE})
+    # Specify maximum data heap size on AIX for 32-bit programs.
+    if($ENV{OBJECT_MODE} STREQUAL "32")
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-bmaxdata:0x80000000")
+    endif()
   endif()
-else()
-  STRING(REGEX REPLACE "^lib" "" TEST_SUITE_CXX_ABI_LIBNAME ${TEST_SUITE_CXX_ABI})
 endif()
 
 include(TestSuite)
 include(SingleMultiSource)
-find_package(TCL)
+# Needs by External/sollve_vv.
 find_package(OpenMP)
+# Fortran Helper Modules
+if(TEST_SUITE_FORTRAN)
+  include(Fortran)
+endif()
 
 if(NOT DEFINED TARGET_OS)
   message(STATUS "Check target operating system - ${CMAKE_SYSTEM_NAME}")
@@ -290,10 +290,12 @@ mark_as_advanced(TEST_SUITE_LIT)
 
 add_subdirectory(tools)
 # Shortcut for the path to the fpcmp executable
-set(FPCMP ${CMAKE_BINARY_DIR}/tools/fpcmp-target)
+set(FPCMP fpcmp-target)
 if (TEST_SUITE_USER_MODE_EMULATION)
-  set(FPCMP ${CMAKE_BINARY_DIR}/tools/fpcmp)
+  set(FPCMP fpcmp)
 endif()
+
+add_subdirectory(litsupport)
 
 option(TEST_SUITE_COLLECT_COMPILE_TIME
        "Measure compile time by wrapping compiler invocations in timeit" ON)
@@ -327,11 +329,13 @@ if(NOT TEST_SUITE_SUBDIRS)
   set(TEST_SUITE_SUBDIRS "")
   foreach(entry ${sub_cmakelists})
     get_filename_component(subdir ${entry} DIRECTORY)
-	 # Exclude tools and CTMark from default list
-    if(NOT ${subdir} STREQUAL tools AND NOT ${subdir} STREQUAL CTMark)
-      list(APPEND TEST_SUITE_SUBDIRS ${subdir})
-    endif()
+    list(APPEND TEST_SUITE_SUBDIRS ${subdir})
   endforeach()
+  # Drop things we do not want to be automatically added.
+  list(REMOVE_ITEM TEST_SUITE_SUBDIRS litsupport tools CTMark)
+  if(NOT TEST_SUITE_FORTRAN)
+    list(REMOVE_ITEM TEST_SUITE_SUBDIRS Fortran)
+  endif()
   set(TEST_SUITE_SUBDIRS "${TEST_SUITE_SUBDIRS}")
 endif()
 set(TEST_SUITE_SUBDIRS "${TEST_SUITE_SUBDIRS}" CACHE STRING
