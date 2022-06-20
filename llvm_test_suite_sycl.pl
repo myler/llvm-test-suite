@@ -652,6 +652,10 @@ sub get_info
     $short_test_name = $test_file;
     $short_test_name =~ s/^$subdir\///;
 
+    if ($current_optset =~ m/opt_use_esimd_emu/) {
+      $short_test_name =~ s/^ESIMD\///;
+    }
+
     my $short_name = basename($test_file);
     my $path = dirname($test_file);
     my $r = { dir => $path, short_name => $short_name, fullpath => $test_file};
@@ -663,6 +667,9 @@ sub generate_run_result
 {
     my $output = shift;
     my $result = "";
+
+    return $SKIP if ($current_optset =~ m/opt_use_esimd_emu/ and $current_test !~ m/^esimd_/);
+
     for my $line (split /^/, $output){
       if ($line =~ m/^(.*): SYCL :: \Q$short_test_name\E \(.*\)/) {
         $result = $1;
