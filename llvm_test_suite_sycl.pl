@@ -993,6 +993,12 @@ sub run_cmake
                                           . " $gpu_aot_target_opts"
                                           . " > $cmake_log 2>&1"
                                       );
+
+    # Post command to copy files to build directory
+    # Detail in https://reviews.llvm.org/D108849
+    execute("cp $optset_work_dir/lit.cfg $build_dir/lit.cfg");
+    execute("cp -r $optset_work_dir/litsupport/* $build_dir/litsupport");
+
     return $command_status, $command_output;
 }
 
