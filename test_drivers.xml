@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testDrivers>
+  <testDriver driverID="dummy_pulldown" file="dummy_llvm_test_suite.pl" title="Driver for unrelated files in pulldown">
+  </testDriver>
   <testDriver driverID="llvm_test_suite" file="llvm_test_suite.pl" title="Driver for llvm_test_suite suite">
   </testDriver>
   <testDriver driverID="llvm_test_suite_sycl" file="llvm_test_suite_sycl.pl" title="Driver for llvm_test_suite_sycl suite">
