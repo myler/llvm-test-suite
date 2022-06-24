@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<suite>
+  <description>To ignore unrelated files issue in tmt verification for llvm-test-suite pulldown.
+  </description>
+  <files>
+    <file path="ABI-Testsuite" />
+    <file path="autoconf" />
+    <file path="ClangAnalyzer" />
+    <file path="CollectDebugInfoUsingLLDB.py" />
+    <file path="CompareDebugInfo.py" />
+    <file path="configure" />
+    <file path="CONTRIBUTING.md" />
+    <file path="CTMark" />
+    <file path="default.*" />
+    <file path="DiffOutput.sh" />
+    <file path="double_test.list" />
+    <file path="dummy_llvm_test_suite.pl" />
+    <file path="External" />
+    <file path="filepp" />
+    <file path="FindMissingLineNo.py" />
+    <file path="Fortran" />
+    <file path="GenerateReport.pl" />
+    <file path="HashProgramOutput.sh" />
+    <file path="HTMLColDiff.pl" />
+    <file path="instant.txt" />
+    <file path="LICENSE.TXT" />
+    <file path="lineinfo.xfail" />
+    <file path="litsupport" />
+    <file path="litsupport-tests" />
+    <file path="LLVMSource" />
+    <file path="LNTBased" />
+    <file path="Makefile" />
+    <file path="Makefile.*" />
+    <file path="ModuleInfo.txt" />
+    <file path="ParseMultipleResults" />
+    <file path="PrintLineNo.sh" />
+    <file path="README.md" />
+    <file path="README.txt" />
+    <file path="RunSafely.sh" />
+    <file path="setenv.list" />
+    <file path="TEST.*" />
+  </files>
+  <tests>
+    <test configFile="config/TEMPLATE_dummy_pulldown.xml" testName="dummy_pulldown" />
+  </tests>
+</suite>
