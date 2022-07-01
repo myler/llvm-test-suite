@@ -21,7 +21,7 @@ $cmake = "cmake";
 my $command_status = 0;
 my $command_output = "";
 
-my $test_suite_repo = "/export/users/$ENV{USER}/llvm-test-suite.orig";
+my $test_suite_repo = ".";
 my $test_suite_repo_rev = '';
 my $test_suite_repo_date = '';
 
