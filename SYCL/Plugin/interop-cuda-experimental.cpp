@@ -95,4 +95,62 @@ int main() {
     sycl::queue new_Q(sycl_ctx, sycl::default_selector());
     assert(check_queue(new_Q));
   }
+
+  // Create new event
+  CUevent cu_event;
+
+  CUDA_CHECK(cuCtxSetCurrent(cu_ctx));
+  CUDA_CHECK(cuEventCreate(&cu_event, CU_EVENT_DEFAULT));
+
+  auto sycl_event =
+      sycl::make_event<sycl::backend::ext_oneapi_cuda>(cu_event, sycl_ctx);
+  auto native_event =
+      sycl::get_native<sycl::backend::ext_oneapi_cuda>(sycl_event);
+
+  check_type<sycl::event>(sycl_event);
+  check_type<CUevent>(native_event);
+
+  // Check sycl queue with sycl_ctx still works
+  {
+    sycl::queue new_Q(sycl_ctx, sycl::default_selector());
+    assert(check_queue(new_Q));
+  }
+
+  // Check has_native_event
+  {
+    auto e = Q.submit([&](sycl::handler &cgh) { cgh.single_task([] {}); });
+    assert(sycl::ext::oneapi::cuda::has_native_event(e));
+  }
+
+  {
+    auto e = Q.submit([&](sycl::handler &cgh) { cgh.host_task([] {}); });
+    assert(!sycl::ext::oneapi::cuda::has_native_event(e));
+  }
+
+  // Create new queue
+  CUstream cu_queue;
+  CUDA_CHECK(cuCtxSetCurrent(cu_ctx));
+  CUDA_CHECK(cuStreamCreate(&cu_queue, CU_STREAM_DEFAULT));
+
+  auto sycl_queue =
+      sycl::make_queue<sycl::backend::ext_oneapi_cuda>(cu_queue, sycl_ctx);
+  native_queue = sycl::get_native<sycl::backend::ext_oneapi_cuda>(sycl_queue);
+
+  check_type<sycl::queue>(sycl_queue);
+  check_type<CUstream>(native_queue);
+
+  // Submit some work to new queue
+  assert(check_queue(sycl_queue));
+
+  // Create new queue with Q's native type and submit some work
+  {
+    CUstream Q_native_stream =
+        sycl::get_native<sycl::backend::ext_oneapi_cuda>(Q);
+    sycl::queue new_Q = sycl::make_queue<sycl::backend::ext_oneapi_cuda>(
+        Q_native_stream, Q_sycl_ctx);
+    assert(check_queue(new_Q));
+  }
+
+  // Check Q still works
+  assert(check_queue(Q));
 }
