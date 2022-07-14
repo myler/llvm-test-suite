@@ -6,12 +6,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-// REQUIRES: aoc, accelerator
-// TODO: As the -fintelfpga flag will implicitly enable -g, this test will hang
-// on finishing queue. Need to replace the -fsycl-targets=spir64_fpga flag with
-// the -fintelfpga flag when the
-// https://jira.devtools.intel.com/browse/CMPLRLLVM-32751 JR will be resolved.
-// RUN: %clangxx -fsycl -fsycl-targets=spir64_fpga %s -o %t.out
+// REQUIRES: (aoc || accelerator)
+// RUN: %clangxx -fsycl -fintelfpga %s -o %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
 #include <CL/sycl.hpp>
