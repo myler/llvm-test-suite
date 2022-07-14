@@ -307,6 +307,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/devicelib_assert.xml" splitGroup="devicelib" testName="devicelib_assert" />
     <test configFile="config_sycl/devicelib_assert_aot.xml" splitGroup="devicelib" testName="devicelib_assert_aot" />
     <test configFile="config_sycl/devicelib_assert_windows.xml" splitGroup="devicelib" testName="devicelib_assert_windows" />
+    <test configFile="config_sycl/devicelib_built_ins_ext_native_math.xml" splitGroup="devicelib" testName="devicelib_built_ins_ext_native_math" />
+    <test configFile="config_sycl/devicelib_built_ins_fast_math_flag.xml" splitGroup="devicelib" testName="devicelib_built_ins_fast_math_flag" />
     <test configFile="config_sycl/devicelib_built_ins_nan.xml" splitGroup="double" testName="devicelib_built_ins_nan" />
     <test configFile="config_sycl/devicelib_built_ins_printf.xml" splitGroup="devicelib" testName="devicelib_built_ins_printf" />
     <test configFile="config_sycl/devicelib_built_ins_scalar_common.xml" splitGroup="devicelib" testName="devicelib_built_ins_scalar_common" />
@@ -522,6 +524,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
     <test configFile="config_sycl/esimd_regression_dgetrf_8x8.xml" splitGroup="double" testName="esimd_regression_dgetrf_8x8" />
     <test configFile="config_sycl/esimd_regression_dgetrf_ref.xml" splitGroup="double" testName="esimd_regression_dgetrf_ref" />
+    <test configFile="config_sycl/esimd_regression_fmod_compatibility_test.xml" splitGroup="esimd" testName="esimd_regression_fmod_compatibility_test" />
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
     <test configFile="config_sycl/esimd_regression_noinline_bypointers_vadd.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
     <test configFile="config_sycl/esimd_regression_operator_decrement.xml" splitGroup="esimd" testName="esimd_regression_operator_decrement" />
