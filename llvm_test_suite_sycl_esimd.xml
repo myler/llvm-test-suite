@@ -137,6 +137,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u64" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u8.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u8" />
+    <test configFile="config_sycl/esimd_lsc_lsc_fence.xml" splitGroup="esimd" testName="esimd_lsc_lsc_fence" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_load.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_load" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_store.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_store" />
@@ -200,6 +201,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_reduction.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/esimd_regression_big_const_initializer.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
     <test configFile="config_sycl/esimd_regression_complex_lib_lin.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
+    <test configFile="config_sycl/esimd_regression_copyto_char_test.xml" splitGroup="esimd" testName="esimd_regression_copyto_char_test" />
     <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
     <test configFile="config_sycl/esimd_regression_dgetrf_8x8.xml" splitGroup="double" testName="esimd_regression_dgetrf_8x8" />
     <test configFile="config_sycl/esimd_regression_dgetrf_ref.xml" splitGroup="double" testName="esimd_regression_dgetrf_ref" />
