@@ -6,18 +6,24 @@
 #include "include/asmhelper.h"
 #include <sycl/sycl.hpp>
 
-using DataType = cl::sycl::cl_int;
+using DataType = sycl::cl_int;
 
 template <typename T = DataType> struct KernelFunctor : WithOutputBuffer<T> {
   KernelFunctor(size_t ProblemSize) : WithOutputBuffer<T>(ProblemSize) {}
 
-  void operator()(cl::sycl::handler &CGH) {
-    auto C = this->getOutputBuffer()
-                 .template get_access<cl::sycl::access::mode::write>(CGH);
+  void operator()(sycl::handler &CGH) {
+    auto C =
+        this->getOutputBuffer().template get_access<sycl::access::mode::write>(
+            CGH);
     bool switchField = false;
     CGH.parallel_for<KernelFunctor<T>>(
+<<<<<<< HEAD
         cl::sycl::range<1>{this->getOutputBufferSize()}, [=
     ](cl::sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
+=======
+        sycl::range<1>{this->getOutputBufferSize()},
+        [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
+>>>>>>> 635fc6c24 ([NFC][SYCL] Remove explict "cl::" namespace references (#1116))
           int Output = 0;
 #if defined(__SYCL_DEVICE_ONLY__)
           asm volatile("{\n"
