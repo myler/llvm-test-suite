@@ -15,3 +15,4 @@ reduction_reduction_range_usm_dw,opt_use_cpu_O0,linux,CL_CONFIG_CPU_FORCE_PRIVAT
 reduction_reduction_nd_(n_vars|ext_double),opt_use_cpu_O0,linux,CL_CONFIG_CPU_FORCE_PRIVATE_MEM_SIZE=8MB
 reduction_reduction_(big_data|nd_lambda|transparent),opt_use_(cpu|acc)_O0,linux,CL_CONFIG_CPU_FORCE_PRIVATE_MEM_SIZE=32MB
 reduction_reduction_queue_parallel_for,opt_use_cpu_O0,linux,CL_CONFIG_CPU_FORCE_PRIVATE_MEM_SIZE=1MB
+plugin_level_zero_eager_init,opt_use_gpu_zedebug,,ZE_DEBUG=1
