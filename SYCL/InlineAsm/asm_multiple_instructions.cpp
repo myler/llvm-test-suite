@@ -35,13 +35,8 @@ struct KernelFunctor : WithInputBuffers<T, 3>, WithOutputBuffer<T> {
             cgh);
 
     cgh.parallel_for<KernelFunctor<T>>(
-<<<<<<< HEAD
-        cl::sycl::range<1>{this->getOutputBufferSize()}, [=
-    ](cl::sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
-=======
         sycl::range<1>{this->getOutputBufferSize()},
         [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
->>>>>>> 635fc6c24 ([NFC][SYCL] Remove explict "cl::" namespace references (#1116))
 #if defined(TO_PASS)
           // The code below passing verification
           volatile int output = -1;

@@ -17,13 +17,8 @@ template <typename T = DataType> struct KernelFunctor : WithOutputBuffer<T> {
             CGH);
     int switchField = 2;
     CGH.parallel_for<KernelFunctor<T>>(
-<<<<<<< HEAD
-        cl::sycl::range<1>{this->getOutputBufferSize()}, [=
-    ](cl::sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
-=======
         sycl::range<1>{this->getOutputBufferSize()},
         [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
->>>>>>> 635fc6c24 ([NFC][SYCL] Remove explict "cl::" namespace references (#1116))
           int Output = 0;
 #if defined(__SYCL_DEVICE_ONLY__)
           asm volatile("{\n"
