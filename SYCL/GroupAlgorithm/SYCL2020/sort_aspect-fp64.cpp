@@ -1,3 +1,4 @@
+// REQUIRES: aspect-fp64
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -I . -o %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
@@ -9,6 +10,12 @@ namespace oneapi_exp = sycl::ext::oneapi::experimental;
 
 int main(int argc, char *argv[]) {
   sycl::queue q(sycl::default_selector{}, async_handler_);
+
+  if (!q.get_device().has(sycl::aspect::fp64) {
+    std::cout << "Skipping test\n";
+    return 0;
+  }
+
   if (!isSupportedDevice(q.get_device())) {
     std::cout << "Skipping test\n";
     return 0;
