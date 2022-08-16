@@ -1,11 +1,11 @@
-//==---------------- ext_math.cpp  - DPC++ ESIMD extended math test --------==//
+//==----- ext_math_aspect-fp64.cpp  - DPC++ ESIMD extended math test -------==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// REQUIRES: gpu
+// REQUIRES: gpu, aspect-fp64
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
@@ -26,16 +26,20 @@ using namespace sycl::ext::intel;
 
 int main(void) {
   queue Q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
+  if (!Q.get_device().has(sycl::aspect::fp64) {
+    std::cout << "Skipping test\n";
+    return 0;
+  }
   auto Dev = Q.get_device();
   std::cout << "Running on " << Dev.get_info<info::device::name>() << "\n";
   bool Pass = true;
-  Pass &= testESIMD<half, 8>(Q);
-  Pass &= testESIMD<float, 16>(Q);
-  Pass &= testESIMD<float, 32>(Q);
-  Pass &= testSYCL<float, 8>(Q);
-  Pass &= testSYCL<float, 32>(Q);
-  Pass &= testESIMDPow<float, 8>(Q);
-  Pass &= testESIMDPow<half, 32>(Q);
+
+  // Not support IEEE-conformant sqrt operations for single precision data.
+  Pass &= testESIMDSqrtIEEE<float, 16>(Q);
+  Pass &= testESIMDDivIEEE<float, 8>(Q);
+
+  Pass &= testESIMDSqrtIEEE<double, 32>(Q);
+  Pass &= testESIMDDivIEEE<double, 32>(Q);
   std::cout << (Pass ? "Test Passed\n" : "Test FAILED\n");
   return Pass ? 0 : 1;
 }

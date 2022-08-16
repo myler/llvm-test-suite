@@ -224,8 +224,10 @@ bool run_test_for_types(sycl::queue &queue) {
   const auto great_size = get_dimensions<desired_simd_large_size>();
 #ifdef SIMD_RUN_TEST_WITH_SYCL_HALF_TYPE
   const auto all_types = get_tested_types<TestedTypes>();
-#else
+#elif SIMD_RUN_TEST_WITH_SYCL_DOUBLE_TYPE
   const auto all_types = named_type_pack<double>::generate("double");
+#else
+  const auto all_types = named_type_pack<float>::generate("float");
 #endif
 
   // Verify correctness for different select sizes.
