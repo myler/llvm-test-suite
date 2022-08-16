@@ -17,7 +17,6 @@ int main() {
   }
 
   constexpr int N = 32;
-  assignment_test<double>(q, N);
 
   // Include long tests if they are 64 bits wide
   if constexpr (sizeof(long) == 8) {
