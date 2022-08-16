@@ -15,7 +15,7 @@
 
 #include "fill.hpp";
 
-using namespace cl::sycl;
+using namespace sycl;
 
 int main() {
   queue q;

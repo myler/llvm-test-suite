@@ -14,7 +14,7 @@
 
 #include "generic-shuffle.hpp"
 
-using namespace cl::sycl;
+using namespace sycl;
 
 int main() {
   queue Queue;

@@ -1,6 +1,6 @@
 #include <sycl/sycl.hpp>
 
-using namespace cl::sycl;
+using namespace sycl;
 
 template <typename T> class usm_device_transfer;
 template <typename T> class usm_aligned_device_transfer;

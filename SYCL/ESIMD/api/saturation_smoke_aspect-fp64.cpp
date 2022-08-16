@@ -16,7 +16,7 @@
 
 #include "saturation_smoke.hpp"
 
-using namespace cl::sycl;
+using namespace sycl;
 using namespace sycl::ext::intel::esimd;
 
 // clang-format on

@@ -26,7 +26,7 @@
 
 #include "bin_and_cmp_ops_heavy.hpp"
 
-using namespace cl::sycl;
+using namespace sycl;
 using namespace sycl::ext::intel::esimd;
 
 int main(void) {

@@ -19,7 +19,7 @@
 
 #include "ext_math.hpp"
 
-using namespace cl::sycl;
+using namespace sycl;
 using namespace sycl::ext::intel;
 
 // --- The entry point
