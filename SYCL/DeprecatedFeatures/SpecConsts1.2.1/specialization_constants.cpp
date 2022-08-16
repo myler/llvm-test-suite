@@ -35,7 +35,6 @@ class MyInt64Const;
 class MyUInt64Const;
 class MyHalfConst;
 class MyFloatConst;
-class MyDoubleConst;
 
 using namespace sycl;
 
@@ -54,7 +53,6 @@ int64_t int64_ref = rnd() % std::numeric_limits<int64_t>::max();
 uint64_t uint64_ref = rnd() % std::numeric_limits<uint64_t>::max();
 half half_ref = rnd() % std::numeric_limits<uint16_t>::max();
 float float_ref = rnd() % std::numeric_limits<uint32_t>::max();
-double double_ref = rnd() % std::numeric_limits<uint64_t>::max();
 
 template <typename T1, typename T2>
 bool check(const T1 &test, const T2 &ref, std::string type) {
@@ -110,9 +108,6 @@ int main(int argc, char **argv) {
     ext::oneapi::experimental::spec_constant<float, MyFloatConst> f32 =
         prog.set_spec_constant<MyFloatConst>(float_ref);
 
-    ext::oneapi::experimental::spec_constant<double, MyDoubleConst> f64 =
-        prog.set_spec_constant<MyDoubleConst>(double_ref);
-
     prog.build_with_kernel_type<SpecializedKernel>();
 
     bool bool_test = 0;
@@ -126,7 +121,6 @@ int main(int argc, char **argv) {
     uint64_t uint64_test = 0;
     half half_test = 0;
     float float_test = 0;
-    double double_test = 0;
 
     {
       buffer<bool> bool_buf(&bool_test, 1);
@@ -140,7 +134,6 @@ int main(int argc, char **argv) {
       buffer<uint64_t> uint64_buf(&uint64_test, 1);
       buffer<half> half_buf(&half_test, 1);
       buffer<float> float_buf(&float_test, 1);
-      buffer<double> double_buf(&double_test, 1);
 
       q.submit([&](handler &cgh) {
         auto bool_acc = bool_buf.get_access<access::mode::write>(cgh);
@@ -154,7 +147,6 @@ int main(int argc, char **argv) {
         auto uint64_acc = uint64_buf.get_access<access::mode::write>(cgh);
         auto half_acc = half_buf.get_access<access::mode::write>(cgh);
         auto float_acc = float_buf.get_access<access::mode::write>(cgh);
-        auto double_acc = double_buf.get_access<access::mode::write>(cgh);
         cgh.single_task<SpecializedKernel>(prog.get_kernel<SpecializedKernel>(),
                                            [=]() {
                                              bool_acc[0] = i1.get();
@@ -170,7 +162,6 @@ int main(int argc, char **argv) {
                                              half_acc[0] = f16.get();
 #endif
                                              float_acc[0] = f32.get();
-                                             double_acc[0] = f64.get();
                                            });
       });
     }
@@ -197,8 +188,6 @@ int main(int argc, char **argv) {
       return 1;
 #endif
     if (!check(float_test, float_ref, "float"))
-      return 1;
-    if (!check(double_test, double_ref, "double"))
       return 1;
   } catch (const exception &e) {
     std::cout << "an async SYCL exception was caught: "
