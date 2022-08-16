@@ -1,3 +1,4 @@
+// REQUIRES: aspect-fp64
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -D HALF_IS_SUPPORTED %s -o %t_gpu.out
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
@@ -5,12 +6,11 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t_gpu.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
-#include <iostream>
-#include <sycl/sycl.hpp>
+#include <CL/sycl.hpp>
 
 #include <cassert>
 
-namespace s = sycl;
+namespace s = cl::sycl;
 using namespace std;
 
 template <typename T, typename R, bool Expected = true> void test_nan_call() {
@@ -40,26 +40,31 @@ template <typename T, typename R> void check_nan(s::queue &Queue) {
 }
 
 int main() {
-  test_nan_call<s::ushort, s::half>();
-  test_nan_call<s::uint, float>();
-  test_nan_call<s::ushort2, s::half2>();
-  test_nan_call<s::uint2, s::float2>();
+  queue q;
+  if (!q.get_device().has(aspect::fp64)) {
+    std::cout << "Skipping test\n";
+    return 0;
+  }
 
-  s::queue Queue([](sycl::exception_list ExceptionList) {
+  test_nan_call<s::ulong, double>();
+  test_nan_call<s::ulonglong, double>();
+  test_nan_call<s::ulong2, s::double2>();
+  test_nan_call<s::ulonglong2, s::double2>();
+
+  s::queue Queue([](cl::sycl::exception_list ExceptionList) {
     for (std::exception_ptr ExceptionPtr : ExceptionList) {
       try {
         std::rethrow_exception(ExceptionPtr);
-      } catch (sycl::exception &E) {
+      } catch (cl::sycl::exception &E) {
         std::cerr << E.what() << std::endl;
       } catch (...) {
         std::cerr << "Unknown async exception was caught." << std::endl;
       }
     }
   });
-#ifdef HALF_IS_SUPPORTED
-  if (Queue.get_device().has(sycl::aspect::fp16))
-    check_nan<unsigned short, s::half>(Queue);
-#endif
-  check_nan<unsigned int, float>(Queue);
+
+  check_nan<unsigned long, double>(Queue);
+  check_nan<unsigned long long, double>(Queue);
+
   return 0;
 }
