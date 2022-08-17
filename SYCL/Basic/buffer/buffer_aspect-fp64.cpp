@@ -45,9 +45,8 @@ template <class T, int D> void check_set_write_back() {
     Queue.submit([&](sycl::handler &cgh) {
       auto Accessor =
           buf_shrd.template get_access<sycl::access::mode::write>(cgh);
-      cgh.parallel_for<class fill_buffer_for_write_back<T>>(r, [=](sycl::id<1> WIid) {
-        Accessor[WIid] = write_back_result<T>;
-      });
+      cgh.parallel_for<class fill_buffer_for_write_back<T>>(
+          r, [=](sycl::id<1> WIid) { Accessor[WIid] = write_back_result<T>; });
     });
   } // Data is copied back
   for (size_t i = 0; i < size; i++) {

@@ -22,7 +22,8 @@ using namespace sycl;
 
 int main() {
   queue Queue;
-  if (Queue.get_device().is_host() or !Queue.get_device().has(sycl::aspect::fp64)) {
+  if (Queue.get_device().is_host() or
+      !Queue.get_device().has(sycl::aspect::fp64)) {
     std::cout << "Skipping test\n";
     return 0;
   }

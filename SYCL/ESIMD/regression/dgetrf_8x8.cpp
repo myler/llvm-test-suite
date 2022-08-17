@@ -209,10 +209,9 @@ static float fp_norm1(int64_t m, int64_t n, float *a, int64_t lda) {
 }
 
 static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, float *a_in,
-                                        float *a, int64_t lda,
-                                        int64_t stride_a, int64_t *ipiv,
-                                        int64_t stride_ipiv, int64_t batch,
-                                        int64_t *info) {
+                                        float *a, int64_t lda, int64_t stride_a,
+                                        int64_t *ipiv, int64_t stride_ipiv,
+                                        int64_t batch, int64_t *info) {
   float thresh = 30.0;
   int fail = 0;
   int64_t i, j, k, l;

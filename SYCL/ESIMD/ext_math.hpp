@@ -86,16 +86,11 @@ enum class MathOp {
 
 // --- Template functions calculating given math operation on host and device
 
-enum ArgKind {
-  AllVec,
-  AllSca,
-  Sca1Vec2,
-  Sca2Vec1
-};
+enum ArgKind { AllVec, AllSca, Sca1Vec2, Sca2Vec1 };
 
-template <class T, int N, MathOp Op, int Args=AllVec> struct ESIMDf;
-template <class T, int N, MathOp Op, int Args=AllVec> struct BinESIMDf;
-template <class T, int N, MathOp Op, int Args=AllVec> struct SYCLf;
+template <class T, int N, MathOp Op, int Args = AllVec> struct ESIMDf;
+template <class T, int N, MathOp Op, int Args = AllVec> struct BinESIMDf;
+template <class T, int N, MathOp Op, int Args = AllVec> struct SYCLf;
 
 template <class T, MathOp Op> struct HostFunc;
 
@@ -288,8 +283,8 @@ struct BinaryDeviceFunc {
 template <class T, int N, MathOp Op,
           template <class, int, MathOp, int> class Kernel,
           typename InitF = InitNarrow<T>>
-bool test(queue &Q, const std::string &Name,
-          InitF Init = InitNarrow<T>{}, float delta = 0.0f) {
+bool test(queue &Q, const std::string &Name, InitF Init = InitNarrow<T>{},
+          float delta = 0.0f) {
 
   constexpr size_t Size = 1024 * 128;
   constexpr bool IsBinOp = (Op == MathOp::div_ieee) || (Op == MathOp::pow);
@@ -303,9 +298,9 @@ bool test(queue &Q, const std::string &Name,
     Init(A, B, Size);
   }
   const char *kind =
-    std::is_same_v<Kernel<T, N, Op, AllVec>, ESIMDf<T, N, Op, AllVec>>
-                         ? "ESIMD"
-                         : "SYCL";
+      std::is_same_v<Kernel<T, N, Op, AllVec>, ESIMDf<T, N, Op, AllVec>>
+          ? "ESIMD"
+          : "SYCL";
   std::cout << "  " << Name << " test, kind=" << kind << "...\n";
 
   try {
@@ -324,12 +319,11 @@ bool test(queue &Q, const std::string &Name,
       auto PC = BufC.template get_access<access::mode::write>(CGH);
       if constexpr (IsBinOp) {
         auto PB = BufB.template get_access<access::mode::read>(CGH);
-        BinaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(
-            PA, PB, PC);
+        BinaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(PA, PB,
+                                                                         PC);
         CGH.parallel_for(nd_range<1>{GlobalRange, LocalRange}, F);
       } else {
-        UnaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(PA,
-                                                                        PC);
+        UnaryDeviceFunc<T, N, Op, Kernel, decltype(PA), decltype(PC)> F(PA, PC);
         CGH.parallel_for(nd_range<1>{GlobalRange, LocalRange}, F);
       }
     });
@@ -418,10 +412,9 @@ template <class T, int N> bool testESIMDDivIEEE(queue &Q) {
 
 template <class T, int N> bool testESIMDPow(queue &Q) {
   bool Pass = true;
-  std::cout << "--- TESTING ESIMD pow, T=" << typeid(T).name()
-            << ", N = " << N << "...\n";
-  Pass &= test<T, N, MathOp::pow, BinESIMDf>(
-      Q, "pow", InitBin<T>{}, 0.1);
+  std::cout << "--- TESTING ESIMD pow, T=" << typeid(T).name() << ", N = " << N
+            << "...\n";
+  Pass &= test<T, N, MathOp::pow, BinESIMDf>(Q, "pow", InitBin<T>{}, 0.1);
   return Pass;
 }
 

@@ -30,7 +30,6 @@ bool operator==(const test_struct &lhs, const test_struct &rhs) {
          lhs.e == rhs.e && lhs.f == rhs.f;
 }
 
-
 int main() {
   queue q;
   auto dev = q.get_device();
