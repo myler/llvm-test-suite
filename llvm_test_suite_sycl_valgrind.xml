@@ -305,6 +305,10 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/devicecodesplit_aot_gpu.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_gpu" />
     <test configFile="config_sycl/devicecodesplit_split_per_kernel.xml" splitGroup="devicecodesplit" testName="devicecodesplit_split_per_kernel" />
     <test configFile="config_sycl/devicecodesplit_split_per_source_main.xml" splitGroup="devicecodesplit" testName="devicecodesplit_split_per_source_main" />
+    <test configFile="config_sycl/deviceglobal_device_global_arrow.xml" splitGroup="deviceglobal" testName="deviceglobal_device_global_arrow" />
+    <test configFile="config_sycl/deviceglobal_device_global_device_only.xml" splitGroup="deviceglobal" testName="deviceglobal_device_global_device_only" />
+    <test configFile="config_sycl/deviceglobal_device_global_operator_passthrough.xml" splitGroup="deviceglobal" testName="deviceglobal_device_global_operator_passthrough" />
+    <test configFile="config_sycl/deviceglobal_device_global_subscript.xml" splitGroup="deviceglobal" testName="deviceglobal_device_global_subscript" />
     <test configFile="config_sycl/devicelib_assert.xml" splitGroup="devicelib" testName="devicelib_assert" />
     <test configFile="config_sycl/devicelib_assert_aot.xml" splitGroup="devicelib" testName="devicelib_assert_aot" />
     <test configFile="config_sycl/devicelib_assert_windows.xml" splitGroup="devicelib" testName="devicelib_assert_windows" />
@@ -349,9 +353,13 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/dotproduct_dot_product_int_test.xml" splitGroup="dotproduct" testName="dotproduct_dot_product_int_test" />
     <test configFile="config_sycl/dotproduct_dot_product_vec_test.xml" splitGroup="dotproduct" testName="dotproduct_dot_product_vec_test" />
     <test configFile="config_sycl/esimd_acc_gather_scatter_rgba.xml" splitGroup="esimd" testName="esimd_acc_gather_scatter_rgba" />
+    <test configFile="config_sycl/esimd_acc_gather_scatter_rgba_stateless.xml" splitGroup="esimd" testName="esimd_acc_gather_scatter_rgba_stateless" />
     <test configFile="config_sycl/esimd_accessor.xml" splitGroup="esimd" testName="esimd_accessor" />
     <test configFile="config_sycl/esimd_accessor_gather_scatter.xml" splitGroup="esimd" testName="esimd_accessor_gather_scatter" />
+    <test configFile="config_sycl/esimd_accessor_gather_scatter_stateless.xml" splitGroup="esimd" testName="esimd_accessor_gather_scatter_stateless" />
     <test configFile="config_sycl/esimd_accessor_load_store.xml" splitGroup="esimd" testName="esimd_accessor_load_store" />
+    <test configFile="config_sycl/esimd_accessor_load_store_stateless.xml" splitGroup="esimd" testName="esimd_accessor_load_store_stateless" />
+    <test configFile="config_sycl/esimd_accessor_stateless.xml" splitGroup="esimd" testName="esimd_accessor_stateless" />
     <test configFile="config_sycl/esimd_aot_mixed.xml" splitGroup="esimd" testName="esimd_aot_mixed" />
     <test configFile="config_sycl/esimd_api_ballot.xml" splitGroup="esimd" testName="esimd_api_ballot" />
     <test configFile="config_sycl/esimd_api_bin_and_cmp_ops_heavy.xml" splitGroup="double" testName="esimd_api_bin_and_cmp_ops_heavy" />
@@ -466,6 +474,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_slm_gather.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_gather" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_scatter.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_scatter" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u64" />
@@ -474,6 +483,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u64" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u8u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_stateless" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_store_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u64" />
@@ -521,6 +532,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_private_memory_pm_access_2.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_2" />
     <test configFile="config_sycl/esimd_private_memory_pm_access_3.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_3" />
     <test configFile="config_sycl/esimd_reduction.xml" splitGroup="esimd" testName="esimd_reduction" />
+    <test configFile="config_sycl/esimd_regression_abs_fix_test.xml" splitGroup="esimd" testName="esimd_regression_abs_fix_test" />
     <test configFile="config_sycl/esimd_regression_big_const_initializer.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
     <test configFile="config_sycl/esimd_regression_complex_lib_lin.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
     <test configFile="config_sycl/esimd_regression_copyto_char_test.xml" splitGroup="esimd" testName="esimd_regression_copyto_char_test" />
@@ -549,6 +561,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_spec_const_spec_const_uint.xml" splitGroup="esimd" testName="esimd_spec_const_spec_const_uint" />
     <test configFile="config_sycl/esimd_spec_const_spec_const_uint64.xml" splitGroup="esimd" testName="esimd_spec_const_spec_const_uint64" />
     <test configFile="config_sycl/esimd_spec_const_spec_const_ushort.xml" splitGroup="esimd" testName="esimd_spec_const_spec_const_ushort" />
+    <test configFile="config_sycl/esimd_spec_const_unused_spec_const.xml" splitGroup="esimd" testName="esimd_spec_const_unused_spec_const" />
     <test configFile="config_sycl/esimd_stencil.xml" splitGroup="esimd" testName="esimd_stencil" />
     <test configFile="config_sycl/esimd_stencil2.xml" splitGroup="esimd" testName="esimd_stencil2" />
     <test configFile="config_sycl/esimd_sycl_esimd_mix.xml" splitGroup="esimd" testName="esimd_sycl_esimd_mix" />
@@ -726,6 +739,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/plugin_level_zero_dynamic_batch_test.xml" splitGroup="plugin" testName="plugin_level_zero_dynamic_batch_test" />
     <test configFile="config_sycl/plugin_level_zero_eager_init.xml" splitGroup="plugin" testName="plugin_level_zero_eager_init" />
     <test configFile="config_sycl/plugin_level_zero_event_leak.xml" splitGroup="plugin" testName="plugin_level_zero_event_leak" />
+    <test configFile="config_sycl/plugin_level_zero_imm_cmdlist.xml" splitGroup="plugin" testName="plugin_level_zero_imm_cmdlist" />
     <test configFile="config_sycl/plugin_level_zero_queue_create.xml" splitGroup="plugin" testName="plugin_level_zero_queue_create" />
     <test configFile="config_sycl/plugin_level_zero_queue_profiling.xml" splitGroup="plugin" testName="plugin_level_zero_queue_profiling" />
     <test configFile="config_sycl/plugin_level_zero_track_indirect_access_memory.xml" splitGroup="plugin" testName="plugin_level_zero_track_indirect_access_memory" />
@@ -780,6 +794,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/reduction_reduction_span_pack.xml" splitGroup="reduction" testName="reduction_reduction_span_pack" />
     <test configFile="config_sycl/reduction_reduction_usm.xml" splitGroup="reduction" testName="reduction_reduction_usm" />
     <test configFile="config_sycl/reduction_reduction_usm_dw.xml" splitGroup="reduction" testName="reduction_reduction_usm_dw" />
+    <test configFile="config_sycl/reduction_regression_after_pr_6343.xml" splitGroup="reduction" testName="reduction_regression_after_pr_6343" />
     <test configFile="config_sycl/regression_2020_spec_constants_debug_info.xml" splitGroup="regression" testName="regression_2020_spec_constants_debug_info" />
     <test configFile="config_sycl/regression_atomic_load.xml" splitGroup="regression" testName="regression_atomic_load" />
     <test configFile="config_sycl/regression_build_log.xml" splitGroup="regression" testName="regression_build_log" />
@@ -803,7 +818,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/regression_intel_std_container_intrinsic.xml" splitGroup="regression" testName="regression_intel_std_container_intrinsic" />
     <test configFile="config_sycl/regression_kernel_bundle_ignore_sycl_external.xml" splitGroup="regression" testName="regression_kernel_bundle_ignore_sycl_external" />
     <test configFile="config_sycl/regression_kernel_name_class.xml" splitGroup="regression" testName="regression_kernel_name_class" />
-    <test configFile="config_sycl/regression_kernel_name_inside_sycl_namespace.xml" splitGroup="regression" testName="regression_kernel_name_inside_sycl_namespace" />
     <test configFile="config_sycl/regression_kernel_unnamed.xml" splitGroup="regression" testName="regression_kernel_unnamed" />
     <test configFile="config_sycl/regression_local_arg_align.xml" splitGroup="regression" testName="regression_local_arg_align" />
     <test configFile="config_sycl/regression_msvc_crt.xml" splitGroup="regression" testName="regression_msvc_crt" />

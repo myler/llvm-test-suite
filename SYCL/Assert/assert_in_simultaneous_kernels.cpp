@@ -1,5 +1,5 @@
 // REQUIRES: linux
-// FIXME unsupported on HIP until fallback libdevice becomes available
+// FIXME: Flaky on HIP
 // UNSUPPORTED: hip
 // RUN: %clangxx -DSYCL_FALLBACK_ASSERT=1 -fsycl -fsycl-targets=%sycl_triple %s -o %t.out %threads_lib
 // RUN: %CPU_RUN_PLACEHOLDER %t.out &> %t.txt || true
