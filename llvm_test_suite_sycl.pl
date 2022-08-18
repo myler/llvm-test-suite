@@ -878,6 +878,8 @@ sub run_cmake
         $thread_opts = "-lpthread";
     }
 
+    my $opencl_icd_dir = dirname(dirname($cpp_cmplr)) . "/lib";
+
     my $collect_code_size="Off";
     execute("which llvm-size");
     if ($command_status == 0)
@@ -982,6 +984,7 @@ sub run_cmake
     execute( "cmake -G Ninja ../ -DTEST_SUITE_SUBDIRS=$subdir -DTEST_SUITE_LIT=$lit"
                                           . " -DSYCL_BE=$sycl_backend -DSYCL_TARGET_DEVICES=$device"
                                           . " -DCMAKE_BUILD_TYPE=None" # to remove predifined options
+                                          . " -DOpenCL_LIBRARY=\"$opencl_icd_dir\""
                                           . " -DCMAKE_C_COMPILER=\"$c_cmplr\""
                                           . " -DCMAKE_CXX_COMPILER=\"$cpp_cmplr\""
                                           . " -DCMAKE_C_FLAGS=\"$c_cmd_opts\""
