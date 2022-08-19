@@ -1,6 +1,5 @@
-// FIXME unsupported on HIP until fallback libdevice becomes available
 // FIXME flaky output on Level Zero
-// UNSUPPORTED: hip || level_zero
+// UNSUPPORTED: level_zero
 // RUN: %clangxx -DSYCL_FALLBACK_ASSERT=1 -fsycl -fsycl-targets=%sycl_triple -I %S/Inputs %s %S/Inputs/kernels_in_file2.cpp -o %t.out %threads_lib
 // RUN: %CPU_RUN_PLACEHOLDER %t.out &> %t.txt || true
 // RUN: %CPU_RUN_PLACEHOLDER FileCheck %s --input-file %t.txt
@@ -38,20 +37,20 @@
 
 #include <cassert>
 
-using namespace cl::sycl;
-using namespace cl::sycl::access;
+using namespace sycl;
+using namespace sycl::access;
 
 static constexpr size_t NUM_THREADS = 4;
 static constexpr size_t BUFFER_SIZE = 10;
 
 template <class kernel_name> void enqueueKernel(queue *Q) {
-  cl::sycl::range<1> numOfItems{BUFFER_SIZE};
-  cl::sycl::buffer<int, 1> Buf(numOfItems);
+  sycl::range<1> numOfItems{BUFFER_SIZE};
+  sycl::buffer<int, 1> Buf(numOfItems);
 
   Q->submit([&](handler &CGH) {
     auto Acc = Buf.template get_access<mode::read_write>(CGH);
 
-    CGH.parallel_for<kernel_name>(numOfItems, [=](cl::sycl::id<1> wiID) {
+    CGH.parallel_for<kernel_name>(numOfItems, [=](sycl::id<1> wiID) {
       Acc[wiID] = 0;
       if (wiID == 5)
         assert(false && "this message from file1");
