@@ -208,6 +208,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_reduction.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/esimd_regression_abs_fix_test.xml" splitGroup="esimd" testName="esimd_regression_abs_fix_test" />
     <test configFile="config_sycl/esimd_regression_big_const_initializer.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
+    <test configFile="config_sycl/esimd_regression_bit_shift_compilation_test.xml" splitGroup="esimd" testName="esimd_regression_bit_shift_compilation_test" />
     <test configFile="config_sycl/esimd_regression_complex_lib_lin.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
     <test configFile="config_sycl/esimd_regression_copyto_char_test.xml" splitGroup="esimd" testName="esimd_regression_copyto_char_test" />
     <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
@@ -215,9 +216,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_dgetrf_ref.xml" splitGroup="double" testName="esimd_regression_dgetrf_ref" />
     <test configFile="config_sycl/esimd_regression_fmod_compatibility_test.xml" splitGroup="esimd" testName="esimd_regression_fmod_compatibility_test" />
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
+    <test configFile="config_sycl/esimd_regression_half_conversion_test.xml" splitGroup="esimd" testName="esimd_regression_half_conversion_test" />
     <test configFile="config_sycl/esimd_regression_noinline_bypointers_vadd.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
     <test configFile="config_sycl/esimd_regression_operator_decrement.xml" splitGroup="esimd" testName="esimd_regression_operator_decrement" />
     <test configFile="config_sycl/esimd_regression_replicate_bug.xml" splitGroup="esimd" testName="esimd_regression_replicate_bug" />
+    <test configFile="config_sycl/esimd_regression_rol_ror_compilation_test.xml" splitGroup="esimd" testName="esimd_regression_rol_ror_compilation_test" />
     <test configFile="config_sycl/esimd_regression_store_zero_const.xml" splitGroup="esimd" testName="esimd_regression_store_zero_const" />
     <test configFile="config_sycl/esimd_regression_unused_load.xml" splitGroup="esimd" testName="esimd_regression_unused_load" />
     <test configFile="config_sycl/esimd_regression_usm_gather_scatter_32.xml" splitGroup="esimd" testName="esimd_regression_usm_gather_scatter_32" />
