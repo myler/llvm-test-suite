@@ -12,9 +12,14 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t1.out
 // RUN: %ACC_RUN_PLACEHOLDER %t1.out
 
-#include "fill.hpp"
+#include <sycl/sycl.hpp>
 
 using namespace sycl;
+
+template <typename T> class usm_device_transfer;
+template <typename T> class usm_aligned_device_transfer;
+
+static constexpr int N = 100;
 
 struct test_struct {
   short a;
@@ -23,11 +28,103 @@ struct test_struct {
   long long d;
   sycl::half e;
   float f;
+#ifdef ENABLE_FP64
+  double g;
+#endif
 };
 
 bool operator==(const test_struct &lhs, const test_struct &rhs) {
+#ifdef ENABLE_FP64
+  return lhs.a == rhs.a && lhs.b == rhs.b && lhs.c == rhs.c && lhs.d == rhs.d &&
+         lhs.e == rhs.e && lhs.f == rhs.f && lhs.g == rhs.g;
+#else
   return lhs.a == rhs.a && lhs.b == rhs.b && lhs.c == rhs.c && lhs.d == rhs.d &&
          lhs.e == rhs.e && lhs.f == rhs.f;
+#endif
+}
+
+template <typename T>
+void runHostTests(device dev, context ctxt, queue q, T val) {
+  T *array;
+
+  array = (T *)malloc_host(N * sizeof(T), q);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+  for (int i = 0; i < N; ++i) {
+    assert(array[i] == val);
+  }
+  free(array, ctxt);
+
+  array = (T *)aligned_alloc_host(alignof(long long), N * sizeof(T), ctxt);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+  for (int i = 0; i < N; ++i) {
+    assert(array[i] == val);
+  }
+  free(array, ctxt);
+}
+
+template <typename T>
+void runSharedTests(device dev, context ctxt, queue q, T val) {
+  T *array;
+
+  array = (T *)malloc_shared(N * sizeof(T), q);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+  for (int i = 0; i < N; ++i) {
+    assert(array[i] == val);
+  }
+  free(array, ctxt);
+
+  array =
+      (T *)aligned_alloc_shared(alignof(long long), N * sizeof(T), dev, ctxt);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+  for (int i = 0; i < N; ++i) {
+    assert(array[i] == val);
+  }
+  free(array, ctxt);
+}
+
+template <typename T>
+void runDeviceTests(device dev, context ctxt, queue q, T val) {
+  T *array;
+  std::vector<T> out;
+  out.resize(N);
+
+  array = (T *)malloc_device(N * sizeof(T), q);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+
+  {
+    buffer<T, 1> buf{&out[0], range<1>{N}};
+    q.submit([&](handler &h) {
+       auto acc = buf.template get_access<access::mode::write>(h);
+       h.parallel_for<usm_device_transfer<T>>(
+           range<1>(N), [=](id<1> item) { acc[item] = array[item]; });
+     }).wait();
+  }
+
+  for (int i = 0; i < N; ++i) {
+    assert(out[i] == val);
+  }
+  free(array, ctxt);
+
+  out.clear();
+  out.resize(N);
+
+  array =
+      (T *)aligned_alloc_device(alignof(long long), N * sizeof(T), dev, ctxt);
+  q.submit([&](handler &h) { h.fill(array, val, N); }).wait();
+
+  {
+    buffer<T, 1> buf{&out[0], range<1>{N}};
+    q.submit([&](handler &h) {
+       auto acc = buf.template get_access<access::mode::write>(h);
+       h.parallel_for<usm_aligned_device_transfer<T>>(
+           range<1>(N), [=](id<1> item) { acc[item] = array[item]; });
+     }).wait();
+  }
+
+  for (int i = 0; i < N; ++i) {
+    assert(out[i] == val);
+  }
+  free(array, ctxt);
 }
 
 int main() {
@@ -35,9 +132,16 @@ int main() {
   auto dev = q.get_device();
   auto ctxt = q.get_context();
 
+#ifdef ENABLE_FP64
+  test_struct test_obj{4, 42, 424, 4242, 4.2f, 4.242, 4.24242};
+#else
   test_struct test_obj{4, 42, 424, 4242, 4.2f, 4.242};
+#endif
 
   if (dev.get_info<info::device::usm_host_allocations>()) {
+#ifdef ENABLE_FP64
+    runHostTests<double>(dev, ctxt, q, 4.24242);
+#endif
     runHostTests<short>(dev, ctxt, q, 4);
     runHostTests<int>(dev, ctxt, q, 42);
     runHostTests<long>(dev, ctxt, q, 424);
@@ -48,6 +152,9 @@ int main() {
   }
 
   if (dev.get_info<info::device::usm_shared_allocations>()) {
+#ifdef ENABLE_FP64
+    runSharedTests<double>(dev, ctxt, q, 4.24242);
+#endif
     runSharedTests<short>(dev, ctxt, q, 4);
     runSharedTests<int>(dev, ctxt, q, 42);
     runSharedTests<long>(dev, ctxt, q, 424);
@@ -58,6 +165,9 @@ int main() {
   }
 
   if (dev.get_info<info::device::usm_device_allocations>()) {
+#ifdef ENABLE_FP64
+    runDeviceTests<double>(dev, ctxt, q, 4.24242);
+#endif
     runDeviceTests<short>(dev, ctxt, q, 4);
     runDeviceTests<int>(dev, ctxt, q, 42);
     runDeviceTests<long>(dev, ctxt, q, 420);

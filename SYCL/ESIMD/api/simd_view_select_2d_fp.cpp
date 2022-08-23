@@ -25,6 +25,9 @@ int main(int argc, char **argv) {
   bool passed = true;
   passed &= test<half>(q);
   passed &= test<float>(q);
+#ifdef ENABLE_FP64
+  passed &= test<double>(q);
+#endif
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");
   return passed ? 0 : 1;

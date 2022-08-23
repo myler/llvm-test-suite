@@ -17,6 +17,9 @@ int main() {
   }
 
   constexpr int N = 32;
+#ifdef ENABLE_FP64
+  assignment_test<double>(q, N);
+#endif
 
   // Include long tests if they are 64 bits wide
   if constexpr (sizeof(long) == 8) {

@@ -20,10 +20,16 @@
 #include <sycl/ext/intel/esimd.hpp>
 #include <sycl/sycl.hpp>
 
+#ifdef ENABLE_FP64
+typedef double fptype;
+#else
+typedef float fptype;
+#endif
+
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define MIN(x, y) ((x) <= (y) ? (x) : (y))
 #define MAX(x, y) ((x) >= (y) ? (x) : (y))
-#define FP_RAND ((float)rand() / (float)RAND_MAX)
+#define FP_RAND ((fptype)rand() / (fptype)RAND_MAX)
 
 #define OUTN(text, ...) fprintf(stderr, text, ##__VA_ARGS__)
 #define OUT(text, ...) OUTN(text "\n", ##__VA_ARGS__)
@@ -49,7 +55,7 @@ using namespace sycl;
 using namespace std;
 using namespace sycl::ext::intel::esimd;
 
-ESIMD_PRIVATE ESIMD_REGISTER(384) simd<float, 3 * 32 * 4> GRF;
+ESIMD_PRIVATE ESIMD_REGISTER(384) simd<fptype, 3 * 32 * 4> GRF;
 
 #define V(x, w, i) (x).template select<w, 1>(i)
 #define V1(x, i) V(x, 1, i)
@@ -67,7 +73,7 @@ template <int M, int N, int K> ESIMD_INLINE void dgetrfnp_panel(int64_t *info) {
       V1(mask, k) = 0;
       if (ak0[k] != 0.0) {
         // scal
-        float temp = 1.0 / ak0[k];
+        fptype temp = 1.0 / ak0[k];
         ak0.merge(ak0 * temp, mask);
         for (int i = 8 + K + kk; i < M; i += 8) {
           V8(ak, i) *= temp;
@@ -96,15 +102,15 @@ template <int M, int N, int K> ESIMD_INLINE void dgetrfnp_panel(int64_t *info) {
 // L=A[K:M,0:K]) - panel to update with P1=A[0:M,K:K+N] = column(U=A[0:K,K:K+N],
 // T=A[K:M,K:K+N]) - panel to be updated
 template <int M, int N, int K>
-ESIMD_INLINE void dgetrfnp_left_step(float *a, int64_t lda, int64_t *info) {
+ESIMD_INLINE void dgetrfnp_left_step(fptype *a, int64_t lda, int64_t *info) {
   auto p1 = V(GRF, M * N, 0);
-  float *a1;
+  fptype *a1;
   int i, j, k;
 
   // load P1
   for (j = 0, a1 = a + K * lda; j < N; j++, a1 += lda)
     for (i = 0; i < M; i += 8) {
-      simd<float, 8> data;
+      simd<fptype, 8> data;
       data.copy_from(a1 + i);
       V8(p1, j * M + i) = data;
     }
@@ -114,18 +120,18 @@ ESIMD_INLINE void dgetrfnp_left_step(float *a, int64_t lda, int64_t *info) {
   // store P1
   for (j = 0, a1 = a + K * lda; j < N; j++, a1 += lda)
     for (i = 0; i < M; i += 8) {
-      simd<float, 8> vals = V8(p1, j * M + i);
+      simd<fptype, 8> vals = V8(p1, j * M + i);
       vals.copy_to(a1 + i);
     }
 }
 
-ESIMD_INLINE void dgetrfnp_esimd_8x8(float *a, int64_t lda, int64_t *ipiv,
+ESIMD_INLINE void dgetrfnp_esimd_8x8(fptype *a, int64_t lda, int64_t *ipiv,
                                      int64_t *info) {
   *info = 0;
   dgetrfnp_left_step<8, 8, 0>(a, lda, info);
 }
 
-void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
+void dgetrfnp_batch_strided_c(int64_t m, int64_t n, fptype *a, int64_t lda,
                               int64_t stride_a, int64_t *ipiv,
                               int64_t stride_ipiv, int64_t batch,
                               int64_t *info) {
@@ -136,11 +142,11 @@ void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
 
   CHECK(status = device.is_gpu(), !status);
 
-  float *a_gpu;
+  fptype *a_gpu;
   int64_t *ipiv_gpu;
   int64_t *info_gpu;
-  CHECK(a_gpu = static_cast<float *>(
-            malloc_shared(stride_a * batch * sizeof(float), device, context)),
+  CHECK(a_gpu = static_cast<fptype *>(
+            malloc_shared(stride_a * batch * sizeof(fptype), device, context)),
         !a_gpu);
   CHECK(ipiv_gpu = static_cast<int64_t *>(malloc_shared(
             stride_ipiv * batch * sizeof(int64_t), device, context)),
@@ -149,7 +155,7 @@ void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
             malloc_shared(batch * sizeof(int64_t), device, context)),
         !info_gpu);
 
-  memcpy(a_gpu, a, stride_a * batch * sizeof(float));
+  memcpy(a_gpu, a, stride_a * batch * sizeof(fptype));
 
   sycl::nd_range<1> range(sycl::range<1>{static_cast<size_t>(batch)},
                           sycl::range<1>{1});
@@ -171,7 +177,7 @@ void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
     return;
   }
 
-  memcpy(a, a_gpu, stride_a * batch * sizeof(float));
+  memcpy(a, a_gpu, stride_a * batch * sizeof(fptype));
   memcpy(ipiv, ipiv_gpu, stride_ipiv * batch * sizeof(int64_t));
   memcpy(info, info_gpu, batch * sizeof(int64_t));
 
@@ -180,14 +186,14 @@ void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
   free(info_gpu, context);
 }
 
-static void fp_init(int64_t m, int64_t n, float *a, int64_t lda) {
+static void fp_init(int64_t m, int64_t n, fptype *a, int64_t lda) {
   int64_t i, j;
   for (j = 0; j < n; j++)
     for (i = 0; i < m; i++)
       a[i + j * lda] = 2.0 * FP_RAND - 1.0;
 }
 
-static void fp_copy(int64_t m, int64_t n, float *a, int64_t lda, float *b,
+static void fp_copy(int64_t m, int64_t n, fptype *a, int64_t lda, fptype *b,
                     int64_t ldb) {
   int64_t i, j;
   for (j = 0; j < n; j++)
@@ -195,8 +201,8 @@ static void fp_copy(int64_t m, int64_t n, float *a, int64_t lda, float *b,
       b[i + j * ldb] = a[i + j * lda];
 }
 
-static float fp_norm1(int64_t m, int64_t n, float *a, int64_t lda) {
-  float sum, value = 0.0;
+static fptype fp_norm1(int64_t m, int64_t n, fptype *a, int64_t lda) {
+  fptype sum, value = 0.0;
   int64_t i, j;
   for (j = 0; j < n; j++) {
     sum = 0.0;
@@ -208,27 +214,32 @@ static float fp_norm1(int64_t m, int64_t n, float *a, int64_t lda) {
   return value;
 }
 
-static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, float *a_in,
-                                        float *a, int64_t lda, int64_t stride_a,
-                                        int64_t *ipiv, int64_t stride_ipiv,
-                                        int64_t batch, int64_t *info) {
-  float thresh = 30.0;
+static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, fptype *a_in,
+                                        fptype *a, int64_t lda,
+                                        int64_t stride_a, int64_t *ipiv,
+                                        int64_t stride_ipiv, int64_t batch,
+                                        int64_t *info) {
+  fptype thresh = 30.0;
   int fail = 0;
   int64_t i, j, k, l;
   char label[1024];
+#ifdef ENABLE_FP64
+  unsigned char prec_b[] = {0, 0, 0, 0, 0, 0, 0xb0, 0x3c};
+#else
   unsigned char prec_b[] = {0, 0, 0xb0, 0x3c};
-  float res = 0.0, nrm = 0.0, ulp = *(float *)prec_b;
-  float *w = (float *)malloc(sizeof(float) * MAX(m * n, 1));
+#endif
+  fptype res = 0.0, nrm = 0.0, ulp = *(fptype *)prec_b;
+  fptype *w = (fptype *)malloc(sizeof(fptype) * MAX(m * n, 1));
 
   sprintf(label, "m=%ld, n=%ld, lda=%ld, batch=%ld", m, n, lda, batch);
 
   for (k = 0; k < batch; k++) {
     /* info == 0 */
-    CHECK_AND_REPORT("info == 0", label, info[k] != 0, (float)info[k], fail);
+    CHECK_AND_REPORT("info == 0", label, info[k] != 0, (fptype)info[k], fail);
 
     if (m > 0 && n > 0) {
       /* | L U - A | / ( |A| n ulp ) */
-      memset(w, 0, sizeof(float) * m * n);
+      memset(w, 0, sizeof(fptype) * m * n);
       if (m < n) {
         for (j = 0; j < n; j++)
           for (i = 0; i <= j; i++)
@@ -255,7 +266,7 @@ static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, float *a_in,
           w[i + j * m] -= a_in[k * stride_a + i + j * lda];
       res = fp_norm1(m, n, w, m);
       nrm = fp_norm1(m, n, &a_in[k * stride_a], lda);
-      nrm *= (float)n * ulp;
+      nrm *= (fptype)n * ulp;
       res /= nrm > 0.0 ? nrm : ulp;
       CHECK_AND_REPORT("| L U - A | / ( |A| n ulp )", label,
                        FAILED(res, thresh), res, fail);
@@ -266,7 +277,7 @@ static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, float *a_in,
   return fail;
 }
 
-void dgetrfnp_batch_strided_c(int64_t m, int64_t n, float *a, int64_t lda,
+void dgetrfnp_batch_strided_c(int64_t m, int64_t n, fptype *a, int64_t lda,
                               int64_t stride_a, int64_t *ipiv,
                               int64_t stride_ipiv, int64_t batch,
                               int64_t *info);
@@ -284,10 +295,10 @@ int main(int argc, char *argv[]) {
     int64_t a_count = MAX(stride_a * batch, 1);
     int64_t ipiv_count = MAX(stride_ipiv * batch, 1);
     int64_t info_count = MAX(batch, 1);
-    float *a = NULL, *a_copy = NULL;
+    fptype *a = NULL, *a_copy = NULL;
     int64_t *ipiv = NULL, *info = NULL;
-    CHECK(a = (float *)malloc(sizeof(float) * a_count), !a);
-    CHECK(a_copy = (float *)malloc(sizeof(float) * a_count), !a_copy);
+    CHECK(a = (fptype *)malloc(sizeof(fptype) * a_count), !a);
+    CHECK(a_copy = (fptype *)malloc(sizeof(fptype) * a_count), !a_copy);
     CHECK(ipiv = (int64_t *)malloc(sizeof(int64_t) * ipiv_count), !ipiv);
     CHECK(info = (int64_t *)malloc(sizeof(int64_t) * info_count), !info);
 
@@ -312,3 +323,4 @@ int main(int argc, char *argv[]) {
   }
   return exit_status;
 }
+

@@ -1,70 +1,8 @@
 // REQUIRES: aspect-fp64
-// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
-// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -D HALF_IS_SUPPORTED %s -o %t_gpu.out
+// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -DENABLE_FP64 %s -o %t.out
 // RUN: %HOST_RUN_PLACEHOLDER %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t_gpu.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
 
-#include <CL/sycl.hpp>
-
-#include <cassert>
-
-namespace s = cl::sycl;
-using namespace std;
-
-template <typename T, typename R, bool Expected = true> void test_nan_call() {
-  static_assert(is_same<decltype(s::nan(T{0})), R>::value == Expected, "");
-}
-
-template <typename, typename> struct test;
-
-template <typename T, typename R> void check_nan(s::queue &Queue) {
-  R Data{0};
-  s::vec<R, 2> VData{0};
-  {
-    s::buffer<R, 1> Buf(&Data, s::range<1>(1));
-    s::buffer<s::vec<R, 2>, 1> VBuf(&VData, s::range<1>(1));
-    Queue.submit([&](s::handler &Cgh) {
-      auto Acc = Buf.template get_access<s::access::mode::write>(Cgh);
-      auto VAcc = VBuf.template get_access<s::access::mode::write>(Cgh);
-      Cgh.single_task<test<T, R>>([=]() {
-        Acc[0] = s::nan(T{0});
-        VAcc[0] = s::nan(s::vec<T, 2>{0});
-      });
-    });
-    Queue.wait_and_throw();
-  }
-  assert(s::isnan(Data));
-  assert(s::all(s::isnan(VData)));
-}
-
-int main() {
-  queue q;
-  if (!q.get_device().has(aspect::fp64)) {
-    std::cout << "Skipping test\n";
-    return 0;
-  }
-
-  test_nan_call<s::ulong, double>();
-  test_nan_call<s::ulonglong, double>();
-  test_nan_call<s::ulong2, s::double2>();
-  test_nan_call<s::ulonglong2, s::double2>();
-
-  s::queue Queue([](cl::sycl::exception_list ExceptionList) {
-    for (std::exception_ptr ExceptionPtr : ExceptionList) {
-      try {
-        std::rethrow_exception(ExceptionPtr);
-      } catch (cl::sycl::exception &E) {
-        std::cerr << E.what() << std::endl;
-      } catch (...) {
-        std::cerr << "Unknown async exception was caught." << std::endl;
-      }
-    }
-  });
-
-  check_nan<unsigned long, double>(Queue);
-  check_nan<unsigned long long, double>(Queue);
-
-  return 0;
-}
+#include "nan.cpp"

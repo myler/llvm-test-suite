@@ -8,7 +8,7 @@
 
 // REQUIRES: gpu, aspect-fp64
 // UNSUPPORTED: cuda || hip
-// RUN: %clangxx -fsycl -DUSE_REF %s -I%S/.. -o %t.ref.out
+// RUN: %clangxx -fsycl -DUSE_REF -DENABLE_FP64 %s -I%S/.. -o %t.ref.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.ref.out 3 2 1
 //
 // This test checks the correctness of ESIMD program for batched LU

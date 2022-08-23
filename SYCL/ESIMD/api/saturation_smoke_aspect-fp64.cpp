@@ -10,34 +10,9 @@
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl -DENABLE_FP64 %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 //
 // The test checks main functionality of esimd::saturate function.
 
-#include "saturation_smoke.hpp"
-
-using namespace sycl;
-using namespace sycl::ext::intel::esimd;
-
-// clang-format on
-
-int main(int argc, char **argv) {
-  queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
-  if (!q.get_device().has(sycl::aspect::fp64) {
-    std::cout << "Skipping test\n";
-    return 0;
-  }
-
-  auto dev = q.get_device();
-  std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
-
-  bool passed = true;
-
-  passed &= test<double, short, FpToInt>(q);
-
-  passed &= test<double, double, FpToFp>(q);
-
-  std::cout << (passed ? "Test passed\n" : "Test FAILED\n");
-  return passed ? 0 : 1;
-}
+#include "saturation_smoke.cpp"

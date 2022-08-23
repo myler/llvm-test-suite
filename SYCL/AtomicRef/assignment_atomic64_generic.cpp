@@ -20,7 +20,9 @@ int main() {
   }
 
   constexpr int N = 32;
-
+#ifdef ENABLE_FP64
+  assignment_generic_test<double>(q, N);
+#endif
   // Include long tests if they are 64 bits wide
   if constexpr (sizeof(long) == 8) {
     assignment_generic_test<long>(q, N);
@@ -37,6 +39,5 @@ int main() {
   if constexpr (sizeof(char *) == 8) {
     assignment_generic_test<char *>(q, N);
   }
-
   std::cout << "Test passed." << std::endl;
 }

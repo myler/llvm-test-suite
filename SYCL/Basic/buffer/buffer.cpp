@@ -25,6 +25,7 @@ int main() {
   int data = 5;
   bool failed = false;
   buffer<int, 1> buf(&data, range<1>(1));
+
   {
     int data1[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     {
@@ -508,16 +509,26 @@ int main() {
     size_t size = 32;
     const size_t dims = 1;
     sycl::range<dims> r(size);
-
     std::shared_ptr<bool> bool_shrd(new bool[size],
                                     [](bool *data) { delete[] data; });
     std::shared_ptr<int> int_shrd(new int[size],
                                   [](int *data) { delete[] data; });
+#ifdef ENABLE_FP64
+    std::shared_ptr<double> double_shrd(new double[size],
+                                        [](double *data) { delete[] data; });
+#endif
 
     std::vector<bool> bool_vector;
     std::vector<int> int_vector;
+#ifdef ENABLE_FP64
+    std::vector<double> double_vector;
+#endif
+
     bool_vector.reserve(size);
     int_vector.reserve(size);
+#ifdef ENABLE_FP64
+    double_vector.reserve(size);
+#endif
 
     sycl::queue Queue;
     std::mutex m;
@@ -528,30 +539,55 @@ int main() {
       sycl::buffer<int, dims> buf_int_shrd(
           int_shrd, r,
           sycl::property_list{sycl::property::buffer::use_mutex(m)});
+#ifdef ENABLE_FP64
+      sycl::buffer<double, dims> buf_double_shrd(
+          double_shrd, r,
+          sycl::property_list{sycl::property::buffer::use_mutex(m)});
+#endif
       m.lock();
       std::fill(bool_shrd.get(), (bool_shrd.get() + size), bool());
       std::fill(int_shrd.get(), (int_shrd.get() + size), int());
+#ifdef ENABLE_FP64
+      std::fill(double_shrd.get(), (double_shrd.get() + size), double());
+#endif
       m.unlock();
-
       buf_bool_shrd.set_final_data(bool_vector.begin());
       buf_int_shrd.set_final_data(int_vector.begin());
+#ifdef ENABLE_FP64
+      buf_double_shrd.set_final_data(double_vector.begin());
+#endif
+
       buf_bool_shrd.set_write_back(true);
       buf_int_shrd.set_write_back(true);
+#ifdef ENABLE_FP64
+      buf_double_shrd.set_write_back(true);
+#endif
 
       Queue.submit([&](sycl::handler &cgh) {
         auto Accessor_bool =
             buf_bool_shrd.get_access<sycl::access::mode::write>(cgh);
         auto Accessor_int =
             buf_int_shrd.get_access<sycl::access::mode::write>(cgh);
+#ifdef ENABLE_FP64
+        auto Accessor_double =
+            buf_double_shrd.get_access<sycl::access::mode::write>(cgh);
+#endif
         cgh.parallel_for<class FillBuffer>(r, [=](sycl::id<1> WIid) {
           Accessor_bool[WIid] = true;
           Accessor_int[WIid] = 3;
+#ifdef ENABLE_FP64
+          Accessor_double[WIid] = 7.5;
+#endif
         });
       });
     } // Data is copied back
 
     for (size_t i = 0; i < size; i++) {
       if (bool_vector[i] != true || int_vector[i] != 3) {
+#ifdef ENABLE_FP64
+      if (bool_vector[i] != true || int_vector[i] != 3 ||
+          double_vector[i] != 7.5) {
+#endif
         assert(false && "Data was not copied back");
         return 1;
       }

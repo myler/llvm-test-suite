@@ -23,7 +23,6 @@
 #define HALF 0 // FIXME Spec constants do not support half type yet
 
 class SpecializedKernel;
-
 class MyBoolConst;
 class MyInt8Const;
 class MyUInt8Const;
@@ -35,6 +34,9 @@ class MyInt64Const;
 class MyUInt64Const;
 class MyHalfConst;
 class MyFloatConst;
+#ifdef ENABLE_FP64
+class MyDoubleConst;
+#endif
 
 using namespace sycl;
 
@@ -53,6 +55,9 @@ int64_t int64_ref = rnd() % std::numeric_limits<int64_t>::max();
 uint64_t uint64_ref = rnd() % std::numeric_limits<uint64_t>::max();
 half half_ref = rnd() % std::numeric_limits<uint16_t>::max();
 float float_ref = rnd() % std::numeric_limits<uint32_t>::max();
+#ifdef ENABLE_FP64
+double double_ref = rnd() % std::numeric_limits<uint64_t>::max();
+#endif
 
 template <typename T1, typename T2>
 bool check(const T1 &test, const T2 &ref, std::string type) {
@@ -107,9 +112,11 @@ int main(int argc, char **argv) {
 #endif
     ext::oneapi::experimental::spec_constant<float, MyFloatConst> f32 =
         prog.set_spec_constant<MyFloatConst>(float_ref);
-
+#ifdef ENABLE_FP64
+    ext::oneapi::experimental::spec_constant<double, MyDoubleConst> f64 =
+        prog.set_spec_constant<MyDoubleConst>(double_ref);
+#endif
     prog.build_with_kernel_type<SpecializedKernel>();
-
     bool bool_test = 0;
     int8_t int8_test = 0;
     uint8_t uint8_test = 0;
@@ -121,6 +128,9 @@ int main(int argc, char **argv) {
     uint64_t uint64_test = 0;
     half half_test = 0;
     float float_test = 0;
+#ifdef ENABLE_FP64
+    double double_test = 0;
+#endif
 
     {
       buffer<bool> bool_buf(&bool_test, 1);
@@ -134,6 +144,9 @@ int main(int argc, char **argv) {
       buffer<uint64_t> uint64_buf(&uint64_test, 1);
       buffer<half> half_buf(&half_test, 1);
       buffer<float> float_buf(&float_test, 1);
+#ifdef ENABLE_FP64
+      buffer<double> double_buf(&double_test, 1);
+#endif
 
       q.submit([&](handler &cgh) {
         auto bool_acc = bool_buf.get_access<access::mode::write>(cgh);
@@ -147,6 +160,9 @@ int main(int argc, char **argv) {
         auto uint64_acc = uint64_buf.get_access<access::mode::write>(cgh);
         auto half_acc = half_buf.get_access<access::mode::write>(cgh);
         auto float_acc = float_buf.get_access<access::mode::write>(cgh);
+#ifdef ENABLE_FP64
+        auto double_acc = double_buf.get_access<access::mode::write>(cgh);
+#endif
         cgh.single_task<SpecializedKernel>(prog.get_kernel<SpecializedKernel>(),
                                            [=]() {
                                              bool_acc[0] = i1.get();
@@ -162,6 +178,9 @@ int main(int argc, char **argv) {
                                              half_acc[0] = f16.get();
 #endif
                                              float_acc[0] = f32.get();
+#ifdef ENABLE_FP64
+                                             double_acc[0] = f64.get();
+#endif
                                            });
       });
     }
@@ -189,6 +208,10 @@ int main(int argc, char **argv) {
 #endif
     if (!check(float_test, float_ref, "float"))
       return 1;
+#ifdef ENABLE_FP64
+    if (!check(double_test, double_ref, "double"))
+      return 1;
+#endif
   } catch (const exception &e) {
     std::cout << "an async SYCL exception was caught: "
               << std::string(e.what());

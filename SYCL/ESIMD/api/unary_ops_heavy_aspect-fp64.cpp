@@ -9,7 +9,7 @@
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'half' type
 // XFAIL: esimd_emulator
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl -DENABLE_FP64 %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 // Tests various unary operations applied to simd objects.
@@ -23,31 +23,4 @@
 // is available in ESIMD.
 //
 
-#include "unary_ops_heavy.hpp"
-
-using namespace sycl;
-using namespace sycl::ext::intel::esimd;
-
-int main(void) {
-  queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
-  if (!q.get_device().has(sycl::aspect::fp64) {
-    std::cout << "Skipping test\n";
-    return 0;
-  }
-
-  auto dev = q.get_device();
-  std::cout << "Running on " << dev.get_info<info::device::name>() << "\n";
-  bool passed = true;
-  using UnOp = esimd_test::UnaryOp;
-
-  auto mod_ops =
-      esimd_test::OpSeq<UnOp, UnOp::minus_minus_pref, UnOp::minus_minus_inf,
-                        UnOp::plus_plus_pref, UnOp::plus_plus_inf>{};
-  passed &= test<double, 7>(mod_ops, q);
-
-  auto singed_ops = esimd_test::OpSeq<UnOp, UnOp::minus, UnOp::plus>{};
-  passed &= test<double, 16>(singed_ops, q);
-
-  std::cout << (passed ? "Test passed\n" : "Test FAILED\n");
-  return passed ? 0 : 1;
-}
+#include "unary_ops_heavy.cpp"

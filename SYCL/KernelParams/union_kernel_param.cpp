@@ -9,31 +9,37 @@
 #include <cstdio>
 #include <sycl/sycl.hpp>
 
+#ifdef ENABLE_FP64
+typedef double fptype;
+#else
+typedef float fptype;
+#endif
+
 union TestUnion {
 public:
   int myint;
   char mychar;
-  float myfloat;
+  fptype mytype;
 
-  TestUnion() { myfloat = 0.0f; };
+  TestUnion() { mytype = 0.0; };
 };
 
 int main(int argc, char **argv) {
   TestUnion x;
-  x.myfloat = 5.0f;
-  float myfloat = 0.0f;
+  x.mytype = 5.0;
+  fptype mytype = 0.0;
 
   sycl::queue queue;
   {
-    sycl::buffer<float, 1> buf(&myfloat, 1);
+    sycl::buffer<fptype, 1> buf(&mytype, 1);
     queue.submit([&](sycl::handler &cgh) {
       auto acc = buf.get_access<sycl::access::mode::read_write>(cgh);
-      cgh.single_task<class test>([=]() { acc[0] = x.myfloat; });
+      cgh.single_task<class test>([=]() { acc[0] = x.mytype; });
     });
   }
 
-  if (myfloat != 5.0f) {
-    printf("FAILED\nmyfloat = %d\n", myfloat);
+  if (mytype != 5.0) {
+    printf("FAILED\nmytype = %d\n", mytype);
     return 1;
   }
   return 0;

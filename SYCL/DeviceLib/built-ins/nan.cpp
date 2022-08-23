@@ -44,7 +44,12 @@ int main() {
   test_nan_call<s::uint, float>();
   test_nan_call<s::ushort2, s::half2>();
   test_nan_call<s::uint2, s::float2>();
-
+#ifdef ENABLE_FP64
+  test_nan_call<s::ulong, double>();
+  test_nan_call<s::ulonglong, double>();
+  test_nan_call<s::ulong2, s::double2>();
+  test_nan_call<s::ulonglong2, s::double2>();
+#endif
   s::queue Queue([](sycl::exception_list ExceptionList) {
     for (std::exception_ptr ExceptionPtr : ExceptionList) {
       try {
@@ -60,6 +65,13 @@ int main() {
   if (Queue.get_device().has(sycl::aspect::fp16))
     check_nan<unsigned short, s::half>(Queue);
 #endif
+
   check_nan<unsigned int, float>(Queue);
+#ifdef ENABLE_FP64
+  if (Queue.get_device().has(sycl::aspect::fp64)) {
+    check_nan<unsigned long, double>(Queue);
+    check_nan<unsigned long long, double>(Queue);
+  }
+#endif
   return 0;
 }

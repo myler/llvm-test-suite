@@ -23,6 +23,9 @@
 
 constexpr sycl::specialization_id<int> int_id;
 constexpr sycl::specialization_id<custom_type> custom_type_id;
+#ifdef ENABLE_FP64
+constexpr sycl::specialization_id<double> double_id(3.14);
+#endif
 
 class TestDefaultValuesKernel;
 class EmptyKernel;
@@ -77,7 +80,9 @@ bool test_default_values(sycl::queue q) {
 
   sycl::buffer<int> int_buffer(1);
   sycl::buffer<custom_type> custom_type_buffer(1);
-
+#ifdef ENABLE_FP64
+  sycl::buffer<double> double_buffer(1);
+#endif
   auto input_bundle =
       sycl::get_kernel_bundle<sycl::bundle_state::input>(q.get_context());
   auto exec_bundle = sycl::build(input_bundle);
@@ -87,12 +92,17 @@ bool test_default_values(sycl::queue q) {
     auto int_acc = int_buffer.get_access<sycl::access::mode::write>(cgh);
     auto custom_type_acc =
         custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
+#ifdef ENABLE_FP64
+    auto double_acc = double_buffer.get_access<sycl::access::mode::write>(cgh);
+#endif
     cgh.single_task<TestDefaultValuesKernel>([=](sycl::kernel_handler kh) {
       int_acc[0] = kh.get_specialization_constant<int_id>();
       custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
+#ifdef ENABLE_FP64
+      double_acc[0] = kh.get_specialization_constant<double_id>();
+#endif
     });
   });
-
   auto int_acc = int_buffer.get_access<sycl::access::mode::read>();
   if (!check_value(
           0, int_acc[0],
@@ -105,7 +115,11 @@ bool test_default_values(sycl::queue q) {
   if (!check_value(custom_type_ref, custom_type_acc[0],
                    "custom_type specialization constant"))
     return false;
-
+#ifdef ENABLE_FP64
+  auto double_acc = double_buffer.get_access<sycl::access::mode::read>();
+  if (!check_value(3.14, double_acc[0], "double specialization constant"))
+    return false;
+#endif
   return true;
 }
 
@@ -131,7 +145,6 @@ bool test_set_and_get_on_host(sycl::queue q) {
           << std::endl;
       return false;
     }
-
     // Check default values
     if (!check_value(
             0, input_bundle.get_specialization_constant<int_id>(),
@@ -144,14 +157,25 @@ bool test_set_and_get_on_host(sycl::queue q) {
             input_bundle.get_specialization_constant<custom_type_id>(),
             "custom_type specializaiton constant before setting any value"))
       ++errors;
-
+#ifdef ENABLE_FP64
+    if (!check_value(3.14,
+                     input_bundle.get_specialization_constant<double_id>(),
+                     "double specializaiton constant before setting any value"))
+      ++errors;
+#endif
     // Update values
     int new_int_value = 42;
     custom_type new_custom_type_value('b', 1.0, 12);
+#ifdef ENABLE_FP64
+    double new_double_value = 3.0;
+#endif
 
     input_bundle.set_specialization_constant<int_id>(new_int_value);
     input_bundle.set_specialization_constant<custom_type_id>(
         new_custom_type_value);
+#ifdef ENABLE_FP64
+    input_bundle.set_specialization_constant<double_id>(new_double_value);
+#endif
 
     // And re-check them again
     if (!check_value(
@@ -164,6 +188,12 @@ bool test_set_and_get_on_host(sycl::queue q) {
             input_bundle.get_specialization_constant<custom_type_id>(),
             "custom_type specializaiton constant after setting a new value"))
       ++errors;
+#ifdef ENABLE_FP64
+    if (!check_value(new_double_value,
+                     input_bundle.get_specialization_constant<double_id>(),
+                     "double specializaiton constant after setting a value"))
+      ++errors;
+#endif
 
     // Let's try to build the bundle
     auto exec_bundle = sycl::build(input_bundle);
@@ -178,6 +208,12 @@ bool test_set_and_get_on_host(sycl::queue q) {
                      exec_bundle.get_specialization_constant<custom_type_id>(),
                      "custom_type specializaiton constant after build"))
       ++errors;
+#ifdef ENABLE_FP64
+    if (!check_value(new_double_value,
+                     exec_bundle.get_specialization_constant<double_id>(),
+                     "double specializaiton constant after build"))
+      ++errors;
+#endif
   } catch (sycl::exception &e) {
   }
 
@@ -187,29 +223,41 @@ bool test_set_and_get_on_host(sycl::queue q) {
 bool test_set_and_get_on_device(sycl::queue q) {
   sycl::buffer<int> int_buffer(1);
   sycl::buffer<custom_type> custom_type_buffer(1);
+#ifdef ENABLE_FP64
+  sycl::buffer<double> double_buffer(1);
+#endif
 
   int new_int_value = 42;
   custom_type new_custom_type_value('b', 1.0, 12);
+#ifdef ENABLE_FP64
+  double new_double_value = 3.0;
+#endif
 
   auto input_bundle =
       sycl::get_kernel_bundle<sycl::bundle_state::input>(q.get_context());
   input_bundle.set_specialization_constant<int_id>(new_int_value);
   input_bundle.set_specialization_constant<custom_type_id>(
       new_custom_type_value);
+#ifdef ENABLE_FP64
+  input_bundle.set_specialization_constant<double_id>(new_double_value);
+#endif
   auto exec_bundle = sycl::build(input_bundle);
-
   q.submit([&](sycl::handler &cgh) {
     cgh.use_kernel_bundle(exec_bundle);
     auto int_acc = int_buffer.get_access<sycl::access::mode::write>(cgh);
     auto custom_type_acc =
         custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
-
+#ifdef ENABLE_FP64
+    auto double_acc = double_buffer.get_access<sycl::access::mode::write>(cgh);
+#endif
     cgh.single_task<TestSetAndGetOnDevice>([=](sycl::kernel_handler kh) {
       int_acc[0] = kh.get_specialization_constant<int_id>();
       custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
+#ifdef ENABLE_FP64
+      double_acc[0] = kh.get_specialization_constant<double_id>();
+#endif
     });
   });
-
   auto int_acc = int_buffer.get_access<sycl::access::mode::read>();
   if (!check_value(new_int_value, int_acc[0],
                    "integer specialization constant"))
@@ -220,6 +268,11 @@ bool test_set_and_get_on_device(sycl::queue q) {
   if (!check_value(new_custom_type_value, custom_type_acc[0],
                    "custom_type specialization constant"))
     return false;
-
+#ifdef ENABLE_FP64
+  auto double_acc = double_buffer.get_access<sycl::access::mode::read>();
+  if (!check_value(new_double_value, double_acc[0],
+                   "double specialization constant"))
+    return false;
+#endif
   return true;
 }
