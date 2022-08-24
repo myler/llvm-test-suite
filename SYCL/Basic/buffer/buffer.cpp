@@ -724,3 +724,4 @@ int main() {
     // TODO tests with mutex property
     return failed;
   }
+}
