@@ -21,9 +21,9 @@
 #include <sycl/sycl.hpp>
 
 #ifdef ENABLE_FP64
-typedef double fptype;
+using fptype = double;
 #else
-typedef float fptype;
+using fptype = float;
 #endif
 
 #define ABS(x) ((x) >= 0 ? (x) : -(x))

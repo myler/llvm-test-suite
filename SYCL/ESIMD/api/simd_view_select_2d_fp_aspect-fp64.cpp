@@ -5,6 +5,11 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
+// Enable FP64 part of <simd_view_select_2d.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
+//
 // REQUIRES: gpu, aspect-fp64
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'single_task()' method

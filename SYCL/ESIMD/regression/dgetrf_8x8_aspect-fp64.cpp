@@ -5,11 +5,14 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
+// Enable FP64 part of <dgetrf_8x8.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
+//
 // REQUIRES: gpu, aspect-fp64
 // UNSUPPORTED: cuda || hip
 // RUN: %clangxx -fsycl -DENABLE_FP64 %s -I%S/.. -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out 1
-//
-// Reduced version of dgetrf.cpp - M = 8, N = 8, single batch.
 //
 #include "dgetrf_8x8.cpp"

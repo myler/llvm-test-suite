@@ -6,6 +6,11 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
+// Enable FP64 part of <bin_and_cmp_ops_heavy.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
+//
 // REQUIRES: aspect-fp64, gpu
 // UNSUPPORTED: cuda || hip
 // TODO: esimd_emulator fails due to unimplemented 'half' type

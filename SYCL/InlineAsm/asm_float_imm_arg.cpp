@@ -1,5 +1,5 @@
 // UNSUPPORTED: cuda || hip_nvidia
-// REQUIRES: gpu,linux
+// REQUIRES: gpu,linux,aspect-fp64
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
@@ -9,8 +9,15 @@
 #include <sycl/sycl.hpp>
 #include <vector>
 
-constexpr float IMM_ARGUMENT = 0.5;
+#ifdef ENABLE_FP64
+using fptype = double;
+using dataType = sycl::cl_double;
+#else
+using fptype = float;
 using dataType = sycl::cl_float;
+#endif
+
+constexpr fptype IMM_ARGUMENT = 0.5;
 
 template <typename T = dataType>
 struct KernelFunctor : WithInputBuffers<T, 1>, WithOutputBuffer<T> {
@@ -42,7 +49,7 @@ struct KernelFunctor : WithInputBuffers<T, 1>, WithOutputBuffer<T> {
 int main() {
   std::vector<dataType> input(DEFAULT_PROBLEM_SIZE);
   for (int i = 0; i < DEFAULT_PROBLEM_SIZE; i++)
-    input[i] = (float)1 / std::pow(2, i);
+    input[i] = (fptype)1 / std::pow(2, i);
 
   KernelFunctor<> f(input);
   if (!launchInlineASMTest(f))

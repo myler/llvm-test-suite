@@ -23,10 +23,10 @@
 
 constexpr sycl::specialization_id<int> int_id;
 constexpr sycl::specialization_id<int> int_id2(2);
-constexpr sycl::specialization_id<custom_type> custom_type_id;
 #ifdef ENABLE_FP64
 constexpr sycl::specialization_id<double> double_id(3.14);
 #endif
+constexpr sycl::specialization_id<custom_type> custom_type_id;
 
 class TestDefaultValuesKernel;
 class EmptyKernel;
@@ -73,26 +73,26 @@ int main() {
 bool test_default_values(sycl::queue q) {
   sycl::buffer<int> int_buffer(1);
   sycl::buffer<int> int_buffer2(1);
-  sycl::buffer<custom_type> custom_type_buffer(1);
 #ifdef ENABLE_FP64
   sycl::buffer<double> double_buffer(1);
 #endif
+  sycl::buffer<custom_type> custom_type_buffer(1);
 
   q.submit([&](sycl::handler &cgh) {
     auto int_acc = int_buffer.get_access<sycl::access::mode::write>(cgh);
     auto int_acc2 = int_buffer2.get_access<sycl::access::mode::write>(cgh);
-    auto custom_type_acc =
-        custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
-#ifdef ENABLE_FP6
+#ifdef ENABLE_FP64
     auto double_acc = double_buffer.get_access<sycl::access::mode::write>(cgh);
 #endif
+    auto custom_type_acc =
+        custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
     cgh.single_task<TestDefaultValuesKernel>([=](sycl::kernel_handler kh) {
       int_acc[0] = kh.get_specialization_constant<int_id>();
       int_acc2[0] = kh.get_specialization_constant<int_id2>();
-      custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
 #ifdef ENABLE_FP64
       double_acc[0] = kh.get_specialization_constant<double_id>();
 #endif
+      custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
     });
   });
 
@@ -106,17 +106,18 @@ bool test_default_values(sycl::queue q) {
   if (!check_value(2, int_acc2[0], "integer specialization constant"))
     return false;
 
+#ifdef ENABLE_FP64
+  auto double_acc = double_buffer.get_access<sycl::access::mode::read>();
+  if (!check_value(3.14, double_acc[0], "double specialization constant"))
+    return false;
+#endif
+
   auto custom_type_acc =
       custom_type_buffer.get_access<sycl::access::mode::read>();
   const custom_type custom_type_ref;
   if (!check_value(custom_type_ref, custom_type_acc[0],
                    "custom_type specialization constant"))
     return false;
-#ifdef ENABLE_FP64
-  auto double_acc = double_buffer.get_access<sycl::access::mode::read>();
-  if (!check_value(3.14, double_acc[0], "double specialization constant"))
-    return false;
-#endif
 
   return true;
 }
@@ -129,45 +130,47 @@ bool test_set_and_get_on_host(sycl::queue q) {
             "integer specializaiton constant before setting any value"))
       ++errors;
 
-    custom_type custom_type_ref;
-    if (!check_value(
-            custom_type_ref, cgh.get_specialization_constant<custom_type_id>(),
-            "custom_type specializaiton constant before setting any value"))
-      ++errors;
 #ifdef ENABLE_FP64
     if (!check_value(3.14, cgh.get_specialization_constant<double_id>(),
                      "double specializaiton constant before setting any value"))
       ++errors;
 #endif
 
+    custom_type custom_type_ref;
+    if (!check_value(
+            custom_type_ref, cgh.get_specialization_constant<custom_type_id>(),
+            "custom_type specializaiton constant before setting any value"))
+      ++errors;
+
     int new_int_value = 8;
-    custom_type new_custom_type_value('b', 1.0, 12);
 #ifdef ENABLE_FP64
     double new_double_value = 3.0;
 #endif
+    custom_type new_custom_type_value('b', 1.0, 12);
 
     cgh.set_specialization_constant<int_id>(new_int_value);
-    cgh.set_specialization_constant<custom_type_id>(new_custom_type_value);
 #ifdef ENABLE_FP64
     cgh.set_specialization_constant<double_id>(new_double_value);
 #endif
+    cgh.set_specialization_constant<custom_type_id>(new_custom_type_value);
 
     if (!check_value(
             new_int_value, cgh.get_specialization_constant<int_id>(),
             "integer specializaiton constant after setting a new value"))
       ++errors;
 
-    if (!check_value(
-            new_custom_type_value,
-            cgh.get_specialization_constant<custom_type_id>(),
-            "custom_type specializaiton constant after setting a new value"))
-      ++errors;
 #ifdef ENABLE_FP64
     if (!check_value(
             new_double_value, cgh.get_specialization_constant<double_id>(),
             "double specializaiton constant after setting a new value"))
       ++errors;
 #endif
+
+    if (!check_value(
+            new_custom_type_value,
+            cgh.get_specialization_constant<custom_type_id>(),
+            "custom_type specializaiton constant after setting a new value"))
+      ++errors;
 
     cgh.single_task<EmptyKernel>([=]() {});
   });
@@ -178,41 +181,41 @@ bool test_set_and_get_on_host(sycl::queue q) {
 bool test_set_and_get_on_device(sycl::queue q) {
   sycl::buffer<int> int_buffer(1);
   sycl::buffer<int> int_buffer2(1);
-  sycl::buffer<custom_type> custom_type_buffer(1);
 #ifdef ENABLE_FP64
   sycl::buffer<double> double_buffer(1);
 #endif
+  sycl::buffer<custom_type> custom_type_buffer(1);
 
   int new_int_value = 8;
   int new_int_value2 = 0;
-  custom_type new_custom_type_value('b', 1.0, 12);
 #ifdef ENABLE_FP64
   double new_double_value = 3.0;
 #endif
+  custom_type new_custom_type_value('b', 1.0, 12);
 
   q.submit([&](sycl::handler &cgh) {
     auto int_acc = int_buffer.get_access<sycl::access::mode::write>(cgh);
     auto int_acc2 = int_buffer2.get_access<sycl::access::mode::write>(cgh);
-    auto custom_type_acc =
-        custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
 #ifdef ENABLE_FP64
     auto double_acc = double_buffer.get_access<sycl::access::mode::write>(cgh);
 #endif
+    auto custom_type_acc =
+        custom_type_buffer.get_access<sycl::access::mode::write>(cgh);
 
     cgh.set_specialization_constant<int_id>(new_int_value);
-    cgh.set_specialization_constant<int_id2>(new_int_value2);
-    cgh.set_specialization_constant<custom_type_id>(new_custom_type_value);
 #ifdef ENABLE_FP64
     cgh.set_specialization_constant<double_id>(new_double_value);
 #endif
+    cgh.set_specialization_constant<int_id2>(new_int_value2);
+    cgh.set_specialization_constant<custom_type_id>(new_custom_type_value);
 
     cgh.single_task<TestSetAndGetOnDevice>([=](sycl::kernel_handler kh) {
       int_acc[0] = kh.get_specialization_constant<int_id>();
       int_acc2[0] = kh.get_specialization_constant<int_id2>();
-      custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
 #ifdef ENABLE_FP64
       double_acc[0] = kh.get_specialization_constant<double_id>();
 #endif
+      custom_type_acc[0] = kh.get_specialization_constant<custom_type_id>();
     });
   });
 
@@ -226,16 +229,18 @@ bool test_set_and_get_on_device(sycl::queue q) {
                    "integer specialization constant"))
     return false;
 
-  auto custom_type_acc =
-      custom_type_buffer.get_access<sycl::access::mode::read>();
-  if (!check_value(new_custom_type_value, custom_type_acc[0],
-                   "custom_type specialization constant"))
-    return false;
 #ifdef ENABLE_FP64
   auto double_acc = double_buffer.get_access<sycl::access::mode::read>();
   if (!check_value(new_double_value, double_acc[0],
                    "double specialization constant"))
     return false;
 #endif
+
+  auto custom_type_acc =
+      custom_type_buffer.get_access<sycl::access::mode::read>();
+  if (!check_value(new_custom_type_value, custom_type_acc[0],
+                   "custom_type specialization constant"))
+    return false;
+
   return true;
 }

@@ -19,9 +19,9 @@
 #include <sycl/sycl.hpp>
 
 #ifdef ENABLE_FP64
-typedef double fptype;
+using fptype = double;
 #else
-typedef float fptype;
+using fptype = float;
 #endif
 
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
@@ -53,7 +53,7 @@ using namespace sycl;
 using namespace std;
 using namespace sycl::ext::intel::esimd;
 
-ESIMD_PRIVATE ESIMD_REGISTER(256) simd<fptype, 3 * 32 * 4> GRF;
+ESIMD_PRIVATE ESIMD_REGISTER(192) simd<fptype, 3 * 32 * 4> GRF;
 
 #define V(x, w, i) (x).template select<w, 1>(i)
 #define V1(x, i) V(x, 1, i)

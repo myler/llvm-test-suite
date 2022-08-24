@@ -1,3 +1,8 @@
+// Enable FP64 part of <sort.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
+//
 // REQUIRES: aspect-fp64
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -DENABLE_FP64 %s -I . -o %t.out
 // RUN: %CPU_RUN_PLACEHOLDER %t.out

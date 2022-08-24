@@ -583,15 +583,13 @@ int main() {
     } // Data is copied back
 
     for (size_t i = 0; i < size; i++) {
-      if (bool_vector[i] != true || int_vector[i] != 3) {
+      bool Passed = true;
+      Passed &= (bool_vector[i] == true);
+      Passed &= (int_vector[i] == 3);
 #ifdef ENABLE_FP64
-        if (bool_vector[i] != true || int_vector[i] != 3 ||
-            double_vector[i] != 7.5) {
+      Passed &= (double_vector[i] == 7.5);
 #endif
-          assert(false && "Data was not copied back");
-          return 1;
-        }
-      }
+      assert(Passed && "Data was not copied back");
     }
 
     // Check that data is not copied back after canceling write-back using

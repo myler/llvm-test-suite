@@ -1,11 +1,7 @@
-// This test is intended to check basic operations with SYCL 2020 specialization
-// constants using sycl::kernel_bundle and sycl::kernel_handler APIs:
-// - test that specialization constants can be accessed in kernel and they
-//   have their default values if `set_specialization_constants` wasn't called
-// - test that specialization constant values can be set and retrieved through
-//   kernel_bundle APIs on host
-// - test that specialization constant values can be set through kernel_bundle
-//   API and correctly retrieved within a kernel
+// Enable FP64 part of <kernel-bundle-api.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
 //
 // REQUIRES: aspect-fp64
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple -DENABLE_FP64 %s -o %t.out \

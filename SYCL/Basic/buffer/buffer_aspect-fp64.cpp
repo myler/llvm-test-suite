@@ -1,3 +1,8 @@
+// Enable FP64 part of <buffer.cpp>. To be removed once DPC++
+// supports optional device features and the code could be enabled
+// unconditionally without causing failures in speculative compilation
+// of the kernels.
+//
 // REQUIRES: aspect-fp64
 // RUN: %clangxx %cxx_std_optionc++17 -DENABLE_FP64 %s -o %t1.out %sycl_options
 // RUN: %HOST_RUN_PLACEHOLDER %t1.out

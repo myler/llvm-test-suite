@@ -9,7 +9,13 @@
 #include <sycl/sycl.hpp>
 #include <vector>
 
+#ifdef ENABLE_FP64
+using fptype = double;
+using dataType = sycl::cl_double;
+#else
+using fptype = float;
 using dataType = sycl::cl_float;
+#endif
 
 template <typename T = dataType>
 struct KernelFunctor : WithInputBuffers<T, 2>, WithOutputBuffer<T> {
@@ -46,8 +52,8 @@ int main() {
   std::vector<dataType> inputA(DEFAULT_PROBLEM_SIZE),
       inputB(DEFAULT_PROBLEM_SIZE);
   for (int i = 0; i < DEFAULT_PROBLEM_SIZE; i++) {
-    inputA[i] = (float)1 / std::pow(2, i);
-    inputB[i] = (float)2 / std::pow(2, i);
+    inputA[i] = (fptype)1 / std::pow(2, i);
+    inputB[i] = (fptype)2 / std::pow(2, i);
   }
 
   KernelFunctor<> f(inputA, inputB);
