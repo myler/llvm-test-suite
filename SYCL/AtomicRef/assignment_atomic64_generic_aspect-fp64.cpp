@@ -1,5 +1,5 @@
-// Enable FP64 part of <assignment_atomic64_generic.cpp>. To be removed once DPC++
-// supports optional device features and the code could be enabled
+// Enable FP64 part of <assignment_atomic64_generic.cpp>. To be removed once
+// DPC++ supports optional device features and the code could be enabled
 // unconditionally without causing failures in speculative compilation
 // of the kernels.
 //
