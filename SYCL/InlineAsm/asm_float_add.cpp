@@ -9,15 +9,7 @@
 #include <sycl/sycl.hpp>
 #include <vector>
 
-#ifdef ENABLE_FP64
-using fptype = double;
-using dataType = sycl::cl_double;
-#else
-using fptype = float;
-using dataType = sycl::cl_float;
-#endif
-
-template <typename T = dataType>
+template <typename T>
 struct KernelFunctor : WithInputBuffers<T, 2>, WithOutputBuffer<T> {
   KernelFunctor(const std::vector<T> &input1, const std::vector<T> &input2)
       : WithInputBuffers<T, 2>(input1, input2), WithOutputBuffer<T>(
@@ -48,26 +40,39 @@ struct KernelFunctor : WithInputBuffers<T, 2>, WithOutputBuffer<T> {
   }
 };
 
-int main() {
-  std::vector<dataType> inputA(DEFAULT_PROBLEM_SIZE),
+template <typename T1, typename T2>
+bool check() {
+  std::vector<T2> inputA(DEFAULT_PROBLEM_SIZE),
       inputB(DEFAULT_PROBLEM_SIZE);
   for (int i = 0; i < DEFAULT_PROBLEM_SIZE; i++) {
-    inputA[i] = (fptype)1 / std::pow(2, i);
-    inputB[i] = (fptype)2 / std::pow(2, i);
+    inputA[i] = (T1)1 / std::pow(2, i);
+    inputB[i] = (T1)2 / std::pow(2, i);
   }
 
-  KernelFunctor<> f(inputA, inputB);
+  KernelFunctor<T2> f(inputA, inputB);
   if (!launchInlineASMTest(f))
-    return 0;
+    return true;
 
   auto &C = f.getOutputBufferData();
   for (int i = 0; i < DEFAULT_PROBLEM_SIZE; i++) {
     if (C[i] != inputA[i] + inputB[i]) {
       std::cerr << "At index: " << i << ". ";
       std::cerr << C[i] << " != " << inputA[i] + inputB[i] << "\n";
-      return 1;
+      return false;
     }
   }
 
-  return 0;
+  return true;
 }
+
+int main() {
+  bool Passed = true;
+
+  Passed &= check<float, sycl::cl_float>();
+#ifdef ENABLE_FP64
+  Passed &= check<double, sycl::cl_double>();
+#endif
+
+  return Passed ? 0 : 1;
+}
+

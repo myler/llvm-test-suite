@@ -5,7 +5,7 @@
 //
 // UNSUPPORTED: cuda || hip_nvidia
 // REQUIRES: gpu,linux,aspect-fp64
-// RUN: %clangxx -fsycl %s -o %t.out
+// RUN: %clangxx -fsycl -DENABLE_FP64 %s -o %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include "asm_float_add.cpp"

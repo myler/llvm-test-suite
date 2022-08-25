@@ -476,10 +476,12 @@ int main(void) {
     Pass &= testSYCL<float, 8>(Q);
     Pass &= testSYCL<float, 32>(Q);
   }
-#ifdef ENABLE_FP64
   Pass &= testESIMDSqrtIEEE<float, 16>(Q);
+#ifdef ENABLE_FP64
   Pass &= testESIMDSqrtIEEE<double, 32>(Q);
+#endif
   Pass &= testESIMDDivIEEE<float, 8>(Q);
+#ifdef ENABLE_FP64
   Pass &= testESIMDDivIEEE<double, 32>(Q);
 #endif
   std::cout << (Pass ? "Test Passed\n" : "Test FAILED\n");
