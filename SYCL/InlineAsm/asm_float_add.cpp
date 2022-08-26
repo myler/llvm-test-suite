@@ -40,10 +40,8 @@ struct KernelFunctor : WithInputBuffers<T, 2>, WithOutputBuffer<T> {
   }
 };
 
-template <typename T1, typename T2>
-bool check() {
-  std::vector<T2> inputA(DEFAULT_PROBLEM_SIZE),
-      inputB(DEFAULT_PROBLEM_SIZE);
+template <typename T1, typename T2> bool check() {
+  std::vector<T2> inputA(DEFAULT_PROBLEM_SIZE), inputB(DEFAULT_PROBLEM_SIZE);
   for (int i = 0; i < DEFAULT_PROBLEM_SIZE; i++) {
     inputA[i] = (T1)1 / std::pow(2, i);
     inputB[i] = (T1)2 / std::pow(2, i);
@@ -75,4 +73,3 @@ int main() {
 
   return Passed ? 0 : 1;
 }
-
