@@ -14,10 +14,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <cassert>
-#include <iostream>
-#include <memory>
 #include <sycl/sycl.hpp>
+
+#include <cassert>
+#include <memory>
 
 using namespace sycl;
 
@@ -25,7 +25,6 @@ int main() {
   int data = 5;
   bool failed = false;
   buffer<int, 1> buf(&data, range<1>(1));
-
   {
     int data1[10] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     {
@@ -509,6 +508,7 @@ int main() {
     size_t size = 32;
     const size_t dims = 1;
     sycl::range<dims> r(size);
+
     std::shared_ptr<bool> bool_shrd(new bool[size],
                                     [](bool *data) { delete[] data; });
     std::shared_ptr<int> int_shrd(new int[size],
@@ -551,6 +551,7 @@ int main() {
       std::fill(double_shrd.get(), (double_shrd.get() + size), double());
 #endif
       m.unlock();
+
       buf_bool_shrd.set_final_data(bool_vector.begin());
       buf_int_shrd.set_final_data(int_vector.begin());
 #ifdef ENABLE_FP64
@@ -591,137 +592,136 @@ int main() {
 #endif
       assert(Passed && "Data was not copied back");
     }
+  }
 
-    // Check that data is not copied back after canceling write-back using
-    // set_write_back
+  // Check that data is not copied back after canceling write-back using
+  // set_write_back
+  {
+    std::vector<int> data1(10, -1);
     {
-      std::vector<int> data1(10, -1);
-      {
-        buffer<int, 1> b(range<1>(10));
-        b.set_final_data(data1.data());
-        b.set_write_back(false);
-        queue myQueue;
-        myQueue.submit([&](handler &cgh) {
-          auto B = b.get_access<access::mode::read_write>(cgh);
-          cgh.parallel_for<class notwb>(range<1>{10},
-                                        [=](id<1> index) { B[index] = 0; });
-        });
-      }
-      // Data is not copied back because write-back is canceled
-      for (int i = 0; i < 10; i++)
-        if (data1[i] != -1) {
-          assert(false);
-          failed = true;
-        }
-    }
-
-    {
-      std::vector<int> data1(10, -1);
-      std::vector<int> data2(10, -2);
-      {
-        buffer<int, 1> a(data1.data(), range<1>(10));
-        buffer<int, 1> b(data2.data(), range<1>(10));
-        queue myQueue;
-        myQueue.submit([&](handler &cgh) {
-          auto A = a.get_access<access::mode::read_write>(cgh);
-          auto B = b.get_access<access::mode::read_write>(cgh);
-          cgh.parallel_for<class override_lambda>(
-              range<1>{10}, [=](id<1> index) { A[index] = 0; });
-        });
-      } // Data is copied back
-      for (int i = 0; i < 10; i++)
-        assert(data2[i] == -2);
-      for (int i = 0; i < 10; i++)
-        assert(data1[i] == 0);
-    }
-
-    {
-      std::vector<int> data1(10, -1);
-      std::vector<int> data2(10, -2);
-      {
-        buffer<int, 1> a(data1.data(), range<1>(10));
-        buffer<int, 1> b(data2);
-        accessor<int, 1, access::mode::read_write, access::target::device,
-                 access::placeholder::true_t>
-            A(a);
-        accessor<int, 1, access::mode::read_write, access::target::device,
-                 access::placeholder::true_t>
-            B(b);
-        queue myQueue;
-        myQueue.submit([&](handler &cgh) {
-          cgh.require(A);
-          cgh.require(B);
-          cgh.parallel_for<class override_lambda_placeholder>(
-              range<1>{10}, [=](id<1> index) { A[index] = 0; });
-        });
-      } // Data is copied back
-      for (int i = 0; i < 10; i++)
-        assert(data2[i] == -2);
-      for (int i = 0; i < 10; i++)
-        assert(data1[i] == 0);
-    }
-
-    {
-      int data[10];
-      void *voidPtr = (void *)data;
       buffer<int, 1> b(range<1>(10));
-      b.set_final_data(voidPtr);
-    }
-
-    {
-      std::allocator<float8> buf_alloc;
-      std::shared_ptr<float8> data(new float8[8],
-                                   [](float8 *p) { delete[] p; });
-      sycl::buffer<float8, 1, std::allocator<float8>> b(data, sycl::range<1>(8),
-                                                        buf_alloc);
-    }
-
-    {
-      constexpr int Size = 6;
-      sycl::buffer<char, 1> Buf_1(Size);
-      sycl::buffer<char, 1> Buf_2(Size / 2);
-
-      {
-        auto AccA = Buf_1.get_access<sycl::access::mode::read_write>(Size / 2);
-        auto AccB = Buf_2.get_access<sycl::access::mode::read_write>(Size / 2);
-        assert(AccA.get_size() == AccB.get_size());
-        assert(AccA.get_range() == AccB.get_range());
-        assert(AccA.get_count() == AccB.get_count());
-      }
-
-      auto AH0 = accessor<char, 0, access::mode::read_write,
-                          access::target::host_buffer>(Buf_1);
-      auto BH0 = accessor<char, 0, access::mode::read_write,
-                          access::target::host_buffer>(Buf_2);
-      assert(AH0.get_size() == sizeof(char));
-      assert(BH0.get_size() == sizeof(char));
-      assert(AH0.get_count() == 1);
-      assert(BH0.get_count() == 1);
-
-      queue Queue;
-      Queue.submit([&](handler &CGH) {
-        auto AK0 =
-            accessor<char, 0, access::mode::read_write, access::target::device>(
-                Buf_1, CGH);
-        auto BK0 =
-            accessor<char, 0, access::mode::read_write, access::target::device>(
-                Buf_2, CGH);
-        assert(AK0.get_size() == sizeof(char));
-        assert(BK0.get_size() == sizeof(char));
-        assert(AK0.get_count() == 1);
-        assert(BK0.get_count() == 1);
-        CGH.single_task<class DummyKernel>([]() {});
+      b.set_final_data(data1.data());
+      b.set_write_back(false);
+      queue myQueue;
+      myQueue.submit([&](handler &cgh) {
+        auto B = b.get_access<access::mode::read_write>(cgh);
+        cgh.parallel_for<class notwb>(range<1>{10},
+                                      [=](id<1> index) { B[index] = 0; });
       });
     }
+    // Data is not copied back because write-back is canceled
+    for (int i = 0; i < 10; i++)
+      if (data1[i] != -1) {
+        assert(false);
+        failed = true;
+      }
+  }
+
+  {
+    std::vector<int> data1(10, -1);
+    std::vector<int> data2(10, -2);
+    {
+      buffer<int, 1> a(data1.data(), range<1>(10));
+      buffer<int, 1> b(data2.data(), range<1>(10));
+      queue myQueue;
+      myQueue.submit([&](handler &cgh) {
+        auto A = a.get_access<access::mode::read_write>(cgh);
+        auto B = b.get_access<access::mode::read_write>(cgh);
+        cgh.parallel_for<class override_lambda>(
+            range<1>{10}, [=](id<1> index) { A[index] = 0; });
+      });
+    } // Data is copied back
+    for (int i = 0; i < 10; i++)
+      assert(data2[i] == -2);
+    for (int i = 0; i < 10; i++)
+      assert(data1[i] == 0);
+  }
+
+  {
+    std::vector<int> data1(10, -1);
+    std::vector<int> data2(10, -2);
+    {
+      buffer<int, 1> a(data1.data(), range<1>(10));
+      buffer<int, 1> b(data2);
+      accessor<int, 1, access::mode::read_write, access::target::device,
+               access::placeholder::true_t>
+          A(a);
+      accessor<int, 1, access::mode::read_write, access::target::device,
+               access::placeholder::true_t>
+          B(b);
+      queue myQueue;
+      myQueue.submit([&](handler &cgh) {
+        cgh.require(A);
+        cgh.require(B);
+        cgh.parallel_for<class override_lambda_placeholder>(
+            range<1>{10}, [=](id<1> index) { A[index] = 0; });
+      });
+    } // Data is copied back
+    for (int i = 0; i < 10; i++)
+      assert(data2[i] == -2);
+    for (int i = 0; i < 10; i++)
+      assert(data1[i] == 0);
+  }
+
+  {
+    int data[10];
+    void *voidPtr = (void *)data;
+    buffer<int, 1> b(range<1>(10));
+    b.set_final_data(voidPtr);
+  }
+
+  {
+    std::allocator<float8> buf_alloc;
+    std::shared_ptr<float8> data(new float8[8], [](float8 *p) { delete[] p; });
+    sycl::buffer<float8, 1, std::allocator<float8>> b(data, sycl::range<1>(8),
+                                                      buf_alloc);
+  }
+
+  {
+    constexpr int Size = 6;
+    sycl::buffer<char, 1> Buf_1(Size);
+    sycl::buffer<char, 1> Buf_2(Size / 2);
 
     {
-      int data = 5;
-      buffer<int, 1> Buffer(&data, range<1>(1));
-      assert(Buffer.size() == 1);
-      assert(Buffer.byte_size() == 1 * sizeof(int));
+      auto AccA = Buf_1.get_access<sycl::access::mode::read_write>(Size / 2);
+      auto AccB = Buf_2.get_access<sycl::access::mode::read_write>(Size / 2);
+      assert(AccA.get_size() == AccB.get_size());
+      assert(AccA.get_range() == AccB.get_range());
+      assert(AccA.get_count() == AccB.get_count());
     }
 
-    // TODO tests with mutex property
-    return failed;
+    auto AH0 = accessor<char, 0, access::mode::read_write,
+                        access::target::host_buffer>(Buf_1);
+    auto BH0 = accessor<char, 0, access::mode::read_write,
+                        access::target::host_buffer>(Buf_2);
+    assert(AH0.get_size() == sizeof(char));
+    assert(BH0.get_size() == sizeof(char));
+    assert(AH0.get_count() == 1);
+    assert(BH0.get_count() == 1);
+
+    queue Queue;
+    Queue.submit([&](handler &CGH) {
+      auto AK0 =
+          accessor<char, 0, access::mode::read_write, access::target::device>(
+              Buf_1, CGH);
+      auto BK0 =
+          accessor<char, 0, access::mode::read_write, access::target::device>(
+              Buf_2, CGH);
+      assert(AK0.get_size() == sizeof(char));
+      assert(BK0.get_size() == sizeof(char));
+      assert(AK0.get_count() == 1);
+      assert(BK0.get_count() == 1);
+      CGH.single_task<class DummyKernel>([]() {});
+    });
   }
+
+  {
+    int data = 5;
+    buffer<int, 1> Buffer(&data, range<1>(1));
+    assert(Buffer.size() == 1);
+    assert(Buffer.byte_size() == 1 * sizeof(int));
+  }
+
+  // TODO tests with mutex property
+  return failed;
 }

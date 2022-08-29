@@ -1,5 +1,4 @@
-//==--------------- bin_un_cmp_ops_heavy_aspect-fp64.cpp  - DPC++ ESIMD
-// on-device test -==//
+//==-- bin_un_cmp_ops_heavy_aspect-fp64.cpp  - DPC++ ESIMD on-device test --==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
