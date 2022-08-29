@@ -224,7 +224,8 @@ static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, T *a_in, T *a,
   char label[1024];
   unsigned char prec_b1[] = {0, 0, 0xb0, 0x3c};
   unsigned char prec_b2[] = {0, 0, 0, 0, 0, 0, 0xb0, 0x3c};
-  T res = 0.0, nrm = 0.0, ulp if (std::is_same<T, double>::value) {
+  T res = 0.0, nrm = 0.0, ulp;
+  if (std::is_same<T, double>::value) {
     ulp = *(T *)prec_b2;
   }
   else {
