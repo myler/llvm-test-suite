@@ -46,7 +46,7 @@ using namespace sycl;
 using namespace std;
 using namespace sycl::ext::intel::esimd;
 
-template<typename T> ESIMD_PRIVATE ESIMD_REGISTER(192) simd<T, 3 * 32 * 4> GRF;
+template <typename T> ESIMD_PRIVATE ESIMD_REGISTER(192) simd<T, 3 * 32 * 4> GRF;
 
 #define V(x, w, i) (x).template select<w, 1>(i)
 #define V1(x, i) V(x, 1, i)
@@ -299,10 +299,11 @@ ESIMD_INLINE void dgetrfnp_esimd(int64_t m, int64_t n, T *a, int64_t lda,
 #endif // defined(USE_REF)
 }
 
-template <typename T> void dgetrfnp_batch_strided_c(int64_t m, int64_t n,
-                              T *a, int64_t lda, int64_t stride_a,
-                              int64_t *ipiv, int64_t stride_ipiv,
-                              int64_t batch, int64_t *info) {
+template <typename T>
+void dgetrfnp_batch_strided_c(int64_t m, int64_t n, T *a, int64_t lda,
+                              int64_t stride_a, int64_t *ipiv,
+                              int64_t stride_ipiv, int64_t batch,
+                              int64_t *info) {
   queue queue((gpu_selector()));
   auto device = queue.get_device();
   auto context = queue.get_context();
@@ -386,11 +387,10 @@ static T fp_norm1(int64_t m, int64_t n, T *a, int64_t lda) {
 }
 
 template <typename T>
-static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, T *a_in,
-                                        T *a, int64_t lda,
-                                        int64_t stride_a, int64_t *ipiv,
-                                        int64_t stride_ipiv, int64_t batch,
-                                        int64_t *info) {
+static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, T *a_in, T *a,
+                                        int64_t lda, int64_t stride_a,
+                                        int64_t *ipiv, int64_t stride_ipiv,
+                                        int64_t batch, int64_t *info) {
   T thresh = 30.0;
   int fail = 0;
   int64_t i, j, k, l;

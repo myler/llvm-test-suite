@@ -9,7 +9,7 @@
 #include <sycl/sycl.hpp>
 #include <vector>
 
-template<typename T> constexpr T IMM_ARGUMENT = T(0.5);
+template <typename T> constexpr T IMM_ARGUMENT = T(0.5);
 
 template <typename T1, typename T2>
 struct KernelFunctor : WithInputBuffers<T2, 1>, WithOutputBuffer<T2> {

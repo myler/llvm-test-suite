@@ -49,4 +49,3 @@ int main(int argc, char **argv) {
 
   return Passed ? 0 : 1;
 }
-
