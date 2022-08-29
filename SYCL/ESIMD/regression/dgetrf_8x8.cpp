@@ -227,8 +227,7 @@ static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, T *a_in, T *a,
   T res = 0.0, nrm = 0.0, ulp;
   if (std::is_same<T, double>::value) {
     ulp = *(T *)prec_b2;
-  }
-  else {
+  } else {
     ulp = *(T *)prec_b1;
   };
 
