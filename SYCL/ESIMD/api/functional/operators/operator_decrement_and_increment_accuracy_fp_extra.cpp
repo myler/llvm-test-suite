@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// REQUIRES: gpu, level_zero
+// REQUIRES: gpu, level_zero, aspect-fp64
 // XREQUIRES: gpu
 // TODO gpu and level_zero in REQUIRES due to only this platforms supported yet.
 // The current "REQUIRES" should be replaced with "gpu" only as mentioned in

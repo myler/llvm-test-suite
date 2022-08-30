@@ -290,6 +290,9 @@ int main(void) {
   auto cmp_ops = esimd_test::CmpOps;
   passed &= test<unsigned char, int, 1, CmpOp, VSf, IDf>(cmp_ops, q);
   passed &= test<char, float, 7, CmpOp, VSf, IDf>(cmp_ops, q);
+#ifdef ENABLE_FP64
+  passed &= test<short, double, 7, BinOp, VEf, IDf>(arith_ops, q, 1e-15);
+#endif
   passed &= test<float, float, 32, CmpOp, VSf, IDf>(cmp_ops, q);
   passed &= test<half, char, 1, CmpOp, VSf, IDf>(cmp_ops, q, 1);
   passed &= test<half, unsigned int, 32, CmpOp, VSf, IDf>(cmp_ops, q, 1);

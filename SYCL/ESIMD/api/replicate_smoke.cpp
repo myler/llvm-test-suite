@@ -184,7 +184,9 @@ int main(int argc, char **argv) {
   passed &= test<int>(q);
   passed &= test<uint64_t>(q);
   passed &= test<float>(q);
+#ifdef ENABLE_FP64
   passed &= test<double>(q);
+#endif
 
   std::cout << (passed ? "Test passed\n" : "Test FAILED\n");
   return passed ? 0 : 1;

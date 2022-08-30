@@ -109,7 +109,7 @@ ESIMD_INLINE void dgetrfnp_left_step(T *a, int64_t lda, int64_t *info) {
       V8(p1, j * M + i) = data;
     }
   // (getrf) factorize T=P*L*U
-  dgetrfnp_panel<M, N, K>(info);
+  dgetrfnp_panel<T, M, N, K>(info);
 
   // store P1
   for (j = 0, a1 = a + K * lda; j < N; j++, a1 += lda)
@@ -278,11 +278,6 @@ static int dgetrfnp_batch_strided_check(int64_t m, int64_t n, T *a_in, T *a,
   free(w);
   return fail;
 }
-
-void dgetrfnp_batch_strided_c(int64_t m, int64_t n, T *a, int64_t lda,
-                              int64_t stride_a, int64_t *ipiv,
-                              int64_t stride_ipiv, int64_t batch,
-                              int64_t *info);
 
 template <typename T> int check(int argc, char *argv[]) {
   int exit_status = 0;
