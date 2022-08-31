@@ -292,7 +292,7 @@ sub init_test
 
     if ($current_suite =~ /valgrind/) {
       safe_Mkdir('-p',$valgrind_dir);
-      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/v.%basename_t.%%p.log";
+      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/v.$current_test.%%p.log";
     }
 
     return PASS;
@@ -399,8 +399,7 @@ sub run_and_parse
             extract_perf_results();
         }
         if ($current_suite =~ /valgrind/) {
-            my $test_basename = $test_info->{"short_name"};
-            my @log_list = alloy_find($valgrind_dir, "v\.$test_basename\.[0-9]{1,}\.log");
+            my @log_list = alloy_find($valgrind_dir, "v\.$current_test\.[0-9]{1,}\.log");
             if ( scalar(@log_list) > 0 ) {
               $execution_output .= "\nVALGRIND reports problems. Check the following log files for detailed report:\n";
               foreach my $log (@log_list) {
@@ -420,7 +419,7 @@ sub run_and_parse
                 my $execution_output_ori = $execution_output;
                 $compiler_output = '';
                 $execution_output = '';
-                process_logs(\&finalize_test, $valgrind_dir, $test_basename, $RUNFAIL);
+                process_logs(\&finalize_test, $valgrind_dir, $current_test, $RUNFAIL);
                 # Recover compilation and execution output
                 $execution_output = $execution_output_ori;
                 $compiler_output = $compiler_output_ori;
