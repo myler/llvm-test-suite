@@ -13,7 +13,7 @@
 // AMD
 // XFAIL: hip_amd
 //
-//==----- load_store_aspect-fp64.cpp - SYCL sub_group load/store test ------==//
+//==----- load_store_aspect_fp64.cpp - SYCL sub_group load/store test ------==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.

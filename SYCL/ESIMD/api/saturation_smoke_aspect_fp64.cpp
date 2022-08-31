@@ -1,4 +1,4 @@
-//==---- saturation_smoke_aspect-fp64.cpp - DPC++ ESIMD on-device test ----==//
+//==---- saturation_smoke_aspect_fp64.cpp - DPC++ ESIMD on-device test ----==//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
