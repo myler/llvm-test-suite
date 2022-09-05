@@ -135,12 +135,14 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_buffer_reinterpret.xml" splitGroup="basic" testName="basic_buffer_reinterpret" />
     <test configFile="config_sycl/basic_buffer_subbuffer.xml" splitGroup="basic" testName="basic_buffer_subbuffer" />
     <test configFile="config_sycl/basic_build_log.xml" splitGroup="basic" testName="basic_build_log" />
+    <test configFile="config_sycl/basic_code_location_e2e.xml" splitGroup="basic" testName="basic_code_location_e2e" />
     <test configFile="config_sycl/basic_compare_exchange_strong.xml" splitGroup="basic" testName="basic_compare_exchange_strong" />
     <test configFile="config_sycl/basic_context_platforms.xml" splitGroup="basic" testName="basic_context_platforms" />
     <test configFile="config_sycl/basic_context_with_multiple_devices.xml" splitGroup="basic" testName="basic_context_with_multiple_devices" />
     <test configFile="config_sycl/basic_cuda_max_wgs_error.xml" splitGroup="basic" testName="basic_cuda_max_wgs_error" />
     <test configFile="config_sycl/basic_device_equality.xml" splitGroup="basic" testName="basic_device_equality" />
     <test configFile="config_sycl/basic_device_event.xml" splitGroup="basic" testName="basic_device_event" />
+    <test configFile="config_sycl/basic_device_selectors.xml" splitGroup="basic" testName="basic_device_selectors" />
     <test configFile="config_sycl/basic_diagnostics_device_check.xml" splitGroup="basic" testName="basic_diagnostics_device_check" />
     <test configFile="config_sycl/basic_diagnostics_handler.xml" splitGroup="basic" testName="basic_diagnostics_handler" />
     <test configFile="config_sycl/basic_diagnostics_non_uniform_wk_gp_test.xml" splitGroup="basic" testName="basic_diagnostics_non_uniform_wk_gp_test" />
@@ -265,7 +267,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/deprecatedfeatures_esimd_spec_const_uint.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_esimd_spec_const_uint" />
     <test configFile="config_sycl/deprecatedfeatures_esimd_spec_const_uint64.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_esimd_spec_const_uint64" />
     <test configFile="config_sycl/deprecatedfeatures_esimd_spec_const_ushort.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_esimd_spec_const_ushort" />
-    <test configFile="config_sycl/deprecatedfeatures_event_creation_opencl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_event_creation_opencl" />
     <test configFile="config_sycl/deprecatedfeatures_functionpointers_fp_as_kernel_arg.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_functionpointers_fp_as_kernel_arg" />
     <test configFile="config_sycl/deprecatedfeatures_functionpointers_pass_fp_through_buffer.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_functionpointers_pass_fp_through_buffer" />
     <test configFile="config_sycl/deprecatedfeatures_get_backend.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_get_backend" />
@@ -331,6 +332,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/devicelib_cmath_fp64_test.xml" splitGroup="devicelib" testName="devicelib_cmath_fp64_test" />
     <test configFile="config_sycl/devicelib_cmath_test.xml" splitGroup="devicelib" testName="devicelib_cmath_test" />
     <test configFile="config_sycl/devicelib_complex_fpga.xml" splitGroup="devicelib" testName="devicelib_complex_fpga" />
+    <test configFile="config_sycl/devicelib_imf_simd_emulate_test.xml" splitGroup="devicelib" testName="devicelib_imf_simd_emulate_test" />
     <test configFile="config_sycl/devicelib_ittannotations_atomic.xml" splitGroup="devicelib" testName="devicelib_ittannotations_atomic" />
     <test configFile="config_sycl/devicelib_ittannotations_barrier.xml" splitGroup="devicelib" testName="devicelib_ittannotations_barrier" />
     <test configFile="config_sycl/devicelib_math_fp64_test.xml" splitGroup="devicelib" testName="devicelib_math_fp64_test" />
@@ -534,6 +536,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_reduction.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/esimd_regression_abs_fix_test.xml" splitGroup="esimd" testName="esimd_regression_abs_fix_test" />
     <test configFile="config_sycl/esimd_regression_big_const_initializer.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
+    <test configFile="config_sycl/esimd_regression_bit_shift_compilation_test.xml" splitGroup="esimd" testName="esimd_regression_bit_shift_compilation_test" />
     <test configFile="config_sycl/esimd_regression_complex_lib_lin.xml" splitGroup="esimd" testName="esimd_regression_complex_lib_lin" />
     <test configFile="config_sycl/esimd_regression_copyto_char_test.xml" splitGroup="esimd" testName="esimd_regression_copyto_char_test" />
     <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
@@ -541,9 +544,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_dgetrf_ref.xml" splitGroup="double" testName="esimd_regression_dgetrf_ref" />
     <test configFile="config_sycl/esimd_regression_fmod_compatibility_test.xml" splitGroup="esimd" testName="esimd_regression_fmod_compatibility_test" />
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
+    <test configFile="config_sycl/esimd_regression_half_conversion_test.xml" splitGroup="esimd" testName="esimd_regression_half_conversion_test" />
     <test configFile="config_sycl/esimd_regression_noinline_bypointers_vadd.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
     <test configFile="config_sycl/esimd_regression_operator_decrement.xml" splitGroup="esimd" testName="esimd_regression_operator_decrement" />
     <test configFile="config_sycl/esimd_regression_replicate_bug.xml" splitGroup="esimd" testName="esimd_regression_replicate_bug" />
+    <test configFile="config_sycl/esimd_regression_rol_ror_compilation_test.xml" splitGroup="esimd" testName="esimd_regression_rol_ror_compilation_test" />
     <test configFile="config_sycl/esimd_regression_store_zero_const.xml" splitGroup="esimd" testName="esimd_regression_store_zero_const" />
     <test configFile="config_sycl/esimd_regression_unused_load.xml" splitGroup="esimd" testName="esimd_regression_unused_load" />
     <test configFile="config_sycl/esimd_regression_usm_gather_scatter_32.xml" splitGroup="esimd" testName="esimd_regression_usm_gather_scatter_32" />
@@ -672,6 +677,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/inorderqueue_in_order_usm_explicit.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_usm_explicit" />
     <test configFile="config_sycl/inorderqueue_in_order_usm_implicit.xml" splitGroup="inorderqueue" testName="inorderqueue_in_order_usm_implicit" />
     <test configFile="config_sycl/inorderqueue_prop.xml" splitGroup="inorderqueue" testName="inorderqueue_prop" />
+    <test configFile="config_sycl/invokesimd_invoke_simd_conv.xml" splitGroup="invokesimd" testName="invokesimd_invoke_simd_conv" />
+    <test configFile="config_sycl/invokesimd_invoke_simd_smoke.xml" splitGroup="invokesimd" testName="invokesimd_invoke_simd_smoke" />
     <test configFile="config_sycl/kernelandprogram_build_log.xml" splitGroup="kernelandprogram" testName="kernelandprogram_build_log" />
     <test configFile="config_sycl/kernelandprogram_cache_build_result.xml" splitGroup="kernelandprogram" testName="kernelandprogram_cache_build_result" />
     <test configFile="config_sycl/kernelandprogram_cache_env_vars.xml" splitGroup="kernelandprogram" testName="kernelandprogram_cache_env_vars" />
@@ -739,9 +746,12 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/plugin_level_zero_dynamic_batch_test.xml" splitGroup="plugin" testName="plugin_level_zero_dynamic_batch_test" />
     <test configFile="config_sycl/plugin_level_zero_eager_init.xml" splitGroup="plugin" testName="plugin_level_zero_eager_init" />
     <test configFile="config_sycl/plugin_level_zero_event_leak.xml" splitGroup="plugin" testName="plugin_level_zero_event_leak" />
+    <test configFile="config_sycl/plugin_level_zero_events_caching.xml" splitGroup="plugin" testName="plugin_level_zero_events_caching" />
+    <test configFile="config_sycl/plugin_level_zero_events_caching_leak.xml" splitGroup="plugin" testName="plugin_level_zero_events_caching_leak" />
     <test configFile="config_sycl/plugin_level_zero_imm_cmdlist.xml" splitGroup="plugin" testName="plugin_level_zero_imm_cmdlist" />
     <test configFile="config_sycl/plugin_level_zero_queue_create.xml" splitGroup="plugin" testName="plugin_level_zero_queue_create" />
     <test configFile="config_sycl/plugin_level_zero_queue_profiling.xml" splitGroup="plugin" testName="plugin_level_zero_queue_profiling" />
+    <test configFile="config_sycl/plugin_level_zero_sub_sub_device.xml" splitGroup="plugin" testName="plugin_level_zero_sub_sub_device" />
     <test configFile="config_sycl/plugin_level_zero_track_indirect_access_memory.xml" splitGroup="plugin" testName="plugin_level_zero_track_indirect_access_memory" />
     <test configFile="config_sycl/plugin_level_zero_usm_capabilities.xml" splitGroup="plugin" testName="plugin_level_zero_usm_capabilities" />
     <test configFile="config_sycl/plugin_level_zero_usm_device_read_only.xml" splitGroup="plugin" testName="plugin_level_zero_usm_device_read_only" />
@@ -802,6 +812,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/regression_commandlist_gpu.xml" splitGroup="double" testName="regression_commandlist_gpu" />
     <test configFile="config_sycl/regression_complex_global_object.xml" splitGroup="regression" testName="regression_complex_global_object" />
     <test configFile="config_sycl/regression_context_is_destroyed_after_exception.xml" splitGroup="regression" testName="regression_context_is_destroyed_after_exception" />
+    <test configFile="config_sycl/regression_dae_separate_compile.xml" splitGroup="regression" testName="regression_dae_separate_compile" />
     <test configFile="config_sycl/regression_device_num.xml" splitGroup="regression" testName="regression_device_num" />
     <test configFile="config_sycl/regression_device_pci_address_bdf_format.xml" splitGroup="regression" testName="regression_device_pci_address_bdf_format" />
     <test configFile="config_sycl/regression_dummy_event_info.xml" splitGroup="regression" testName="regression_dummy_event_info" />
