@@ -258,6 +258,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/config_kernel_from_file.xml" splitGroup="config" testName="config_kernel_from_file" />
     <test configFile="config_sycl/config_select_device.xml" splitGroup="config" testName="config_select_device" />
     <test configFile="config_sycl/deprecatedfeatures_deprecated.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_deprecated" />
+    <test configFile="config_sycl/deprecatedfeatures_deprecated_intel_ext_device.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_deprecated_intel_ext_device" />
     <test configFile="config_sycl/deprecatedfeatures_device_platform_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_device_platform_interop" />
     <test configFile="config_sycl/deprecatedfeatures_kernel_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_kernel_interop" />
     <test configFile="config_sycl/deprecatedfeatures_opencl_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_opencl_interop" />
@@ -446,6 +447,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u64" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u8.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u8" />
     <test configFile="config_sycl/esimd_lsc_lsc_fence.xml" splitGroup="esimd" testName="esimd_lsc_lsc_fence" />
+    <test configFile="config_sycl/esimd_lsc_lsc_predicate.xml" splitGroup="esimd" testName="esimd_lsc_lsc_predicate" />
+    <test configFile="config_sycl/esimd_lsc_lsc_predicate_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_predicate_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_load.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_load" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_store.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_store" />
@@ -456,6 +459,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u32" />
@@ -466,6 +470,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_2d.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_2d" />
@@ -473,6 +478,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u32" />
@@ -481,6 +487,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8u32" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot_spec.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot_spec" />
