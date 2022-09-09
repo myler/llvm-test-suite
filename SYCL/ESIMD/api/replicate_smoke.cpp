@@ -178,7 +178,10 @@ template <class T> bool test(queue q) {
 int main(int argc, char **argv) {
   queue q(esimd_test::ESIMDSelector{}, esimd_test::createExceptionHandler());
   auto dev = q.get_device();
+<<<<<<< HEAD
   const bool doublesSupported = dev.has(sycl::aspect::fp64);
+=======
+>>>>>>> be4717ca8 ([SYCL] Modify test for changing namespace for intel device info extensions (#1178))
   std::cout << "Running on " << dev.get_info<sycl::info::device::name>()
             << "\n";
   bool passed = true;
