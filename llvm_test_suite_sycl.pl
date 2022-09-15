@@ -697,7 +697,11 @@ sub set_tool_path
 
     # For the product compiler, add the internal "bin-llvm" directory to PATH.
     if ($compiler =~ /xmain/) {
-        my $llvm_dir = dirname(qx/icx -print-prog-name=llvm-ar/);
+        if ($cmplr_platform{OSFamily} eq "Windows") {
+          my $llvm_dir = dirname(qx/which llvm-ar/);
+        } else {
+          my $llvm_dir = dirname(qx/icx -print-prog-name=llvm-ar/);
+        }
         my $llvm_path = join($path_sep, $llvm_dir, $ENV{PATH});
         set_envvar("PATH", $llvm_path, join($path_sep, $llvm_dir, '$PATH'));
     }
@@ -819,12 +823,12 @@ sub generate_tool_path
     my $driver = shift;
     my $tool_name = shift;
 
-    my $tool_path = qx/$driver --print-prog-name=$tool_name/;
-    chomp $tool_path;
-
+    my $tool_path;
     if ($cmplr_platform{OSFamily} eq "Windows") {
-        $tool_path =~ tr#\\#/#;
-        $tool_path = "$tool_path.exe";
+        $tool_path = qx/which $tool_name/;
+    } else {
+        $tool_path = qx/$driver --print-prog-name=$tool_name/;
+        chomp $tool_path;
     }
 
     return $tool_path;
