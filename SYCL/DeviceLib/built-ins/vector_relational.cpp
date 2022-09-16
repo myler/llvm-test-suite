@@ -1,10 +1,6 @@
 // FIXME unsupported on windows (opencl and level-zero) until fix of libdevice
 // UNSUPPORTED: windows && (opencl || level_zero)
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
-<<<<<<< HEAD
-// RUN: env SYCL_DEVICE_TYPE=HOST %t.out
-=======
->>>>>>> 3794bb6e4 ([SYCL] Remove host run and dependencies from SYCL/DeviceLib tests (#1203))
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 // RUN: %ACC_RUN_PLACEHOLDER %t.out
