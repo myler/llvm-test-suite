@@ -162,7 +162,7 @@ sub init_test
         if (defined $ENV{BASECOMPILER}) {
           $compiler_path = $ENV{BASECOMPILER};
         } else {
-          $compiler_path = generate_tool_path("dpcpp", "clang++");
+          $compiler_path = generate_tool_path("icx", "clang++");
         }
 
         my $branch = "";
@@ -697,7 +697,13 @@ sub set_tool_path
 
     # For the product compiler, add the internal "bin-llvm" directory to PATH.
     if ($compiler =~ /xmain/) {
-        my $llvm_dir = dirname(qx/dpcpp -print-prog-name=llvm-ar/);
+        my $llvm_dir = "";
+        if ($cmplr_platform{OSFamily} eq "Windows") {
+          $llvm_dir = dirname(qx/which llvm-ar/);
+        } else {
+          $llvm_dir = dirname(qx/icx -print-prog-name=llvm-ar/);
+        }
+        chomp $llvm_dir;
         my $llvm_path = join($path_sep, $llvm_dir, $ENV{PATH});
         set_envvar("PATH", $llvm_path, join($path_sep, $llvm_dir, '$PATH'));
     }
@@ -819,13 +825,13 @@ sub generate_tool_path
     my $driver = shift;
     my $tool_name = shift;
 
-    my $tool_path = qx/$driver --print-prog-name=$tool_name/;
-    chomp $tool_path;
-
+    my $tool_path;
     if ($cmplr_platform{OSFamily} eq "Windows") {
-        $tool_path =~ tr#\\#/#;
-        $tool_path = "$tool_path.exe";
+        $tool_path = qx/which $tool_name/;
+    } else {
+        $tool_path = qx/$driver --print-prog-name=$tool_name/;
     }
+    chomp $tool_path;
 
     return $tool_path;
 }
@@ -857,10 +863,10 @@ sub run_cmake
         } else {
             $c_cmplr = "clang";
             $cpp_cmplr = 'clang++';
-            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # Clang is not guaranteed to be in PATH, but icx is. Ask icx
             # for absolute paths.
-            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
-            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
+            $c_cmplr = generate_tool_path("icx", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("icx", $cpp_cmplr);
             $c_cmd_opts = convert_opt($c_cmd_opts);
             $cpp_cmd_opts = convert_opt($cpp_cmd_opts);
         }
@@ -869,10 +875,10 @@ sub run_cmake
         $c_cmplr = "clang";
         if ($compiler =~ /xmain/) {
             $cpp_cmplr = "clang++";
-            # Clang is not guaranteed to be in PATH, but dpcpp is. Ask dpcpp
+            # Clang is not guaranteed to be in PATH, but icx is. Ask icx
             # for absolute paths.
-            $c_cmplr = generate_tool_path("dpcpp", $c_cmplr);
-            $cpp_cmplr = generate_tool_path("dpcpp", $cpp_cmplr);
+            $c_cmplr = generate_tool_path("icx", $c_cmplr);
+            $cpp_cmplr = generate_tool_path("icpx", $cpp_cmplr);
         }
         $thread_opts = "-lpthread";
     }
