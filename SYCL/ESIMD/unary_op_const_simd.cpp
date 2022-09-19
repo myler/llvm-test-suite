@@ -1,3 +1,4 @@
+// REQUIRES: gpu
 // RUN: %clangxx -fsycl -fsyntax-only -Xclang -verify %s
 // expected-no-diagnostics
 

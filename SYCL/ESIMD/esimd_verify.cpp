@@ -1,3 +1,4 @@
+// REQUIRES: gpu
 // RUN: not %clangxx -fsycl -fsycl-device-only %s 2>&1 | FileCheck %s
 
 #include <sycl/ext/intel/esimd.hpp>
