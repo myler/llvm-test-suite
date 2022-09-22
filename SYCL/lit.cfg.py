@@ -191,10 +191,14 @@ config.substitutions.append( ('%opencl_include_dir',  config.opencl_include_dir)
 
 if cl_options:
 <<<<<<< HEAD
+<<<<<<< HEAD
     config.substitutions.append( ('%sycl_options',  ' ' + config.sycl_libs_dir + '/../lib/sycl6.lib /I' +
 =======
     config.substitutions.append( ('%sycl_options',  ' ' + config.sycl_libs_dir + '/../lib/sycl5.lib /I' +
 >>>>>>> 3bac74f7e ([SYCL] Add MAJOR_VERSION to the name of the sycl library on Win (#1237))
+=======
+    config.substitutions.append( ('%sycl_options',  ' ' + config.sycl_libs_dir + '/../lib/sycl6.lib /I' +
+>>>>>>> 87f890df4 (Update version of sycl library on Win (#1285))
                                 config.sycl_include + ' /I' + os.path.join(config.sycl_include, 'sycl')) )
     config.substitutions.append( ('%include_option',  '/FI' ) )
     config.substitutions.append( ('%debug_option',  '/DEBUG' ) )
