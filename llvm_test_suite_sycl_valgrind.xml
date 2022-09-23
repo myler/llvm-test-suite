@@ -262,7 +262,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/deprecatedfeatures_kernel_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_kernel_interop" />
     <test configFile="config_sycl/deprecatedfeatures_opencl_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_opencl_interop" />
     <test configFile="config_sycl/deprecatedfeatures_platform.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_platform" />
-    <test configFile="config_sycl/deprecatedfeatures_program_merge_options_env.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_program_merge_options_env" />
     <test configFile="config_sycl/deprecatedfeatures_queue_old_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_queue_old_interop" />
     <test configFile="config_sycl/deprecatedfeatures_sampler_ocl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_sampler_ocl" />
     <test configFile="config_sycl/deprecatedfeatures_set_arg_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_set_arg_interop" />
