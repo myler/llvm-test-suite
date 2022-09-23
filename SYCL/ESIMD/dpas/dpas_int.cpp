@@ -25,14 +25,22 @@ int main(int argc, const char *argv[]) {
   Passed &= tests<8, 4, u2, u2>(Q, Print);
   // TODO: enable this case when the problem with simd constructor
   // is resolved.
+<<<<<<< HEAD
    Passed &= tests<8, 3, u2, u2>(Q, Print);
+=======
+  // Passed &= tests<8, 3, u2, u2>(Q, Print);
+>>>>>>> 78be3ae16 ([ESIMD] Add tests for new esimd::xmx:dpas API (#1281))
   Passed &= tests<8, 1, u2, u2>(Q, Print);
 
   // Test signed 2-bit integers.
   Passed &= tests<8, 8, s2, s2>(Q, Print);
   // TODO: enable this case when the problem with simd constructor
   // is resolved.
+<<<<<<< HEAD
    Passed &= tests<8, 5, s2, s2>(Q, Print);
+=======
+  // Passed &= tests<8, 5, s2, s2>(Q, Print);
+>>>>>>> 78be3ae16 ([ESIMD] Add tests for new esimd::xmx:dpas API (#1281))
   Passed &= tests<8, 2, s2, s2>(Q, Print);
   Passed &= tests<8, 1, s2, s2>(Q, Print);
 

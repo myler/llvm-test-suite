@@ -317,10 +317,17 @@ bool test(queue &Q, bool Print) {
   auto BPacked = aligned_alloc_shared<BNaturalType>(128, BPackedSize, Q);
   auto Res = aligned_alloc_shared<ResNaturalType>(128, M * N, Q);
   // Init APacked;
+<<<<<<< HEAD
   int Value = 1;
   for (int II = 0; II < M; II++) {
     for (int JJ = 0; JJ < K; JJ++) {
       //Value++;
+=======
+  int Value = 0;
+  for (int II = 0; II < M; II++) {
+    for (int JJ = 0; JJ < K; JJ++) {
+      Value++;
+>>>>>>> 78be3ae16 ([ESIMD] Add tests for new esimd::xmx:dpas API (#1281))
       writeToHorizontallyPackedMatrix<M, K, APrec>(
           APacked, II, JJ, static_cast<ANaturalType>(Value));
     }
@@ -331,8 +338,12 @@ bool test(queue &Q, bool Print) {
   // Init BPacked;
   for (int II = 0; II < K; II++) {
     for (int JJ = 0; JJ < N; JJ++) {
+<<<<<<< HEAD
       //int Value = (II + JJ % 4) == 0 ? 1 : (2 + II + JJ) % 3;
       int Value = 2.5;
+=======
+      int Value = (II + JJ % 4) == 0 ? 1 : (2 + II + JJ) % 3;
+>>>>>>> 78be3ae16 ([ESIMD] Add tests for new esimd::xmx:dpas API (#1281))
       writeToVerticallyPackedMatrix<K, N, BPrec>(
           BPacked, II, JJ, static_cast<BNaturalType>(Value));
       assert(Value == (int)(static_cast<BNaturalType>(Value)) && "ERROR");
