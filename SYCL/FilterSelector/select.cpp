@@ -1,5 +1,4 @@
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t1.out
-// RUN: %HOST_RUN_PLACEHOLDER %t1.out
 // RUN: %CPU_RUN_PLACEHOLDER %t1.out
 // RUN: %GPU_RUN_PLACEHOLDER %t1.out
 // RUN: %ACC_RUN_PLACEHOLDER %t1.out
@@ -23,7 +22,6 @@ int main() {
   std::vector<device> GPUs;
   std::vector<device> Accels;
   std::vector<device> Devs;
-  device host;
 
   CPUs = device::get_devices(info::device_type::cpu);
   GPUs = device::get_devices(info::device_type::gpu);
