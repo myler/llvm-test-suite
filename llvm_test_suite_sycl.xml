@@ -398,6 +398,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_bitonicsortk.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/esimd_bitonicsortkv2.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/esimd_dp4a.xml" splitGroup="esimd" testName="esimd_dp4a" />
+    <test configFile="config_sycl/esimd_dpas_dpas_fp16.xml" splitGroup="esimd" testName="esimd_dpas_dpas_fp16" />
+    <test configFile="config_sycl/esimd_dpas_dpas_int.xml" splitGroup="esimd" testName="esimd_dpas_dpas_int" />
     <test configFile="config_sycl/esimd_dpas_dpas_test1.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test1" />
     <test configFile="config_sycl/esimd_dpas_dpas_test2.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test2" />
     <test configFile="config_sycl/esimd_dpas_dpas_test3.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test3" />
