@@ -2526,7 +2526,5 @@
     <test testName="singlesource_unittests_vectorizer_recurrences" configFile="config/TEMPLATE_llvm_test_suite.xml" />
     <test testName="singlesource_unittests_vectorizer_runtime_checks" configFile="config/TEMPLATE_llvm_test_suite.xml" />
     <test testName="singlesource_unittests_vla" configFile="config/TEMPLATE_llvm_test_suite.xml" />
-    <test testName="esimd_dpas_dpas_fp16" configFile="SYCL/ESIMD/dpas/config/esimd_dpas_dpas_fp16.xml" />
-    <test testName="esimd_dpas_dpas_int" configFile="SYCL/ESIMD/dpas/config/esimd_dpas_dpas_int.xml" />
   </tests>
 </suite>
