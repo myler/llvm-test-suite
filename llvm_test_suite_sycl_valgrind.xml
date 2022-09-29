@@ -556,6 +556,9 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_vadd_half.xml" splitGroup="esimd" testName="esimd_vadd_half" />
     <test configFile="config_sycl/esimd_vadd_raw_send.xml" splitGroup="esimd" testName="esimd_vadd_raw_send" />
     <test configFile="config_sycl/esimd_vadd_usm.xml" splitGroup="esimd" testName="esimd_vadd_usm" />
+    <test configFile="config_sycl/esimd_vadd_usm_opqptr.xml" splitGroup="esimd" testName="esimd_vadd_usm_opqptr" />
+    <test configFile="config_sycl/esimd_vec_arg_call_conv_ext.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_ext" />
+    <test configFile="config_sycl/esimd_vec_arg_call_conv_smoke.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_smoke" />
     <test configFile="config_sycl/filterselector_filter_list_cpu_gpu_acc.xml" splitGroup="filterselector" testName="filterselector_filter_list_cpu_gpu_acc" />
     <test configFile="config_sycl/filterselector_reuse.xml" splitGroup="filterselector" testName="filterselector_reuse" />
     <test configFile="config_sycl/filterselector_select.xml" splitGroup="filterselector" testName="filterselector_select" />
