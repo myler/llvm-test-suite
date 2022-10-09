@@ -103,6 +103,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_bitonicsortk.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/esimd_bitonicsortkv2.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/esimd_dp4a.xml" splitGroup="esimd" testName="esimd_dp4a" />
+    <test configFile="config_sycl/esimd_dpas_dpas_bf16.xml" splitGroup="esimd" testName="esimd_dpas_dpas_bf16" />
     <test configFile="config_sycl/esimd_dpas_dpas_fp16.xml" splitGroup="esimd" testName="esimd_dpas_dpas_fp16" />
     <test configFile="config_sycl/esimd_dpas_dpas_int.xml" splitGroup="esimd" testName="esimd_dpas_dpas_int" />
     <test configFile="config_sycl/esimd_dpas_dpas_test1.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test1" />
@@ -220,6 +221,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_private_memory_pm_access_1.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_1" />
     <test configFile="config_sycl/esimd_private_memory_pm_access_2.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_2" />
     <test configFile="config_sycl/esimd_private_memory_pm_access_3.xml" splitGroup="esimd" testName="esimd_private_memory_pm_access_3" />
+    <test configFile="config_sycl/esimd_radix_sort.xml" splitGroup="esimd" testName="esimd_radix_sort" />
     <test configFile="config_sycl/esimd_reduction.xml" splitGroup="esimd" testName="esimd_reduction" />
     <test configFile="config_sycl/esimd_regression_abs_fix_test.xml" splitGroup="esimd" testName="esimd_regression_abs_fix_test" />
     <test configFile="config_sycl/esimd_regression_big_const_initializer.xml" splitGroup="esimd" testName="esimd_regression_big_const_initializer" />
@@ -229,6 +231,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_dgetrf.xml" splitGroup="double" testName="esimd_regression_dgetrf" />
     <test configFile="config_sycl/esimd_regression_dgetrf_8x8.xml" splitGroup="double" testName="esimd_regression_dgetrf_8x8" />
     <test configFile="config_sycl/esimd_regression_dgetrf_ref.xml" splitGroup="double" testName="esimd_regression_dgetrf_ref" />
+    <test configFile="config_sycl/esimd_regression_double_conversion.xml" splitGroup="esimd" testName="esimd_regression_double_conversion" />
     <test configFile="config_sycl/esimd_regression_fmod_compatibility_test.xml" splitGroup="esimd" testName="esimd_regression_fmod_compatibility_test" />
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
     <test configFile="config_sycl/esimd_regression_half_conversion_test.xml" splitGroup="esimd" testName="esimd_regression_half_conversion_test" />
@@ -267,5 +270,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_vadd_half.xml" splitGroup="esimd" testName="esimd_vadd_half" />
     <test configFile="config_sycl/esimd_vadd_raw_send.xml" splitGroup="esimd" testName="esimd_vadd_raw_send" />
     <test configFile="config_sycl/esimd_vadd_usm.xml" splitGroup="esimd" testName="esimd_vadd_usm" />
+    <test configFile="config_sycl/esimd_vadd_usm_opqptr.xml" splitGroup="esimd" testName="esimd_vadd_usm_opqptr" />
+    <test configFile="config_sycl/esimd_vec_arg_call_conv_ext.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_ext" />
+    <test configFile="config_sycl/esimd_vec_arg_call_conv_smoke.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_smoke" />
   </tests>
 </suite>
