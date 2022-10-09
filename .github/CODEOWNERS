@@ -94,14 +94,5 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
 /SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
 
-<<<<<<< HEAD
-=======
-# Printf
-/SYCL/Printf/ @intel/dpcpp-tools-reviewers
-
-# Specialization constant
-/SYCL/SpecConstants/ @intel/dpcpp-tools-reviewers
-
 # invoke_simd
 /SYCL/InvokeSimd/ @rolandschulz @kbobrovs
->>>>>>> f3a885bb4 ([SYCL] Assign code owners for SYCL/InvokeSimd tests. (#1239))

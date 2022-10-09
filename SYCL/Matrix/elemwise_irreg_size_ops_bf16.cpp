@@ -7,13 +7,7 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: matrix
 
-<<<<<<< HEAD
-// 'LINK' environment is used to set additional flags for MS linker, set stack
-// size to 8MB to avoid stack overflow issue on windows.
-// RUN: env LINK=-stack:0x800000 %clangxx -fsycl %s -o %t.out -DSYCL_EXT_ONEAPI_MATRIX=1
-=======
 // RUN: %clangxx -fsycl %s -o %t.out -DSYCL_EXT_ONEAPI_MATRIX=1
->>>>>>> 25c9aadea ([SYCL] Set the feature macro to use the non-use matrix API (#1292))
 // This test is for element wise operations when matrix size does not multiply
 // SG size. This corner case only applies to AMX. Also, it tests bf16 type.
 // only run this on AMX
