@@ -171,7 +171,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_free_function_queries_free_function_queries.xml" splitGroup="basic" testName="basic_free_function_queries_free_function_queries" />
     <test configFile="config_sycl/basic_free_function_queries_free_function_queries_sub_group.xml" splitGroup="basic" testName="basic_free_function_queries_free_function_queries_sub_group" />
     <test configFile="config_sycl/basic_get_backend.xml" splitGroup="basic" testName="basic_get_backend" />
-    <test configFile="config_sycl/basic_get_nonhost_devices.xml" splitGroup="basic" testName="basic_get_nonhost_devices" />
     <test configFile="config_sycl/basic_group_async_copy.xml" splitGroup="basic" testName="basic_group_async_copy" />
     <test configFile="config_sycl/basic_group_local_id.xml" splitGroup="basic" testName="basic_group_local_id" />
     <test configFile="config_sycl/basic_half_builtins.xml" splitGroup="basic" testName="basic_half_builtins" />
@@ -182,7 +181,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_handler_interop_task.xml" splitGroup="basic" testName="basic_handler_interop_task" />
     <test configFile="config_sycl/basic_handler_run_on_host_intel.xml" splitGroup="basic" testName="basic_handler_run_on_host_intel" />
     <test configFile="config_sycl/basic_handler_run_on_host_intel2.xml" splitGroup="basic" testName="basic_handler_run_on_host_intel2" />
-    <test configFile="config_sycl/basic_host_platform_avail.xml" splitGroup="basic" testName="basic_host_platform_avail" />
     <test configFile="config_sycl/basic_host_task_dependency.xml" splitGroup="basic" testName="basic_host_task_dependency" />
     <test configFile="config_sycl/basic_image_image.xml" splitGroup="basic" testName="basic_image_image" />
     <test configFile="config_sycl/basic_image_image_accessor_range.xml" splitGroup="basic" testName="basic_image_image_accessor_range" />
