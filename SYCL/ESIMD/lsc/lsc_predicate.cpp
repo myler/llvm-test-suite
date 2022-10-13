@@ -145,10 +145,14 @@ int main() {
   queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   auto q =
       queue{esimd_test::ESIMDSelector, esimd_test::createExceptionHandler()};
 >>>>>>> 907a49b6f ([SYCL] updating device selectors (#1160))
+=======
+  queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
+>>>>>>> da119bf03 ([SYCL][ESIMD] Fix lsc predicate test that failed on PVC hardware (#1315))
   auto device = q.get_device();
   std::cout << "Device name: " << device.get_info<info::device::name>()
             << std::endl;
