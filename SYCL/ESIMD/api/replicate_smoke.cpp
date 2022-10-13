@@ -189,7 +189,8 @@ int main(int argc, char **argv) {
   passed &= test<short>(q);
   passed &= test<unsigned short>(q);
   passed &= test<int>(q);
-  passed &= test<uint64_t>(q);
+  // TODO: disabled due to CMPLRLLVM-40909
+  //passed &= test<uint64_t>(q);
   passed &= test<float>(q);
   if (doublesSupported)
     passed &= test<double>(q);
