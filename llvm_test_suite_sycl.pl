@@ -292,7 +292,7 @@ sub init_test
 
     if ($current_suite =~ /valgrind/) {
       safe_Mkdir('-p',$valgrind_dir);
-      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --log-file=$valgrind_dir/v.$current_test.%%p.log";
+      $insert_command = "$ENV{INFO_RDRIVE}/ref/valgrind/v3.16.0/efi2/bin/valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --log-file=$valgrind_dir/v.$current_test.%%p.log";
     }
 
     return PASS;
