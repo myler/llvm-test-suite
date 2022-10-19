@@ -30,6 +30,7 @@ int main(int, char **) {
   sycl::queue queue(esimd_test::ESIMDSelector{},
                     esimd_test::createExceptionHandler());
 
+<<<<<<< HEAD
   sycl::device device = queue.get_device();
   // verify aspect::fp16 due to using sycl::half data type
   // verify aspect::fp64 due to using double data type
@@ -40,6 +41,8 @@ int main(int, char **) {
 
   bool passed = true;
 
+=======
+>>>>>>> target/xmain-cand
   const auto types = get_tested_types<tested_types::core>();
   const auto sizes = get_all_sizes();
   const auto contexts =
@@ -47,7 +50,7 @@ int main(int, char **) {
                         ctors::rval_in_expr, ctors::const_ref>::generate();
 
   // Run test for all combinations possible
-  passed &=
+  bool passed =
       for_all_combinations<ctors::run_test>(types, sizes, contexts, queue);
 
   std::cout << (passed ? "=== Test passed\n" : "=== Test FAILED\n");

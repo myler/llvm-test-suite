@@ -94,3 +94,5 @@ SYCL/XPTI @intel/llvm-reviewers-runtime
 /SYCL/DeviceCodeSplit/ @intel/dpcpp-tools-reviewers
 /SYCL/SeparateCompile/ @intel/dpcpp-tools-reviewers
 
+# invoke_simd
+/SYCL/InvokeSimd/ @rolandschulz @kbobrovs
