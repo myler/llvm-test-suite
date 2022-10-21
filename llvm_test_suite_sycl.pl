@@ -848,10 +848,10 @@ sub run_cmake
     my $thread_opts = '';
     my $gpu_aot_target_opts = '';
 
+    $c_cmplr .= " $c_flags";
+    $cpp_cmplr .= " $cpp_flags";
     ($c_cmplr, $c_cmd_opts) = remove_opt($c_cmplr);
     ($cpp_cmplr, $cpp_cmd_opts) = remove_opt($cpp_cmplr);
-    $c_cmd_opts .= $c_flags;
-    $cpp_cmd_opts .= $cpp_flags;
 
     if ($cmplr_platform{OSFamily} eq "Windows") {
     # Windows
@@ -1041,6 +1041,8 @@ sub remove_opt
         $cmd_opts =~ s/-fsycl-unnamed-lambda$|-fsycl-unnamed-lambda\s{1,}//;
         # Remove "/EHsc" since it's not supported by clang/clang++
         $cmd_opts =~ s/\/EHsc$|\/EHsc\s{1,}//;
+        # Remove "/F 2097152" when running opt_use_cpu_O0 since it's not supported by clang/clang++
+        $cmd_opts =~ s/\/F\s*\d+//;
     } else {
         $cmplr = $cmplr_info;
     }
