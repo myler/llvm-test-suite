@@ -738,7 +738,7 @@ sub generate_run_result
     return $SKIP if ($current_optset =~ m/opt_use_esimd_emu/ and $current_test !~ m/^esimd_/);
 
     for my $line (split /^/, $output){
-      if ($line =~ m/^(.*): SYCL :: \Q$short_test_name\E \(.*\)/) {
+      if ($line =~ m/^(.*): SYCL :: (ESIMD\/)?\Q$short_test_name\E \(.*\)/) {
         $result = $1;
         if ($result =~ m/^PASS/ or $result =~ m/^XFAIL/) {
           # Expected PASS and Expected FAIL
