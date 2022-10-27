@@ -19,7 +19,7 @@ template <typename T = dataType> struct KernelFunctor : WithOutputBuffer<T> {
             cgh);
     cgh.parallel_for<KernelFunctor<T>>(
         sycl::range<1>{this->getOutputBufferSize()},
-        [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
+        [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
           C[wiID] = 43;
 #if defined(__SYCL_DEVICE_ONLY__)
           asm volatile("");
