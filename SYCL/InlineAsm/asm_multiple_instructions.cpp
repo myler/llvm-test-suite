@@ -36,7 +36,7 @@ struct KernelFunctor : WithInputBuffers<T, 3>, WithOutputBuffer<T> {
 
     cgh.parallel_for<KernelFunctor<T>>(
         sycl::range<1>{this->getOutputBufferSize()},
-        [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(8)]] {
+        [=](sycl::id<1> wiID) [[intel::reqd_sub_group_size(16)]] {
 #if defined(TO_PASS)
           // The code below passing verification
           volatile int output = -1;
