@@ -7,6 +7,8 @@
 //===----------------------------------------------------------------------===//
 // Intel GPU is not really required, but the test does not make sense for
 // others.
+// CMPLRTOOLS-28055: Disable for release compiler (Xmain and Xmain-rel)
+// REQUIRES: TEMPORARILY_DISABLED
 // REQUIRES: gpu
 // UNSUPPORTED: cuda || hip
 // RUN: %clangxx -fsycl -Xclang -opaque-pointers -fsycl-device-only -Xclang -emit-llvm -o %t.comp.ll %s
