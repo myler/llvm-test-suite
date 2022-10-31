@@ -622,7 +622,7 @@ sub do_run
       my $sycl2020_non_aspect_features = "";
 
       # CPU features
-      if ( has_amx() {
+      if ( has_amx() ) {
         $matrix = "-Dmatrix=1";
         $cpu_opts .= " -Damx=1 ";
       }
