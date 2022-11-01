@@ -121,8 +121,14 @@ if lit_config.params.get('gpu-intel-ats', False):
 if lit_config.params.get('matrix', False):
     config.available_features.add('matrix')
 
-if lit_config.params.get('matrix-pvc', False):
-    config.available_features.add('matrix-pvc')
+if lit_config.params.get('matrix-xmx8', False):
+    config.available_features.add('matrix-xmx8')
+
+if lit_config.params.get('amx', False):
+    config.available_features.add('amx')
+
+if lit_config.params.get('spr', False):
+    config.available_features.add('spr')
 
 #support for LIT parameter ze_debug<num>
 if lit_config.params.get('ze_debug'):

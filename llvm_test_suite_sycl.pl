@@ -35,6 +35,26 @@ my $os_platform = is_windows() ? "windows" : "linux";
 my $build_dir = "$optset_work_dir/build";
 my $lit = "../lit/lit.py";
 
+sub cpu {
+  my $cpus = shift;
+  $cpus = [ $cpus ] if ref($cpus) ne "ARRAY";
+  my $current_cpu = $ENV{'CURRENT_CPU_DEVICE'};
+  if (!defined $current_cpu) {
+    my @avaliable_cpu_names = get_cpu_name();
+    foreach my $cpu (@{$cpus}) {
+      return 1 if (grep(/$cpu/i, @avaliable_cpu_names));
+    }
+    return 0;
+  } else {
+    $current_cpu =~ tr/,//d; # e.g. skx/clx/adl/spr
+    if (grep(/$current_cpu/i, @{$cpus})) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
+
 sub gpu {
   my $gpus = shift;
   $gpus = [ $gpus ] if ref($gpus) ne "ARRAY";
@@ -596,21 +616,37 @@ sub do_run
       my $matrix = "";
       my $jobset = "-j 8";
       my $zedebug = "";
+      my $cpu_opts = "";
       my $gpu_opts = "";
       my $sycl2020_aspects = "";
       my $sycl2020_non_aspect_features = "";
 
+      # CPU features
+      if ( has_amx() ) {
+        $matrix = "-Dmatrix=1";
+        $cpu_opts .= " -Damx=1 ";
+      }
+
+      # CPU codename
+      if ( is_spr() ) { # Sapphire Rapids
+        $matrix = "-Dmatrix=1";
+        $cpu_opts .= " -Dspr=1 ";
+      }
+
+      # GPU features
+
+      # GPU codename
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
-        $matrix = "-Dmatrix=1";
+        $matrix = "-Dmatrix-xmx8=1";
         $jobset = "-j 1";
       } elsif ( is_pvc() ) {
-        $matrix = "-Dmatrix-pvc=1";
+        $matrix = "-Dmatrix=1";
         $timeset = "--timeout 1800";
         $jobset = "";
       }
 
-      if ($current_optset =~ m/_spr$/) {
+      if ($current_optset =~ m/_spr$/) { # spr sde
         $matrix = "-Dmatrix=1";
       }
 
@@ -674,9 +710,9 @@ sub do_run
 
       set_tool_path();
       if ($is_dynamic_suite == 1 or is_suite()) {
-        execute("$python $lit -a $backward_compatibility_opts $sycl2020_aspects $sycl2020_non_aspect_features $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
+        execute("$python $lit -a $backward_compatibility_opts $sycl2020_aspects $sycl2020_non_aspect_features $cpu_opts $gpu_opts $matrix $zedebug $jobset . $timeset > $run_all_lf 2>&1");
       } else {
-        execute("$python $lit -a $sycl2020_aspects $sycl2020_non_aspect_features $gpu_opts $matrix $zedebug $path $timeset");
+        execute("$python $lit -a $sycl2020_aspects $sycl2020_non_aspect_features $cpu_opts $gpu_opts $matrix $zedebug $path $timeset");
       }
     }
 
@@ -1141,6 +1177,14 @@ sub is_ats {
 
 sub is_pvc {
     return gpu("pvc");
+}
+
+sub is_spr {
+    return cpu("spr");
+}
+
+sub has_amx {
+    return is_spr();
 }
 
 sub append2file
