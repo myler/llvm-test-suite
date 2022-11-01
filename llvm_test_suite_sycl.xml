@@ -446,6 +446,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u64" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_store_u8.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_store_u8" />
     <test configFile="config_sycl/esimd_lsc_lsc_fence.xml" splitGroup="esimd" testName="esimd_lsc_lsc_fence" />
+    <test configFile="config_sycl/esimd_lsc_lsc_predicate.xml" splitGroup="esimd" testName="esimd_lsc_lsc_predicate" />
+    <test configFile="config_sycl/esimd_lsc_lsc_predicate_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_predicate_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_load.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_load" />
     <test configFile="config_sycl/esimd_lsc_lsc_slm_block_store.xml" splitGroup="esimd" testName="esimd_lsc_lsc_slm_block_store" />
@@ -456,6 +458,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u32" />
@@ -466,6 +469,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_2d.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_2d" />
@@ -473,6 +477,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u32" />
@@ -481,6 +486,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8u32" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot_spec.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot_spec" />
@@ -691,12 +697,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_joint_matrix_tensorcore.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcore" />
     <test configFile="config_sycl/matrix_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_us_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_uu_int8" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_bf16_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_bf16_pvc" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_half_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_half_pvc" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_ss_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_ss_int8_pvc" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_su_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_su_int8_pvc" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_us_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_us_int8_pvc" />
-    <test configFile="config_sycl/matrix_pvc_joint_matrix_uu_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_uu_int8_pvc" />
     <test configFile="config_sycl/onlinecompiler_online_compiler_l0.xml" splitGroup="onlinecompiler" testName="onlinecompiler_online_compiler_l0" />
     <test configFile="config_sycl/onlinecompiler_online_compiler_opencl.xml" splitGroup="onlinecompiler" testName="onlinecompiler_online_compiler_opencl" />
     <test configFile="config_sycl/pdb_sycl.xml" splitGroup="pdb" testName="pdb_sycl" />
