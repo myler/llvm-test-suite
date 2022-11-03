@@ -1172,7 +1172,7 @@ sub print2file
 }
 
 sub is_ats {
-    return gpu("ats");
+    return gpu(["ats", "atsm"]);
 }
 
 sub is_pvc {
