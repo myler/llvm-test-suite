@@ -26,8 +26,6 @@ using namespace sycl;
 
 namespace esimd_test {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 // This is the function provided to SYCL runtime by the application to decide
 // on which device to run, or whether to run at all.
 // When selecting a device, SYCL runtime first takes (1) a selector provided by
@@ -50,38 +48,6 @@ inline int ESIMDSelector(const device &device) {
   } else {
     return -1;
   }
-=======
-// This is function provided to SYCL runtime by the application to decide
-=======
-// This is the function provided to SYCL runtime by the application to decide
->>>>>>> 87a75bdb2 ([SYCL] Change library loading and fix esimd selector function (#1312))
-// on which device to run, or whether to run at all.
-// When selecting a device, SYCL runtime first takes (1) a selector provided by
-// the program or a default one and (2) the set of all available devices. Then
-// it passes each device to the '()' operator of the selector. Device, for
-// which '()' returned the highest number, is selected. If a negative number
-// was returned for all devices, then the selection process will cause an
-// exception.
-// Require GPU device
-inline int ESIMDSelector(const device &device) {
-  const std::string intel{"Intel(R) Corporation"};
-  if (device.get_backend() == backend::ext_intel_esimd_emulator) {
-    return 1000;
-  } else if (device.is_gpu() &&
-             (device.get_info<info::device::vendor>() == intel)) {
-    // pick gpu device if esimd not available but give it a lower score in
-    // order not to compete with the esimd in environments where both are
-    // present
-    return 900;
-  } else {
-    return -1;
-  }
-<<<<<<< HEAD
-  // If "SYCL_DEVICE_FILTER" not defined, only allow gpu device
-  return device.is_gpu() ? 1000 : -1;
->>>>>>> 907a49b6f ([SYCL] updating device selectors (#1160))
-=======
->>>>>>> 87a75bdb2 ([SYCL] Change library loading and fix esimd selector function (#1312))
 }
 
 inline auto createExceptionHandler() {

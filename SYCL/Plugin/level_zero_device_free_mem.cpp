@@ -1,9 +1,6 @@
-// REQUIRES: level_zero, level_zero_dev_kit
-<<<<<<< HEAD
+YCL/lit.cfg.py
+
 // UNSUPPORTED: gpu-intel-gen9, gpu-intel-gen12
-=======
-// UNSUPPORTED: gpu-intel-gen9
->>>>>>> 7dd12a2f6 ([SYCL][L0] The query of free memory is not supported on integrated GPU (#1335))
 // The query of free memory is not supported on integrated devices
 //
 // RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %level_zero_options %s -o %t.out

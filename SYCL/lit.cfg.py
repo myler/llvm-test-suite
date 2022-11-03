@@ -124,15 +124,12 @@ if lit_config.params.get('matrix', False):
 if lit_config.params.get('matrix-xmx8', False):
     config.available_features.add('matrix-xmx8')
 
-<<<<<<< HEAD
 if lit_config.params.get('amx', False):
     config.available_features.add('amx')
 
 if lit_config.params.get('spr', False):
     config.available_features.add('spr')
 
-=======
->>>>>>> 4c376201f (add matrix-xmx8 feature config for XMX8 tests (#1349))
 #support for LIT parameter ze_debug<num>
 if lit_config.params.get('ze_debug'):
     config.ze_debug = lit_config.params.get('ze_debug')
