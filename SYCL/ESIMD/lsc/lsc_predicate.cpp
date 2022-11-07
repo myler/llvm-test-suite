@@ -142,8 +142,8 @@ template <unsigned SIMDSize> int testUSM(queue q) {
 }
 
 int main() {
-  queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
 
+  queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
   auto device = q.get_device();
   std::cout << "Device name: " << device.get_info<info::device::name>()
             << std::endl;

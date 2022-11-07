@@ -239,6 +239,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_stream_stream.xml" splitGroup="double" testName="basic_stream_stream" />
     <test configFile="config_sycl/basic_stream_stream_copies_buffer_sync.xml" splitGroup="basic" testName="basic_stream_stream_copies_buffer_sync" />
     <test configFile="config_sycl/basic_stream_stream_max_stmt_exceed.xml" splitGroup="basic" testName="basic_stream_stream_max_stmt_exceed" />
+    <test configFile="config_sycl/basic_sub_group_size_prop.xml" splitGroup="basic" testName="basic_sub_group_size_prop" />
     <test configFile="config_sycl/basic_subdevice.xml" splitGroup="basic" testName="basic_subdevice" />
     <test configFile="config_sycl/basic_subdevice_pi.xml" splitGroup="basic" testName="basic_subdevice_pi" />
     <test configFile="config_sycl/basic_submit_barrier.xml" splitGroup="basic" testName="basic_submit_barrier" />
@@ -249,6 +250,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_use_pinned_host_memory.xml" splitGroup="basic" testName="basic_use_pinned_host_memory" />
     <test configFile="config_sycl/basic_vector_byte.xml" splitGroup="basic" testName="basic_vector_byte" />
     <test configFile="config_sycl/basic_vector_operators.xml" splitGroup="basic" testName="basic_vector_operators" />
+    <test configFile="config_sycl/basic_work_group_size_prop.xml" splitGroup="basic" testName="basic_work_group_size_prop" />
     <test configFile="config_sycl/basic_wrapped_usm_pointers.xml" splitGroup="basic" testName="basic_wrapped_usm_pointers" />
     <test configFile="config_sycl/bfloat16_bfloat16_builtins.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_builtins" />
     <test configFile="config_sycl/bfloat16_bfloat16_type.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_type" />
@@ -274,9 +276,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/deprecatedfeatures_sampler_ocl.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_sampler_ocl" />
     <test configFile="config_sycl/deprecatedfeatures_set_arg_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_set_arg_interop" />
     <test configFile="config_sycl/deprecatedfeatures_subbuffer_interop.xml" splitGroup="deprecatedfeatures" testName="deprecatedfeatures_subbuffer_interop" />
+    <test configFile="config_sycl/devicearchitecture_device_architecture.xml" splitGroup="devicearchitecture" testName="devicearchitecture_device_architecture" />
     <test configFile="config_sycl/devicecodesplit_aot_accelerator.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_accelerator" />
     <test configFile="config_sycl/devicecodesplit_aot_cpu.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_cpu" />
     <test configFile="config_sycl/devicecodesplit_aot_gpu.xml" splitGroup="devicecodesplit" testName="devicecodesplit_aot_gpu" />
+    <test configFile="config_sycl/devicecodesplit_double_grf.xml" splitGroup="devicecodesplit" testName="devicecodesplit_double_grf" />
     <test configFile="config_sycl/devicecodesplit_split_per_kernel.xml" splitGroup="devicecodesplit" testName="devicecodesplit_split_per_kernel" />
     <test configFile="config_sycl/devicecodesplit_split_per_source_main.xml" splitGroup="devicecodesplit" testName="devicecodesplit_split_per_source_main" />
     <test configFile="config_sycl/deviceglobal_device_global_arrow.xml" splitGroup="deviceglobal" testName="deviceglobal_device_global_arrow" />
@@ -388,36 +392,42 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_api_functional_operators_operator_decrement_and_increment_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_operators_operator_decrement_and_increment_fp_extra" />
     <test configFile="config_sycl/esimd_api_functional_operators_operator_logical_not.xml" splitGroup="esimd" testName="esimd_api_functional_operators_operator_logical_not" />
     <test configFile="config_sycl/esimd_api_replicate_smoke.xml" splitGroup="double" testName="esimd_api_replicate_smoke" />
+    <test configFile="config_sycl/esimd_api_replicate_smoke_pvc.xml" splitGroup="esimd" testName="esimd_api_replicate_smoke_pvc" />
     <test configFile="config_sycl/esimd_api_saturation_smoke.xml" splitGroup="double" testName="esimd_api_saturation_smoke" />
     <test configFile="config_sycl/esimd_api_simd_any_all.xml" splitGroup="esimd" testName="esimd_api_simd_any_all" />
     <test configFile="config_sycl/esimd_api_simd_binop_integer_promotion.xml" splitGroup="esimd" testName="esimd_api_simd_binop_integer_promotion" />
     <test configFile="config_sycl/esimd_api_simd_copy_to_from.xml" splitGroup="double" testName="esimd_api_simd_copy_to_from" />
+    <test configFile="config_sycl/esimd_api_simd_copy_to_from_pvc.xml" splitGroup="esimd" testName="esimd_api_simd_copy_to_from_pvc" />
     <test configFile="config_sycl/esimd_api_simd_mask.xml" splitGroup="esimd" testName="esimd_api_simd_mask" />
     <test configFile="config_sycl/esimd_api_simd_memory_access.xml" splitGroup="esimd" testName="esimd_api_simd_memory_access" />
     <test configFile="config_sycl/esimd_api_simd_negation_operator.xml" splitGroup="esimd" testName="esimd_api_simd_negation_operator" />
     <test configFile="config_sycl/esimd_api_simd_subscript_operator.xml" splitGroup="esimd" testName="esimd_api_simd_subscript_operator" />
+    <test configFile="config_sycl/esimd_api_simd_subscript_operator_pvc.xml" splitGroup="esimd" testName="esimd_api_simd_subscript_operator_pvc" />
     <test configFile="config_sycl/esimd_api_simd_view_copy_move_assign.xml" splitGroup="esimd" testName="esimd_api_simd_view_copy_move_assign" />
     <test configFile="config_sycl/esimd_api_simd_view_negation_operator.xml" splitGroup="esimd" testName="esimd_api_simd_view_negation_operator" />
     <test configFile="config_sycl/esimd_api_simd_view_select_2d_fp.xml" splitGroup="double" testName="esimd_api_simd_view_select_2d_fp" />
     <test configFile="config_sycl/esimd_api_simd_view_select_2d_int.xml" splitGroup="esimd" testName="esimd_api_simd_view_select_2d_int" />
     <test configFile="config_sycl/esimd_api_simd_view_subscript_operator.xml" splitGroup="esimd" testName="esimd_api_simd_view_subscript_operator" />
+    <test configFile="config_sycl/esimd_api_simd_view_subscript_operator_pvc.xml" splitGroup="esimd" testName="esimd_api_simd_view_subscript_operator_pvc" />
     <test configFile="config_sycl/esimd_api_slm_gather_scatter.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter" />
     <test configFile="config_sycl/esimd_api_slm_gather_scatter_heavy.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
     <test configFile="config_sycl/esimd_api_slm_gather_scatter_rgba.xml" splitGroup="double" testName="esimd_api_slm_gather_scatter_rgba" />
     <test configFile="config_sycl/esimd_api_svm_gather_scatter.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter" />
+    <test configFile="config_sycl/esimd_api_svm_gather_scatter_pvc.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter_pvc" />
     <test configFile="config_sycl/esimd_api_unary_ops_heavy.xml" splitGroup="double" testName="esimd_api_unary_ops_heavy" />
     <test configFile="config_sycl/esimd_api_unary_ops_heavy_pvc.xml" splitGroup="esimd" testName="esimd_api_unary_ops_heavy_pvc" />
     <test configFile="config_sycl/esimd_bitonicsortk.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
     <test configFile="config_sycl/esimd_bitonicsortkv2.xml" splitGroup="esimd" testName="esimd_bitonicsortkv2" />
     <test configFile="config_sycl/esimd_dp4a.xml" splitGroup="esimd" testName="esimd_dp4a" />
+    <test configFile="config_sycl/esimd_dpas_deprecated_dpas_test1.xml" splitGroup="esimd" testName="esimd_dpas_deprecated_dpas_test1" />
+    <test configFile="config_sycl/esimd_dpas_deprecated_dpas_test2.xml" splitGroup="esimd" testName="esimd_dpas_deprecated_dpas_test2" />
+    <test configFile="config_sycl/esimd_dpas_deprecated_dpas_test3.xml" splitGroup="esimd" testName="esimd_dpas_deprecated_dpas_test3" />
+    <test configFile="config_sycl/esimd_dpas_deprecated_dpas_tf32.xml" splitGroup="esimd" testName="esimd_dpas_deprecated_dpas_tf32" />
+    <test configFile="config_sycl/esimd_dpas_deprecated_dpasw_test.xml" splitGroup="esimd" testName="esimd_dpas_deprecated_dpasw_test" />
     <test configFile="config_sycl/esimd_dpas_dpas_bf16.xml" splitGroup="esimd" testName="esimd_dpas_dpas_bf16" />
     <test configFile="config_sycl/esimd_dpas_dpas_fp16.xml" splitGroup="esimd" testName="esimd_dpas_dpas_fp16" />
     <test configFile="config_sycl/esimd_dpas_dpas_int.xml" splitGroup="esimd" testName="esimd_dpas_dpas_int" />
-    <test configFile="config_sycl/esimd_dpas_dpas_test1.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test1" />
-    <test configFile="config_sycl/esimd_dpas_dpas_test2.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test2" />
-    <test configFile="config_sycl/esimd_dpas_dpas_test3.xml" splitGroup="esimd" testName="esimd_dpas_dpas_test3" />
     <test configFile="config_sycl/esimd_dpas_dpas_tf32.xml" splitGroup="esimd" testName="esimd_dpas_dpas_tf32" />
-    <test configFile="config_sycl/esimd_dpas_dpasw_test.xml" splitGroup="esimd" testName="esimd_dpas_dpasw_test" />
     <test configFile="config_sycl/esimd_dword_atomic_cmpxchg.xml" splitGroup="esimd" testName="esimd_dword_atomic_cmpxchg" />
     <test configFile="config_sycl/esimd_dword_atomic_smoke.xml" splitGroup="esimd" testName="esimd_dword_atomic_smoke" />
     <test configFile="config_sycl/esimd_esimd_check_vc_codegen.xml" splitGroup="esimd" testName="esimd_esimd_check_vc_codegen" />
@@ -446,6 +456,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_linear_linear.xml" splitGroup="esimd" testName="esimd_linear_linear" />
     <test configFile="config_sycl/esimd_lsc_atomic_cmpxchg.xml" splitGroup="esimd" testName="esimd_lsc_atomic_cmpxchg" />
     <test configFile="config_sycl/esimd_lsc_atomic_smoke.xml" splitGroup="esimd" testName="esimd_lsc_atomic_smoke" />
+    <test configFile="config_sycl/esimd_lsc_lsc_argument_type_deduction.xml" splitGroup="esimd" testName="esimd_lsc_lsc_argument_type_deduction" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_load_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_load_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_load_u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_load_u64" />
@@ -470,8 +481,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u32_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u32_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u64_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u64_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8_u16" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8_u16_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8_u16_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_load_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_prefetch_u32" />
@@ -481,7 +495,9 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u16u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u32_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u32_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u64_stateless.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u64_stateless" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm" />
@@ -507,6 +523,12 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_matrix_transpose2.xml" splitGroup="esimd" testName="esimd_matrix_transpose2" />
     <test configFile="config_sycl/esimd_matrix_transpose_glb.xml" splitGroup="esimd" testName="esimd_matrix_transpose_glb" />
     <test configFile="config_sycl/esimd_matrix_transpose_usm.xml" splitGroup="esimd" testName="esimd_matrix_transpose_usm" />
+    <test configFile="config_sycl/esimd_named_barriers_exec_in_order.xml" splitGroup="esimd" testName="esimd_named_barriers_exec_in_order" />
+    <test configFile="config_sycl/esimd_named_barriers_exec_in_order_branched.xml" splitGroup="esimd" testName="esimd_named_barriers_exec_in_order_branched" />
+    <test configFile="config_sycl/esimd_named_barriers_loop.xml" splitGroup="esimd" testName="esimd_named_barriers_loop" />
+    <test configFile="config_sycl/esimd_named_barriers_loop_extended.xml" splitGroup="esimd" testName="esimd_named_barriers_loop_extended" />
+    <test configFile="config_sycl/esimd_named_barriers_multiple_wg.xml" splitGroup="esimd" testName="esimd_named_barriers_multiple_wg" />
+    <test configFile="config_sycl/esimd_named_barriers_single_wg.xml" splitGroup="esimd" testName="esimd_named_barriers_single_wg" />
     <test configFile="config_sycl/esimd_noinline_args_size_noinline_args_char_int_size_192.xml" splitGroup="esimd" testName="esimd_noinline_args_size_noinline_args_char_int_size_192" />
     <test configFile="config_sycl/esimd_noinline_args_size_noinline_args_char_int_size_256.xml" splitGroup="esimd" testName="esimd_noinline_args_size_noinline_args_char_int_size_256" />
     <test configFile="config_sycl/esimd_noinline_args_size_noinline_args_char_int_size_512.xml" splitGroup="esimd" testName="esimd_noinline_args_size_noinline_args_char_int_size_512" />
@@ -542,6 +564,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_fmod_compatibility_test.xml" splitGroup="esimd" testName="esimd_regression_fmod_compatibility_test" />
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
     <test configFile="config_sycl/esimd_regression_half_conversion_test.xml" splitGroup="esimd" testName="esimd_regression_half_conversion_test" />
+    <test configFile="config_sycl/esimd_regression_iselect.xml" splitGroup="esimd" testName="esimd_regression_iselect" />
     <test configFile="config_sycl/esimd_regression_noinline_bypointers_vadd.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
     <test configFile="config_sycl/esimd_regression_operator_decrement.xml" splitGroup="esimd" testName="esimd_regression_operator_decrement" />
     <test configFile="config_sycl/esimd_regression_replicate_bug.xml" splitGroup="esimd" testName="esimd_regression_replicate_bug" />
@@ -698,12 +721,14 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/kernelparams_union_kernel_param.xml" splitGroup="double" testName="kernelparams_union_kernel_param" />
     <test configFile="config_sycl/matrix_element_wise_all_ops_bf16.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_bf16" />
     <test configFile="config_sycl/matrix_element_wise_all_ops_cuda.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_cuda" />
+    <test configFile="config_sycl/matrix_element_wise_all_ops_cuda_legacy.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_cuda_legacy" />
     <test configFile="config_sycl/matrix_element_wise_all_ops_half.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_half" />
     <test configFile="config_sycl/matrix_element_wise_all_ops_int8.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8" />
     <test configFile="config_sycl/matrix_element_wise_all_ops_int8_packed.xml" splitGroup="matrix" testName="matrix_element_wise_all_ops_int8_packed" />
     <test configFile="config_sycl/matrix_element_wise_irreg_sum_rows.xml" splitGroup="matrix" testName="matrix_element_wise_irreg_sum_rows" />
     <test configFile="config_sycl/matrix_element_wise_ops.xml" splitGroup="matrix" testName="matrix_element_wise_ops" />
     <test configFile="config_sycl/matrix_element_wise_wi_marray.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray" />
+    <test configFile="config_sycl/matrix_element_wise_wi_marray_legacy.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray_legacy" />
     <test configFile="config_sycl/matrix_elemwise_irreg_size_ops_bf16.xml" splitGroup="matrix" testName="matrix_elemwise_irreg_size_ops_bf16" />
     <test configFile="config_sycl/matrix_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16" />
@@ -714,7 +739,8 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_ss_int8_use.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8_use" />
     <test configFile="config_sycl/matrix_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_su_int8" />
-    <test configFile="config_sycl/matrix_joint_matrix_tensorcore.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcore" />
+    <test configFile="config_sycl/matrix_joint_matrix_tensorcores.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcores" />
+    <test configFile="config_sycl/matrix_joint_matrix_tensorcores_legacy.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcores_legacy" />
     <test configFile="config_sycl/matrix_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_us_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_uu_int8" />
     <test configFile="config_sycl/matrix_pvc_joint_matrix_bf16_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_bf16_pvc" />
@@ -723,6 +749,12 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_pvc_joint_matrix_su_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_su_int8_pvc" />
     <test configFile="config_sycl/matrix_pvc_joint_matrix_us_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_us_int8_pvc" />
     <test configFile="config_sycl/matrix_pvc_joint_matrix_uu_int8_pvc.xml" splitGroup="matrix" testName="matrix_pvc_joint_matrix_uu_int8_pvc" />
+    <test configFile="config_sycl/oneapideviceselector_backendonly_error.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_backendonly_error" />
+    <test configFile="config_sycl/oneapideviceselector_cpu_gpu_acc.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_cpu_gpu_acc" />
+    <test configFile="config_sycl/oneapideviceselector_cuda_top.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_cuda_top" />
+    <test configFile="config_sycl/oneapideviceselector_illegal_be_error.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_illegal_be_error" />
+    <test configFile="config_sycl/oneapideviceselector_level_zero_top.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_level_zero_top" />
+    <test configFile="config_sycl/oneapideviceselector_no_duplicate_devices.xml" splitGroup="oneapideviceselector" testName="oneapideviceselector_no_duplicate_devices" />
     <test configFile="config_sycl/onlinecompiler_online_compiler_l0.xml" splitGroup="onlinecompiler" testName="onlinecompiler_online_compiler_l0" />
     <test configFile="config_sycl/onlinecompiler_online_compiler_opencl.xml" splitGroup="onlinecompiler" testName="onlinecompiler_online_compiler_opencl" />
     <test configFile="config_sycl/pdb_sycl.xml" splitGroup="pdb" testName="pdb_sycl" />
@@ -811,6 +843,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/reduction_regression_after_pr_6343.xml" splitGroup="reduction" testName="reduction_regression_after_pr_6343" />
     <test configFile="config_sycl/regression_2020_spec_constants_debug_info.xml" splitGroup="regression" testName="regression_2020_spec_constants_debug_info" />
     <test configFile="config_sycl/regression_atomic_load.xml" splitGroup="regression" testName="regression_atomic_load" />
+    <test configFile="config_sycl/regression_barrier_with_work.xml" splitGroup="regression" testName="regression_barrier_with_work" />
     <test configFile="config_sycl/regression_build_log.xml" splitGroup="regression" testName="regression_build_log" />
     <test configFile="config_sycl/regression_cache_test.xml" splitGroup="regression" testName="regression_cache_test" />
     <test configFile="config_sycl/regression_check_vector_of_opencl_event.xml" splitGroup="regression" testName="regression_check_vector_of_opencl_event" />
