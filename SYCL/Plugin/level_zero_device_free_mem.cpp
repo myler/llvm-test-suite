@@ -1,5 +1,4 @@
-YCL/lit.cfg.py
-
+// REQUIRES: level_zero, level_zero_dev_kit
 // UNSUPPORTED: gpu-intel-gen9, gpu-intel-gen12
 // The query of free memory is not supported on integrated devices
 //
