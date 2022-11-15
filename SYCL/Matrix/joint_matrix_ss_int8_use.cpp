@@ -7,11 +7,7 @@
 //===----------------------------------------------------------------------===//
 // REQUIRES: matrix
 
-<<<<<<< HEAD
 // RUN: %clangxx -fsycl %s -o %t.out -DSYCL_EXT_ONEAPI_MATRIX_VERSION=2
-=======
-// RUN: %clangxx -fsycl %s -o %t.out -DSYCL_EXT_ONEAPI_MATRIX=2
->>>>>>> target/xmain-cand
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
