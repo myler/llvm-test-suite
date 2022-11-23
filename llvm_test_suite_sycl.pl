@@ -1000,10 +1000,15 @@ sub run_cmake
           copy($config_file, $config_file_original);
         }
 
+        my $extra_env = "";
+        if ($current_optset =~ m/opt_use_cpu_spr/ ){
+          $extra_env = "CL_CONFIG_CPU_TARGET_ARCH=sapphirerapids";
+        }
+
         open my $in, "<", $config_file_original || die "Cannot open file lit.cfg.py.ori: $!";
         open my $out, ">", $config_file || die "Cannot open file lit.cfg.py: $!";
         while (<$in>) {
-          s/env\s+SYCL_DEVICE_FILTER=(\S+)/env SYCL_DEVICE_FILTER=$1 $insert_command /g;
+          s/env\s+SYCL_DEVICE_FILTER=(\S+)/env SYCL_DEVICE_FILTER=$1 $extra_env $insert_command /g;
           print $out $_;
         }
         close $in;
