@@ -1,7 +1,10 @@
 // RUN: %clangxx -fsycl %s -o %t.out
 // RUN: %t.out
+<<<<<<< HEAD
 //
 // UNSUPPORTED: cuda || hip
+=======
+>>>>>>> 249e3819d ([SYCL] Add tests for user-defined reductions extension (#1395))
 
 #include <numeric>
 
