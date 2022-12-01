@@ -303,11 +303,7 @@ int main(void) {
   passed &= test<char, float, 7, BinOp, VEf, IDf>(div_op, q, 0.000001f);
 #ifndef WA_BUG
   if (SupportsDouble)
-<<<<<<< HEAD
     passed &= test<short, double, 7, BinOp, VEf, IDf>(div_op, q, 0.000001f);
-=======
-    passed &= test<short, double, 7, BinOp, VSf, IDf>(div_op, q);
->>>>>>> target/xmain-cand
 #endif // WA_BUG
   passed &= test<float, float, 32, BinOp, VEf, IDf>(div_op, q, 0.000001f);
   if (SupportsHalf)
@@ -316,11 +312,7 @@ int main(void) {
     passed &= test<half, unsigned int, 32, BinOp, VSf, IDf>(div_op, q, 1);
 #ifndef WA_BUG
   if (SupportsDouble && SupportsHalf)
-<<<<<<< HEAD
     passed &= test<double, half, 7, BinOp, VEf, IDf>(div_op, q, 0.000001f);
-=======
-    passed &= test<double, half, 7, BinOp, VSf, IDf>(div_op, q);
->>>>>>> target/xmain-cand
 #endif // WA_BUG
   passed &= test<short, uint64_t, 7, BinOp, VSf, IDf>(div_op, q);
 #ifdef USE_BF16
