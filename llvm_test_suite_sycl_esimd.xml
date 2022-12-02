@@ -260,6 +260,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_rol_ror_compilation_test.xml" splitGroup="esimd" testName="esimd_regression_rol_ror_compilation_test" />
     <test configFile="config_sycl/esimd_regression_store_zero_const.xml" splitGroup="esimd" testName="esimd_regression_store_zero_const" />
     <test configFile="config_sycl/esimd_regression_sycl_esimd_mixed_unnamed.xml" splitGroup="esimd" testName="esimd_regression_sycl_esimd_mixed_unnamed" />
+    <test configFile="config_sycl/esimd_regression_tanh_fix_test.xml" splitGroup="esimd" testName="esimd_regression_tanh_fix_test" />
     <test configFile="config_sycl/esimd_regression_unused_load.xml" splitGroup="esimd" testName="esimd_regression_unused_load" />
     <test configFile="config_sycl/esimd_regression_usm_gather_scatter_32.xml" splitGroup="esimd" testName="esimd_regression_usm_gather_scatter_32" />
     <test configFile="config_sycl/esimd_regression_variable_gather_mask.xml" splitGroup="esimd" testName="esimd_regression_variable_gather_mask" />
