@@ -1009,7 +1009,7 @@ sub run_cmake
         open my $in, "<", $config_file_original || die "Cannot open file lit.cfg.py.ori: $!";
         open my $out, ">", $config_file || die "Cannot open file lit.cfg.py: $!";
         while (<$in>) {
-          s/env\s+SYCL_DEVICE_FILTER=(\S+)/env SYCL_DEVICE_FILTER=$1 $extra_env $insert_command /g;
+          s/env\s+ONEAPI_DEVICE_SELECTOR=(\S+)/env ONEAPI_DEVICE_SELECTOR=$1 $extra_env $insert_command /g;
           print $out $_;
         }
         close $in;
