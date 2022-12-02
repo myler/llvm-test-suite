@@ -639,6 +639,7 @@ sub do_run
       if ( is_ats() ) {
         $python = "/usr/bin/python3";
         $matrix = "-Dmatrix-xmx8=1";
+        $timeset = "--timeout 600";
         $jobset = "-j 1";
       } elsif ( is_pvc() ) {
         $matrix = "-Dmatrix=1";
