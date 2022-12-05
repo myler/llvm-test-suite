@@ -637,7 +637,6 @@ sub do_run
 
       # GPU codename
       if ( is_ats() ) {
-        $python = "/usr/bin/python3";
         $matrix = "-Dmatrix-xmx8=1";
         $timeset = "--timeout 600";
         $jobset = "-j 1";
