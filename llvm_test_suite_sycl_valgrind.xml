@@ -259,6 +259,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/bfloat16_bfloat16_conversions.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_conversions" />
     <test configFile="config_sycl/bfloat16_bfloat16_example.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_example" />
     <test configFile="config_sycl/bfloat16_bfloat16_type.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_type" />
+    <test configFile="config_sycl/bfloat16_bfloat16_type_cuda.xml" splitGroup="bfloat16" testName="bfloat16_bfloat16_type_cuda" />
     <test configFile="config_sycl/bfloat16_bfloat_hw.xml" splitGroup="bfloat16" testName="bfloat16_bfloat_hw" />
     <test configFile="config_sycl/complex_sycl_complex_math_test.xml" splitGroup="complex" testName="complex_sycl_complex_math_test" />
     <test configFile="config_sycl/complex_sycl_complex_operator_test.xml" splitGroup="complex" testName="complex_sycl_complex_operator_test" />

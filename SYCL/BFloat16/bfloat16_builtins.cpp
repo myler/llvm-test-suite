@@ -13,7 +13,6 @@
 
 using namespace sycl;
 using namespace sycl::ext::oneapi;
-using namespace sycl::ext::oneapi::experimental;
 
 constexpr int N = 60; // divisible by all tested array sizes
 constexpr float bf16_eps = 0.00390625;
