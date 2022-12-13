@@ -122,6 +122,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_esimd_check_vc_codegen.xml" splitGroup="esimd" testName="esimd_esimd_check_vc_codegen" />
     <test configFile="config_sycl/esimd_esimd_verify.xml" splitGroup="esimd" testName="esimd_esimd_verify" />
     <test configFile="config_sycl/esimd_ext_math.xml" splitGroup="double" testName="esimd_ext_math" />
+    <test configFile="config_sycl/esimd_ext_math_ieee_sqrt_div.xml" splitGroup="esimd" testName="esimd_ext_math_ieee_sqrt_div" />
     <test configFile="config_sycl/esimd_fp_args_size_fp_args_char_int_size_192.xml" splitGroup="esimd" testName="esimd_fp_args_size_fp_args_char_int_size_192" />
     <test configFile="config_sycl/esimd_fp_args_size_fp_args_char_int_size_256.xml" splitGroup="esimd" testName="esimd_fp_args_size_fp_args_char_int_size_256" />
     <test configFile="config_sycl/esimd_fp_args_size_fp_args_char_int_size_512.xml" splitGroup="esimd" testName="esimd_fp_args_size_fp_args_char_int_size_512" />
