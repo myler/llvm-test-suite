@@ -35,7 +35,7 @@
 //    _pvc_ .
 // 7)	In _pvc_ panel:
 //    "COUNT=200; CUR=1; while [ "$CUR" -ne `expr $COUNT + 1` ]; \
-//     do /iusers/vklochko/ws/fulsim/PVC/AubLoad -device rlt.8x10x8.a0 -socket \
+//     do /iusers/$USER/fulsim/PVC/AubLoad -device rlt.8x10x8.a0 -socket \
 //     tcp -swsbcheck fatal -msglevel terse ; CUR=`expr $CUR + 1`; done;"
 // 8)	In _test_ panel:
 // cat > igdrcl.config
