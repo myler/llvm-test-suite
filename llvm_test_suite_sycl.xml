@@ -202,6 +202,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_image_image_write.xml" splitGroup="basic" testName="basic_image_image_write" />
     <test configFile="config_sycl/basic_image_image_write_fp16.xml" splitGroup="basic" testName="basic_image_image_write_fp16" />
     <test configFile="config_sycl/basic_image_srgba_read.xml" splitGroup="basic" testName="basic_image_srgba_read" />
+    <test configFile="config_sycl/basic_in_order_queue_status.xml" splitGroup="basic" testName="basic_in_order_queue_status" />
     <test configFile="config_sycl/basic_info.xml" splitGroup="basic" testName="basic_info" />
     <test configFile="config_sycl/basic_info_ocl_version.xml" splitGroup="basic" testName="basic_info_ocl_version" />
     <test configFile="config_sycl/basic_intel_ext_device.xml" splitGroup="basic" testName="basic_intel_ext_device" />
@@ -219,6 +220,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_multi_ptr_legacy.xml" splitGroup="basic" testName="basic_multi_ptr_legacy" />
     <test configFile="config_sycl/basic_multisource.xml" splitGroup="basic" testName="basic_multisource" />
     <test configFile="config_sycl/basic_offset_accessor_get_pointer.xml" splitGroup="basic" testName="basic_offset_accessor_get_pointer" />
+    <test configFile="config_sycl/basic_out_of_order_queue_status.xml" splitGroup="basic" testName="basic_out_of_order_queue_status" />
     <test configFile="config_sycl/basic_parallel_for_disable_range_roundup.xml" splitGroup="basic" testName="basic_parallel_for_disable_range_roundup" />
     <test configFile="config_sycl/basic_parallel_for_indexers.xml" splitGroup="basic" testName="basic_parallel_for_indexers" />
     <test configFile="config_sycl/basic_parallel_for_range_roundup.xml" splitGroup="basic" testName="basic_parallel_for_range_roundup" />
@@ -1005,6 +1007,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/tracing_buffer_printers.xml" splitGroup="tracing" testName="tracing_buffer_printers" />
     <test configFile="config_sycl/tracing_image_printers.xml" splitGroup="tracing" testName="tracing_image_printers" />
     <test configFile="config_sycl/tracing_pi_tracing_test.xml" splitGroup="tracing" testName="tracing_pi_tracing_test" />
+    <test configFile="config_sycl/userdefinedreductions_user_defined_reductions.xml" splitGroup="userdefinedreductions" testName="userdefinedreductions_user_defined_reductions" />
     <test configFile="config_sycl/usm_alloc_functions.xml" splitGroup="usm" testName="usm_alloc_functions" />
     <test configFile="config_sycl/usm_allocator_container.xml" splitGroup="usm" testName="usm_allocator_container" />
     <test configFile="config_sycl/usm_allocator_equal.xml" splitGroup="usm" testName="usm_allocator_equal" />
