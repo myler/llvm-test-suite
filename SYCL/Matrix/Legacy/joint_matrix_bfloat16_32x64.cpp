@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+<<<<<<<< HEAD:SYCL/Matrix/Legacy/joint_matrix_bfloat16_32x64.cpp
 //==----- joint_matrix_bfloat16_32x64.cpp  - DPC++ joint_matrix-------------==//
+========
+//==-------- joint_matrix_bf16_vnni.cpp  - DPC++ joint_matrix---------------==//
+>>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391)):SYCL/Matrix/Legacy/joint_matrix_int8_vnni.cpp
+=======
+//==----- joint_matrix_bfloat16_32x64.cpp  - DPC++ joint_matrix-------------==//
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -18,8 +26,19 @@
 
 using namespace sycl;
 using namespace sycl::ext::oneapi::experimental::matrix;
-using bfloat16 = sycl::ext::oneapi::bfloat16;
+<<<<<<< HEAD
+
+#define SG_SZ 16
+
+<<<<<<<< HEAD:SYCL/Matrix/Legacy/joint_matrix_bfloat16_32x64.cpp
+#include "joint_matrix_bfloat16_32x64_impl.hpp"
+========
+#include "joint_matrix_int8_vnni_impl.hpp"
+>>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391)):SYCL/Matrix/Legacy/joint_matrix_int8_vnni.cpp
+=======
+using bfloat16 = sycl::ext::oneapi::experimental::bfloat16;
 
 #define SG_SZ 16
 
 #include "joint_matrix_bfloat16_32x64_impl.hpp"
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))

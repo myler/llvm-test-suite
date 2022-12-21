@@ -120,13 +120,21 @@ int main() {
     for (int j = 0; j < MATRIX_K; j++) {
       // bfloat16 is created using unsigned short since conversion from float to
       // bfloat16 is not supported on the host side yet
+<<<<<<< HEAD
       A[i][j] = bfloat16(1.0f * (i + j));
+=======
+      A[i][j] = bfloat16::from_bits(make_bf16(1.0f * (i + j)));
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
       Aref[i][j] = make_bf16(1.0f * (i + j));
     }
   }
   for (int i = 0; i < MATRIX_K / 2; i++) {
     for (int j = 0; j < MATRIX_N * 2; j++) {
+<<<<<<< HEAD
       B[i][j] = bfloat16(2.0f * i + 3.0f * j);
+=======
+      B[i][j] = bfloat16::from_bits((make_bf16(2.0f * i + 3.0f * j)));
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
       Bref[i][j] = make_bf16(2.0f * i + 3.0f * j);
     }
   }

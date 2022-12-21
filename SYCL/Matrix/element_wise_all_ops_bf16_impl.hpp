@@ -55,7 +55,10 @@ void matrix_verify_add(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            for (int i = 0; i < wi_slice_a.length(); i++) {
              wi_slice_a[i] = wi_slice_a[i] + bfloat16(2);
            }
+<<<<<<< HEAD
 
+=======
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
            ext::intel::experimental::matrix::joint_matrix_store(
                sg, sub_a,
                accA.get_pointer() + (sg_startx * TM) * N +
@@ -117,7 +120,11 @@ void matrix_verify_mul(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
 
            sub_group sg = spmd_item.get_sub_group();
            joint_matrix<sub_group, T, use::a, TM, TK, layout::row_major> sub_a;
+<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, bfloat16(5.0));
+=======
+           joint_matrix_fill(sg, sub_a, make_bf16(5.0));
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
 
            auto wi_slice_a = get_wi_data(sg, sub_a);
            for (int i = 0; i < wi_slice_a.length(); i++) {

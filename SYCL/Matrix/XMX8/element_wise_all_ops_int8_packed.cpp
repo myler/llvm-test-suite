@@ -12,10 +12,14 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // This test stores the matrix B that is VNNIed (packed) in a row major fashion.
 =======
 // This test store the matrix B that is VNNIed (packed) in a row major fashion.
 >>>>>>> 909dc769e (Set the row major store on B test to xfail on the GPU (#1392))
+=======
+// This test stores the matrix B that is VNNIed (packed) in a row major fashion.
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
 // This is expected to fail on the GPU because the implementation does not
 // support automatic transformation YET, in this case: VNNI to row major in the
 // store.

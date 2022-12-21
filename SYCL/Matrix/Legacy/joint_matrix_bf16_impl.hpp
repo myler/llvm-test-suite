@@ -52,6 +52,27 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
            const auto sg_starty = global_idy - spmd_item.get_local_id(1);
 
            sub_group sg = spmd_item.get_sub_group();
+<<<<<<< HEAD
+           joint_matrix<sub_group, unsigned short, use::a, TM, TK,
+                        layout::row_major>
+               sub_a;
+           // For B, we assume B has been already VNNIed.
+           joint_matrix<sub_group, unsigned short, use::b, TK, TN,
+                        ext::intel::experimental::matrix::layout::packed>
+               sub_b;
+           joint_matrix<sub_group, float, use::accumulator, TM, TN> sub_c;
+           joint_matrix_load(sg, sub_c,
+                             accC.get_pointer() + (sg_startx * TM) * N +
+                                 sg_starty / SG_SZ * TN,
+                             N, layout::row_major);
+           for (int k = 0; k < K; k += TK) {
+             joint_matrix_load(
+                 sg, sub_a, accA.get_pointer() + (sg_startx * TM) * K + k, K);
+             joint_matrix_load(sg, sub_b,
+                               accB.get_pointer() + k * N +
+                                   sg_starty / SG_SZ * TN * 2,
+                               N * 2);
+=======
            joint_matrix<unsigned short, TM, TK> sub_a(sg);
            // For B, since current implementation does not support non-packed
            // layout, users need to specify the packed_b layout.
@@ -72,12 +93,17 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
                                accB.get_pointer() + (k) * (N) +
                                    sg_starty / SG_SZ * TN * 2,
                                N * 2, matrix_layout::packed_b);
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
              sub_c = joint_matrix_mad(sg, sub_a, sub_b, sub_c);
            }
            joint_matrix_store(sg, sub_c,
                               accC.get_pointer() + (sg_startx * TM) * N +
                                   sg_starty / SG_SZ * TN,
+<<<<<<< HEAD
+                              N, layout::row_major);
+=======
                               N, matrix_layout::row_major);
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
          }); // parallel for
    }).wait();
 }
@@ -105,14 +131,20 @@ unsigned short make_bf16(float x) {
 
 void matrix_multiply_ref(int *A_mem, int *B_mem, int *C_mem, int M, int N,
                          int K) {
+<<<<<<< HEAD
+=======
   // tiling
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
   for (int m = 0; m < M; m++)
     for (int n = 0; n < N; n++) {
       for (int k = 0; k < K; k++) {
         short *va = (short *)(A_mem + m * K + k);
         short *vb = (short *)(B_mem + k * N + n);
         float acc = *((float *)(C_mem + m * N + n));
+<<<<<<< HEAD
+=======
         // FIXME: Should we do reduce-add in another version?
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
         for (int i = 0; i < 2; i++) {
           acc += (make_fp32(va[i]) * make_fp32(vb[i]));
         }
@@ -155,6 +187,13 @@ int main() {
         res = false;
     }
   }
+<<<<<<< HEAD
   std::cout << (res ? "passed" : "failed") << std::endl;
   return !res;
+=======
+  if (res)
+    std::cout << "passed\n";
+  else
+    std::cout << "failed\n";
+>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
 }
