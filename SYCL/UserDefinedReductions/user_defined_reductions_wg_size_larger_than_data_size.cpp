@@ -1,7 +1,6 @@
-// RUN: %clangxx -fsycl %s -o %t.out
-// RUN: %t.out
-//
-// UNSUPPORTED: cuda || hip
+// RUN: %clangxx -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
+// RUN: %CPU_RUN_PLACEHOLDER %t.out
+// RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 #include <iostream>
 #include <numeric>
@@ -23,17 +22,6 @@ template <typename T = void> struct UserDefinedMinimum {
   }
 };
 
-template <> struct UserDefinedMinimum<void> {
-  struct is_transparent {};
-  template <typename T, typename U>
-  auto operator()(T &&lhs, U &&rhs) const ->
-      typename std::common_type<T &&, U &&>::type {
-    return std::less<>()(std::forward<const T>(lhs), std::forward<const U>(rhs))
-               ? std::forward<T>(lhs)
-               : std::forward<U>(rhs);
-  }
-};
-
 constexpr int segment_size = 8;
 
 using namespace sycl;
@@ -41,8 +29,8 @@ using namespace sycl;
 template <typename InputContainer, typename OutputContainer,
           class BinaryOperation>
 void test(queue q, InputContainer input, OutputContainer output,
-          BinaryOperation binary_op, const size_t num_segments,
-          size_t workgroup_size, typename OutputContainer::value_type init) {
+          BinaryOperation binary_op, size_t workgroup_size,
+          typename OutputContainer::value_type init) {
   using InputT = typename InputContainer::value_type;
   using OutputT = typename OutputContainer::value_type;
   constexpr size_t N = input.size();
@@ -57,8 +45,7 @@ void test(queue q, InputContainer input, OutputContainer output,
       size_t temp_memory_size = workgroup_size * sizeof(InputT);
       auto scratch = sycl::local_accessor<std::byte, 1>(temp_memory_size, cgh);
       cgh.parallel_for(
-          nd_range<1>(workgroup_size * num_segments, workgroup_size),
-          [=](nd_item<1> it) {
+          nd_range<1>(workgroup_size, workgroup_size), [=](nd_item<1> it) {
             InputT *segment_begin = in.get_pointer();
             InputT *segment_end = in.get_pointer() + segment_size;
             auto handle =
@@ -87,7 +74,7 @@ int main() {
   std::array<int, 1> output;
 
   // queue, input array, output array, binary_op, segment_size, WG size, init
-  test(q, input, output, sycl::minimum<int>{}, segment_size, N, INT_MAX);
-  test(q, input, output, UserDefinedMinimum<int>{}, segment_size, N, INT_MAX);
+  test(q, input, output, sycl::minimum<int>{}, N, INT_MAX);
+  test(q, input, output, UserDefinedMinimum<int>{}, N, INT_MAX);
   return 0;
 }
