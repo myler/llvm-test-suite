@@ -108,12 +108,23 @@ void matrix_multiply_ref(int *A_mem, int *B_mem, int *C_mem, int M, int N,
 int main() {
   for (int i = 0; i < MATRIX_M; i++) {
     for (int j = 0; j < MATRIX_K; j++) {
+<<<<<<< HEAD
       A[i][j] = bfloat16(1.0f * (i + j));
+=======
+      // bfloat16 is created using unsigned short since conversion from float to
+      // bfloat16 is not supported on the host side yet
+      A[i][j] = bfloat16(1.0f * (i + j));
+      Aref[i][j] = make_bf16(1.0f * (i + j));
+>>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
     }
   }
   for (int i = 0; i < MATRIX_K / 2; i++) {
     for (int j = 0; j < MATRIX_N * 2; j++) {
       B[i][j] = bfloat16(2.0f * i + 3.0f * j);
+<<<<<<< HEAD
+=======
+      Bref[i][j] = make_bf16(2.0f * i + 3.0f * j);
+>>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
     }
   }
   for (int i = 0; i < MATRIX_M; i++) {

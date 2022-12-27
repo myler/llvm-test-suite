@@ -185,11 +185,15 @@ int main() {
 =======
       // bfloat16 is created using unsigned short since conversion from float to
       // bfloat16 is not supported on the host side yet
+<<<<<<< HEAD
 <<<<<<<< HEAD:SYCL/Matrix/Legacy/joint_matrix_bfloat16_impl.hpp
       A[i][j] = bfloat16(1.0f * (i + j));
 ========
       A[i][j] = bfloat16::from_bits(make_bf16(1.0f * (i + j)));
 >>>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391)):SYCL/Matrix/joint_matrix_bfloat16_32x64_impl.hpp
+=======
+      A[i][j] = bfloat16(1.0f * (i + j));
+>>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
       Aref[i][j] = make_bf16(1.0f * (i + j));
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
     }
@@ -198,7 +202,10 @@ int main() {
     for (int j = 0; j < MATRIX_N * 2; j++) {
       B[i][j] = bfloat16(2.0f * i + 3.0f * j);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
       Bref[i][j] = make_bf16(2.0f * i + 3.0f * j);
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
     }

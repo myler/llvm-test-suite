@@ -77,6 +77,7 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
 
            sub_group sg = spmd_item.get_sub_group();
 <<<<<<< HEAD
+<<<<<<< HEAD
            joint_matrix<sub_group, bfloat16, use::a, TM, TK, layout::row_major>
                sub_a;
            // For B, we assume B has been already VNNIed.
@@ -88,6 +89,12 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
            // For B, we assume B has been already VNNIed.
            joint_matrix<sub_group, unsigned short, use::b, TK, TN,
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+           joint_matrix<sub_group, bfloat16, use::a, TM, TK, layout::row_major>
+               sub_a;
+           // For B, we assume B has been already VNNIed.
+           joint_matrix<sub_group, bfloat16, use::b, TK, TN,
+>>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
                         ext::intel::experimental::matrix::layout::packed>
                sub_b;
            joint_matrix<sub_group, float, use::accumulator, TM, TN> sub_c;
