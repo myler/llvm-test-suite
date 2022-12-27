@@ -746,7 +746,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_element_wise_wi_marray.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray" />
     <test configFile="config_sycl/matrix_element_wise_wi_marray_legacy.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray_legacy" />
     <test configFile="config_sycl/matrix_elemwise_irreg_size_ops_bf16.xml" splitGroup="matrix" testName="matrix_elemwise_irreg_size_ops_bf16" />
-    <test configFile="config_sycl/matrix_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16" />
     <test configFile="config_sycl/matrix_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16_32x64" />
     <test configFile="config_sycl/matrix_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
@@ -797,7 +796,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_xmx8_element_wise_all_ops_int8_packed.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_all_ops_int8_packed" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_irreg_sum_rows.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_irreg_sum_rows" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_ops.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_ops" />
-    <test configFile="config_sycl/matrix_xmx8_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bfloat16" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bfloat16_32x64" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_half" />
