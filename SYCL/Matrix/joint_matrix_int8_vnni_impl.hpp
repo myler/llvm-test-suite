@@ -51,7 +51,7 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
            joint_matrix<sub_group, int8_t, use::a, TM, TK, layout::row_major>
                sub_a;
            joint_matrix<sub_group, int8_t, use::b, TK, TN,
-                        ext::intel::experimental::matrix::layout::packed>
+                        layout::row_major>
                sub_b;
            joint_matrix<sub_group, int32_t, use::accumulator, TM, TN> sub_c;
 
