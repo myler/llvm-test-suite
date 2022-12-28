@@ -746,34 +746,61 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_element_wise_wi_marray.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray" />
     <test configFile="config_sycl/matrix_element_wise_wi_marray_legacy.xml" splitGroup="matrix" testName="matrix_element_wise_wi_marray_legacy" />
     <test configFile="config_sycl/matrix_elemwise_irreg_size_ops_bf16.xml" splitGroup="matrix" testName="matrix_elemwise_irreg_size_ops_bf16" />
-    <test configFile="config_sycl/matrix_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16" />
     <test configFile="config_sycl/matrix_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16_32x64" />
-    <test configFile="config_sycl/matrix_joint_matrix_bfloat16_use.xml" splitGroup="matrix" testName="matrix_joint_matrix_bfloat16_use" />
     <test configFile="config_sycl/matrix_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
     <test configFile="config_sycl/matrix_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_joint_matrix_int8_vnni" />
     <test configFile="config_sycl/matrix_joint_matrix_query_default.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
     <test configFile="config_sycl/matrix_joint_matrix_query_use_default.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_use_default" />
     <test configFile="config_sycl/matrix_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8" />
-    <test configFile="config_sycl/matrix_joint_matrix_ss_int8_use.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8_use" />
     <test configFile="config_sycl/matrix_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_su_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_tensorcores.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcores" />
     <test configFile="config_sycl/matrix_joint_matrix_tensorcores_legacy.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcores_legacy" />
     <test configFile="config_sycl/matrix_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_us_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_uu_int8" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_all_ops_bf16.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_all_ops_bf16" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_all_ops_half.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_all_ops_half" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_all_ops_int8.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_all_ops_int8" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_all_ops_int8_packed.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_all_ops_int8_packed" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_irreg_sum_rows.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_irreg_sum_rows" />
+    <test configFile="config_sycl/matrix_legacy_element_wise_ops.xml" splitGroup="matrix" testName="matrix_legacy_element_wise_ops" />
+    <test configFile="config_sycl/matrix_legacy_elemwise_irreg_size_ops_bf16.xml" splitGroup="matrix" testName="matrix_legacy_elemwise_irreg_size_ops_bf16" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bf16" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16_32x64" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_half" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_int8_vnni" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_query_default.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_query_default" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_ss_int8" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_su_int8" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_us_int8" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_uu_int8" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_all_ops_bf16.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_all_ops_bf16" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_all_ops_half.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_all_ops_half" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_all_ops_int8.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_all_ops_int8" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_all_ops_int8_packed.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_all_ops_int8_packed" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_irreg_sum_rows.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_irreg_sum_rows" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_element_wise_ops.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_element_wise_ops" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_bf16" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_bfloat16" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_bfloat16_32x64" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_half" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_int8_vnni" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_ss_int8" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_su_int8" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_us_int8" />
+    <test configFile="config_sycl/matrix_legacy_xmx8_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_legacy_xmx8_joint_matrix_uu_int8" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_all_ops_bf16.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_all_ops_bf16" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_all_ops_half.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_all_ops_half" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_all_ops_int8.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_all_ops_int8" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_all_ops_int8_packed.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_all_ops_int8_packed" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_irreg_sum_rows.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_irreg_sum_rows" />
     <test configFile="config_sycl/matrix_xmx8_element_wise_ops.xml" splitGroup="matrix" testName="matrix_xmx8_element_wise_ops" />
-    <test configFile="config_sycl/matrix_xmx8_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bfloat16" />
-    <test configFile="config_sycl/matrix_xmx8_joint_matrix_bfloat16_use.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bfloat16_use" />
+    <test configFile="config_sycl/matrix_xmx8_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_bfloat16_32x64" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_half" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_int8_vnni" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_ss_int8" />
-    <test configFile="config_sycl/matrix_xmx8_joint_matrix_ss_int8_use.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_ss_int8_use" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_su_int8" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_us_int8.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_us_int8" />
     <test configFile="config_sycl/matrix_xmx8_joint_matrix_uu_int8.xml" splitGroup="matrix" testName="matrix_xmx8_joint_matrix_uu_int8" />
