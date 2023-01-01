@@ -751,7 +751,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_joint_matrix_half" />
     <test configFile="config_sycl/matrix_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_joint_matrix_int8_vnni" />
     <test configFile="config_sycl/matrix_joint_matrix_query_default.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_default" />
-    <test configFile="config_sycl/matrix_joint_matrix_query_use_default.xml" splitGroup="matrix" testName="matrix_joint_matrix_query_use_default" />
     <test configFile="config_sycl/matrix_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_ss_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_su_int8.xml" splitGroup="matrix" testName="matrix_joint_matrix_su_int8" />
     <test configFile="config_sycl/matrix_joint_matrix_tensorcores.xml" splitGroup="matrix" testName="matrix_joint_matrix_tensorcores" />
@@ -1035,6 +1034,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/tracing_image_printers.xml" splitGroup="tracing" testName="tracing_image_printers" />
     <test configFile="config_sycl/tracing_pi_tracing_test.xml" splitGroup="tracing" testName="tracing_pi_tracing_test" />
     <test configFile="config_sycl/userdefinedreductions_user_defined_reductions.xml" splitGroup="userdefinedreductions" testName="userdefinedreductions_user_defined_reductions" />
+    <test configFile="config_sycl/userdefinedreductions_user_defined_reductions_wg_size_larger_than_data_size.xml" splitGroup="userdefinedreductions" testName="userdefinedreductions_user_defined_reductions_wg_size_larger_than_data_size" />
     <test configFile="config_sycl/usm_alloc_functions.xml" splitGroup="usm" testName="usm_alloc_functions" />
     <test configFile="config_sycl/usm_allocator_container.xml" splitGroup="usm" testName="usm_allocator_container" />
     <test configFile="config_sycl/usm_allocator_equal.xml" splitGroup="usm" testName="usm_allocator_equal" />
