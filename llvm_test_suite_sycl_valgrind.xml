@@ -134,6 +134,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_buffer_buffer_dev_to_dev.xml" splitGroup="basic" testName="basic_buffer_buffer_dev_to_dev" />
     <test configFile="config_sycl/basic_buffer_buffer_full_copy.xml" splitGroup="basic" testName="basic_buffer_buffer_full_copy" />
     <test configFile="config_sycl/basic_buffer_buffer_migrate.xml" splitGroup="basic" testName="basic_buffer_buffer_migrate" />
+    <test configFile="config_sycl/basic_buffer_buffer_release.xml" splitGroup="basic" testName="basic_buffer_buffer_release" />
     <test configFile="config_sycl/basic_buffer_native_buffer_creation_flags.xml" splitGroup="basic" testName="basic_buffer_native_buffer_creation_flags" />
     <test configFile="config_sycl/basic_buffer_reinterpret.xml" splitGroup="basic" testName="basic_buffer_reinterpret" />
     <test configFile="config_sycl/basic_buffer_subbuffer.xml" splitGroup="basic" testName="basic_buffer_subbuffer" />
@@ -188,6 +189,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/basic_handler_run_on_host_intel.xml" splitGroup="basic" testName="basic_handler_run_on_host_intel" />
     <test configFile="config_sycl/basic_handler_run_on_host_intel2.xml" splitGroup="basic" testName="basic_handler_run_on_host_intel2" />
     <test configFile="config_sycl/basic_host_task_dependency.xml" splitGroup="basic" testName="basic_host_task_dependency" />
+    <test configFile="config_sycl/basic_host_task_depends.xml" splitGroup="basic" testName="basic_host_task_depends" />
     <test configFile="config_sycl/basic_image_image.xml" splitGroup="basic" testName="basic_image_image" />
     <test configFile="config_sycl/basic_image_image_accessor_range.xml" splitGroup="basic" testName="basic_image_image_accessor_range" />
     <test configFile="config_sycl/basic_image_image_accessor_readsampler.xml" splitGroup="basic" testName="basic_image_image_accessor_readsampler" />
