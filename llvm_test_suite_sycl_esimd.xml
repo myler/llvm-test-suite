@@ -255,6 +255,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_globals.xml" splitGroup="esimd" testName="esimd_regression_globals" />
     <test configFile="config_sycl/esimd_regression_half_conversion_test.xml" splitGroup="esimd" testName="esimd_regression_half_conversion_test" />
     <test configFile="config_sycl/esimd_regression_iselect.xml" splitGroup="esimd" testName="esimd_regression_iselect" />
+    <test configFile="config_sycl/esimd_regression_math_const_fix_test.xml" splitGroup="esimd" testName="esimd_regression_math_const_fix_test" />
     <test configFile="config_sycl/esimd_regression_noinline_bypointers_vadd.xml" splitGroup="esimd" testName="esimd_regression_noinline_bypointers_vadd" />
     <test configFile="config_sycl/esimd_regression_operator_decrement.xml" splitGroup="esimd" testName="esimd_regression_operator_decrement" />
     <test configFile="config_sycl/esimd_regression_replicate_bug.xml" splitGroup="esimd" testName="esimd_regression_replicate_bug" />
