@@ -813,7 +813,10 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/matrix_legacy_joint_matrix_bf16.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bf16" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16_32x64.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16_32x64" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16_colmajora_colmajorb.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16_colmajora_colmajorb" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_bfloat16_rowmajora_rowmajorb.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_bfloat16_rowmajora_rowmajorb" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_half.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_half" />
+    <test configFile="config_sycl/matrix_legacy_joint_matrix_int8_colmajora_colmajorb.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_int8_colmajora_colmajorb" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_int8_vnni.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_int8_vnni" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_query_default.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_query_default" />
     <test configFile="config_sycl/matrix_legacy_joint_matrix_ss_int8.xml" splitGroup="matrix" testName="matrix_legacy_joint_matrix_ss_int8" />
