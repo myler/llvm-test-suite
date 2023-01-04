@@ -25,10 +25,14 @@
 using namespace sycl;
 using namespace sycl::ext::oneapi::experimental::matrix;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using bfloat16 = sycl::ext::oneapi::bfloat16;
 =======
 using bfloat16 = sycl::ext::oneapi::experimental::bfloat16;
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+using bfloat16 = sycl::ext::oneapi::bfloat16;
+>>>>>>> 87f7445c7 ([SYCL][Matrix] Fix bfloat16 namespace in the legacy tests (#1478))
 
 #define SG_SZ 8
 
