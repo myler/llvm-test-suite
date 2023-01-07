@@ -165,6 +165,7 @@ int main() {
       // bfloat16 is created using unsigned short since conversion from float to
       // bfloat16 is not supported on the host side yet
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:SYCL/Matrix/Legacy/joint_matrix_bfloat16_impl.hpp
       A[i][j] = bfloat16(1.0f * (i + j));
 ========
@@ -173,16 +174,23 @@ int main() {
 =======
       A[i][j] = bfloat16::from_bits(make_bf16(1.0f * (i + j)));
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+      A[i][j] = bfloat16(1.0f * (i + j));
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
       Aref[i][j] = make_bf16(1.0f * (i + j));
     }
   }
   for (int i = 0; i < MATRIX_K / 2; i++) {
     for (int j = 0; j < MATRIX_N * 2; j++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       B[i][j] = bfloat16(2.0f * i + 3.0f * j);
 =======
       B[i][j] = bfloat16::from_bits((make_bf16(2.0f * i + 3.0f * j)));
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+      B[i][j] = bfloat16(2.0f * i + 3.0f * j);
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
       Bref[i][j] = make_bf16(2.0f * i + 3.0f * j);
     }
   }
@@ -209,6 +217,7 @@ int main() {
     }
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   std::cout << (res ? "passed" : "failed") << std::endl;
   return !res;
 =======
@@ -217,4 +226,8 @@ int main() {
   else
     std::cout << "failed\n";
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+  std::cout << (res ? "passed" : "failed") << std::endl;
+  return !res;
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
 }

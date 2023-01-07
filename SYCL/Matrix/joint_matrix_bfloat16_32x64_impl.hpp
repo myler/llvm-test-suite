@@ -123,6 +123,7 @@ static constexpr size_t MATRIX_K = TK * 2;
 bfloat16 A[MATRIX_M][MATRIX_K];
 bfloat16 B[MATRIX_K / 2][MATRIX_N * 2];
 <<<<<<< HEAD
+<<<<<<< HEAD
 float C[MATRIX_M][MATRIX_N];
 float D[MATRIX_M][MATRIX_N];
 
@@ -137,11 +138,19 @@ float D[MATRIX_M][MATRIX_N];
 float make_fp32(short x) {
   unsigned int y = x;
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+float C[MATRIX_M][MATRIX_N];
+float D[MATRIX_M][MATRIX_N];
+
+float make_fp32(bfloat16 x) {
+  unsigned int y = *((int *)&x);
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
   y = y << 16;
   float *res = reinterpret_cast<float *>(&y);
   return *res;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 void matrix_multiply_ref(int *A_mem, int *B_mem, int *C_mem, int M, int N,
                          int K) {
@@ -158,17 +167,21 @@ unsigned short make_bf16(float x) {
   return (unsigned short)*res;
 }
 
+=======
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
 void matrix_multiply_ref(int *A_mem, int *B_mem, int *C_mem, int M, int N,
                          int K) {
-  // tiling
   for (int m = 0; m < M; m++)
     for (int n = 0; n < N; n++) {
       for (int k = 0; k < K; k++) {
-        short *va = (short *)(A_mem + m * K + k);
-        short *vb = (short *)(B_mem + k * N + n);
+        bfloat16 *va = (bfloat16 *)(A_mem + m * K + k);
+        bfloat16 *vb = (bfloat16 *)(B_mem + k * N + n);
         float acc = *((float *)(C_mem + m * N + n));
+<<<<<<< HEAD
         // FIXME: Should we do reduce-add in another version?
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
         for (int i = 0; i < 2; i++) {
           acc += (make_fp32(va[i]) * make_fp32(vb[i]));
         }
@@ -180,6 +193,7 @@ void matrix_multiply_ref(int *A_mem, int *B_mem, int *C_mem, int M, int N,
 int main() {
   for (int i = 0; i < MATRIX_M; i++) {
     for (int j = 0; j < MATRIX_K; j++) {
+<<<<<<< HEAD
 <<<<<<< HEAD
       A[i][j] = bfloat16(1.0f * (i + j));
 =======
@@ -196,6 +210,9 @@ int main() {
 >>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
       Aref[i][j] = make_bf16(1.0f * (i + j));
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+      A[i][j] = bfloat16(1.0f * (i + j));
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
     }
   }
   for (int i = 0; i < MATRIX_K / 2; i++) {
@@ -203,11 +220,14 @@ int main() {
       B[i][j] = bfloat16(2.0f * i + 3.0f * j);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> f2e536cf2 ([SYCL] Correct bfloat16 class namespace (#1468))
       Bref[i][j] = make_bf16(2.0f * i + 3.0f * j);
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
     }
   }
   for (int i = 0; i < MATRIX_M; i++) {
@@ -223,10 +243,14 @@ int main() {
   big_matrix<bfloat16, MATRIX_K / 2, MATRIX_N * 2> MB((bfloat16 *)&B);
   matrix_multiply(MC, MA, MB);
 <<<<<<< HEAD
+<<<<<<< HEAD
   matrix_multiply_ref((int32_t *)A, (int32_t *)B, (int32_t *)D, MATRIX_M,
 =======
   matrix_multiply_ref((int32_t *)Aref, (int32_t *)Bref, (int32_t *)D, MATRIX_M,
 >>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
+=======
+  matrix_multiply_ref((int32_t *)A, (int32_t *)B, (int32_t *)D, MATRIX_M,
+>>>>>>> 2722bd134 ([SYCL][Matrix]update recent tests to use the new API and remove deprecated bfloat16::from_bits   (#1494))
                       MATRIX_N, MATRIX_K / 2);
 
   bool res = true;
