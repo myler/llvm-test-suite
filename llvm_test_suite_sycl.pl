@@ -817,6 +817,9 @@ sub generate_run_result
         } elsif ($line =~ m/error: command failed with exit status: ([\-]{0,1}[0]{0,1}[x]{0,1}[0-9a-f]{1,})/) {
           $failure_message = "command failed with exit status $1";
           return $RUNFAIL;
+        } elsif ($line =~ m/LEAK\s*\=\s*\d+/ && $current_optset =~ m/zedebug/) {
+          $failure_message = "ZE_DEBUG detects ZE call leaks";
+          return $RUNFAIL;
         }
       }
     }
