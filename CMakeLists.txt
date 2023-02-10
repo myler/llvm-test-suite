@@ -6,8 +6,6 @@ option(TEST_SUITE_FORTRAN "Enable Fortran test suite" OFF)
 
 project(test-suite C CXX)
 
-<<<<<<< HEAD
-=======
 if("Fortran" IN_LIST TEST_SUITE_SUBDIRS)
   set(TEST_SUITE_FORTRAN_default ON)
 else()
@@ -15,7 +13,6 @@ else()
 endif()
 option(TEST_SUITE_FORTRAN "Enable Fortran test suite" ${TEST_SUITE_FORTRAN_default})
 
->>>>>>> temp_main
 if(TEST_SUITE_FORTRAN)
   enable_language(Fortran)
 endif()

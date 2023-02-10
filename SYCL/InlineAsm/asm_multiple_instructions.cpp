@@ -58,12 +58,8 @@ struct KernelFunctor : WithInputBuffers<T, 3>, WithOutputBuffer<T> {
           D[wiID] = output;
 #else
 #if defined(__SYCL_DEVICE_ONLY__)
-<<<<<<< HEAD
-          asm volatile("{\n"
-=======
           asm volatile(
               "{\n"
->>>>>>> 417b60f35 ([SYCL] Use Subgroup size 16 as default for InlineASM tests (#1476))
               "add (M1, 16) %1(0, 0)<1> %1(0, 0)<1;1,0> %2(0, 0)<1;1,0>\n"
               "add (M1, 16) %1(0, 0)<1> %1(0, 0)<1;1,0> %3(0, 0)<1;1,0>\n"
               "mov (M1, 16) %0(0, 0)<1> %1(0, 0)<1;1,0>\n"

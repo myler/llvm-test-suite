@@ -41,15 +41,7 @@ void matrix_verify_add(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
            joint_matrix<T, TM, TK> sub_a(sg);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, 5);
-=======
-           joint_matrix_fill(sg, sub_a, 5.0);
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-           joint_matrix_fill(sg, sub_a, 5);
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
 
            auto wi_slice_a = sub_a.get_wi_data();
            for (int i = 0; i < wi_slice_a.length(); i++) {
@@ -82,15 +74,7 @@ void matrix_verify_sub(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
            joint_matrix<T, TM, TK> sub_a(sg);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, 5);
-=======
-           joint_matrix_fill(sg, sub_a, 5.0);
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-           joint_matrix_fill(sg, sub_a, 5);
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
 
            auto wi_slice_a = sub_a.get_wi_data();
            for (int i = 0; i < wi_slice_a.length(); i++) {
@@ -123,15 +107,7 @@ void matrix_verify_mul(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
            joint_matrix<T, TM, TK> sub_a(sg);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, 5);
-=======
-           joint_matrix_fill(sg, sub_a, 5.0);
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-           joint_matrix_fill(sg, sub_a, 5);
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
 
            auto wi_slice_a = sub_a.get_wi_data();
            for (int i = 0; i < wi_slice_a.length(); i++) {
@@ -164,15 +140,7 @@ void matrix_verify_div(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
            joint_matrix<T, TM, TK> sub_a(sg);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, 4);
-=======
-           joint_matrix_fill(sg, sub_a, 4.0);
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-           joint_matrix_fill(sg, sub_a, 4);
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
 
            auto wi_slice_a = sub_a.get_wi_data();
            for (int i = 0; i < wi_slice_a.length(); i++) {
@@ -205,15 +173,7 @@ void matrix_verify_logic(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
            joint_matrix<T, TM, TK> sub_a(sg);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
            joint_matrix_fill(sg, sub_a, 5);
-=======
-           joint_matrix_fill(sg, sub_a, 5.0);
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-           joint_matrix_fill(sg, sub_a, 5);
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
 
            auto wi_slice_a = sub_a.get_wi_data();
            for (int i = 0; i < wi_slice_a.length(); i++) {
@@ -229,18 +189,8 @@ void matrix_verify_logic(queue q, big_matrix<T, M, N> &A, nd_range<2> &r,
                  val++;
                  if (wi_slice_a[i] == static_cast<half>(2.0)) {
                    val -= 2;
-<<<<<<< HEAD
-<<<<<<< HEAD
                    val *= 3;
                    val /= 2;
-=======
-                   val *= 3.0;
-                   val /= 2.0;
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
-                   val *= 3;
-                   val /= 2;
->>>>>>> e3a7db8e9 ([SYCL][Matrix] fix ATS-M double bug (#1496))
                  } else {
                    val += 2;
                  }

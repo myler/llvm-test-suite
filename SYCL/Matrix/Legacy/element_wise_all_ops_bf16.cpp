@@ -11,10 +11,6 @@
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
-<<<<<<< HEAD
-
-=======
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
 #include <iostream>
 #include <random>
 #include <sycl/sycl.hpp>

@@ -74,23 +74,11 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
 
            ext::oneapi::sub_group sg = spmd_item.get_sub_group();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 61464a1ec ([SYCL][Matrix] Minor corrections to the matrix tests (#1475))
            myparams2::joint_matrix_a<sub_group, layout::row_major> sub_a;
            myparams2::joint_matrix_b<
                sub_group, ext::intel::experimental::matrix::layout::packed>
                sub_b;
            myparams2::joint_matrix_accumulator<sub_group> sub_c;
-<<<<<<< HEAD
-=======
-           myparams2::joint_matrix_a<sub_group> sub_a;
-           myparams2::joint_matrix_b<sub_group> sub_b;
-           myparams2::joint_matrix_c<sub_group> sub_c;
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
->>>>>>> 61464a1ec ([SYCL][Matrix] Minor corrections to the matrix tests (#1475))
 
            joint_matrix_load(sg, sub_c,
                              accC.get_pointer() + (sg_startx * TM) * N +

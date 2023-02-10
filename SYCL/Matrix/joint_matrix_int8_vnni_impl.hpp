@@ -50,16 +50,7 @@ void matrix_multiply(big_matrix<T1, NUM_ROWS_C, NUM_COLS_C> &C,
            sub_group sg = spmd_item.get_sub_group();
            joint_matrix<sub_group, int8_t, use::a, TM, TK, layout::row_major>
                sub_a;
-<<<<<<< HEAD
-           joint_matrix<sub_group, int8_t, use::b, TK, TN,
-<<<<<<< HEAD
-                        layout::row_major>
-=======
-                        ext::intel::experimental::matrix::layout::packed>
->>>>>>> cbbfcc6c1 ([SYCL] Add matrix tests that use the new API (unified API) (#1391))
-=======
            joint_matrix<sub_group, int8_t, use::b, TK, TN, layout::row_major>
->>>>>>> 61464a1ec ([SYCL][Matrix] Minor corrections to the matrix tests (#1475))
                sub_b;
            joint_matrix<sub_group, int32_t, use::accumulator, TM, TN> sub_c;
 
