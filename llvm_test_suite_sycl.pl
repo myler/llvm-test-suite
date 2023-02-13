@@ -679,6 +679,10 @@ sub do_run
       if (gpu(['dg2'])) {
           $gpu_opts .= " -Dgpu-intel-dg2=1 ";
       }
+      #workaround for CMPLRTST-18835
+      if (gpu(['atsm'])) {
+          $gpu_opts .= " -Dgpu-intel-dg2=1 ";
+      }
       if (gpu(['pvc'])) {
           $gpu_opts .= " -Dgpu-intel-pvc=1 ";
       }
