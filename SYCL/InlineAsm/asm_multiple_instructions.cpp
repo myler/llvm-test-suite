@@ -58,7 +58,8 @@ struct KernelFunctor : WithInputBuffers<T, 3>, WithOutputBuffer<T> {
           D[wiID] = output;
 #else
 #if defined(__SYCL_DEVICE_ONLY__)
-          asm volatile("{\n"
+          asm volatile(
+              "{\n"
               "add (M1, 16) %1(0, 0)<1> %1(0, 0)<1;1,0> %2(0, 0)<1;1,0>\n"
               "add (M1, 16) %1(0, 0)<1> %1(0, 0)<1;1,0> %3(0, 0)<1;1,0>\n"
               "mov (M1, 16) %0(0, 0)<1> %1(0, 0)<1;1,0>\n"
