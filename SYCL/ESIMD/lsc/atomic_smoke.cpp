@@ -23,6 +23,12 @@ using namespace sycl;
 using namespace sycl::ext::intel::esimd;
 using namespace sycl::ext::intel::experimental::esimd;
 
+#ifdef USE_64_BIT_OFFSET
+typedef uint64_t Toffset;
+#else
+typedef uint32_t Toffset;
+#endif
+
 struct Config {
   int threads_per_group;
   int n_groups;
@@ -210,8 +216,8 @@ bool test(queue q, const Config &cfg) {
       cgh.parallel_for<TestID<T, N, ImplF>>(
           rng, [=](id<1> ii) SYCL_ESIMD_KERNEL {
             int i = ii;
-            simd<unsigned, N> offsets(cfg.start_ind * sizeof(T),
-                                      cfg.stride * sizeof(T));
+            simd<Toffset, N> offsets(cfg.start_ind * sizeof(T),
+                                     cfg.stride * sizeof(T));
             simd_mask<N> m = 1;
             m[cfg.masked_lane] = 0;
         // barrier to achieve better contention:
@@ -334,43 +340,76 @@ template <class T, int N> struct ImplDec {
   }
 };
 
+// The purpose of this is validate that floating point data is correctly
+// processed.
+constexpr float FPDELTA = 0.5f;
+
+template <class T, int N> struct ImplLoad {
+  static constexpr AtomicOp atomic_op = AtomicOp::load;
+  static constexpr int n_args = 0;
+
+  static T init(int i, const Config &cfg) { return (T)(i + FPDELTA); }
+
+  static T gold(int i, const Config &cfg) {
+    T gold = init(i, cfg);
+    return gold;
+  }
+};
+
+template <class T, int N> struct ImplStore {
+  static constexpr AtomicOp atomic_op = AtomicOp::store;
+  static constexpr int n_args = 1;
+  static constexpr T base = (T)(2 + FPDELTA);
+
+  static T init(int i, const Config &cfg) { return 0; }
+
+  static T gold(int i, const Config &cfg) {
+    T gold = is_updated(i, N, cfg) ? base : init(i, cfg);
+    return gold;
+  }
+
+  static T arg0(int i) { return base; }
+};
+
 template <class T, int N, class C, C Op> struct ImplAdd {
   static constexpr C atomic_op = Op;
   static constexpr int n_args = 1;
 
-  static T init(int i, const Config &cfg) { return (T)0; }
+  static T init(int i, const Config &cfg) { return 0; }
 
   static T gold(int i, const Config &cfg) {
-    T gold = is_updated(i, N, cfg)
-                 ? (T)(cfg.repeat * cfg.threads_per_group * cfg.n_groups)
-                 : init(i, cfg);
+    T gold = is_updated(i, N, cfg) ? (T)(cfg.repeat * cfg.threads_per_group *
+                                         cfg.n_groups * (T)(1 + FPDELTA))
+                                   : init(i, cfg);
     return gold;
   }
 
-  static T arg0(int i) { return 1; }
+  static T arg0(int i) { return (T)(1 + FPDELTA); }
 };
 
 template <class T, int N, class C, C Op> struct ImplSub {
   static constexpr C atomic_op = Op;
   static constexpr int n_args = 1;
-  static constexpr int base = 5;
+  static constexpr T base = (T)(5 + FPDELTA);
 
   static T init(int i, const Config &cfg) {
-    return (T)(cfg.repeat * cfg.threads_per_group * cfg.n_groups + base);
+    return (T)(cfg.repeat * cfg.threads_per_group * cfg.n_groups *
+                   (T)(1 + FPDELTA) +
+               base);
   }
 
   static T gold(int i, const Config &cfg) {
-    T gold = is_updated(i, N, cfg) ? (T)base : init(i, cfg);
+    T gold = is_updated(i, N, cfg) ? base : init(i, cfg);
     return gold;
   }
 
-  static T arg0(int i) { return 1; }
+  static T arg0(int i) { return (T)(1 + FPDELTA); }
 };
 
 template <class T, int N, class C, C Op> struct ImplMin {
   static constexpr C atomic_op = Op;
   static constexpr int n_args = 1;
-  static constexpr int MIN = 1;
+  static constexpr T MIN = (T)(1 + FPDELTA);
 
   static T init(int i, const Config &cfg) {
     return (T)(cfg.threads_per_group * cfg.n_groups + MIN + 1);
@@ -387,18 +426,18 @@ template <class T, int N, class C, C Op> struct ImplMin {
 template <class T, int N, class C, C Op> struct ImplMax {
   static constexpr C atomic_op = Op;
   static constexpr int n_args = 1;
-  static constexpr int base = 5;
+  static constexpr T base = (T)(5 + FPDELTA);
 
-  static T init(int i, const Config &cfg) { return 0; }
+  static T init(int i, const Config &cfg) { return (T)FPDELTA; }
 
   static T gold(int i, const Config &cfg) {
     T gold = is_updated(i, N, cfg)
-                 ? (T)(cfg.threads_per_group * cfg.n_groups - 1)
+                 ? (T)(cfg.threads_per_group * cfg.n_groups - 1 + FPDELTA)
                  : init(i, cfg);
     return gold;
   }
 
-  static T arg0(int i) { return i; }
+  static T arg0(int i) { return (T)(i + FPDELTA); }
 };
 
 template <class T, int N>
@@ -438,7 +477,7 @@ struct ImplLSCFmax : ImplMax<T, N, LSCAtomicOp, LSCAtomicOp::fmax> {};
 template <class T, int N, class C, C Op> struct ImplCmpxchgBase {
   static constexpr C atomic_op = Op;
   static constexpr int n_args = 2;
-  static constexpr int base = 2;
+  static constexpr T base = (T)(2 + FPDELTA);
 
   static T init(int i, const Config &cfg) { return base - 1; }
 
@@ -564,6 +603,15 @@ int main(void) {
   passed &= test<float, 8, ImplLSCFcmpwr>(q, cfg);
 #endif // USE_DWORD_ATOMICS
 #endif // CMPXCHG_TEST
+
+  // Check load/store operations
+  passed &= test_int_types<8, ImplLoad>(q, cfg);
+  if (q.get_backend() != sycl::backend::ext_intel_esimd_emulator)
+    passed &= test_int_types<8, ImplStore>(q, cfg);
+#ifndef USE_DWORD_ATOMICS
+  if (q.get_backend() != sycl::backend::ext_intel_esimd_emulator)
+    passed &= test<float, 8, ImplStore>(q, cfg);
+#endif // USE_DWORD_ATOMICS
   // TODO: check double other vector lengths in LSC mode.
 
   std::cout << (passed ? "Passed\n" : "FAILED\n");

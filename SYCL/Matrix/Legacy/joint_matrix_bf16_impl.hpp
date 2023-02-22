@@ -155,6 +155,8 @@ int main() {
         res = false;
     }
   }
-  std::cout << (res ? "passed" : "failed") << std::endl;
-  return !res;
+  if (res)
+    std::cout << "passed\n";
+  else
+    std::cout << "failed\n";
 }

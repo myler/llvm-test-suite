@@ -42,6 +42,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_api_esimd_merge.xml" splitGroup="esimd" testName="esimd_api_esimd_merge" />
     <test configFile="config_sycl/esimd_api_esimd_pack_unpack_mask.xml" splitGroup="esimd" testName="esimd_api_esimd_pack_unpack_mask" />
     <test configFile="config_sycl/esimd_api_esimd_rgba_smoke.xml" splitGroup="esimd" testName="esimd_api_esimd_rgba_smoke" />
+    <test configFile="config_sycl/esimd_api_esimd_rgba_smoke_64.xml" splitGroup="esimd" testName="esimd_api_esimd_rgba_smoke_64" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_array_core.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_array_core" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_array_fp_extra.xml" splitGroup="double" testName="esimd_api_functional_ctors_ctor_array_fp_extra" />
     <test configFile="config_sycl/esimd_api_functional_ctors_ctor_broadcast_core.xml" splitGroup="esimd" testName="esimd_api_functional_ctors_ctor_broadcast_core" />
@@ -102,7 +103,9 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_api_slm_gather_scatter_heavy.xml" splitGroup="esimd" testName="esimd_api_slm_gather_scatter_heavy" />
     <test configFile="config_sycl/esimd_api_slm_gather_scatter_rgba.xml" splitGroup="double" testName="esimd_api_slm_gather_scatter_rgba" />
     <test configFile="config_sycl/esimd_api_svm_gather_scatter.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter" />
+    <test configFile="config_sycl/esimd_api_svm_gather_scatter_64.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter_64" />
     <test configFile="config_sycl/esimd_api_svm_gather_scatter_pvc.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter_pvc" />
+    <test configFile="config_sycl/esimd_api_svm_gather_scatter_pvc_64.xml" splitGroup="esimd" testName="esimd_api_svm_gather_scatter_pvc_64" />
     <test configFile="config_sycl/esimd_api_unary_ops_heavy.xml" splitGroup="double" testName="esimd_api_unary_ops_heavy" />
     <test configFile="config_sycl/esimd_api_unary_ops_heavy_pvc.xml" splitGroup="esimd" testName="esimd_api_unary_ops_heavy_pvc" />
     <test configFile="config_sycl/esimd_bitonicsortk.xml" splitGroup="esimd" testName="esimd_bitonicsortk" />
@@ -137,15 +140,19 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_fp_call_recursive.xml" splitGroup="esimd" testName="esimd_fp_call_recursive" />
     <test configFile="config_sycl/esimd_fp_in_phi.xml" splitGroup="esimd" testName="esimd_fp_in_phi" />
     <test configFile="config_sycl/esimd_fp_in_select.xml" splitGroup="esimd" testName="esimd_fp_in_select" />
+    <test configFile="config_sycl/esimd_hardware_dispatch.xml" splitGroup="esimd" testName="esimd_hardware_dispatch" />
     <test configFile="config_sycl/esimd_histogram.xml" splitGroup="esimd" testName="esimd_histogram" />
     <test configFile="config_sycl/esimd_histogram_256_slm.xml" splitGroup="esimd" testName="esimd_histogram_256_slm" />
     <test configFile="config_sycl/esimd_histogram_256_slm_spec_2020.xml" splitGroup="esimd" testName="esimd_histogram_256_slm_spec_2020" />
     <test configFile="config_sycl/esimd_histogram_2d.xml" splitGroup="esimd" testName="esimd_histogram_2d" />
+    <test configFile="config_sycl/esimd_histogram_2d_64.xml" splitGroup="esimd" testName="esimd_histogram_2d_64" />
+    <test configFile="config_sycl/esimd_histogram_64.xml" splitGroup="esimd" testName="esimd_histogram_64" />
     <test configFile="config_sycl/esimd_histogram_raw_send.xml" splitGroup="esimd" testName="esimd_histogram_raw_send" />
     <test configFile="config_sycl/esimd_kmeans_kmeans.xml" splitGroup="esimd" testName="esimd_kmeans_kmeans" />
     <test configFile="config_sycl/esimd_linear_linear.xml" splitGroup="esimd" testName="esimd_linear_linear" />
     <test configFile="config_sycl/esimd_lsc_atomic_cmpxchg.xml" splitGroup="esimd" testName="esimd_lsc_atomic_cmpxchg" />
     <test configFile="config_sycl/esimd_lsc_atomic_smoke.xml" splitGroup="esimd" testName="esimd_lsc_atomic_smoke" />
+    <test configFile="config_sycl/esimd_lsc_atomic_smoke_64.xml" splitGroup="esimd" testName="esimd_lsc_atomic_smoke_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_argument_type_deduction.xml" splitGroup="esimd" testName="esimd_lsc_lsc_argument_type_deduction" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_load_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_load_u16" />
     <test configFile="config_sycl/esimd_lsc_lsc_block_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_block_load_u32" />
@@ -192,21 +199,37 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_lsc_lsc_surf_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_surf_store_u8u32" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_2d.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_2d" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_atomic_cachehint.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_atomic_cachehint" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_atomic_cachehint_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_atomic_cachehint_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u16u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u16u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u16u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u64_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u64_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8_u16" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8_u16_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8_u16_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_load_u8u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_load_u8u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u16u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u16u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u16u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u64_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u64_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u8u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_prefetch_u8u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_prefetch_u8u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u16u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u16u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u16u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u16u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u32_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u64" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u64_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u64_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8_u16.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8_u16" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8_u16_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8_u16_64" />
     <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8u32.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8u32" />
+    <test configFile="config_sycl/esimd_lsc_lsc_usm_store_u8u32_64.xml" splitGroup="esimd" testName="esimd_lsc_lsc_usm_store_u8u32_64" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot" />
     <test configFile="config_sycl/esimd_mandelbrot_mandelbrot_spec.xml" splitGroup="esimd" testName="esimd_mandelbrot_mandelbrot_spec" />
     <test configFile="config_sycl/esimd_matrix_transpose.xml" splitGroup="esimd" testName="esimd_matrix_transpose" />
@@ -266,6 +289,9 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_regression_unused_load.xml" splitGroup="esimd" testName="esimd_regression_unused_load" />
     <test configFile="config_sycl/esimd_regression_usm_gather_scatter_32.xml" splitGroup="esimd" testName="esimd_regression_usm_gather_scatter_32" />
     <test configFile="config_sycl/esimd_regression_variable_gather_mask.xml" splitGroup="esimd" testName="esimd_regression_variable_gather_mask" />
+    <test configFile="config_sycl/esimd_slm_alloc.xml" splitGroup="esimd" testName="esimd_slm_alloc" />
+    <test configFile="config_sycl/esimd_slm_alloc_many_kernels_many_funcs.xml" splitGroup="esimd" testName="esimd_slm_alloc_many_kernels_many_funcs" />
+    <test configFile="config_sycl/esimd_slm_alloc_many_kernels_one_func.xml" splitGroup="esimd" testName="esimd_slm_alloc_many_kernels_one_func" />
     <test configFile="config_sycl/esimd_slm_barrier.xml" splitGroup="esimd" testName="esimd_slm_barrier" />
     <test configFile="config_sycl/esimd_slm_split_barrier.xml" splitGroup="esimd" testName="esimd_slm_split_barrier" />
     <test configFile="config_sycl/esimd_spec_const_spec_const_bool.xml" splitGroup="esimd" testName="esimd_spec_const_spec_const_bool" />
@@ -283,9 +309,11 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_stencil.xml" splitGroup="esimd" testName="esimd_stencil" />
     <test configFile="config_sycl/esimd_stencil2.xml" splitGroup="esimd" testName="esimd_stencil2" />
     <test configFile="config_sycl/esimd_sycl_esimd_mix.xml" splitGroup="esimd" testName="esimd_sycl_esimd_mix" />
+    <test configFile="config_sycl/esimd_template.xml" splitGroup="esimd" testName="esimd_template" />
     <test configFile="config_sycl/esimd_test_id_3d.xml" splitGroup="esimd" testName="esimd_test_id_3d" />
     <test configFile="config_sycl/esimd_unary_op_const_simd.xml" splitGroup="esimd" testName="esimd_unary_op_const_simd" />
     <test configFile="config_sycl/esimd_usm_gather_scatter_rgba.xml" splitGroup="esimd" testName="esimd_usm_gather_scatter_rgba" />
+    <test configFile="config_sycl/esimd_usm_gather_scatter_rgba_64.xml" splitGroup="esimd" testName="esimd_usm_gather_scatter_rgba_64" />
     <test configFile="config_sycl/esimd_vadd_1d.xml" splitGroup="esimd" testName="esimd_vadd_1d" />
     <test configFile="config_sycl/esimd_vadd_2d.xml" splitGroup="esimd" testName="esimd_vadd_2d" />
     <test configFile="config_sycl/esimd_vadd_2d_acc.xml" splitGroup="esimd" testName="esimd_vadd_2d_acc" />
