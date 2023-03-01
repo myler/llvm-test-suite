@@ -34,7 +34,8 @@ sub main
     $test_suite_repo = File::Spec->rel2abs($test_suite_repo);
 
     prepare_src();
-    do_cmake();
+    my $err = do_cmake();
+    die "Run cmake failed, generate llvm_test_suite.xml failed." if $err;
 
     execute("cd $tmp_dir && find -name '*.test'");
     my @list = split( "\n", $command_output);
@@ -195,12 +196,21 @@ sub do_run
 
 sub do_cmake
 {
+    my $ret = 0;
     execute( "rm -rf $tmp_dir ; mkdir $tmp_dir");
+    $ret += $command_status;
 
-    execute( "cd $tmp_dir && CC=clang CXX=clang++ $cmake $test_suite_repo");
+    execute("rm -rf vc-intrinsics");
+    $ret += $command_status;
+
+    execute("cd $tmp_dir && CC=clang CXX=clang++ $cmake $test_suite_repo");
+    $ret += $command_status;
+
+    execute("git -C $test_suite_repo checkout vc-intrinsics");
+    $ret += $command_status;
 
     print $command_output;
-
+    return $ret;
 }
 
 sub print2file
