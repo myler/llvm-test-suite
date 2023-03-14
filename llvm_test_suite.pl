@@ -92,7 +92,12 @@ sub do_build
         if ($current_test =~ m/avx512/i and !(-e "build/$r->{dir}")) {
            return $SKIP;
         } else {
-           $cmd = "cd ./build/$r->{dir} && make $parallel_opt $r->{short_name} VERBOSE=1";
+            # if "skylake-avx512" is detected in cmake configuration.
+            if ($current_test =~ m/matrix_amxint8/i && ! -e "./build/$r->{dir}")
+            {
+                return $SKIP;
+            }
+            $cmd = "cd ./build/$r->{dir} && make $parallel_opt $r->{short_name} VERBOSE=1";
         }
     }
 
@@ -133,6 +138,10 @@ sub do_run
     } else {
       $cmd = "python3 $lit $path";
     }
+
+    # Only compile SingleSource/UnitTests/Matrix/AMXINT8/*,
+    # if do_build() pass, return $PASS, otherwise, do_build() returns $COMPFAIL or $SKIP.
+    return $PASS if ($current_test =~ m/matrix_amxint8/i);
 
     # using PIN_CMD to run lit leads to big overhead. So disable it.  But it may be usefull in some cases.
     if ( 0 && $ENV{PIN_CMD})
