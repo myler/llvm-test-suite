@@ -341,5 +341,6 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_vadd_usm_opqptr.xml" splitGroup="esimd" testName="esimd_vadd_usm_opqptr" />
     <test configFile="config_sycl/esimd_vec_arg_call_conv_ext.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_ext" />
     <test configFile="config_sycl/esimd_vec_arg_call_conv_smoke.xml" splitGroup="esimd" testName="esimd_vec_arg_call_conv_smoke" />
+    <test configFile="config_sycl/esimd_wait.xml" splitGroup="esimd" testName="esimd_wait" />
   </tests>
 </suite>
