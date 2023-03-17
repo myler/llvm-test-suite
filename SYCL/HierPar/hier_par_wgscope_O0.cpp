@@ -5,14 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-<<<<<<< HEAD
-// UNSUPPORTED: gpu-intel-dg
-=======
 
 // Test hangs on AMD with https://github.com/intel/llvm/pull/8412
 // UNSUPPORTED: hip_amd
 
->>>>>>> 60d73a31c ([SYCL] Disable tests failed during pulldown (#1633))
 // RUN: %clangxx -O0 -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
