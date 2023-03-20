@@ -602,6 +602,17 @@ sub add_setting
             die "Unrecognized format: $rule!\n";
         }
     }
+
+    # CMPLRTST-19196: No lit feature can be used to skip test on RHEL8, so workaround here.
+    my $gcc_abi = $ENV{ICS_GCCABI};
+    if (defined $gcc_abi and $gcc_abi eq "rhel80"
+        and $current_test eq "userdefinedreductions_user_defined_reductions") {
+        my $file_path = "$optset_work_dir/SYCL/UserDefinedReductions/user_defined_reductions.cpp";
+        if (-f $file_path) {
+            my $gcc_toolchain_root = "$ENV{ICS_GCCBIN}/..";
+            `sed -i "s#\/\/ RUN: %clangxx -fsycl#\/\/ RUN: %clangxx -fsycl --gcc-toolchain=$gcc_toolchain_root#g" $file_path;`
+        }
+    }
 }
 
 sub do_run
