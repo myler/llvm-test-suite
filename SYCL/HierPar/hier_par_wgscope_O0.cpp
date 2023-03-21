@@ -5,7 +5,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //
 //===----------------------------------------------------------------------===//
-// UNSUPPORTED: gpu-intel-dg
+
+// Test hangs on AMD with https://github.com/intel/llvm/pull/8412
+// UNSUPPORTED: hip_amd
+
 // RUN: %clangxx -O0 -fsycl -fsycl-targets=%sycl_triple %s -o %t.out
 
 // RUN: %CPU_RUN_PLACEHOLDER %t.out
