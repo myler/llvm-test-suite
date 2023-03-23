@@ -16,7 +16,6 @@
 //   simd<int, 4> v = 1;
 //   auto v1 = v.select<2, 1>(0);
 //   v1[0] = 0; // v1[0] returns writable simd_view
-
 #include "../esimd_test_utils.hpp"
 
 #include <sycl/ext/intel/esimd.hpp>
@@ -96,7 +95,7 @@ template <class T> bool test(queue &q) {
   }
   return err_cnt > 0 ? false : true;
 }
-
+#ifndef SKIP_MAIN
 int main(int argc, char **argv) {
   queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
 
@@ -114,3 +113,4 @@ int main(int argc, char **argv) {
 
   return passed ? 0 : 1;
 }
+#endif

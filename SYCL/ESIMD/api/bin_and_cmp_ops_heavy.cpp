@@ -22,9 +22,7 @@
 // (emulated) results larger than certain threshold. Might need to tune the cr0
 // once this feature is available in ESIMD.
 //
-
 #include "../esimd_test_utils.hpp"
-
 #include <iostream>
 #include <sycl/ext/intel/esimd.hpp>
 #include <sycl/sycl.hpp>
@@ -187,7 +185,9 @@ template <class T1, class T2, class OpClass> struct verify_strict {
 };
 
 #define EQ(x, gold, epsilon)                                                   \
-  ((x == gold) || (std::abs((double)(x - gold) / (double)gold) <= epsilon))
+  ((x == gold) || (std::abs((double)(x - gold) / (double)gold) <= epsilon) ||  \
+   (std::abs((double)gold) < epsilon) && (std::abs((double)x) < epsilon) &&    \
+       (std::abs((double)(x - gold)) < epsilon))
 
 template <class T1, class T2, class OpClass, bool AllOps = false>
 struct verify_epsilon {
@@ -256,6 +256,7 @@ template <class T1, class T2, class C> using VNf = verify_n<T1, T2, C>;
 template <class T1, class T2, class C> using IDf = init_default<T1, T2, C>;
 template <class T1, class T2, class C> using ISf = init_for_shift<T1, T2, C>;
 
+#ifndef SKIP_MAIN
 int main(void) {
   queue q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
 
@@ -386,3 +387,4 @@ int main(void) {
   std::cout << (passed ? "Test PASSED\n" : "Test FAILED\n");
   return passed ? 0 : 1;
 }
+#endif

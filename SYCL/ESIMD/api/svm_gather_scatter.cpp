@@ -12,7 +12,6 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 // Regression test for SVM gather/scatter API.
-
 #include "../esimd_test_utils.hpp"
 
 #include <algorithm>
@@ -89,7 +88,7 @@ template <typename T, int N> bool test(queue &Q) {
   std::cout << (NumErrs == 0 ? "    Passed\n" : "    FAILED\n");
   return NumErrs == 0;
 }
-
+#ifndef SKIP_MAIN
 int main(void) {
   queue Q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
   auto Dev = Q.get_device();
@@ -157,3 +156,4 @@ int main(void) {
   std::cout << (Pass ? "Test Passed\n" : "Test FAILED\n");
   return Pass ? 0 : 1;
 }
+#endif

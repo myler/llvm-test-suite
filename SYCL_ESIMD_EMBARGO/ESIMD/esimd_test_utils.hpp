@@ -7,7 +7,6 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-
 #include <sycl/ext/intel/experimental/esimd/tfloat32.hpp>
 #include <sycl/sycl.hpp>
 #define NOMINMAX
@@ -553,7 +552,7 @@ TID(uint32_t)
 TID(int64_t)
 TID(uint64_t)
 TID(half)
-TID(sycl::ext::oneapi::experimental::bfloat16)
+TID(sycl::ext::oneapi::bfloat16)
 TID(sycl::ext::intel::experimental::esimd::tfloat32)
 TID(float)
 TID(double)

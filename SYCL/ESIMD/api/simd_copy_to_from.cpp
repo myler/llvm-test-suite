@@ -12,7 +12,6 @@
 // RUN: %GPU_RUN_PLACEHOLDER %t.out
 
 // This test checks simd::copy_from/to methods with alignment flags.
-
 #include "../esimd_test_utils.hpp"
 
 #include <algorithm>
@@ -226,7 +225,7 @@ template <typename T> bool testAcc(queue &Q) {
 
   return Pass;
 }
-
+#ifndef SKIP_MAIN
 int main(void) {
   queue Q(esimd_test::ESIMDSelector, esimd_test::createExceptionHandler());
   auto Dev = Q.get_device();
@@ -268,3 +267,4 @@ int main(void) {
   std::cout << (Pass ? "Test Passed\n" : "Test FAILED\n");
   return Pass ? 0 : 1;
 }
+#endif
