@@ -329,6 +329,7 @@ Sources repo https://github.com/intel-innersource/applications.compilers.tests.l
     <test configFile="config_sycl/esimd_sycl_esimd_mix.xml" splitGroup="esimd" testName="esimd_sycl_esimd_mix" />
     <test configFile="config_sycl/esimd_template.xml" splitGroup="esimd" testName="esimd_template" />
     <test configFile="config_sycl/esimd_test_id_3d.xml" splitGroup="esimd" testName="esimd_test_id_3d" />
+    <test configFile="config_sycl/esimd_thread_id_test.xml" splitGroup="esimd" testName="esimd_thread_id_test" />
     <test configFile="config_sycl/esimd_unary_op_const_simd.xml" splitGroup="esimd" testName="esimd_unary_op_const_simd" />
     <test configFile="config_sycl/esimd_usm_gather_scatter_rgba.xml" splitGroup="esimd" testName="esimd_usm_gather_scatter_rgba" />
     <test configFile="config_sycl/esimd_usm_gather_scatter_rgba_64.xml" splitGroup="esimd" testName="esimd_usm_gather_scatter_rgba_64" />
